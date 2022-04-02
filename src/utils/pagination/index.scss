@@ -1,0 +1,88 @@
+@mixin flexFunc {
+    display: flex;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pagination-container{
+    width: 100%;
+    height: max-content;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    .pagination-content{
+        @include flexFunc;
+        padding: 5px 15px;
+
+        .pagination-content-section{
+            @include flexFunc;
+
+            .pagination-row-title{
+                margin: 0;
+            }
+
+            .pagination-overview{
+                margin-left: 10px; 
+            }
+
+            .pagination-navigation{
+                @include flexFunc;
+                
+                .pagination-nav{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 35px;
+                    height: 35px;
+                    margin: 0px;
+                    background: none;
+                    transition: .4s all ease-in-out;
+                    cursor: pointer;
+
+                    i{
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    &.disable:hover {
+                        background: none;
+                        cursor: default;
+                    }
+
+                    &.left-img{
+                        transform: rotate( 180deg );            
+                        transform-origin: center initial; 
+                    }
+                }
+            }
+
+            .pagination-btn{
+                min-width: 10px;
+                color: #5d77fc;
+                margin : 0 10px 0 5px;
+                cursor: default;
+                
+                &:hover{
+                    background: none;
+                }
+
+                img{
+                    margin-left: 10px;
+                    transform: rotate( 90deg );            
+                    transform-origin: center initial; 
+                }
+            }
+
+        }
+    }
+
+    .pagination-text{
+        font-size: 14px;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+}

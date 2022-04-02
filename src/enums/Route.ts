@@ -1,0 +1,46 @@
+
+export enum url {
+    LANDING_PAGE = "/",
+    LOGIN = '/login',
+    FORGOT_PASSWORD = '/forgot-password',
+    RESET_PASSWORD = '/reset-password',
+    REGISTER = '/register',
+    VERIFY_EMAIL = '/verify-email',
+    INSTRUCTIONS = '/how-to',
+    OVERVIEW = '/organization-dashboard/overview',
+    APPLICATIONS = '/organization-dashboard/applications',
+    CREATE_APP = '/organization-dashboard/application/create-app',
+    USERS = '/organization-dashboard/user-management',
+    PROFILE = '/organization-dashboard/profile',
+    ORGANIZATION = '/organization-dashboard/organization',
+    BILLING = '/organization-dashboard/billing',
+    API_BUNDLES = '/organization-dashboard/billing/api-bundles',
+    API_CONFIGS = '/organization-dashboard/billing/api-configurations',
+    API_CONFIG_GROUPS = '/organization-dashboard/billing/api-configuration/groups',
+    SUBSCRIPTION = '/organization-dashboard/billing/subscriptions',
+    CLIENT_SUBSCRIPTIONS = '/organization-dashboard/billing/client-subscriptions',
+    APP_SECURITY = '/organization-dashboard/app-security',
+    API_DOCUMENTATION = '/organization-dashboard/api-documentation',
+    PERMISSIONS = '/organization-dashboard/app-security/permissions',
+    ROLES = '/organization-dashboard/app-security/roles',
+    PAGE404 = ''
+};
+
+export enum pageName {
+    OVERVIEW = 'Overview',
+    APPLICATIONS = 'Applications',
+    CREATE_APP = 'Create Application',
+    USERS = 'User Management',
+    PROFILE = 'Profile',
+    ORGANIZATION = 'Organization',
+    BILLING = 'Billing',
+    API_BUNDLES = 'API Bundles',
+    API_CONFIGS = 'API Configurations',
+    API_CONFIG_GROUPS = 'API Configuration Groups',
+    SUBSCRIPTIONS = 'Subscription',
+    CLIENT_SUBSCRIPTIONS = 'Client Subscriptions',
+    API_DOCUMENTATION = 'Documentation',
+    PERMISSIONS = 'Permissions',
+    ROLES = 'Roles',
+}
+

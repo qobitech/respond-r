@@ -1,0 +1,52 @@
+
+.download-component{
+    display: flex;
+    align-items : center;
+    justify-content: center;
+    border: 1px solid black;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 8px 10px;
+    width: max-content;
+    height: max-content;
+    cursor: pointer;
+    transition: .4s ease;
+    background: none;
+    color: #000;
+    font-weight: 600;
+
+    &.big-btn{
+        font-size: 1em;
+    }
+
+    &.small-btn{
+        font-size: .8em;
+    }
+
+    &.thumbnail-btn{
+        padding: 2px 4px;
+        text-align: center; 
+        border: 1px solid #d7d7d7;
+        border-radius: 3px;
+
+        i{
+            font-size: .7em;   
+        }
+
+    }
+
+    &:hover{
+        background: #000;
+        color: #fff;
+    }
+
+    p{
+        margin :0;
+        margin-right: 5px;
+    }
+}
+
+.a-tag{
+    text-decoration: none;
+    color: inherit;
+}

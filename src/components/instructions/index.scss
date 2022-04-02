@@ -1,0 +1,30 @@
+@import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
+
+.instructions-main{
+    background-image: url('../../extras/images/faq.svg');
+    background-size: cover;
+    background-position:center;
+    background-repeat: no-repeat;
+    background-position-y: -100px;
+    background-blend-mode: multiply;
+
+    .instructions-page{
+        height: 83.5vh;
+        overflow: auto;
+
+        @media screen and (max-width:$md-breakpoint){
+            height: 100vh;
+        }
+    
+        .header{
+    
+            h2{
+                letter-spacing: 2px;
+                text-transform: uppercase;
+                text-align: center;
+            }
+        }
+    
+    };
+}

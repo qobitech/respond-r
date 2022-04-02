@@ -1,0 +1,25 @@
+export enum HttpStatusEnum {
+    OK = 200,
+    BAD_REQUEST = 400,
+    UNAUTHORIZED = 401,
+    FORBIDDEN = 403,
+    REQUEST_ERROR = 404,
+    NOT_ALLOWED = 405,
+    MANY_REQUESTS = 429,
+    LEGALLY_UNAVAILABLE = 451,
+    SERVER_ERROR = 500,
+    BAD_GATEWAY = 502,
+    SERVICE_UNAVAILABLE = 503,
+    NETWORK_ERROR = 0,
+    SERVER_REQUEST_ERROR = 10101,
+    TIME_OUT = 404040
+}
+
+export enum HttpMethod {
+    GET = 'GET',
+    POST = 'POST',
+    PUT = 'PUT',
+    PATCH = 'PATCH',
+    UPDATE = 'UPDATE',
+    DELETE = 'DELETE'
+}

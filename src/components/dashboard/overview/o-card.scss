@@ -1,0 +1,51 @@
+@import '../../../styles/variables.scss';
+@import '../../../styles/mixins.scss';
+
+.o-card{
+    // background-color: #fff;
+    height: 100px;
+    border: 1px solid #e6e6e6;
+    background-color: #fbfbfb;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    align-items: center;
+    justify-content: center;
+
+    @media screen and (max-width:$md-breakpoint){
+        margin-bottom: 20px;
+        width: 250px;
+    }
+
+    .icon-title{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        width: 100%;
+
+        p{
+            margin: 0;
+        }
+
+        i{
+            position: absolute;
+            left: 20px;
+            font-size: 24px;
+            height: 24px;
+        }
+    }
+
+    .stats{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+        width: 100%;
+
+        h2{
+            margin: 0;
+        }
+    }
+}

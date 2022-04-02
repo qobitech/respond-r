@@ -1,0 +1,72 @@
+$transitionEffect : .4s all ease-in-out;
+
+.notification-container{
+
+    position : fixed;
+    background : none;
+    z-index: 400000;
+    transition: $transitionEffect;
+    top:0;
+    width: 100%;
+    height: 8vh;
+    cursor: pointer;
+
+    &.open {
+        transform: translateY(0%);
+    }
+    
+    &.close {
+        transform: translateY(-100%);
+    }
+
+    .notification-bg { 
+        height : max-content;
+        transition: $transitionEffect;  
+        padding : 5px 0;
+        color: #000;
+
+        &.true{
+            background: #64FDE1;
+        }
+
+        &.false{
+            background : #FF5592;
+        }
+
+        .notification-header{
+            height : max-content;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 10px;
+            padding-left: 10px;
+            padding-bottom: 10px;
+            text-align: center;
+
+            p{
+                margin:0;
+                font-size: 12px;
+                font-weight: 600;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+            }
+        }
+
+        .notification-body{
+            padding : 0px 15px 20px;
+
+            .notification-content{
+                display: flex;
+                align-items: flex-start;  
+
+                p{
+                    margin:0;
+                    font-size: 13px;
+                    font-weight: 600;
+                    color : #000;
+                }
+            }            
+        }
+    }
+
+}

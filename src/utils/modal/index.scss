@@ -1,0 +1,69 @@
+@import '../../styles/variables.scss';
+
+.modal-component {
+  top: 0;
+
+  .modal {
+    position:fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(15, 18, 37, 0.8);
+    backdrop-filter: blur(20px);
+    z-index: 1500;
+  }
+
+  .modal-main {
+    padding: 2em 2em 6em;
+    position: fixed;
+    background: #fff;
+    box-shadow: 4px 4px 10px 10;
+    width: 60%;
+    height: max-content;
+    max-height: 80vh;
+    border-radius: .5em;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: auto;
+
+    @media screen and (max-width:$md-breakpoint){
+      width: 80%;
+    }
+
+    .close{
+
+      @media screen and (max-width:$md-breakpoint){
+        margin-bottom: 20px;
+      }
+
+      h4 {
+        color: white;
+        cursor: pointer;
+        padding: 1em;
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: #0F1225;
+  
+        @media screen and (max-width:$md-breakpoint){
+          padding: .5em;
+        }
+      }
+    }
+  }
+
+  .display-block {
+    display: block;
+  }
+
+  .display-none {
+    display: none;
+  }
+}
+
+
+.makeStyles-main-11 {
+	border: 0px !important
+}

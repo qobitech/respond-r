@@ -1,0 +1,77 @@
+@import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
+
+.main-accordion{
+    width: 60%;
+    margin: 0 auto;
+    padding: 1em;
+    border: 1.2px solid #1D2A3B;
+    border-radius: 7px;
+    margin-bottom: 20px;
+
+    &:hover{
+        border-color: lighten(#1D2A3B, 40);
+    }
+
+    @media screen and (max-width:$md-breakpoint){
+        width: 80%;
+    }
+
+    .accordion{
+        transition: .4s ease-in-out;
+        box-sizing: border-box;
+        width: 100%;
+        height: 30px;
+    
+        &.expanded{
+            height: max-content;
+        }
+
+        .header{
+            height: 30px;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .title{
+                font-weight: 600;
+                font-size: 1.2em;
+                max-width: 400px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+
+                @media screen and (max-width:$md-breakpoint){
+                    max-width: 280px;
+                }
+
+                &:hover{
+                    overflow: visible;
+                }
+            }
+
+            .icon{
+                // margin-left: auto;
+                transition: .4s ease;
+            }
+        }
+
+        .content{
+            height: max-content;
+            box-sizing: border-box;
+            padding: 1em;
+
+            ul{
+                padding: 0;
+
+                li{
+                    margin: 10px;
+                    line-height: 1.6;
+                }
+            }
+        }
+
+    }
+
+}

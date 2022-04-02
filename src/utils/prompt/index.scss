@@ -1,0 +1,59 @@
+@import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
+
+$prompt-text-color: #ffffff;
+$prompt-background-color: #4E5A72;
+$prompt-margin: 30px;
+$prompt-arrow-size: 6px;
+$transitionEffect : .4s all ease-in-out;
+  
+.prompt-wrapper {
+	background: blanchedalmond;
+	padding: .5em;
+	border-radius: 5px;
+	height: auto;
+	min-width: 300px;
+	margin: .5em;
+	box-shadow: 0px 0px 4px 0.2px rgb(223, 223, 223);
+	z-index: 100;
+	transition: $transitionEffect;
+
+	&.open {
+        opacity: 100;
+    }
+    
+    &.close {
+        opacity: 0;
+    }
+
+	.content{
+		width: 80%;
+		margin: auto;
+		letter-spacing: 1.2px;
+	}
+
+	.close-prompt{
+		position: absolute;
+		right: 5px;
+		top: 5px;
+		cursor: pointer;
+		
+		button {
+			@include button($font-size: .6em);
+			padding: .5em;
+		}
+	}
+}
+
+.prompt-baby{
+	position: absolute;
+	cursor: pointer;
+	position: fixed;
+	z-index: 100;
+	margin: .5em;
+
+	i{
+		font-size: 18px;
+		color: #E1AD01;
+	}
+}

@@ -1,0 +1,32 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
+
+.icon, i{
+    width: 15px;
+    height: 15px;
+}
+
+.ir{
+    margin-left: 5px;
+    color : #fff;
+}
+
+.btn-request{
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    margin-left: auto;
+    margin-top: 20px;
+
+    button{
+        @include button
+    }
+}
+
+.btn-reusable{
+
+    button{
+        @include button;
+    }
+}

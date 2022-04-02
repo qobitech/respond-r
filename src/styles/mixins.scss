@@ -1,0 +1,153 @@
+@import './variables.scss';
+@mixin box-shadow {
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
+		0 0 8px rgba(102, 175, 233, 0.6);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
+		0 0 8px rgba(102, 175, 233, 0.6);
+};
+
+@mixin error-shadow {
+	-webkit-box-shadow: inset 0 1px 1px #FF5592,
+		0 0 8px #FF5592;
+	box-shadow:inset 0 1px 1px #FF5592
+	0 0 8px #FF5592;
+}
+
+@mixin input {
+	border: 0.9px solid $grey-3;
+	padding: 0.75em 1em;
+	border-radius: 0.2em;
+	color: $grey-1;
+	width: 100%;
+	box-sizing: border-box;
+	// margin: .5em 0 0 0;
+	font-family: $font-family;
+
+	&:hover {
+		border-color: $blue-2;
+	}
+
+	&:focus {
+		border-color: $blue-2;
+		outline: 0;
+		@include box-shadow;
+	}
+
+	&.error {
+		border-color: rgba(255, 85, 146, 0.7);
+		box-shadow: 0 0 0 1px rgba(255, 85, 146, 0.2);
+	}
+};
+
+@mixin textarea {
+	@include input()
+}
+
+@mixin button($background: #1D2A3B, $font-size: 1.5em) {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1em 2em;
+	border: 1px solid darken(#1D2A3B, 10);
+	border-radius: .2em;
+	background: $background;
+	color: #fff;
+	font-weight: 500;
+	font-size: $font-size;
+	text-decoration: none;
+	cursor: pointer;
+	font-family: $font-family;
+	white-space: nowrap;
+
+	&:hover {
+		background: darken(#1D2A3B, 50);
+	}
+
+	&.delete{
+		background: transparent;
+		border-color: #FF5592;
+		color: #1D2A3B;
+
+		&:hover{
+			background-color: #FF5592;
+			color: #fff;
+			transition: .4s ease-in-out;
+		}
+	}
+	&:disabled{
+		cursor: not-allowed;
+		background: $grey-3;
+		border: none;
+		
+		&:hover{
+			background: $grey-3;
+		}
+	}
+}
+
+@mixin select {
+	border: 0.9px solid $grey-3;
+	padding: 0.75em 1em;
+	border-radius: 0.2em;
+	color: $grey-1;
+	appearance: none;
+	outline: none;
+	width: auto;
+	box-sizing: border-box;
+	margin-top: 0.9em;
+	background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+	background-repeat: no-repeat;
+	background-position-x: 100%;
+	background-position-y: 50%;
+	cursor: pointer;
+
+	&:hover {
+		border-color: $blue-2;
+	}
+
+	&:focus {
+		border-color: $blue-2;
+		outline: 0;
+		@include box-shadow;
+	}
+}
+
+@mixin scrollbar ($thumb-bg: #1D2A3B, $track-bg: #fff ) {
+	&::-webkit-scrollbar{
+        transition: .4s ease-in-out;
+        width: 5px  !important; 
+        height: 5px  !important; 
+    }
+
+    &::-webkit-scrollbar-track{
+        transition: .4s ease-in-out;
+        background: $track-bg;
+    }
+    
+    &::-webkit-scrollbar-thumb{
+        background: $thumb-bg;
+        border-radius: 5px;
+    }
+}
+
+@mixin cta-section {
+    display: flex;
+    align-items: center;
+
+    @media screen and (max-width:$md-breakpoint){
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    button {
+        @include button;
+        font-size: .8em;
+        margin-left: 10px;
+
+        &.delete{
+            background: transparent;
+            border-color: #FF5592;
+            color: #1D2A3B;
+        }
+    }
+}

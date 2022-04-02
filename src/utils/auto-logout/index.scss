@@ -1,0 +1,18 @@
+@import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
+
+.logout-prompt{
+
+    text-align: center;
+    
+    .lg-btn{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        button{
+            @include button;
+            font-size: .8em;
+        }
+    }
+}

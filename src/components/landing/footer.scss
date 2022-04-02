@@ -1,0 +1,11 @@
+@import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
+
+.footer_main{
+    width: 100%;
+    margin:0;
+    padding:10px 0;
+    box-sizing: border-box;
+    background-color: #e8e8e8;
+    text-align: center;
+}

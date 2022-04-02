@@ -1,0 +1,27 @@
+@import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
+
+.cta-comp{
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media screen and (max-width:$md-breakpoint){
+        flex-direction: column;
+    }
+
+    button{
+        @include button($font-size: .8em);
+        margin: 10px 10px 10px 0;
+        white-space: nowrap;
+        width: 180px;
+    
+        i{
+            margin-right: 10px;
+        }
+    }
+    
+}
+
+

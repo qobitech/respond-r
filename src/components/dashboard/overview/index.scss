@@ -1,0 +1,123 @@
+@import '../../../styles/variables.scss';
+@import '../../../styles/mixins.scss';
+
+.overview{
+    min-height: 100vh;
+
+    .card-section{
+        padding: 0 2em;
+
+        .cards{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+
+            @media screen and (max-width:$md-breakpoint){
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    }
+
+    .app-section{
+        margin-top: 80px;
+        padding: 0 2em;
+
+        .app-header{
+            margin: 0;
+        }
+
+        .app-cta{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 5px;
+            text-align: center;
+
+            .recent{
+
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+
+                p{
+                    font-size: 10px;
+                    letter-spacing: 2px;
+                    margin: 0;
+                }
+
+                i{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+
+            .add-app{
+                width: 24px;
+
+                i{
+                    font-size: 24px;
+                    cursor: pointer;
+                    color: #E1AD01;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+        }
+
+        .app-preview{
+            min-height: max-content;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 2em 0;
+
+            @media screen and (max-width:$md-breakpoint){
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+
+        .view-all-apps{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            p, i{           
+                font-size: 14px;
+                color: #E1AD01;
+                cursor: pointer;
+                margin: 0;
+            }
+
+            i{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+        }
+    }
+
+    .payments-section{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-top: 80px;
+        padding: 0 2em;
+
+        .payment-accordion{
+            background: #fff;
+            padding: 1em;
+            border-radius: 10px;
+            height: 40px;
+            margin-bottom: .5em;
+            box-shadow: 0px 0px 4px 0.2px rgb(223, 223, 223);
+        }
+    }
+}

@@ -1,0 +1,112 @@
+$tooltip-text-color: #ffffff;
+$tooltip-background-color: #4E5A72;
+$tooltip-margin: 30px;
+$tooltip-arrow-size: 6px;
+  
+.Tooltip-Wrapper {
+  display: inline-block;
+  position: relative;
+
+	.Tooltip-Tip {
+		position: absolute;
+		border-radius: 4px;
+		left: 50%;
+		top: -23px !important;
+		transform: translateX(50px);
+		padding: 6px 12px;
+		color: $tooltip-text-color;
+		background: $tooltip-background-color;
+		font-family: sans-serif;
+		font-weight: 300;
+		letter-spacing: 1.2px;
+		line-height: 1;
+		z-index: 100;
+		white-space: nowrap;
+		transition : "all 0.3s ease";
+
+		&::before{
+			content: " ";
+			left: 50%;
+			border: solid transparent;
+			height: 0;
+			width: 0;
+			position: absolute;
+			pointer-events: none;
+			border-width: $tooltip-arrow-size;
+			margin-left: calc(#{$tooltip-arrow-size} * -1);
+		}
+
+		&.top{
+			top: calc(#{$tooltip-margin} * -1);
+
+			&::before{
+				top: 100%;
+				border-top-color: $tooltip-background-color;
+			}
+		}
+
+		&.right{
+			left: calc(100% + #{$tooltip-margin});
+			top: 50%;
+			transform: translateX(50px) translateY(-20%);
+
+			&::before{
+				left: calc(#{$tooltip-arrow-size} * -1);
+				top: 50%;
+				transform: translateX(0) translateY(-50%);
+				border-right-color: $tooltip-background-color;
+			}
+		}
+
+		&.bottom{
+			bottom: calc(#{$tooltip-margin} * -1);
+
+			&::before{
+				bottom: 100%;
+				border-bottom-color: $tooltip-background-color;
+			}
+		}
+
+		&.left{
+			left: auto;
+			right: calc(100% + #{$tooltip-margin});
+			top: 50%;
+			transform: translateX(0) translateY(-50%);
+
+			&::before{
+				left: auto;
+				right: calc(#{$tooltip-arrow-size} * -2);
+				top: 50%;
+				transform: translateX(0) translateY(-50%);
+				border-left-color: $tooltip-background-color;
+			}
+		}
+		
+		&.tooltipContainer{
+			background : $tooltip-background-color;
+		}
+
+		.tooltipText{
+			color : $tooltip-text-color;
+		}
+	}
+
+	.Tooltip-Triad {
+		content: " ";
+		right: 18px !important;
+		top:-29px !important;
+		border: solid transparent;
+		height: 0;
+		width: 0;
+		position: absolute;
+		pointer-events: none;
+		border-width: $tooltip-arrow-size;
+		border-top: 7px solid transparent;
+		border-bottom: 7px solid transparent;
+		z-index: 1;
+		
+		&.tooltipTriangle{
+			border-left: 8px solid black;
+		}
+	}
+}

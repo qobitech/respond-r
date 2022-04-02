@@ -1,0 +1,145 @@
+@import '../../../styles/variables.scss';
+@import '../../../styles/mixins.scss';
+
+.back{
+
+    &:hover {
+        font-weight: 500;
+        color: #5d77fc;
+    }
+}
+
+.profile-container{
+    margin-top: 10px;
+    padding: 0 1em;
+    padding-top: 0;
+    min-height: 100vh;
+
+    .profile-cta{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        @media screen and (max-width:$md-breakpoint){
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        i{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .prof{
+            font-size: 24px;
+            @media screen and (max-width:$md-breakpoint){
+                margin-bottom: 10px;
+            }
+        }
+
+        .cta{
+            display: flex; 
+            justify-content: flex-end; 
+        }
+    }
+
+    h2{
+        text-align: center;
+        border-bottom: 1px solid #e2e2e2;
+        padding: .5em 0;
+    }
+
+    .profile-content-wrapper{
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        margin-top: 20px;
+        place-items: center;
+        text-align: left;
+
+        @media screen and (max-width:$md-breakpoint){
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .content-card{
+            margin: 10px 0;
+            width: 100%;
+            text-align: center;
+
+            .card-label{
+                font-weight: 500;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                margin: 0;
+                margin-bottom: 7px;
+                color : rgb(79, 79, 79);
+            }
+
+            .card-text{
+                font-weight: 600;
+                margin: 0;
+                text-transform: capitalize;
+                padding-bottom: 10px;
+            }
+        }
+    }
+};
+
+.change-password{
+
+    .create-main{
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+        height: auto;
+        width: 60%;
+
+        @media screen and (max-width:$md-breakpoint){
+            width: 100%;
+        }
+    
+        .input-area{
+            margin-bottom: 20px;
+            width: 100%;
+            
+            .label{
+                margin: .5em 0;
+                font-size: 10px;
+                font-weight: 500;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+            }
+
+            input{
+                @include input;
+            }
+
+            textarea{
+                @include textarea
+            }
+
+            span{
+                margin: .5em 0;
+                font-weight: 500;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                color: #64FDE1;
+
+                &.error{
+                    color: #FF5592;
+                }
+
+                i{
+                    color: #64FDE1;
+                    margin-right: 10px;
+                }
+            }
+        }
+
+        button{
+            @include button($font-size: .8em)
+        }
+    }
+};

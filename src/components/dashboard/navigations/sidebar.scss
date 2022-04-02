@@ -1,0 +1,161 @@
+@import '../../../styles/variables.scss';
+@import '../../../styles/mixins.scss';
+
+.side-bar{
+    height: 100vh;
+    background-color: #4E5A72;
+    width: 5vw;
+    position: fixed;
+    left: 0;
+    top: 0;
+    transition: 0.4s ease-out;
+    z-index: 12;
+    @include scrollbar($track-bg: #4E5A72, $thumb-bg: #fff);
+
+    @media screen and (max-width:$md-breakpoint){
+        width: 0vw;
+        overflow: hidden;
+    }
+
+    &.expanded{
+        width: 17vw;
+        overflow-y: auto;
+
+        @media screen and (max-width:$md-breakpoint){
+            width: 50vw;
+        } 
+    }
+
+    .side-menu-container{
+
+        margin-top: 60px;
+
+        @media screen and (max-width:$md-breakpoint){
+            margin-top: 80px;
+        } 
+
+        .side-menu{
+            display: flex;
+            align-items: center;
+            height: 8vh;
+            margin-top: 20px;
+            cursor: pointer;
+            color: #fff;
+            justify-content: space-between;
+            box-sizing: border-box;
+    
+            @media screen and (max-width:$md-breakpoint){
+                width: 50vw;
+                padding: 0 1em;
+                height: 7vh;
+            }
+    
+            &.active{
+                background-color: #E1AD01;
+            }
+    
+            &.logout{
+                // position: fixed;
+                // bottom: 0px;
+                // background: #4E5A72;
+                // z-index: 100;
+            }
+    
+            &:hover{
+                background-color: #E1AD01;
+                transition: all .5s ease-in-out;
+            }
+    
+            .icon{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                width: 5vw;
+                position: relative;
+    
+                i{
+                    font-size: 18px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                }
+    
+                .hover-title{
+                    position: absolute;
+                    font-size: 9px;
+                    font-weight: 500;
+                    color: #1D2A3B;
+                    visibility: hidden;
+    
+                    &.show{
+                        visibility: visible;
+                    }
+                }
+    
+                .indicator{
+                    position: absolute;
+                    right: 0;
+                    font-size: 10px;
+                }
+            }
+    
+            .title{
+                display: flex;
+                align-items: center;
+                width: 12vw;
+                transition: 4s ease;
+    
+                @media screen and (max-width:$md-breakpoint){
+                    width: 40vw;
+                    margin-left: 20px;
+                }
+    
+                p{
+                    font-size: 12px;
+                    letter-spacing: 2px;
+                    text-transform: uppercase;
+                    text-overflow: ellipsis;
+                    position: relative;
+    
+                    @media screen and (max-width:$md-breakpoint){
+                        font-size: 10px;
+                    }
+    
+                    i{
+                        margin-left: 10px;
+                        font-size: 12px;
+                        // position: fixed;
+                    }
+                }
+            }
+        }
+
+        .sub-menu-area{
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            cursor: pointer;
+            width: 75%;
+            margin-left: auto;
+            border-radius: 20px 0 0 20px;
+    
+            &:hover{
+                background-color: #E1AD01;
+                transition: all .5s ease-in-out;
+            };
+    
+            &.active{
+                background-color: #9e8b50;
+            }
+    
+            .sub-menu{
+                color: #fff;
+                font-size: 10px;
+                letter-spacing: 1.5px;
+                margin-left: 10px;
+            }
+        }
+    }
+}
