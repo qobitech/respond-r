@@ -67,7 +67,7 @@ export const UploadComponent : FC<IUC> = (props) => {
             <div style={{border:"1px solid #e7e7e7", borderRadius:"5px", width:"100%", height:"56px", marginBottom:"25px", marginTop:"10px", position:"relative"}}>
                 <div style={{width:"100%", height:"100%", display:"flex", alignItems:"center", justifyContent:"center", textAlign:"center", margin:"0"}}>
                     <p style={{fontSize:"1em", fontWeight:600, margin:0}}>
-                        {uploadObj!?.name}
+                        {uploadObj!?.name.name}
                     </p>
                 </div>
             </div>}

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import {  IAdmin } from 'interfaces/IAdmin';
 import {  IHttp } from 'interfaces/IHttp';
 import { pageName, url } from 'enums/Route';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useStrictLoader } from 'hooks/useStrictLoader';
 import { ActionEnums } from 'enums/ActionEnums';
 import { IOrganization } from 'interfaces/IOrganization';
@@ -42,7 +42,7 @@ const Subscribed:FC<IProps> = (props) => {
     const { id: orgSubId = 0 } = organizationSubscription || {};
     const [ selectedApps, setSelectedApps ] = useState<Array<IApplication>>([]);
     const [ objToSend, setObjToSend ] = useState<Array<IObjToSend>>([]);
-    const history = useHistory();
+    const navigate = useNavigate();
 
     interface IAddAppToSub {
         applicationId: number;
@@ -117,7 +117,7 @@ const Subscribed:FC<IProps> = (props) => {
             </div>
 
             <div className="select-another">
-                <p className="another-bundle" onClick={() => history.push(url.API_BUNDLES, {pageName: pageName.API_BUNDLES})}>
+                <p className="another-bundle" onClick={() => navigate(url.API_BUNDLES, {state: {pageName: pageName.API_BUNDLES}})}>
                     Subscribe to another bundle
                     <i className='fa fa-angle-right'></i>
                 </p>

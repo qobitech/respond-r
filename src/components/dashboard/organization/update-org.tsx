@@ -19,7 +19,7 @@ interface IStateProps {
 }
 
 interface IDispatchProps {
-    registerOrganization : ( data : object, update? : boolean ) => void;
+    registerOrganization : ( data : object, update?: boolean ) => void;
 }
 
 interface IProps extends IStateProps, IDispatchProps{}

@@ -1,11 +1,12 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import './index.scss';
 
 interface IVSProps {
-    onBClick? : React.MouseEventHandler<HTMLElement>;
-    name? : string; 
-    logo? : string;
-    hideUpdate? : boolean;
+    children: ReactNode;
+    onBClick?: React.MouseEventHandler<HTMLElement>;
+    name?: string; 
+    logo?: string;
+    hideUpdate?: boolean;
     MainCTA?: JSX.Element;
     showBTL?: boolean;
 }

@@ -11,7 +11,7 @@ import NotSubscribed from './not-subscribed';
 import Subscribed from './subscribed';
 import './index.scss';
 import { IAuth } from 'interfaces/IAuth';
-import { useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { pageName, url } from 'enums/Route';
 
 interface IStateProps {
@@ -35,8 +35,9 @@ const Subscriptions:FC<IProps> = (props) => {
     const { loggedInDetails } = auth || {};
     const { user } = loggedInDetails || {};
     const { organizationId } = user || {};
-    const history = useHistory<{pageName: string, bundleCode: string}>();
-    const historyState = history!?.location!?.state;
+    const navigate = useNavigate();
+    const location = useLocation();
+    const historyState = location!?.state;
     let bundleCodeH = historyState!?.bundleCode;
     const [ isMigrating, setIsMigrating ] = useState(false)
 
@@ -55,7 +56,7 @@ const Subscriptions:FC<IProps> = (props) => {
 
     const clearMigration = () => {
         setIsMigrating(false);
-        history.replace(url.SUBSCRIPTION, {pageName: pageName.SUBSCRIPTIONS, bundleCode: ''})
+        navigate(url.SUBSCRIPTION, {state: {pageName: pageName.SUBSCRIPTIONS, bundleCode: ''}})
     }
 
     let isLoad = useStrictLoader( admin.action, ActionEnums.GET_API_BUNDLE_BY_ID ) && loading;

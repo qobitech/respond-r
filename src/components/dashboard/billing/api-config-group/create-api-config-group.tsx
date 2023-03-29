@@ -20,7 +20,7 @@ interface IStateProps {
 }
 
 interface IDispatchProps {
-    createAPIConfigGroup : ( data : object, update? : boolean ) => void;
+    createAPIConfigGroup : ( data : object, update?: boolean ) => void;
 }
 
 interface IProps extends IStateProps, IDispatchProps{

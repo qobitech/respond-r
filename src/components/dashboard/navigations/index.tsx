@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import SideBar from './sidebar';
 import logo from 'extras/images/car_logo.jpg';
-import { useHistory } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { IHttp } from 'interfaces/IHttp';
 import { IAuth } from 'interfaces/IAuth';
 import { IAppState } from 'interfaces/IAppState';
@@ -32,8 +32,9 @@ const DashboardNav:FC<IProps> = (props) => {
     const { username = '' } = user || {};
     const [ hamburgerClicked, setHamburgerClicked ] = useState(false);
     const [ showActions, setShowActions ] = useState(false);
-    const history = useHistory<{pageName: string}>();
-    const historyState = history!?.location!?.state;
+    const navigate = useNavigate();
+    const location = useLocation();
+    const historyState = location!?.state;
     const pageName = historyState!?.pageName;
 
     const [ setValueFunc, ModalComponent ] = useModalWithArg( [ <UpdateOrg />, <></> ], { updateOrg: false } );
@@ -70,9 +71,9 @@ const DashboardNav:FC<IProps> = (props) => {
                         content={
                             <div className='action-list'>
                                 <h4>{username}</h4>
-                                <p onClick={() => history.push(url.PROFILE, {pageName: pName.PROFILE })}>My Profile</p>
+                                <p onClick={() => navigate(url.PROFILE, {state: {pageName: pName.PROFILE }})}>My Profile</p>
                                 <p onClick={() => setValueFunc('updateOrg', true)}>Update Organization Information</p>
-                                <p onClick={() => history.push(url.SUBSCRIPTION, {pageName: pName.SUBSCRIPTIONS})}>Manage Subscription</p>
+                                <p onClick={() => navigate(url.SUBSCRIPTION, {state: {pageName: pName.SUBSCRIPTIONS}})}>Manage Subscription</p>
                                 <p onClick={() => logOut()}>Logout</p>
                             </div>
                         }

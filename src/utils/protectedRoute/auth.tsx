@@ -1,8 +1,8 @@
-import React, { FC } from 'react';
+import React, { FC, ReactElement } from 'react';
 import { connect } from "react-redux";
+import { Navigate } from 'react-router-dom';
 import { IAppState } from "../../interfaces/IAppState";
 import { IAuth } from "interfaces/IAuth";
-import { Route, Redirect } from 'react-router-dom';
 import { url } from 'enums/Route';
 
 interface IStateProps {
@@ -10,23 +10,18 @@ interface IStateProps {
 }
 
 interface IProps extends IStateProps {
-    Component: React.ElementType<any>;
-    exact: boolean | undefined;
-    path?: string | string[] | undefined
+  children: ReactElement;
+  path?: string | string[] | undefined
 }
 
 const AuthRoute:FC<IProps> = (props) => {
-  const { auth, Component, ...rest } = props;
-  return(
-      <Route {...rest}
-        render={props =>
-          auth.authenticated ? 
-            <Component {...props} />
-            : 
-            <Redirect to={{ pathname: url.LANDING_PAGE }} />  
-        }
-      />
-  );
+  const { auth } = props;
+
+  if (!auth.authenticated) {
+    return <Navigate to={{ pathname: url.LANDING_PAGE }} replace />;
+  }
+
+  return props.children;
 }
 
 const mapStateToProps = (state: IAppState): IStateProps => ({

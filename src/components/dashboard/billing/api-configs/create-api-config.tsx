@@ -21,7 +21,7 @@ interface IStateProps {
 }
 
 interface IDispatchProps {
-    createAPIConfig : ( data : object, update? : boolean ) => void;
+    createAPIConfig : ( data : object, update?: boolean ) => void;
     getAPIConfigGroups : (PageNumber?: number, PageSize?: number, query?: string) => void;
 }
 

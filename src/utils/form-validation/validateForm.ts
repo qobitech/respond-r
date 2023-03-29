@@ -37,7 +37,7 @@ const checkValues =  async <F extends { [key : string] : any }>( formValues : F,
     return { valueStatus : reason.length === 0, valueReason : reason, formValues }
 } 
 
-export const validateFormValues = async <F>( formValues : F, interfaceobject : F, setErrorObj : IErrorObj ) => {
+export const validateFormValues = async <F extends { [key : string] : any }>( formValues : F, interfaceobject : F, setErrorObj : IErrorObj ) => {
     let cL : boolean, cP : boolean, cV : boolean;
     cL = await checkLength( formValues, interfaceobject, setErrorObj )    
     cP = await (await compareProps( formValues, interfaceobject, setErrorObj )).status

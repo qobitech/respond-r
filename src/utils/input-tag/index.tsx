@@ -12,7 +12,7 @@ interface IProps extends IAutoInputProps {
     isData?: boolean;
     clearValue?: (item: string) => void;
     formClose?: boolean;
-    updateDefaultValues? : Array<string>;
+    updateDefaultValues?: Array<string>;
     update?: boolean;
     selectedTags: Array<ITag>;
     setSelectedTags: React.Dispatch<React.SetStateAction<ITag[]>>

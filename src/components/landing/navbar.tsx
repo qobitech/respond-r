@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { MenuItems } from './menuItems';
 import { pageurl } from '../../utils/constants';
-import { Link, NavLink, useHistory } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import logo from 'extras/images/car_logo.jpg';
 import "./navbar.scss";
 import { url } from "enums/Route";
@@ -13,7 +13,7 @@ const Navbar: React.FC<IProps> = (props) => {
 	const handleClick = () => {
 		setClicked(!clicked);
 	};
-	const history = useHistory();
+	const navigate = useNavigate();
 
     return (
         <nav className='navbarItems'>
@@ -32,13 +32,20 @@ const Navbar: React.FC<IProps> = (props) => {
 				{MenuItems.map((item, index) => (
                     <div className='menu-item' key={index} >
                         <i className={item!?.icon}></i>
-                        <NavLink key={index} exact to={item.url} activeClassName='nav-current' className={item.cName} 
-							onClick={() => window.innerWidth < 758 ? setClicked(!clicked): void(0)}>
+                        <NavLink key={index}
+							className={({ isActive }) =>
+								isActive
+									? `menu-item-container ${item.cName}`
+									: `${item.cName}`
+							}
+							to={item.url} 
+							onClick={() => window.innerWidth < 758 ? setClicked(!clicked): void(0)}
+						>
                         	{item.title}
                         </NavLink>
                     </div>
 				))}
-				<button onClick={() => history.push(url.REGISTER) }>Register</button>
+				<button onClick={() => navigate(url.REGISTER) }>Register</button>
 			</ul>
 
         </nav>

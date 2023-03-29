@@ -3,10 +3,10 @@ import './index.scss'
 
 interface IProps {
     type : "small" | "big" | "thumbnail",
-    imageArray? : Array<string>;
-    image? : string;
-    multiple? : boolean;
-    docType? : string;
+    imageArray?: Array<string>;
+    image?: string;
+    multiple?: boolean;
+    docType?: string;
 }
 
 const DownloadFeature:FC<IProps> = (props) => {
@@ -17,7 +17,7 @@ const DownloadFeature:FC<IProps> = (props) => {
 }
 
 interface IDC {
-    multiple? : boolean;
+    multiple?: boolean;
     type : "small" | "big" | "thumbnail",
     onClick: React.MouseEventHandler<HTMLDivElement> | undefined;
 }

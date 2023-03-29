@@ -1,11 +1,11 @@
 import React,{FC} from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { url } from 'enums/Route';
 // import trafficlightimg from '../../extras/images/payment4.jpg'
 
 const Page404:FC = () => {
 
-    const history = useHistory();
+    const navigate = useNavigate();
 
     return(
         <div style={{width:"100%", height:"100vh", position: "relative", backgroundImage:`url(${''})`,backgroundSize:"contain"}}>
@@ -22,7 +22,7 @@ const Page404:FC = () => {
                 </p>
                 <div style={{marginTop:'70px',width:"max-content",margin:"35px auto 0"}} >
                     <button style={{background:"yellow", fontWeight:600}}
-                    onClick={()=>history.push(url.OVERVIEW)}
+                    onClick={()=>navigate(url.OVERVIEW)}
                     >
                     Go To Home Page
                     </button>

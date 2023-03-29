@@ -1,16 +1,14 @@
 import React, { FC } from 'react';
 import Navbar from './navbar';
 import Footer from './footer';
-import dashboard from 'extras/images/dashboard-interface.svg';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { url } from 'enums/Route';
 import './index.scss';
+import DashboardInterfaceSVG from 'extras/images/DashboardInterface';
 
-interface IProps {};
+const LandingPage = () => {
 
-const LandingPage:FC<IProps> = () => {
-
-    const history = useHistory();
+    const navigate = useNavigate();
 
     return(
         <div>
@@ -22,7 +20,7 @@ const LandingPage:FC<IProps> = () => {
                         <h1>
                             ONE-STOP ACCESS TO MANAGING YOUR TRAFFIC MANAGEMENT APPLICATIONS
                         </h1>
-                        <button onClick={() => history.push(url.REGISTER)}>
+                        <button onClick={() => navigate(url.REGISTER)}>
                             Register Now
                         </button>
                     </div>
@@ -33,14 +31,14 @@ const LandingPage:FC<IProps> = () => {
 
                 <div className="second-section">
                     <div className="left-ss">
-                        <img src={dashboard} alt="" />
+                        <DashboardInterfaceSVG />
 
                     </div>
                     <div className="right-ss">
                         <p className="intro-title">your personalized dashboard</p>
                         <h1>Manage your application empire</h1>
                         <p>Track your user management and application progress.</p>
-                        <p className="get-started" onClick={() => history.push(url.REGISTER)}>
+                        <p className="get-started" onClick={() => navigate(url.REGISTER)}>
                             Get Started <span><i className='fa fa-angle-right'></i></span>
                         </p>
                     </div>

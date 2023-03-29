@@ -10,7 +10,7 @@ import { getAllApplications, getOrganizationInfo } from 'store/actions';
 import { useStrictLoader } from 'hooks/useStrictLoader';
 import { ActionEnums } from 'enums/ActionEnums';
 import { NoSearchResults } from 'utils/refresh';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { pageName, url } from 'enums/Route';
 import { IAuth } from 'interfaces/IAuth';
 import Tour from 'components/dashboard/user-onboarding';
@@ -38,7 +38,7 @@ const Overview:FC<IProps> = (props) => {
     const { loggedInDetails } = auth || {};
     const { user } = loggedInDetails || {};
     const { organizationId } = user || {};
-    const history = useHistory();
+    const navigate = useNavigate();
 
     useEffect(() => {
         getAllApplications(1,3,'');
@@ -59,7 +59,7 @@ const Overview:FC<IProps> = (props) => {
             <div className="overview">
                 <Prompt trigger={!!organizationSubscription} content={<p>
                     It appears you aren't subscribed... <br />
-                    <b onClick={() => history.push(url.API_BUNDLES, {pageName: pageName.API_BUNDLES})}
+                    <b onClick={() => navigate(url.API_BUNDLES, {state: {pageName: pageName.API_BUNDLES}})}
                         style={{cursor: 'pointer'}}
                     >
                         Subscribe to a bundle
@@ -93,7 +93,7 @@ const Overview:FC<IProps> = (props) => {
                             <i className="fa fa-angle-down"></i>
                         </div>
 
-                        <div className="add-app" onClick={ () => history.push(url.CREATE_APP, {pageName: pageName.CREATE_APP})}>
+                        <div className="add-app" onClick={ () => navigate(url.CREATE_APP, {state: {pageName: pageName.CREATE_APP}})}>
                             <i className="fa fa-plus-circle"></i>
                         </div>
 
@@ -112,7 +112,7 @@ const Overview:FC<IProps> = (props) => {
                                 })}
                             </div>
                             <div className="view-all-apps">
-                                <p onClick={() => history.push(url.APPLICATIONS, {pageName: pageName.APPLICATIONS})}>View all</p>
+                                <p onClick={() => navigate(url.APPLICATIONS, {state: {pageName: pageName.APPLICATIONS}})}>View all</p>
                                 <i className="fa fa-angle-right"></i>
                             </div>
                         </>

@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { MenuData, SubMenuData, IMenuData } from './menudata';
-import { useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { connect } from "react-redux";
 import { IAppState } from "interfaces/IAppState";
 import { IAuth } from 'interfaces/IAuth';
@@ -22,12 +22,12 @@ interface IProps extends IStateProps, IDispatchProps {
 };
 
 const SideBar:FC<IProps> = (props) => {
-
     const { hamburgerClicked = false, setHamburgerClicked, logOut } = props;
-    const history = useHistory();
+    const navigate = useNavigate();
+    const location = useLocation();
     const onSideMenuClick = (url: string, title: string) => {
         setHamburgerClicked(false);
-        history.push(url, {pageName: title!})
+        navigate(url, {state: {pageName: title!}})
     };
     const [showSubMenu, setShowSubMenu] = useState<{id: number, show:boolean}>({id: 0, show: false});
 
@@ -51,7 +51,7 @@ const SideBar:FC<IProps> = (props) => {
     const isChildActive = (item: IMenuData) => {
         if( Array.isArray( item!?.subUrls ) ){
             for(let i = 0; i < item!?.subUrls.length; i++){
-                if( history.location.pathname === item.subUrls[i] || history.location.pathname.includes( item.subUrls[i] ) ){
+                if( location.pathname === item.subUrls[i] || location.pathname.includes( item.subUrls[i] ) ){
                     return true
                 }
             }
@@ -78,7 +78,7 @@ const SideBar:FC<IProps> = (props) => {
                         return(
                             view &&
                             <div key={id}>
-                                <div className={(history.location.pathname === url || isChildActive(m)) ? 'side-menu active' : 'side-menu'} onClick={(e) => {handleSideMenu(e, id, hasChildren, url, title)}}>
+                                <div className={(location.pathname === url || isChildActive(m)) ? 'side-menu active' : 'side-menu'} onClick={(e) => {handleSideMenu(e, id, hasChildren, url, title)}}>
 
                                     <IconComponent title={title} icon={icon} isShow={!hamburgerClicked} hasChildren={hasChildren} />
                                     <div className="title" style={{display: hamburgerClicked ? "block" : "none"}}>
@@ -100,7 +100,7 @@ const SideBar:FC<IProps> = (props) => {
                                                     return(
                                                         view &&
                                                         <div onClick={() => {onSideMenuClick(url, title); }}
-                                                            className={history.location.pathname === url ? 'sub-menu-area active' : 'sub-menu-area'} key={id} 
+                                                            className={location.pathname === url ? 'sub-menu-area active' : 'sub-menu-area'} key={id} 
                                                         >
                                                             <p className='sub-menu'>
                                                                     {title}

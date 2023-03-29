@@ -15,7 +15,7 @@ import { useParams } from 'react-router-dom';
 import { IApplication } from 'interfaces/IApplication';
 import AppMD from './more-details';
 import { NoSearchResults } from 'utils/refresh';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { pageName, url } from 'enums/Route';
 import './index.scss';
 
@@ -43,7 +43,7 @@ const Applications:FC<IProps> = (props) => {
     const [rowsPerPage, setRowsPerPage] = useState(50);
     const [pageNumber, setPageNumber] = useState(1);
     const pageSize = 20;
-    const history = useHistory();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if(!id)
@@ -69,7 +69,7 @@ const Applications:FC<IProps> = (props) => {
     const [ setValueFunc, ModalComponent ] = useModalWithArg( [ <></> ], { deleteApp: false } );
 
     const filterCTAContent = [
-        {title: 'Create Application', action: () => {history.push(url.CREATE_APP, {pageName: pageName.CREATE_APP})}, font: '', isLoad: false }
+        {title: 'Create Application', action: () => {navigate(url.CREATE_APP, {state: {pageName: pageName.CREATE_APP}})}, font: '', isLoad: false }
     ];
 
     return(

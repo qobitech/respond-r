@@ -1,9 +1,9 @@
 import React, { FC } from 'react'
 import { separator, checkIfNull, checkIfUrl } from 'utils/helpers';
 
-type S = {sectionHeader : string, type : 'image' | 'no-image', moreDetails? : {[key: string]: any}, moreDetailsArray? : {[key: string]: any}[], CTA?: JSX.Element, cImages?: Array<string> }[]
+type S = {sectionHeader : string, type : 'image' | 'no-image', moreDetails?: {[key: string]: any}, moreDetailsArray?: {[key: string]: any}[], CTA?: JSX.Element, cImages?: Array<string> }[]
 
-export const useMoreDetailsSection = ( Component : FC<{}>, parentArg : {}, ...mdProps : S ) => {
+export const useMoreDetailsSection = ( Component: any, parentArg : {}, ...mdProps : S ) => {
     return [
         <Component { ...parentArg } >
             {mdProps.map(( { sectionHeader, moreDetails, moreDetailsArray, CTA, cImages }, index ) => {

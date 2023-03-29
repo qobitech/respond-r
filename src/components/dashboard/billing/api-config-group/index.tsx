@@ -5,7 +5,7 @@ import {  IAppState } from 'interfaces/IAppState'
 import { connect } from 'react-redux'
 import {  IAdmin } from 'interfaces/IAdmin'
 import {  IHttp } from 'interfaces/IHttp'
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useStrictLoader } from 'hooks/useStrictLoader';
 import { ActionEnums } from 'enums/ActionEnums';
 import { IAPIConfigGroup } from 'interfaces/IBilling';
@@ -36,7 +36,7 @@ const ApiConfigGroups:FC<IProps> = (props) => {
     const { getAPIConfigGroups, admin, deleteAPIConfig, http } = props;
     const { apiConfigGroups  = [], loading = false } = admin;
     const { id } = useParams<{ id: string }>();
-    const history = useHistory();
+    const navigate = useNavigate();
     const [ isMoreOption, setIsMoreOption ] = useState( false );
     const [ aCObject, setACObject ] = useState({} as IAPIConfigGroup);
     const [page, setPage] = useState(0);
@@ -91,7 +91,7 @@ const ApiConfigGroups:FC<IProps> = (props) => {
     ];
 
     const setMoreOptions = ( id: string ) => {
-        history.push(url.API_CONFIG_GROUPS + `/${id}`, {pageName: pageName.API_CONFIG_GROUPS});
+        navigate(url.API_CONFIG_GROUPS + `/${id}`, {state: {pageName: pageName.API_CONFIG_GROUPS}});
     };
 
     return(

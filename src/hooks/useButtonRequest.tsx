@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { IHttp } from 'interfaces/IHttp';
 import { ButtonRequest } from 'utils/button';
 import { validateFormValues } from 'utils/form-validation';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface IProps {
     formState: {[key: string]: any};
@@ -25,7 +25,7 @@ interface IProps {
     updateInitObj?: object;
     requiredInitObj?: object;
     onButtonClick?: () => void;
-    onSuccess? : () => void;
+    onSuccess?: () => void;
     required?: boolean;
     requiredState?: {[key: string]: any};
 }
@@ -33,7 +33,7 @@ interface IProps {
 export const useButtonRequest = ( props: IProps ) => {
     
     const { http, loading = false, cTitle, uTitle, update, formAction, formState, setFormState, mediaState, createInitObj, updateInitObj, onButtonClick, actionEnums, adminAction, otherValidations, setFormError, isMedia, mediaAction, onSuccess, required, requiredState, requiredInitObj, url } = props;
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const isSuccess = ( ) => {
         return (update ? actionEnums.update : actionEnums.create ) === adminAction && http.httpStatus === 200
@@ -45,7 +45,7 @@ export const useButtonRequest = ( props: IProps ) => {
             if(!update){
                 setFormState( createInitObj )
             }
-            history.push(url!?.url, {pageName: url!?.pageName})
+            navigate(url!?.url, {state: {pageName: url!?.pageName}})
             history.go(0)
         }
     // eslint-disable-next-line
@@ -53,7 +53,7 @@ export const useButtonRequest = ( props: IProps ) => {
 
     const handleOnSubmit = ( ) => {
         typeof onButtonClick !== 'function' ? void(0) : onButtonClick();
-        validateFormValues( required ? requiredState : formState, required ? requiredInitObj :createInitObj, setFormError )
+        validateFormValues( required ? requiredState! : formState, required ? requiredInitObj! :createInitObj!, setFormError )
         .then(( isValidated )=>{        
             if( isValidated ) {
                 if( otherValidations ){
@@ -71,7 +71,7 @@ export const useButtonRequest = ( props: IProps ) => {
     
     const handleOnUpdate = async ( ) => {
         typeof onButtonClick === 'function' ? onButtonClick!() : void(0);
-        validateFormValues( required ? requiredState : formState, required ? requiredInitObj : updateInitObj, setFormError )
+        validateFormValues( required ? requiredState! : formState, required ? requiredInitObj! : updateInitObj!, setFormError )
         .then(( isValidated )=>{        
             if( isValidated ) {
                 formAction!( formState, update )

@@ -11,7 +11,7 @@ import { useButtonRequest } from 'hooks/useButtonRequest';
 import { ActionEnums } from 'enums/ActionEnums'
 import ErrorTxt from 'utils/form-validation'
 import { useStrictLoader } from 'hooks/useStrictLoader';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Loader from 'extras/images/loader/loader.svg';
 import './index.scss';
 
@@ -36,7 +36,7 @@ const ResetPassword:FC<IProps> = ( props ) => {
     const initObj = { email, token, password : '', confirmPassword: '' }
     const [ formDetails, setFormDetails ] = useState<{[key : string] : any}>( initObj );
     const [ formError, setFormError ] = useState<{ [key : string] : string }>( );
-    const history = useHistory();
+    const navigate = useNavigate();
 
     let isVPLoad = useStrictLoader( action, ActionEnums.PASSWORD_RESET_TOKEN_VERIFICATION ) && loading;
 
@@ -107,7 +107,7 @@ const ResetPassword:FC<IProps> = ( props ) => {
                                 <div className='expired-token'>
                                     <h2>Oh my  :(</h2>
                                     <p>The token has expired.</p>
-                                    <button onClick={() => history.push(url.FORGOT_PASSWORD)}>
+                                    <button onClick={() => navigate(url.FORGOT_PASSWORD)}>
                                         Request new token
                                     </button>
                                 </div>

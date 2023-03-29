@@ -11,7 +11,7 @@ import APPThumbnail from 'utils/app-card/app-thumbnail';
 import { useStrictLoader } from 'hooks/useStrictLoader';
 import { ActionEnums } from 'enums/ActionEnums';
 import { pageName, url } from 'enums/Route';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { IAuth } from 'interfaces/IAuth';
 import './index.scss';
 
@@ -45,7 +45,7 @@ const NotSubscribed:FC<IProps> = (props) => {
     const { organizationId } = user || {};
     const { id = '1' } = useParams<{ id: string }>();
     const [ selectedApps, setSelectedApps ] = useState<Array<IApplication>>([]);
-    const history = useHistory();
+    const navigate = useNavigate();
     const [ objToSend, setObjToSend ] = useState<IObjToSend>({
         organizationId: 1, bundleCode: '', clientDetailsList: []
     });
@@ -120,7 +120,7 @@ const NotSubscribed:FC<IProps> = (props) => {
 
             <div className="select-another">
                 <p>Or select another bundle</p>
-                <p className="another-bundle" onClick={() => history.push(url.API_BUNDLES, {pageName: pageName.API_BUNDLES})}>
+                <p className="another-bundle" onClick={() => navigate(url.API_BUNDLES, {state: {pageName: pageName.API_BUNDLES}})}>
                     Select another bundle
                     <i className='fa fa-angle-right'></i>
                 </p>

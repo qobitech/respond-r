@@ -5,7 +5,7 @@ import './card.scss';
 interface ICardProps {
     cardObject: {[ key: string ]: any};
     cardImage: string;
-    onClick? : React.MouseEventHandler<HTMLDivElement>;
+    onClick?: React.MouseEventHandler<HTMLDivElement>;
     cardHeader?: string;
     logo?: string;
     headerHover?: string;

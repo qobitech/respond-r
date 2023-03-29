@@ -1,7 +1,7 @@
 import { useMoreDetailsSection } from 'hooks/useMoreDetails';
 import React, { FC, useCallback } from 'react';
 import { MoreInformation } from 'utils/more-details';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import Loader from 'extras/images/loader/loader.svg';
 import { pageName, url } from 'enums/Route';
 import { IApplication } from 'interfaces/IApplication';
@@ -25,7 +25,7 @@ interface IProps {
 const AppMD:FC<IProps> =( props ) => {
     
     const { setIsMoreOption, setValueFunc, loading, data, addAppsToSub, orgSubId } = props;
-    const history = useHistory();
+    const navigate = useNavigate();
     const { applicationName = '', description = '', environment = '', createdAt = '', clientId = '', clientSecret = '', id } = data || {};
 
     const mainInfo = {
@@ -58,8 +58,8 @@ const AppMD:FC<IProps> =( props ) => {
     },[]);
 
     const [ MoreDetailsComp ] = useMoreDetailsSection( MoreInformation, 
-        { MainCTA : <MainCTA/>, onBClick : ()=> {setIsMoreOption!( false ); history.push(url.APPLICATIONS, 
-            {pageName: pageName.APPLICATIONS})},showBTL : true },
+        { MainCTA : <MainCTA/>, onBClick : ()=> {setIsMoreOption!( false ); navigate(url.APPLICATIONS, 
+            {state: {pageName: pageName.APPLICATIONS}})},showBTL : true },
 
         { sectionHeader : 'Other Information', type : 'no-image', moreDetails : mainInfo },
         

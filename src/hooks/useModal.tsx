@@ -33,7 +33,7 @@ export const useCRUDModal =
     ( 
         Component: Array<FC>, 
         initialValues: T,
-        childArg? : Y
+        childArg?: Y
     ): UseModalProps  => {
 
     const [ modal, setModal ] = useState( initialValues );

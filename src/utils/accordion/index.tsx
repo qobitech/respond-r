@@ -5,7 +5,7 @@ interface IAccordion {
     title: string;
     content: JSX.Element | Array<string | JSX.Element>;
     index: number;
-    icon? : string;
+    icon?: string;
 };
 
 const Accordion:FC<IAccordion> = ( props ) => {

@@ -9,7 +9,7 @@ import { useStrictLoader } from 'hooks/useStrictLoader';
 import { ActionEnums } from 'enums/ActionEnums';
 import { IAuth } from 'interfaces/IAuth';
 import { useSearch } from 'hooks/useQuery';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { pageName, url } from 'enums/Route';
 import OrgFilter from './org-filter';
 import Table from 'utils/table';
@@ -34,7 +34,7 @@ const Overview:FC<IProps> = (props) => {
 
     const { admin, getAllOrganizations } = props;
     const { loading = false, organizations = [] } = admin;
-    const history = useHistory();
+    const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const [ isMoreOption, setIsMoreOption ] = useState( false );
     const [ orgObject, setOrgObject ] = useState({} as IOrganization);
@@ -77,7 +77,7 @@ const Overview:FC<IProps> = (props) => {
     ];
 
     const setMoreOptions = ( id: string ) => {
-        history.push(url.ORGANIZATION + `/${id}`, {pageName: pageName.ORGANIZATION});
+        navigate(url.ORGANIZATION + `/${id}`, {state: {pageName: pageName.ORGANIZATION}});
     };
 
     let isPageLoad = useStrictLoader( admin.action, ActionEnums.GET_ALL_ORGANIZATIONS );

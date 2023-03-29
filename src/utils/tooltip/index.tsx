@@ -1,10 +1,11 @@
-import React, { FC, useState } from "react";
+import React, { FC, ReactNode, useState } from "react";
 import "./tooltip.scss";
 
 interface IProps {
-  delay? : number;
-  content : JSX.Element;
-  direction? : string;
+  content: JSX.Element;
+  children: ReactNode;
+  direction?: string;
+  delay?: number;
 }
 
 const Tooltip : FC <IProps> = (props) => {

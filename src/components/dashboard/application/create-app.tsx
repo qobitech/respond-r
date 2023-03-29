@@ -23,12 +23,12 @@ interface IStateProps {
 }
 
 interface IDispatchProps {
-    createApplication : ( data : object, update? : boolean ) => void;
+    createApplication : ( data : object, update?: boolean ) => void;
     getAPIScopes: () => void;
 }
 
 interface IProps extends IStateProps, IDispatchProps{
-    update? : boolean
+    update?: boolean
 }
 
 const Application : FC<IProps> = ( props ) => {

@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import './index.scss';
 import Navbar from 'components/landing/navbar';
 import Footer from 'components/landing/footer';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { url } from 'enums/Route';
 import { connect } from 'react-redux'
 import {  IAppState } from 'interfaces/IAppState'
@@ -36,7 +36,7 @@ const Login : FC<IProps> = ( props ) => {
     const [ formDetails, setFormDetails ] = useState<{[key : string] : any}>( initObj );
     const [ formError, setFormError ] = useState<{ [key : string] : string }>( )
     
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const loginOnEnter = ( e: React.KeyboardEvent ) => {
 		if (e.key ===  'Enter') {
@@ -86,7 +86,7 @@ const Login : FC<IProps> = ( props ) => {
                                 <input type="checkbox" />
                                 <p className='keep'>Keep me logged in</p>
                             </div> */}
-                            <p className='forgot' onClick={() => history.push(url.FORGOT_PASSWORD)}>Forgot Password?</p>
+                            <p className='forgot' onClick={() => navigate(url.FORGOT_PASSWORD)}>Forgot Password?</p>
                         </div>
                     </div>
                     {BTN}

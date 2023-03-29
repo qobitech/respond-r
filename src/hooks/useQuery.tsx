@@ -3,8 +3,8 @@ import { useState, useEffect, useCallback } from 'react'
 interface IProps {
     loading : boolean;
     request : Array<{ [ key : string ] : any }>;
-    requestBySearch? : Array<{ [ key : string ] : any }>;
-    cancelfunc? : () => void; 
+    requestBySearch?: Array<{ [ key : string ] : any }>;
+    cancelfunc?: () => void; 
 }
 
 type USearch = [ { [ key : string ] : any }[], boolean, boolean, React.Dispatch<React.SetStateAction<boolean>>, boolean, ()=> void ]

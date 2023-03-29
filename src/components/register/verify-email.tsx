@@ -8,7 +8,7 @@ import {  IAuth } from 'interfaces/IAuth';
 import { verifyEmail } from 'store/actions';
 import { ActionEnums } from 'enums/ActionEnums';
 import { useStrictLoader } from 'hooks/useStrictLoader';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Loader from 'extras/images/loader/loader.svg';
 import './index.scss';
 
@@ -28,7 +28,7 @@ const ResetPassword:FC<IProps> = ( props ) => {
     const { loading = false, action = '', verifyEmail: vEmail } = auth || {};
     const { isSuccessful = false } = vEmail || {};
     const { email, token } = useParams<{ email: string, token: string }>();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     let isVELoad = useStrictLoader( action, ActionEnums.EMAIL_VERIFICATION ) && loading;
 
@@ -39,7 +39,7 @@ const ResetPassword:FC<IProps> = ( props ) => {
 
     useEffect(() => {
         if(isSuccessful){
-            history.push(url.LOGIN)
+            navigate(url.LOGIN)
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSuccessful])
@@ -69,7 +69,7 @@ const ResetPassword:FC<IProps> = ( props ) => {
                                 <div className='verify-failure'>
                                     <i className='fa fa-exclamation-triangle'></i>
                                     <p>Email Verification failed</p>
-                                    <button onClick={() => history.push(url.LOGIN)}>Back to login</button>
+                                    <button onClick={() => navigate(url.LOGIN)}>Back to login</button>
                                 </div>
                     }
                 </div>

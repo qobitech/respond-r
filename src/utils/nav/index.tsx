@@ -1,92 +1,114 @@
-import React, { FC } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { FC, ReactNode } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 import { IMenuData, ISubMenuData } from '../../interfaces/IMenu';
 
 interface INavC {
-    item: IMenuData;
-}
-export const NavComponent:FC<INavC> = ( props ) => {
-
-    const { item } = props
-
-    return(
-        <NavLink className="menu-item-container"
-            to={ item.url }
-            activeClassName="main-active"
-            isActive={
-                (match : any, location : any): boolean => {  
-                    let isUrl: boolean = false;
-                    let url = location && location.pathname
-                    if(url === item.url){
-                        isUrl = true;
-                    }
-                    return isUrl;
-                }                      
-            }
-        exact >
-            { props.children }               
-        </NavLink>
-    )
+    children: ReactNode;
+	item: IMenuData;
 }
 
+export const NavComponent: FC<INavC> = props => {
+	const { item } = props;
+	const location = useLocation();
+
+	const checkActive = (itemUrl: string) => {
+		let isUrl = false;
+		const url = location && location.pathname;
+		if (url === itemUrl) {
+			isUrl = true;
+		}
+		return isUrl;
+	};
+
+	return (
+		<NavLink
+			to={item.url}
+			className={({ isActive }) =>
+				isActive && checkActive(item.url) ? 'menu-item-container main-active' : 'menu-item-container'
+			}
+		>
+			{props.children}
+		</NavLink>
+	);
+};
 interface INavParent {
-    item: IMenuData;
-    setIsClicked: React.Dispatch<React.SetStateAction<boolean>>;
-    isClicked: boolean;
+    children: ReactNode | ((props: { isActive: boolean; }) => ReactNode);
+	item: IMenuData;
+	setIsClicked: React.Dispatch<React.SetStateAction<boolean>>;
+	isClicked: boolean;
 }
-export const NavIsParentComponent:FC<INavParent> = ( props ) => {
+export const NavIsParentComponent: FC<INavParent> = props => {
+	const { item, setIsClicked, isClicked } = props;
+	const location = useLocation();
 
-    const { item, setIsClicked, isClicked } = props
+	const checkActive = (itemUrl: string) => {
+		let isUrl = false;
+		const url = location && location.pathname;
+		if (url === itemUrl) {
+			isUrl = true;
+		}
+		return isUrl;
+	};
 
-    return(
-        <NavLink className="menu-item-container"
-                to={ item.url }
-                activeClassName="main-active"
-                onClick={(e)=>{e.preventDefault(); setIsClicked( !isClicked ); }}
-                isActive={
-                    (match : any, location : any): boolean => {  
-                        let isUrl: boolean = false;
-                        let url = location && location.pathname
-                        if( Array.isArray( item.suburls ) ){
-                            for(let i = 0; i < item.suburls.length; i++){
-                                if( url === item.suburls[i] || url.includes( item.suburls[i] ) ){
-                                    isUrl = true;
-                                }
-                            }
-                        }
-                        return isUrl;
-                    }                      
-                }
-        exact >
-            { props.children }               
-        </NavLink>
-    )
-}
+	const checkPActive = (itemSubUrls: Array<string>) => {
+		let isUrl = false;
+		const url = location && location.pathname;
+		if (Array.isArray(itemSubUrls)) {
+			for (let i = 0; i < itemSubUrls.length; i++) {
+				if (url === itemSubUrls[i] || url.includes(itemSubUrls[i])) {
+					isUrl = true;
+				}
+			}
+		}
+		return isUrl;
+	};
+
+	return (
+		<NavLink
+			to={item.url}
+			className={({ isActive }) =>
+				(isActive && checkActive(item.url)) || (isActive && checkPActive(item.suburls || []))
+					? 'menu-item-container main-active'
+					: 'menu-item-container'
+			}
+			onClick={e => {
+				e.preventDefault();
+				setIsClicked(!isClicked);
+			}}
+		>
+			{props.children}
+		</NavLink>
+	);
+};
 
 interface ISubMenu {
-    subItem: ISubMenuData;
-    isLast: boolean;
+    children: ReactNode;
+	subItem: ISubMenuData;
+	isLast: boolean;
 }
-export const NavSubComponent:FC<ISubMenu> = ( props ) => {
+export const NavSubComponent: FC<ISubMenu> = props => {
+	const { subItem, isLast } = props;
+	const location = useLocation();
 
-    const { subItem, isLast } = props
+	const checkActive = (itemUrl: string) => {
+		let isUrl = false;
+		const url = location && location.pathname;
+		if (url === itemUrl) {
+			isUrl = true;
+		}
+		return isUrl;
+	};
 
-    return(
-        <NavLink className={`menu-subitem ${ isLast && "last"}`}
-            to={ subItem.url }
-            activeClassName="sub-active"
-            isActive={
-                (match : any, location : any): boolean => {  
-                    let isUrl: boolean = false;
-                    let url = location && location.pathname
-                    if(url === subItem.url){
-                        isUrl = true;
-                    }
-                    return isUrl;
-                }                      
-            }
-        exact >
-            { props.children }
-        </NavLink>
-    )
-}
+	return (
+		<NavLink
+			to={subItem.url}
+			className={({ isActive }) =>
+				isActive && checkActive(subItem.url)
+					? `menu-subitem ${isLast && 'last'} sub-active`
+					: `menu-subitem ${isLast && 'last'}`
+			}
+		>
+			{props.children}
+		</NavLink>
+	);
+};

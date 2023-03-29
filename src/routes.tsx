@@ -1,12 +1,10 @@
 import React, { FC } from 'react';
-import {Switch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { connect } from "react-redux";
 import { IAppState } from "interfaces/IAppState";
 import { IAuth } from "interfaces/IAuth";
-import { Route } from 'react-router-dom';
-import { route } from 'utils/route';
+import { routes } from 'utils/route';
 import AuthRoute from 'utils/protectedRoute/auth'
-import PublicRoute from 'utils/protectedRoute/public'
 import { logOut, getRefreshToken } from "store/actions";
 import SessionTimeout from 'utils/auto-logout';
 // import checkRole from './utils/checkRole';
@@ -22,27 +20,37 @@ interface IDispatchProps {
 
 interface IProps extends IStateProps, IDispatchProps {}
 
-const Routes:FC<IProps> = (props) => {
+const RouteList:FC<IProps> = (props) => {
     const { auth, logOut, getRefreshToken } = props;
     const Wow = SessionTimeout(auth, logOut, getRefreshToken);
 
     return(
         <>
-            <Switch>
-                {route!?.map( (item) => {
+            <Routes>
+                {routes!?.map( (item) => {
+                    const { paths, PageRenders } = item;
+                    
                     return(
-                    item.path!?.length > 0 ?
-
-                        item!?.requiresAuth ?
-                            <AuthRoute exact path={ item.path } key={ item.id } Component={item!?.PageRender!} /> 
-                            :
-                            <PublicRoute exact path={ item.path } key={ item.id } Component={item!?.PageRender!} /> 
-
-                    :
-                    <Route key={ item.id } component={item.PageRender} />  
-                    ) 
+                        <Route path={paths[0]}>
+                            {PageRenders.map((PageRender, index) => (
+                                PageRender ? 
+                                    <Route 
+                                        path={paths[index]} 
+                                        index={index===0} 
+                                        element={
+                                            item.requiresAuth ?
+                                                <AuthRoute>
+                                                    <PageRender />
+                                                </AuthRoute>
+                                                : <PageRender />
+                                        } 
+                                    /> 
+                                : null
+                            ))}
+                        </Route>
+                    )
                 })}
-            </Switch>
+            </Routes>
             <div key={100}>
                 {Wow}
             </div>
@@ -59,4 +67,4 @@ const mapDispatchToProps: IDispatchProps = {
     getRefreshToken
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Routes);
+export default connect(mapStateToProps, mapDispatchToProps)(RouteList);

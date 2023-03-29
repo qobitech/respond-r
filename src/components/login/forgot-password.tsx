@@ -12,7 +12,7 @@ import { useButtonRequest } from 'hooks/useButtonRequest';
 import { ActionEnums } from 'enums/ActionEnums'
 import ErrorTxt from 'utils/form-validation'
 import { useStrictLoader } from 'hooks/useStrictLoader';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 
 interface IStateProps {
     auth : IAuth;
@@ -31,7 +31,7 @@ const ForgotPassword:FC<IProps> = ( props ) => {
     const { auth, http, requestPasswordToken, clearPasswordReset } = props
     const { loading = false, action = '', passwordReset } = auth;
     const { passwordResetLink = '' } = passwordReset;
-    const history = useHistory();
+    const navigate = useNavigate();
     const initObj = { email : '' }
     const [ formDetails, setFormDetails ] = useState<{[key : string] : any}>( initObj );
     const [ formError, setFormError ] = useState<{ [key : string] : string }>( )
@@ -79,7 +79,7 @@ const ForgotPassword:FC<IProps> = ( props ) => {
                     }
 
                     <div className='back-to-login'>
-                        <p onClick={() => {history.push(url.LOGIN); clearPasswordReset()}}>Back to Login</p>
+                        <p onClick={() => {navigate(url.LOGIN); clearPasswordReset()}}>Back to Login</p>
                     </div>
                 </div>
 

@@ -1,7 +1,7 @@
 import { useMoreDetailsSection } from 'hooks/useMoreDetails';
 import React, { FC, useCallback } from 'react';
 import { MoreInformation } from 'utils/more-details';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 // import CTA from 'utils/cta';
 import Loader from 'extras/images/loader/loader.svg';
 import { pageName, url } from 'enums/Route';
@@ -19,7 +19,7 @@ interface IProps {
 const ConfigMD:FC<IProps> =( props ) => {
     
     const { setIsMoreOption, setValueFunc, loading, data } = props;
-    const history = useHistory();
+    const navigate = useNavigate();
     const { groupCode = '', groupDescription = '' } = data || {};
 
     const mainInfo = {
@@ -44,7 +44,7 @@ const ConfigMD:FC<IProps> =( props ) => {
     },[]);
 
     const [ MoreDetailsComp ] = useMoreDetailsSection( MoreInformation, 
-        { MainCTA : <MainCTA/>, onBClick : ()=> {setIsMoreOption!( false ); history.push(url.API_CONFIG_GROUPS, {pageName: pageName.API_CONFIG_GROUPS})},showBTL : true },
+        { MainCTA : <MainCTA/>, onBClick : ()=> {setIsMoreOption!( false ); navigate(url.API_CONFIG_GROUPS, {state: {pageName: pageName.API_CONFIG_GROUPS}})},showBTL : true },
         { sectionHeader : 'Main Information', type : 'no-image', moreDetails : mainInfo },
     )
 

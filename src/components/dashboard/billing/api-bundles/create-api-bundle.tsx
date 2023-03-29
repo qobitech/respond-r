@@ -20,11 +20,11 @@ interface IStateProps {
 }
 
 interface IDispatchProps {
-    createAPIBundle : ( data : object, update? : boolean ) => void;
+    createAPIBundle : ( data : object, update?: boolean ) => void;
 }
 
 interface IProps extends IStateProps, IDispatchProps{
-    update? : boolean,
+    update?: boolean,
     prevApiBundle?: IAPIBundle;
 }
 

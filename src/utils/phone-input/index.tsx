@@ -103,7 +103,7 @@ export interface IInputProps {
     defaultValue?: any;
     disabled?: boolean;
     ref?: ((instance: HTMLDivElement | null) => void) | React.RefObject<HTMLDivElement> | null | undefined;
-    inputRef? : React.Ref<any> | undefined;
+    inputRef?: React.Ref<any> | undefined;
     onKeyDown?: React.KeyboardEventHandler<HTMLDivElement> | undefined;
     onKeyUp?: React.KeyboardEventHandler<HTMLDivElement> | undefined;
     onInput?: React.FormEventHandler<HTMLDivElement> | undefined;

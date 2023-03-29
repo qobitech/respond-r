@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // import CTAContent from 'utils/cta-content';
 import { pageName, url } from 'enums/Route';
 import './index.scss';
@@ -14,7 +14,7 @@ interface IAppCard {
 const IAppCard:FC<IAppCard> = (props) => {
 
     const { id = 0, title = '', description = '', date = '' } = props;
-    const history = useHistory();
+    const navigate = useNavigate();
     // const [ showActions, setShowActions ] = useState(false);
 
     return(
@@ -23,7 +23,7 @@ const IAppCard:FC<IAppCard> = (props) => {
             {/* <CTAContent show={showActions} content={<p>boom</p>} setShow={setShowActions} >
                 <i className="fa fa-ellipsis-v more-info" onClick={() => setShowActions(true)}></i>
             </CTAContent> */}
-            <div onClick={() => history.push(url.APPLICATIONS + `/${id}`, {pageName: pageName.APPLICATIONS}) } className='app-body'>
+            <div onClick={() => navigate(url.APPLICATIONS + `/${id}`, {state: {pageName: pageName.APPLICATIONS}}) } className='app-body'>
                 <h3>{title}</h3>
                 <div className="desc-section">
                     <p className='desc-header'>Description</p>

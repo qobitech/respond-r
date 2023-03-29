@@ -5,7 +5,7 @@ import {  IAppState } from 'interfaces/IAppState'
 import { connect } from 'react-redux'
 import {  IAdmin } from 'interfaces/IAdmin'
 import {  IHttp } from 'interfaces/IHttp'
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useStrictLoader } from 'hooks/useStrictLoader';
 import { ActionEnums } from 'enums/ActionEnums';
 import { IAPIBundle } from 'interfaces/IBilling';
@@ -43,7 +43,7 @@ const ApiBundles:FC<IProps> = (props) => {
     const [rowsPerPage, setRowsPerPage] = useState(50);
     const [pageNumber, setPageNumber] = useState(1);
     const pageSize = 20;
-    const history = useHistory();
+    const navigate = useNavigate();
 
     useEffect(()=>{
         getAPIBundles(pageNumber, pageSize, '');
@@ -77,11 +77,11 @@ const ApiBundles:FC<IProps> = (props) => {
     ];
 
     const setBundleId = ( id: number) => {
-        history.push(url.API_BUNDLES + `/${id}`, {pageName: pageName.API_BUNDLES});
+        navigate(url.API_BUNDLES + `/${id}`, {state: {pageName: pageName.API_BUNDLES}});
     };
 
     const subscribeToBundle = ( id: number, bundleCode: string ) => {
-        history.push(url.SUBSCRIPTION + `/${id}`, {pageName: pageName.SUBSCRIPTIONS, bundleCode});
+        navigate(url.SUBSCRIPTION + `/${id}`, {state: {pageName: pageName.SUBSCRIPTIONS, bundleCode}});
         history.go(0)
     }
 

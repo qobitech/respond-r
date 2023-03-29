@@ -1,7 +1,7 @@
 import { useMoreDetailsSection } from 'hooks/useMoreDetails';
 import React, { FC, useCallback } from 'react';
 import { MoreInformation } from 'utils/more-details';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import Loader from 'extras/images/loader/loader.svg';
 import { pageName, url } from 'enums/Route';
 import { IOrganization } from 'interfaces/IOrganization';
@@ -19,7 +19,7 @@ interface IProps {
 const OrgMD:FC<IProps> =( props ) => {
     
     const { setIsMoreOption, setValueFunc, loading, data } = props;
-    const history = useHistory();
+    const navigate = useNavigate();
     const { organizationName = '', address = '', phoneNumber = '', email = '', createdAt = '', state = '', applications, organizationSubscription  } = data || {};
     const { bundleCode = '', subscriptionStatus = '', createdAt: orgCreatedAt = '' } = organizationSubscription || {}
 
@@ -49,7 +49,7 @@ const OrgMD:FC<IProps> =( props ) => {
     },[]);
 
     const [ MoreDetailsComp ] = useMoreDetailsSection( MoreInformation, 
-        { MainCTA : <MainCTA/>, onBClick : ()=> {setIsMoreOption!( false ); history.push(url.ORGANIZATION, {pageName: pageName.ORGANIZATION})},showBTL : true },
+        { MainCTA : <MainCTA/>, onBClick : ()=> {setIsMoreOption!( false ); navigate(url.ORGANIZATION, {state: {pageName: pageName.ORGANIZATION}})},showBTL : true },
         { sectionHeader : 'Main Information', type : 'no-image', moreDetails : mainInfo },
         { sectionHeader : 'Subscription Information', type : 'no-image', moreDetails : subInfo },
     )

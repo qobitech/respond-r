@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 import {  IAdmin } from 'interfaces/IAdmin'
 import {  IHttp } from 'interfaces/IHttp'
 import { pageName, url } from 'enums/Route';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { IUser } from 'interfaces/IAdmin';
 import UserMD from './more-details';
 import UserFilter from './user-filter';
@@ -35,7 +35,7 @@ const UserManagement:FC<IProps> = (props) => {
 
     const { getAllUsers, admin, http } = props;
     const { users  = [], loading = false } = admin;
-    const history = useHistory();
+    const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const [ isMoreOption, setIsMoreOption ] = useState( false );
     const [ userObject, setUserObject ] = useState({} as IUser);
@@ -89,7 +89,7 @@ const UserManagement:FC<IProps> = (props) => {
     { createUser: false, updateUser: false, deleteUser: false } );
 
     const setMoreOptions = ( id: string ) => {
-        history.push(url.USERS + `/${id}`, {pageName: pageName.USERS});
+        navigate(url.USERS + `/${id}`, {state: {pageName: pageName.USERS}});
     };
 
     let isLoad = useStrictLoader( admin.action, ActionEnums.GET_ALL_USERS );

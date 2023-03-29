@@ -8,8 +8,8 @@ type Ie = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 interface IFormProps {
     label : string;
     name : string;
-    placeholder? : string;
-    value? : string | number;
+    placeholder?: string;
+    value?: string | number;
     onChange : ( e: Ie ) => void;
     isAI?: boolean;
     isDate?: boolean;

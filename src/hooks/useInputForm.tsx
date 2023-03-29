@@ -13,8 +13,8 @@ interface IFormProps {
     name : string;
     className?: string;
     formError: {[key: string]: any};
-    placeholder? : string;
-    value? : string | number;
+    placeholder?: string;
+    value?: string | number;
     onChange : ( e: Ie ) => void;
     isAI?: boolean;
     handleLIClick?: (e: any, name: string) => void;

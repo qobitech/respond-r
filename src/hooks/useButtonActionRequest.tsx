@@ -21,7 +21,7 @@ interface IProps {
     otherValidations: boolean;
     setFormError: React.Dispatch<React.SetStateAction<{ [ key : string ] : string; } | undefined>>;
     onButtonClick?: () => void;
-    onSuccess? : () => void;
+    onSuccess?: () => void;
     required?: boolean;
     requiredState?: {[key: string]: any};
     updateFormState : ( title : string, callBack:( action: string, updatedFormState : object )=> void ) => Promise<void>;
@@ -54,7 +54,7 @@ export const useButtonActionRequest = ( props: IProps ) => {
 
     const handleOnSubmit = async ( action: string, updatedFormState : object ) => {
         typeof onButtonClick === 'function' ? onButtonClick!() : void(0);
-        validateFormValues( required ? requiredState : updatedFormState, required ? requiredInitObj :createInitObj, setFormError )
+        validateFormValues( required ? requiredState! : updatedFormState, required ? requiredInitObj! :createInitObj, setFormError )
         .then(( isValidated )=>{        
             if( isValidated ) {
                 if( otherValidations){
@@ -72,7 +72,7 @@ export const useButtonActionRequest = ( props: IProps ) => {
     
     const handleOnUpdate = async ( action:string, updatedFormState: object ) => {
         typeof onButtonClick === 'function' ? onButtonClick!() : void(0);
-        validateFormValues( required ? requiredState: updatedFormState , required ? requiredInitObj :updateInitObj, setFormError )
+        validateFormValues( required ? requiredState!: updatedFormState , required ? requiredInitObj! :updateInitObj!, setFormError )
         .then(( isValidated )=>{        
             if( isValidated ) {
                 formAction!( action, updatedFormState , update )

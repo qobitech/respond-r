@@ -2,7 +2,7 @@ import React, { FC, useEffect } from 'react';
 import { useStrictLoader } from 'hooks/useStrictLoader';
 import { IAdmin } from 'interfaces/IAdmin';
 import { IHttp } from 'interfaces/IHttp';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Loader from '../../extras/images/loader/loader.svg';
 import './index.scss';
 
@@ -19,11 +19,11 @@ interface IRUSure {
 const AreYouSure: FC<IRUSure> = (props) => {
 
     const { message = '', deleteFunc, returnFunc, admin, http, actionEnum, url } = props;
-    const history = useHistory();
+    const navigate = useNavigate();
     
     useEffect(()=>{
         if( actionEnum === admin!?.action && http!?.httpStatus === 200 ){
-            history.push(url!?.url, {pageName: url!?.pageName})
+            navigate(url!?.url, {state: {pageName: url!?.pageName }})
             history.go(0)
         }
     // eslint-disable-next-line

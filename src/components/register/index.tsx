@@ -14,7 +14,7 @@ import ErrorTxt from 'utils/form-validation'
 import { useStrictLoader } from 'hooks/useStrictLoader';
 import { validatePassword, validatePhoneNumber } from 'utils/helpers';
 import { url } from 'enums/Route';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './index.scss';
 import PhoneInput from 'utils/phone-input';
 
@@ -44,7 +44,7 @@ const Register : FC<IProps> = ( props ) => {
     const [ formError, setFormError ] = useState<{ [key : string] : string }>( )
     const [ otherErrors, setOtherErrors ] = useState<{ [key : string] : string }>();
     const [ otherValidations, setOtherValidations ] = useState(false);
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const handleOnChange = ( e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> ) => {
         const { name = '', value = '' } = e.target;
@@ -159,7 +159,7 @@ const Register : FC<IProps> = ( props ) => {
                                 <i className='fa fa-thumbs-up'></i>
                                 <p>{responseMessage}</p>
                                 <span>Check your email to confirm registration.</span>
-                                <button onClick={() => {clearOrgAuth(); history.push(url.LOGIN)}}>Proceed to login</button>
+                                <button onClick={() => {clearOrgAuth(); navigate(url.LOGIN)}}>Proceed to login</button>
                             </div>
                             :
                             <div className='verify-failure'>
