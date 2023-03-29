@@ -46,7 +46,7 @@ export const useButtonRequest = ( props: IProps ) => {
                 setFormState( createInitObj )
             }
             navigate(url!?.url, {state: {pageName: url!?.pageName}})
-            history.go(0)
+            // history.go(0)
         }
     // eslint-disable-next-line
     },[http.httpStatus]);
