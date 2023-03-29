@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import {  IAppState } from 'interfaces/IAppState'
 import {  IAuth } from 'interfaces/IAuth'
@@ -28,7 +28,7 @@ interface IProps extends IStateProps, IDispatchProps{
     prevConfigGroup?: IAPIConfigGroup;
 }
 
-const CreateConfigGroup : FC<IProps> = ( props ) => {
+const CreateConfigGroup= (props: IProps) => {
 
     const { http, update, createAPIConfigGroup, prevConfigGroup, admin } = props;
     const { loading = false, action = '' } = admin || {};

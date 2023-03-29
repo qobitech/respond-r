@@ -1,11 +1,11 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface IProps{
     toCopy: string;
     isSecret?: boolean;
 };
 
-const CopyToClipboard: FC<IProps> = (props) => {
+const CopyToClipboard = (props: IProps) => {
 
     const { toCopy = '', isSecret = false }  = props;
     const [ copySuccess, setCopySuccess ] = useState('');

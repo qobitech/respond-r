@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import ClearSearch from '../clearsearch'
 import Refresh from '../refresh';
 import Pagination from '../pagination';
@@ -35,7 +35,7 @@ interface IProps {
     filterCTAContent?: Array<{ title: string, action: () => void, isLoad: boolean, show?: boolean, className?: string, font?: string }>;
 };
 
-const Filter:FC<IProps> = ( props ) => {
+const Filter = ( props: IProps ) => {
 
     const { getAll, getBySearch, gArray, isSearch, pageNumber, setPageNumber, rowsPerPage, category, 
             categoryType, setRowsPerPage, isSearchEmpty, setSearchMode, page, setPage, cancelQuery, 

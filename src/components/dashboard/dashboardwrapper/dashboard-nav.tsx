@@ -12,7 +12,7 @@ interface IDispatchProps {}
 
 interface IProps extends IStateProps, IDispatchProps {};
 
-const DashNav:FC<IProps> = (props) => {
+const DashNav = (props: IProps) => {
 
     const { auth } = props;
     const { authenticated = false } = auth || {};

@@ -35,7 +35,7 @@ interface IProps extends IStateProps, IDispatchProps {
     filterCTAContent?: Array<{ title: string, action: () => void, className?: string, font?: string, isLoad: boolean }>;
 };
 
-const RoleFilter: FC<IProps> = (props) => {
+const RoleFilter = (props: IProps) => {
     const { admin, roles, isSearch, pageNumber, setPageNumber, rowsPerPage, setRowsPerPage, searchMode, setSearchMode, page, setPage, cancelQuery, isSearchEmpty, isMoreOption, setIsMoreOption, showOnlyPagination, filterCTAContent, getAllRoles } = props;
     const { totalCount = 0, loading = false } = admin || [];
     let isLoad = useStrictLoader( admin.action, ActionEnums.GET_ALL_ROLES );

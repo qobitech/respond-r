@@ -1,5 +1,5 @@
 import { useMoreDetailsSection } from 'hooks/useMoreDetails';
-import React, { FC, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { MoreInformation } from 'utils/more-details';
 import { useNavigate } from 'react-router';
 // import CTA from 'utils/cta';
@@ -17,7 +17,7 @@ interface IProps {
     setValueFunc?: (a: string, b: boolean ) => void;
 }
 
-const ConfigMD:FC<IProps> =( props ) => {
+const ConfigMD= (props: IProps) => {
     
     const { setIsMoreOption, setValueFunc, loading, data } = props;
     const navigate = useNavigate();

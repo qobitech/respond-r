@@ -7,7 +7,7 @@ interface IProps {
     loading?: boolean;
 }
 
-const CTA:FC<IProps> = ( props ) => {
+const CTA = (props: IProps) => {
     const { content = [], loading = false } = props;
     return(
         <div className='cta-comp'>

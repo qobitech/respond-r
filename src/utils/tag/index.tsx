@@ -7,7 +7,7 @@ interface IProps {
     content: string | JSX.Element;
 };
 
-const TagPill: FC<IProps> = (props) => {
+const TagPill = (props: IProps) => {
     const { color = '', content } = props;
 
     return (

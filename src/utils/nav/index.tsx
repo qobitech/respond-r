@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { IMenuData, ISubMenuData } from '../../interfaces/IMenu';
 
@@ -7,7 +7,7 @@ interface INavC {
 	item: IMenuData;
 }
 
-export const NavComponent: FC<INavC> = props => {
+export const NavComponent = (props: INavC) => {
 	const { item } = props;
 	const location = useLocation();
 
@@ -37,7 +37,7 @@ interface INavParent {
 	setIsClicked: React.Dispatch<React.SetStateAction<boolean>>;
 	isClicked: boolean;
 }
-export const NavIsParentComponent: FC<INavParent> = props => {
+export const NavIsParentComponent = (props: INavParent) => {
 	const { item, setIsClicked, isClicked } = props;
 	const location = useLocation();
 
@@ -86,7 +86,7 @@ interface ISubMenu {
 	subItem: ISubMenuData;
 	isLast: boolean;
 }
-export const NavSubComponent: FC<ISubMenu> = props => {
+export const NavSubComponent = (props: ISubMenu) => {
 	const { subItem, isLast } = props;
 	const location = useLocation();
 

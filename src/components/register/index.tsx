@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from 'components/landing/navbar';
 import Footer from 'components/landing/footer';
 import AutoInput from 'utils/auto-complete';
@@ -30,7 +30,7 @@ interface IDispatchProps {
 
 interface IProps extends IStateProps, IDispatchProps {}
 
-const Register : FC<IProps> = ( props ) => {
+const Register= (props: IProps) => {
  
     const { registerOrganization, http, auth, clearOrgAuth } = props
     const { loading = false, action = '', orgAuth } = auth || {};

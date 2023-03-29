@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import './index.scss';
 
 interface IAccordion {
@@ -8,7 +8,7 @@ interface IAccordion {
     icon?: string;
 };
 
-const Accordion:FC<IAccordion> = ( props ) => {
+const Accordion = ( props: IAccordion ) => {
 
     const { title, content, index } = props
     const [openTray, setTray] = useState(false);

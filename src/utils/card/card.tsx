@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { useState } from 'react'
 import N_A from '../../extras/images/N_A.jpg';
 import './card.scss';
 
@@ -12,7 +12,7 @@ interface ICardProps {
     onHeaderClick?: () => void;
 }
 
-const GCard:FC<ICardProps> = ( props ) => {
+const GCard = ( props: ICardProps ) => {
     const { cardObject, cardImage, onClick, cardHeader, logo, headerHover, onHeaderClick } = props;
     const [ hHover, setHHover ] = useState('');
 

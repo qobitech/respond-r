@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './index.scss';
 import { connect } from 'react-redux'
 import {  IAppState } from 'interfaces/IAppState'
@@ -39,7 +39,7 @@ interface IProps extends IStateProps, IDispatchProps, IUpdate {
     organizationId?: number;
 };
 
-const CreateUpdUser : FC<IProps> = ( props ) => {
+const CreateUpdUser= (props: IProps) => {
 
     const  { auth, admin, http, createUser, update, prevUser, getAllRoles } = props;
     const { roles } = admin || {};

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DashboardWrapper from 'components/dashboard/dashboardwrapper';
 import { useModalWithArg } from 'hooks/useModal';
 import { getPermissions } from 'store/actions'
@@ -22,7 +22,7 @@ interface IDispatchProps {
 
 interface IProps extends IStateProps, IDispatchProps {}
 
-const Permissions:FC<IProps> = (props) => {
+const Permissions = (props: IProps) => {
 
     const { getPermissions, admin } = props;
     const { permissions  = [], loading = false } = admin;

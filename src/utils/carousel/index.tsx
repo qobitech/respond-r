@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 // import pic_icon from '../../extras/images/icons/imageicon.svg'
 // import vid_icon from '../../extras/images/icons/play-button.svg';
 import { checkIfVid } from '../helpers';
@@ -10,7 +10,7 @@ interface IProps {
     images: Array<string>;
 }
 
-const Carousel:FC<IProps> = (props) => {
+const Carousel = (props: IProps) => {
 
     const { images = [] } = props;
     const [ index, setIndex ]= useState(0);

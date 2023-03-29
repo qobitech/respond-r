@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import "./index.scss";
 
 interface IProps {
@@ -7,7 +7,7 @@ interface IProps {
 	reference?: React.MutableRefObject<any>
 }
 
-const Prompt: FC<IProps> = (props) => {
+const Prompt = (props: IProps) => {
 
 	const { trigger, content, reference } = props;
 	const [showPrompt, setShowPrompt] = useState(trigger);
@@ -38,7 +38,7 @@ const Prompt: FC<IProps> = (props) => {
 	}, [trigger, showPrompt])
 
 	const togglePrompt = () => {
-		setShowPrompt(showPrompt => !showPrompt)
+		setShowPrompt(!showPrompt)
 	}
 	
 	return (

@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from 'components/landing/navbar';
 import Footer from 'components/landing/footer';
 import { url } from 'enums/Route';
@@ -27,7 +27,7 @@ interface IDispatchProps {
 
 interface IProps extends IStateProps, IDispatchProps {}
 
-const ResetPassword:FC<IProps> = ( props ) => {
+const ResetPassword = (props: IProps) => {
 
     const { auth, http, passwordReset, verifyPasswordResetToken } = props;
     const { loading = false, action = '', verifyPasswordReset } = auth || {};

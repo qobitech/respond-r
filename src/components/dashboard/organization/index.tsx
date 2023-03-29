@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import DashboardWrapper from '../dashboardwrapper';
 import { IAppState } from 'interfaces/IAppState';
 import { connect } from 'react-redux'
@@ -30,7 +30,7 @@ interface IDispatchProps {
 }
 
 interface IProps extends IStateProps, IDispatchProps {};
-const Overview:FC<IProps> = (props) => {
+const Overview = (props: IProps) => {
 
     const { admin, getAllOrganizations } = props;
     const { loading = false, organizations = [] } = admin;

@@ -1,11 +1,11 @@
-import React, { FC, useReducer, useState, useEffect } from "react";
+import React, { useReducer, useState, useEffect } from "react";
 import JoyRide, { ACTIONS, EVENTS, STATUS } from "react-joyride";
 import { useModalWithArg } from "hooks/useModal";
 import { IAppState } from "interfaces/IAppState";
 import { connect } from "react-redux";
 import { IAuth } from "interfaces/IAuth";
-import welcome from 'extras/images/welcome.svg';
 import './index.scss';
+import WelcomeSVG from "extras/images/WelcomeSVG";
 
 interface IStateProps {
     auth: IAuth;
@@ -25,7 +25,7 @@ interface IProps extends IStateProps, IDispatchProps{
 	styles?: object;
 };
 
-const Tour:FC<IProps> = (props) => {
+const Tour = (props: IProps) => {
 	const { steps, showSkipButton, auth } = props;
 	const { loggedInDetails } = auth || {};
 	const { user } = loggedInDetails || {};
@@ -66,7 +66,7 @@ const Tour:FC<IProps> = (props) => {
 	const WelcomeMessage = () => {
 		return(
 			<div className='welcome-message'>
-				<img src={welcome} alt="Welcome" />
+				<WelcomeSVG />
 				<h2>Hello {username}</h2>
 				<p>Welcome to your central database dashboard</p>
 				<p>Click 'Start Tour' for a quick overview of the dashboard</p>

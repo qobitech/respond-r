@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import {  IAppState } from 'interfaces/IAppState';
 import {  IAuth } from 'interfaces/IAuth';
@@ -24,7 +24,7 @@ interface IDispatchProps {
 
 interface IProps extends IStateProps, IDispatchProps{}
 
-const UpdateOrg : FC<IProps> = ( props ) => {
+const UpdateOrg= (props: IProps) => {
 
     const { registerOrganization, http, auth } = props;
     const { loggedInDetails } = auth || {};

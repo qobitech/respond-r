@@ -20,7 +20,7 @@ interface IDispatchProps {
 
 interface IProps extends IStateProps, IDispatchProps {}
 
-const RouteList:FC<IProps> = (props) => {
+const RouteList = (props: IProps) => {
     const { auth, logOut, getRefreshToken } = props;
     const Wow = SessionTimeout(auth, logOut, getRefreshToken);
 

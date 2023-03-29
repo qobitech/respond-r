@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MenuData, SubMenuData, IMenuData } from './menudata';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { connect } from "react-redux";
@@ -21,7 +21,7 @@ interface IProps extends IStateProps, IDispatchProps {
     setHamburgerClicked: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const SideBar:FC<IProps> = (props) => {
+const SideBar = (props: IProps) => {
     const { hamburgerClicked = false, setHamburgerClicked, logOut } = props;
     const navigate = useNavigate();
     const location = useLocation();

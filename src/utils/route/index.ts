@@ -1,137 +1,135 @@
+import { ReactElement } from 'react';
 import { url } from '../../enums/Route'
 import LandingPage from 'components/landing';
-
+import Login from 'components/login';
+import ForgotPassword  from 'components/login/forgot-password';
+import ResetPassword from 'components/login/reset-password';
+import Register from 'components/register';
+import VerifyEmail from 'components/register/verify-email';
+import Instructions from 'components/instructions';
+import Overview from 'components/dashboard/overview';
+import UserManagement from 'components/dashboard/user-management';
+import Applications from 'components/dashboard/application';
+import CreateApp from 'components/dashboard/application/create-app';
+import Profile from 'components/dashboard/profile';
+import Organization from 'components/dashboard/organization';
+import ApiBundles from 'components/dashboard/billing/api-bundles';
+import ApiConfigs from 'components/dashboard/billing/api-configs';
+import ApiConfigGroups from 'components/dashboard/billing/api-config-group';
+import Subscriptions from 'components/dashboard/billing/subscriptions';
+import ClientSubscriptions from 'components/dashboard/billing/client-subscriptions';
+import Roles from 'components/dashboard/roles';
+import Page404 from 'utils/404';
+import APIDocumentation from 'components/dashboard/documentation'
+import Permissions from 'components/dashboard/roles/permissions';
 export interface IUrl {
     id: number;
-    PageRenders: (() => JSX.Element)[];
+    PageRenders: ((props?: any) => ReactElement | null)[];
     paths: string[];
     requiresAuth?: boolean;
 }
-
-// export const Page404 = React.lazy(()=>import('../404'));
-// const LandingPage = React.lazy(() => import('components/landing'));
-// const Login = React.lazy(() => import('components/login'));
-// const ForgotPassword = React.lazy(() => import('components/login/forgot-password'));
-// const ResetPassword = React.lazy(() => import('components/login/reset-password'));
-// const Register = React.lazy(() => import('components/register'));
-// const VerifyEmail = React.lazy(() => import('components/register/verify-email'));
-// const Instructions = React.lazy(() => import('components/instructions'));
-// const Overview = React.lazy(() => import('components/dashboard/overview'));
-// const UserManagement = React.lazy(() => import('components/dashboard/user-management'));
-// const Applications = React.lazy(() => import('components/dashboard/application'));
-// const CreateApp = React.lazy(() => import('components/dashboard/application/create-app'));
-// const Profile = React.lazy(() => import('components/dashboard/profile'));
-// const Organization = React.lazy(() => import('components/dashboard/organization'));
-// const ApiBundles = React.lazy(() => import('components/dashboard/billing/api-bundles'));
-// const ApiConfigs = React.lazy(() => import('components/dashboard/billing/api-configs'));
-// const ApiConfigGroups = React.lazy(() => import('components/dashboard/billing/api-config-group'));
-// const Subscriptions = React.lazy(() => import('components/dashboard/billing/subscriptions'));
-// const ClientSubs = React.lazy(() => import('components/dashboard/billing/client-subscriptions'));
-// const APIDocumentation = React.lazy(() => import('components/dashboard/documentation'));
-// const Roles = React.lazy(() => import('components/dashboard/roles'));
-// const Permissions = React.lazy(() => import('components/dashboard/roles/permissions'));
 
 export const routes:Array<IUrl> = [
     {   id : 1,
         PageRenders: [LandingPage],
         paths: [url.LANDING_PAGE],
     },
-    // {   id : 2,
-    //     PageRender : Login,
-    //     path : url.LOGIN,
-    // },
-    // {   id : 3,
-    //     PageRender : ForgotPassword,
-    //     path : url.FORGOT_PASSWORD,
-    // },
-    // {   id : 4,
-    //     PageRender : ResetPassword,
-    //     path : url.RESET_PASSWORD + '/:email?/:token?',
-    // },
-    // {   id : 5,
-    //     PageRender : Register,
-    //     path : url.REGISTER,
-    // },
-    // {   id : 6,
-    //     PageRender : VerifyEmail,
-    //     path : url.VERIFY_EMAIL + '/:email?/:token?',
-    // },
-    // {   id : 6.2,
-    //     PageRender : Instructions,
-    //     path : url.INSTRUCTIONS,
-    // },
-    // {   id : 7,
-    //     PageRender : Overview,
-    //     path : url.OVERVIEW,
-    //     requiresAuth: true
-    // },
-    // {   id : 8,
-    //     PageRender : UserManagement,
-    //     path : url.USERS + '/:id?',
-    //     requiresAuth: true
-    // },
-    // {   id : 9,
-    //     PageRender : Applications,
-    //     path : url.APPLICATIONS + '/:id?',
-    //     requiresAuth: true
-    // },
-    // {   id : 10,
-    //     PageRender : CreateApp,
-    //     path : url.CREATE_APP,
-    //     requiresAuth: true
-    // },
-    // {   id : 11,
-    //     PageRender : Profile,
-    //     path : url.PROFILE,
-    //     requiresAuth: true
-    // },
-    // {   id : 12,
-    //     PageRender : Organization,
-    //     path : url.ORGANIZATION + '/:id?',
-    //     requiresAuth: true
-    // },
-    // {   id : 13,
-    //     PageRender : ApiBundles,
-    //     path : url.API_BUNDLES + '/:id?',
-    //     requiresAuth: true
-    // },
-    // {   id : 14,
-    //     PageRender : ApiConfigs,
-    //     path : url.API_CONFIGS + '/:id?',
-    //     requiresAuth: true
-    // },
-    // {   id : 15,
-    //     PageRender : ApiConfigGroups,
-    //     path : url.API_CONFIG_GROUPS + '/:id?',
-    //     requiresAuth: true
-    // },
-    // {   id : 16,
-    //     PageRender : Subscriptions,
-    //     path : url.SUBSCRIPTION + '/:id?',
-    //     requiresAuth: true
-    // },
-    // {   id : 17,
-    //     PageRender : ClientSubs,
-    //     path : url.CLIENT_SUBSCRIPTIONS + '/:id?',
-    //     requiresAuth: true
-    // },
-    // {   id : 18,
-    //     PageRender : APIDocumentation,
-    //     path : url.API_DOCUMENTATION,
-    //     requiresAuth: true
-    // },
-    // {   id : 19,
-    //     PageRender : Roles,
-    //     path : url.ROLES,
-    //     requiresAuth: true
-    // },
-    // {   id : 20,
-    //     PageRender : Permissions,
-    //     path : url.PERMISSIONS,
-    //     requiresAuth: true
-    // },
-    // {   id : 21,
-    //     PageRender : Page404,
-    //     path : url.PAGE404,
-    // },
+    {   id : 2,
+        PageRenders : [Login],
+        paths : [url.LOGIN],
+    },
+    {   id : 3,
+        PageRenders : [ForgotPassword],
+        paths : [url.FORGOT_PASSWORD],
+    },
+    {   id : 4,
+        PageRenders : [ResetPassword, ResetPassword],
+        paths : [url.RESET_PASSWORD, `${url.RESET_PASSWORD}/:email/:token`],
+    },
+    {   id : 5,
+        PageRenders : [Register],
+        paths : [url.REGISTER],
+    },
+    {   id : 6,
+        PageRenders : [VerifyEmail, VerifyEmail],
+        paths : [url.VERIFY_EMAIL, `${url.VERIFY_EMAIL}/:email/:token`],
+    },
+    {   id : 6.2,
+        PageRenders : [Instructions],
+        paths : [url.INSTRUCTIONS],
+    },
+    {   id : 7,
+        PageRenders : [Overview],
+        paths : [url.OVERVIEW],
+        requiresAuth: true
+    },
+    {   id : 8,
+        PageRenders : [UserManagement],
+        paths : [url.USERS, `${url.USERS}/:id`],
+        requiresAuth: true
+    },
+    {   id : 9,
+        PageRenders : [Applications, Applications],
+        paths : [url.APPLICATIONS, `${url.APPLICATIONS}/:id`],
+        requiresAuth: true
+    },
+    {   id : 10,
+        PageRenders : [CreateApp],
+        paths : [url.CREATE_APP],
+        requiresAuth: true
+    },
+    {   id : 11,
+        PageRenders : [Profile],
+        paths : [url.PROFILE],
+        requiresAuth: true
+    },
+    {   id : 12,
+        PageRenders : [Organization],
+        paths : [url.ORGANIZATION, `${url.ORGANIZATION}/:id`],
+        requiresAuth: true
+    },
+    {   id : 13,
+        PageRenders : [ApiBundles],
+        paths : [url.API_BUNDLES, `${url.API_BUNDLES}/:id`],
+        requiresAuth: true
+    },
+    {   id : 14,
+        PageRenders : [ApiConfigs],
+        paths : [url.API_CONFIGS, `${url.API_CONFIGS}/:id`],
+        requiresAuth: true
+    },
+    {   id : 15,
+        PageRenders : [ApiConfigGroups],
+        paths : [url.API_CONFIG_GROUPS, `${url.API_CONFIG_GROUPS}/:id`],
+        requiresAuth: true
+    },
+    {   id : 16,
+        PageRenders : [Subscriptions],
+        paths : [url.SUBSCRIPTION, `${url.SUBSCRIPTION}/:id`],
+        requiresAuth: true
+    },
+    {   id : 17,
+        PageRenders : [ClientSubscriptions],
+        paths : [url.CLIENT_SUBSCRIPTIONS, `${url.CLIENT_SUBSCRIPTIONS}/:id`],
+        requiresAuth: true
+    },
+    {   id : 18,
+        PageRenders : [APIDocumentation],
+        paths : [url.API_DOCUMENTATION],
+        requiresAuth: true
+    },
+    {   id : 19,
+        PageRenders : [Roles],
+        paths: [url.ROLES],
+        requiresAuth: true
+    },
+    {   id : 20,
+        PageRenders : [Permissions],
+        paths : [url.PERMISSIONS],
+        requiresAuth: true
+    },
+    {   id : 21,
+        PageRenders : [Page404],
+        paths : [url.PAGE404],
+    },
 ];

@@ -35,7 +35,7 @@ interface IProps extends IStateProps, IDispatchProps {
     filterCTAContent?: Array<{ title: string, action: () => void, className?: string, font?: string, isLoad: boolean }>;
 };
 
-const APIBundleFilter: FC<IProps> = (props) => {
+const APIBundleFilter = (props: IProps) => {
     const { admin, users, isSearch, pageNumber, setPageNumber, rowsPerPage, setRowsPerPage, searchMode, setSearchMode, page, setPage, cancelQuery, isSearchEmpty, isMoreOption, setIsMoreOption, showOnlyPagination, filterCTAContent, getAPIBundles } = props;
     const { totalCount = 0, loading = false } = admin || [];
     let isLoad = useStrictLoader( admin.action, ActionEnums.GET_API_BUNDLES );

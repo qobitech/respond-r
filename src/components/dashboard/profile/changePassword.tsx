@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import { connect } from "react-redux";
 import { IAppState } from "interfaces/IAppState";
 import { updatePassword } from "store/actions";
@@ -21,7 +21,7 @@ interface IDispatchProps {
 
 interface IProps extends IStateProps, IDispatchProps { };
 
-const ChangePassword: FC<IProps> = (props) => {
+const ChangePassword = (props: IProps) => {
     const { http, auth, updatePassword } = props;
     const { loading, action } = auth
     const initObj = { currentPassword: '', newPassword: '', confirmPassword: '' }

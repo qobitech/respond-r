@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DashboardWrapper from 'components/dashboard/dashboardwrapper';
 import { getAPIBundles, deleteAPIBundle } from 'store/actions'
 import {  IAppState } from 'interfaces/IAppState'
@@ -31,7 +31,7 @@ interface IDispatchProps {
 
 interface IProps extends IStateProps, IDispatchProps {}
 
-const ApiBundles:FC<IProps> = (props) => {
+const ApiBundles = (props: IProps) => {
 
     const { getAPIBundles, admin, deleteAPIBundle, http } = props;
     const { apiBundles = [], loading = false, organizationInfo } = admin;
@@ -82,7 +82,7 @@ const ApiBundles:FC<IProps> = (props) => {
 
     const subscribeToBundle = ( id: number, bundleCode: string ) => {
         navigate(url.SUBSCRIPTION + `/${id}`, {state: {pageName: pageName.SUBSCRIPTIONS, bundleCode}});
-        history.go(0)
+        // history.go(0)
     }
 
     return(

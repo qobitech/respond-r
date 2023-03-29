@@ -35,7 +35,7 @@ interface IProps extends IStateProps, IDispatchProps {
     filterCTAContent?: Array<{ title: string, action: () => void, className?: string, font?: string, isLoad: boolean }>;
 };
 
-const ClientSubsFilter: FC<IProps> = (props) => {
+const ClientSubsFilter = (props: IProps) => {
     const { admin, users, isSearch, pageNumber, setPageNumber, rowsPerPage, setRowsPerPage, searchMode, setSearchMode, page, setPage, cancelQuery, isSearchEmpty, isMoreOption, setIsMoreOption, showOnlyPagination, filterCTAContent, getClientSubscriptions } = props;
     const { totalCount = 0, loading = false } = admin || [];
     let isLoad = useStrictLoader( admin.action, ActionEnums.GET_CLIENT_SUBSCRIPTIONS );

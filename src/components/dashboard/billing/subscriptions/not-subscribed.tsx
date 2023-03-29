@@ -1,11 +1,10 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getAPIBundleById, clearAPIBundleById, subscribeToBundle } from 'store/actions';
 import {  IAppState } from 'interfaces/IAppState';
 import { connect } from 'react-redux';
 import {  IAdmin } from 'interfaces/IAdmin';
 import {  IHttp } from 'interfaces/IHttp';
 import { useParams } from 'react-router-dom';
-import subscribe from 'extras/images/subscribe.svg';
 import { IApplication } from 'interfaces/IApplication';
 import APPThumbnail from 'utils/app-card/app-thumbnail';
 import { useStrictLoader } from 'hooks/useStrictLoader';
@@ -14,6 +13,7 @@ import { pageName, url } from 'enums/Route';
 import { useNavigate } from 'react-router-dom';
 import { IAuth } from 'interfaces/IAuth';
 import './index.scss';
+import SubscribedSVG from 'extras/images/SubscribedSvg';
 
 interface IStateProps {
     admin : IAdmin;
@@ -35,7 +35,7 @@ interface IObjToSend {
     clientDetailsList: Array<{applicationId: number}>
 }
 
-const NotSubscribed:FC<IProps> = (props) => {
+const NotSubscribed = (props: IProps) => {
 
     const { admin, getAPIBundleById, subscribeToBundle, auth } = props;
     const { applications, apiBundleById, loading = false } = admin || {};
@@ -81,7 +81,7 @@ const NotSubscribed:FC<IProps> = (props) => {
     return(
         <div className='not-subscribed'>
             <div className="heading">
-                <img src={subscribe} alt="subscribe" /> 
+                <SubscribedSVG />
                 <h2>Let's set you up!</h2>
                 <p>This will be the bundle your organization would be subscribed to</p>
                 <p>You can always switch bundles later if you wish</p>

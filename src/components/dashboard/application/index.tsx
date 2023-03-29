@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DashboardWrapper from '../dashboardwrapper';
 import AppCard from 'utils/app-card';
 import { IAppState } from 'interfaces/IAppState';
@@ -30,7 +30,7 @@ interface IDispatchProps {
 }
 
 interface IProps extends IStateProps, IDispatchProps {};
-const Applications:FC<IProps> = (props) => {
+const Applications = (props: IProps) => {
 
     const { admin, getAllApplications, addAppsToSub } = props;
     const { applications = [], loading = false, organizationInfo } = admin;

@@ -56,7 +56,7 @@ interface IProps {
     formError: {[key: string]: string};
 }
 
-export const InputFormMain = (props: IProps) => {
+export const InputFormMain  = (props: IProps) => {
 
     const { formDetails = [], setFormDetails, formError } = props;
 

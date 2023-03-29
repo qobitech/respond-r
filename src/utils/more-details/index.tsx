@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import './index.scss';
 
 interface IVSProps {
@@ -11,7 +11,7 @@ interface IVSProps {
     showBTL?: boolean;
 }
 
-export const MoreInformation:FC<IVSProps> = ( props ) => {
+export const MoreInformation = ( props: IVSProps ) => {
     const { onBClick, MainCTA, showBTL } = props;
     return(
         <div className='more-info'>

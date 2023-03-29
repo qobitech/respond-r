@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import './index.scss';
 import Navbar from 'components/landing/navbar';
 import Footer from 'components/landing/footer';
@@ -25,7 +25,7 @@ interface IDispatchProps {
 
 interface IProps extends IStateProps, IDispatchProps {}
 
-const Login : FC<IProps> = ( props ) => {
+const Login = ( props: IProps ) => {
 
     const  { auth, http, userLogin } = props;
     const { loading = false, action = '', loggedInDetails } = auth || {};

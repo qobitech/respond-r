@@ -22,7 +22,7 @@
                 text-align: center;
             }
 
-            img{
+            svg{
                 position: absolute;
                 height: 180px;
                 right: 1em;
@@ -136,7 +136,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            img {
+            svg {
                 height: 300px;
                 object-fit: cover;
             }

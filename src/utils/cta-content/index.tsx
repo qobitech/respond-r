@@ -9,7 +9,7 @@ interface IProps {
     className?: string
 };
 
-const CTAContent: FC<IProps> = (props) => {
+const CTAContent = (props: IProps) => {
     const { children, show = false, className, content, setShow } = props;
 
     return (

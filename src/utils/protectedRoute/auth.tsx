@@ -1,4 +1,4 @@
-import React, { FC, ReactElement } from 'react';
+import React, { ReactElement } from 'react';
 import { connect } from "react-redux";
 import { Navigate } from 'react-router-dom';
 import { IAppState } from "../../interfaces/IAppState";
@@ -14,7 +14,7 @@ interface IProps extends IStateProps {
   path?: string | string[] | undefined
 }
 
-const AuthRoute:FC<IProps> = (props) => {
+const AuthRoute = (props: IProps) => {
   const { auth } = props;
 
   if (!auth.authenticated) {

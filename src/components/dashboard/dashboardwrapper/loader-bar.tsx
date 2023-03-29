@@ -1,11 +1,11 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './general.scss';
 
 interface ILoaderBar {
     loading?: boolean;
 }
 
-const LoaderBar:FC<ILoaderBar> = (props) => {
+const LoaderBar = (props: ILoaderBar) => {
     
     const { loading = true } = props;
     const [ completed, setCompleted ] = useState(0);

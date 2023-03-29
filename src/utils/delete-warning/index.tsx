@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useStrictLoader } from 'hooks/useStrictLoader';
 import { IAdmin } from 'interfaces/IAdmin';
 import { IHttp } from 'interfaces/IHttp';
@@ -16,7 +16,7 @@ interface IRUSure {
     returnFunc ?: () => void;
 };
 
-const AreYouSure: FC<IRUSure> = (props) => {
+const AreYouSure = (props: IRUSure) => {
 
     const { message = '', deleteFunc, returnFunc, admin, http, actionEnum, url } = props;
     const navigate = useNavigate();
@@ -24,7 +24,7 @@ const AreYouSure: FC<IRUSure> = (props) => {
     useEffect(()=>{
         if( actionEnum === admin!?.action && http!?.httpStatus === 200 ){
             navigate(url!?.url, {state: {pageName: url!?.pageName }})
-            history.go(0)
+            // history.go(0)
         }
     // eslint-disable-next-line
     },[http.httpStatus]);

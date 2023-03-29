@@ -38,7 +38,7 @@ interface IProps extends IDispatchProps {
     showUpdate?: boolean;
 };
 
-const InstanceTable: FC<IProps> = (props) => {
+const InstanceTable = (props: IProps) => {
     const { headCells, rows, onUClick, onDClick, setTableIndex, setMoreOptions, page, rowsPerPage, header = '', showUpdate = true } = props;
 
     const EnhancedTableHead = (props: EnhancedTableProps) => {

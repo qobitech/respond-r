@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import './index.scss';
 import Navbar from 'components/landing/navbar';
 import Footer from 'components/landing/footer';
@@ -26,7 +26,7 @@ interface IDispatchProps {
 
 interface IProps extends IStateProps, IDispatchProps {}
 
-const ForgotPassword:FC<IProps> = ( props ) => {
+const ForgotPassword= ( props: IProps ) => {
 
     const { auth, http, requestPasswordToken, clearPasswordReset } = props
     const { loading = false, action = '', passwordReset } = auth;

@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import DashboardWrapper from '../dashboardwrapper';
 import { CardComponent, OverviewCards } from './o-card';
 import AppCard from 'utils/app-card';
@@ -30,7 +30,7 @@ interface IDispatchProps {
 }
 
 interface IProps extends IStateProps, IDispatchProps {};
-const Overview:FC<IProps> = (props) => {
+const Overview = (props: IProps) => {
 
     const { admin, getAllApplications, getOrganizationInfo, auth } = props;
     const { applications = [], loading = false, organizationInfo } = admin;

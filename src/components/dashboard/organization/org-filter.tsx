@@ -35,7 +35,7 @@ interface IProps extends IStateProps, IDispatchProps {
     filterCTAContent?: Array<{ title: string, action: () => void, className?: string, font?: string, isLoad: boolean }>;
 };
 
-const OrgFilter: FC<IProps> = (props) => {
+const OrgFilter = (props: IProps) => {
     const { admin, orgs, isSearch, pageNumber, getAllOrganizations, setPageNumber, rowsPerPage, setRowsPerPage, searchMode, setSearchMode, page, setPage, cancelQuery, isSearchEmpty, isMoreOption, setIsMoreOption, showOnlyPagination, filterCTAContent } = props;
     const { totalCount = 0, loading = false } = admin || [];
     let isLoad = useStrictLoader( admin.action, ActionEnums.GET_ALL_ORGANIZATIONS );

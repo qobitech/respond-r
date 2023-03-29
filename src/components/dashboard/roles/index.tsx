@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DashboardWrapper from 'components/dashboard/dashboardwrapper';
 import { useModalWithArg } from 'hooks/useModal';
 import { getAllRoles, deleteRole } from 'store/actions'
@@ -30,7 +30,7 @@ interface IDispatchProps {
 
 interface IProps extends IStateProps, IDispatchProps {}
 
-const Roles:FC<IProps> = (props) => {
+const Roles = (props: IProps) => {
 
     const { getAllRoles, admin, http, deleteRole } = props;
     const { roles = [], loading = false, tableIndex = '' } = admin;

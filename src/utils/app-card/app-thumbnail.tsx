@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IApplication } from 'interfaces/IApplication';
 import './index.scss';
 
@@ -9,7 +9,7 @@ interface IAPPThumbnail {
     onClick: React.MouseEventHandler<HTMLElement>;
 };
 
-const APPThumbnail:FC<IAPPThumbnail> = (props) => {
+const APPThumbnail = (props: IAPPThumbnail) => {
 
     const { applications, onClick, selectedApps, setSelectedApps } = props;
     const [ addAll, setAddAll ] = useState(false);

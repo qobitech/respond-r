@@ -9,7 +9,7 @@ interface IProps {
     docType?: string;
 }
 
-const DownloadFeature:FC<IProps> = (props) => {
+const DownloadFeature = (props: IProps) => {
     const { type, imageArray = [], image = '', multiple = false, docType } = props
     return(
         <DownloadComponent type={type}  multiple={multiple} onClick={()=>{ multiple ? downloadMultipleFilesasZip( imageArray ) : downloadFunction( image, docType ) }} />        

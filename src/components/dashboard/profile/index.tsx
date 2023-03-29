@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux';
 import { IHttp } from 'interfaces/IHttp';
 import { IAppState } from 'interfaces/IAppState';
@@ -21,7 +21,7 @@ interface IDispatchProps {
 
 interface IProps extends IStateProps, IDispatchProps { }
 
-const UserProfile:FC<IProps> = ( props ) => {
+const UserProfile = (props: IProps) => {
 
     const { auth } = props;
     const { loggedInDetails, loading = false } = auth;

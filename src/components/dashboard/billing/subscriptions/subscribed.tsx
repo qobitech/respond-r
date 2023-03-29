@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { addAppsToSub, getAllApplications } from 'store/actions';
 import {  IAppState } from 'interfaces/IAppState';
 import { connect } from 'react-redux';
@@ -12,8 +12,8 @@ import { IOrganization } from 'interfaces/IOrganization';
 import { IApplication } from 'interfaces/IApplication';
 import APPThumbnail from 'utils/app-card/app-thumbnail';
 import { checkIfNull, dateCleaner, separator } from 'utils/helpers';
-import subscribed from 'extras/images/subscribed.svg';
 import './index.scss';
+import SubscribedSVG from 'extras/images/SubscribedSvg';
 
 interface IStateProps {
     admin : IAdmin;
@@ -34,7 +34,7 @@ interface IObjToSend {
     organizationSubscriptionId: number;
 };
 
-const Subscribed:FC<IProps> = (props) => {
+const Subscribed = (props: IProps) => {
 
     const { admin, organizationInfo, addAppsToSub, getAllApplications } = props;
     const { loading = false, applications } = admin || {};
@@ -97,7 +97,7 @@ const Subscribed:FC<IProps> = (props) => {
             </div>
 
             <div className="image-area">
-                <img src={subscribed} alt="subscribe" /> 
+            <SubscribedSVG />
             </div>
 
            <div className="add-applications">

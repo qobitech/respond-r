@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux';
 import { IHttp } from 'interfaces/IHttp';
 import { IAppState } from 'interfaces/IAppState';
@@ -16,7 +16,7 @@ interface IDispatchProps {
 
 interface IProps extends IStateProps, IDispatchProps { }
 
-const APIDocumentation:FC<IProps> = ( props ) => {
+const APIDocumentation = (props: IProps) => {
 
     const { auth } = props;
     const { loading = false } = auth;

@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import {  IAppState } from 'interfaces/IAppState'
 import {  IAuth } from 'interfaces/IAuth'
@@ -28,7 +28,7 @@ interface IProps extends IStateProps, IDispatchProps{
     prevApiBundle?: IAPIBundle;
 }
 
-const CreateAPIBundle : FC<IProps> = ( props ) => {
+const CreateAPIBundle= (props: IProps) => {
 
     const { http, auth, update, createAPIBundle, prevApiBundle } = props;
     const { loading = false, action = '' } = auth || {};

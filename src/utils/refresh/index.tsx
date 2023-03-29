@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import './index.scss';
 import loader from 'extras/images/loader/loader.svg';
-import no_result from 'extras/images/no-results.svg';
+import NoResultsSVG from 'extras/images/NoResultsSVG';
 
 interface IProps {
     onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
@@ -10,7 +10,7 @@ interface IProps {
     loading?: boolean;
 };
 
-const Refresh: FC<IProps> = (props) => {
+const Refresh = (props: IProps) => {
     const { onClick, style, position, loading } = props;
 
     return (
@@ -75,7 +75,7 @@ export const NoSearchResults:FC<INoSearchResult> = (props) => {
 
     return(
         <div className='no-result'>
-            <img src={no_result} alt="no_search_res" />
+            <NoResultsSVG />
             <p>No search results...</p>
         </div>
     )

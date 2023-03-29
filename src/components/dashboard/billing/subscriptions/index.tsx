@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DashboardWrapper from 'components/dashboard/dashboardwrapper';
 import { getOrganizationInfo } from 'store/actions';
 import {  IAppState } from 'interfaces/IAppState';
@@ -26,7 +26,7 @@ interface IDispatchProps {
 
 interface IProps extends IStateProps, IDispatchProps {};
 
-const Subscriptions:FC<IProps> = (props) => {
+const Subscriptions = (props: IProps) => {
 
     const { admin, getOrganizationInfo, auth } = props;
     const { loading = false, organizationInfo } = admin || {};

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DashboardWrapper from '../dashboardwrapper';
 import Table from 'utils/table';
 import './index.scss';
@@ -31,7 +31,7 @@ interface IDispatchProps {
 
 interface IProps extends IStateProps, IDispatchProps {}
 
-const UserManagement:FC<IProps> = (props) => {
+const UserManagement = (props: IProps) => {
 
     const { getAllUsers, admin, http } = props;
     const { users  = [], loading = false } = admin;

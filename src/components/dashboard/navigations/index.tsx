@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import SideBar from './sidebar';
 import logo from 'extras/images/car_logo.jpg';
 import { useLocation, useNavigate } from 'react-router';
@@ -24,7 +24,7 @@ interface IDispatchProps {
 
 interface IProps extends IStateProps, IDispatchProps {};
 
-const DashboardNav:FC<IProps> = (props) => {
+const DashboardNav = (props: IProps) => {
 
     const { auth, logOut } = props;
     const { loggedInDetails } = auth || {};

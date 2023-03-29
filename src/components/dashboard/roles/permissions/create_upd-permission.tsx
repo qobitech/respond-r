@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
 import {  IAppState } from 'interfaces/IAppState'
 import {  IAuth } from 'interfaces/IAuth'
@@ -32,7 +32,7 @@ interface IUpdate {
 
 interface IProps extends IStateProps, IDispatchProps, IUpdate {};
 
-const CreateUpdPermission : FC<IProps> = ( props ) => {
+const CreateUpdPermission= (props: IProps) => {
 
     const  { auth, admin, http, createUser, update, prevPermission } = props;
     const { loading, action } = auth;

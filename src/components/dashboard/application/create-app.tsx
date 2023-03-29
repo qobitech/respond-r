@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import {  IAppState } from 'interfaces/IAppState';
 import {  IAuth } from 'interfaces/IAuth';
@@ -31,7 +31,7 @@ interface IProps extends IStateProps, IDispatchProps{
     update?: boolean
 }
 
-const Application : FC<IProps> = ( props ) => {
+const Application= (props: IProps) => {
 
     const { http, auth, admin, update, createApplication, getAPIScopes } = props;
     const { loading = false, action = '', loggedInDetails } = auth || {};

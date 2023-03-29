@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DashboardWrapper from 'components/dashboard/dashboardwrapper';
 import { deleteAPIConfig, getAPIConfigGroups } from 'store/actions'
 import {  IAppState } from 'interfaces/IAppState'
@@ -31,7 +31,7 @@ interface IDispatchProps {
 
 interface IProps extends IStateProps, IDispatchProps {}
 
-const ApiConfigGroups:FC<IProps> = (props) => {
+const ApiConfigGroups = (props: IProps) => {
 
     const { getAPIConfigGroups, admin, deleteAPIConfig, http } = props;
     const { apiConfigGroups  = [], loading = false } = admin;
