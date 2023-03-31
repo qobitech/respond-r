@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-import './index.scss';
-import Navbar from 'components/landing/navbar';
-import Footer from 'components/landing/footer';
 import { url } from 'enums/Route';
 import { connect } from 'react-redux'
 import {  IAppState } from 'interfaces/IAppState'
@@ -13,6 +10,8 @@ import { ActionEnums } from 'enums/ActionEnums'
 import ErrorTxt from 'utils/form-validation'
 import { useStrictLoader } from 'hooks/useStrictLoader';
 import { useNavigate } from 'react-router';
+import './index.scss';
+import Page from 'components/reusable/page';
 
 interface IStateProps {
     auth : IAuth;
@@ -54,38 +53,37 @@ const ForgotPassword= ( props: IProps ) => {
     });
 
     return(
-        <div className="login-page">
-            <Navbar />
-            <div className='login-main'>
-                <div className="main-card">
-                    <h2>Forgot your password?</h2>
+        <Page>
+            <div className="login-page">
+                <div className='login-main'>
+                    <div className="main-card">
+                        <h2>Forgot your password?</h2>
 
-                    <p className='forgot-message'>Please enter the email address you'd like your password reset information sent to.</p>
-                    
-                    <div className="input-area">
-                        <p className="label">Enter email address</p>
-                        <input type="text" name='email' onChange={handleOnChange} value={formDetails!?.email} />
-                        <ErrorTxt formError={ formError } value={'email'} />
-                    </div>
-
-                    {passwordResetLink!?.length > 0 ?
-                        <div className='verify-success'>
-                            <i className='fa fa-thumbs-up'></i>
-                            <p>Password reset request successful</p>
-                            <span>Proceed to your email to reset</span>
+                        <p className='forgot-message'>Please enter the email address you'd like your password reset information sent to.</p>
+                        
+                        <div className="input-area">
+                            <p className="label">Enter email address</p>
+                            <input type="text" name='email' onChange={handleOnChange} value={formDetails!?.email} />
+                            <ErrorTxt formError={ formError } value={'email'} />
                         </div>
-                        :
-                        BTN
-                    }
 
-                    <div className='back-to-login'>
-                        <p onClick={() => {navigate(url.LOGIN); clearPasswordReset()}}>Back to Login</p>
+                        {passwordResetLink!?.length > 0 ?
+                            <div className='verify-success'>
+                                <i className='fa fa-thumbs-up'></i>
+                                <p>Password reset request successful</p>
+                                <span>Proceed to your email to reset</span>
+                            </div>
+                            :
+                            BTN
+                        }
+
+                        <div className='back-to-login'>
+                            <p onClick={() => {navigate(url.LOGIN); clearPasswordReset()}}>Back to Login</p>
+                        </div>
                     </div>
                 </div>
-
             </div>
-            <Footer />
-        </div>
+        </Page>
     )
 };
 

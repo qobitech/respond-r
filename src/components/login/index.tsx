@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-import './index.scss';
-import Navbar from 'components/landing/navbar';
-import Footer from 'components/landing/footer';
 import { useNavigate } from 'react-router-dom';
 import { url } from 'enums/Route';
 import { connect } from 'react-redux'
@@ -13,6 +10,8 @@ import { useButtonRequest } from 'hooks/useButtonRequest';
 import { ActionEnums } from 'enums/ActionEnums'
 import ErrorTxt from 'utils/form-validation'
 import { useStrictLoader } from 'hooks/useStrictLoader';
+import './index.scss';
+import Page from 'components/reusable/page';
 
 interface IStateProps {
     auth : IAuth;
@@ -64,36 +63,36 @@ const Login = ( props: IProps ) => {
     });
 
     return(
-        <div className="login-page">
-            <Navbar />
-            <div className='login-main'>
-                <div className="main-card" onKeyPress={(e) => loginOnEnter(e)} >
-                    <h3>Central Database Login</h3>
-                    {!loading && <p className='response-message'>{responseMessage}</p>}
-                    <div className="input-area">
-                        <p className="label">email</p>
-                        <input type="text" name='username' onChange={handleOnChange} value={formDetails!?.username}
-                            className={formError!?.username!?.length > 0 ? 'error' : ''} />
-                        <ErrorTxt formError={ formError } value={'username'} />
-                    </div>
-                    <div className="input-area">
-                        <p className="label">Password</p>
-                        <input type="password" onChange={handleOnChange} value={formDetails!?.password} name='password'
-                            className={formError!?.password!?.length > 0 ? 'error' : ''} />
-                        <ErrorTxt formError={ formError } value={'password'} />
-                        <div className="form-actions">
-                            {/* <div className='keep'>
-                                <input type="checkbox" />
-                                <p className='keep'>Keep me logged in</p>
-                            </div> */}
-                            <p className='forgot' onClick={() => navigate(url.FORGOT_PASSWORD)}>Forgot Password?</p>
+        <Page fitContent>
+            <div className="login-page">
+                <div className='login-main'>
+                    <div className="main-card" onKeyPress={(e) => loginOnEnter(e)} >
+                        <h3>Central Database Login</h3>
+                        {!loading && <p className='response-message'>{responseMessage}</p>}
+                        <div className="input-area">
+                            <p className="label">email</p>
+                            <input type="text" name='username' onChange={handleOnChange} value={formDetails!?.username}
+                                className={formError!?.username!?.length > 0 ? 'error' : ''} />
+                            <ErrorTxt formError={ formError } value={'username'} />
                         </div>
+                        <div className="input-area">
+                            <p className="label">Password</p>
+                            <input type="password" onChange={handleOnChange} value={formDetails!?.password} name='password'
+                                className={formError!?.password!?.length > 0 ? 'error' : ''} />
+                            <ErrorTxt formError={ formError } value={'password'} />
+                            <div className="form-actions">
+                                {/* <div className='keep'>
+                                    <input type="checkbox" />
+                                    <p className='keep'>Keep me logged in</p>
+                                </div> */}
+                                <p className='forgot' onClick={() => navigate(url.FORGOT_PASSWORD)}>Forgot Password?</p>
+                            </div>
+                        </div>
+                        {BTN}
                     </div>
-                    {BTN}
                 </div>
             </div>
-            <Footer />
-        </div>
+        </Page>
     )
 };
 

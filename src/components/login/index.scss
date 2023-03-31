@@ -3,16 +3,12 @@
 
 .login-page{
     background-color: #F9FAFF;
+    height: 100%;
 
     .login-main{
-        height: 83.5vh;
         box-sizing: border-box;
         padding: 2em 0;
         overflow: auto;
-
-        @media screen and (max-width:$md-breakpoint){
-            height: 100vh;
-        }
     
         .main-card{
             width: 300px;

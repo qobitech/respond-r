@@ -1,6 +1,4 @@
 import React, { useEffect } from 'react';
-import Navbar from 'components/landing/navbar';
-import Footer from 'components/landing/footer';
 import { url } from 'enums/Route';
 import { connect } from 'react-redux';
 import {  IAppState } from 'interfaces/IAppState';
@@ -11,6 +9,7 @@ import { useStrictLoader } from 'hooks/useStrictLoader';
 import { useParams, useNavigate } from 'react-router-dom';
 import Loader from 'extras/images/loader/loader.svg';
 import './index.scss';
+import Page from 'components/reusable/page';
 
 interface IStateProps {
     auth : IAuth;
@@ -45,9 +44,8 @@ const ResetPassword = (props: IProps) => {
     }, [isSuccessful])
 
     return(
-        <div className="verify-email">
-            <Navbar />
-
+        <Page fitContent>
+            <div className="verify-email">
                 <div className="verify-main">
                     {
                         isVELoad ?
@@ -73,9 +71,8 @@ const ResetPassword = (props: IProps) => {
                                 </div>
                     }
                 </div>
-
-            <Footer />
-        </div>
+            </div>
+        </Page>
     )
 };
 

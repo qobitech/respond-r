@@ -1,18 +1,16 @@
-import React, { FC } from 'react';
-import Navbar from './navbar';
-import Footer from './footer';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { url } from 'enums/Route';
-import './index.scss';
 import DashboardInterfaceSVG from 'extras/images/DashboardInterface';
+import './index.scss';
+import Page from 'components/reusable/page';
 
 const LandingPage = () => {
 
     const navigate = useNavigate();
 
     return(
-        <div>
-            <Navbar />
+        <Page>
             <div className="landing-page">
                 <div className='hero-section'>
                     <div className="left-hero">
@@ -45,8 +43,7 @@ const LandingPage = () => {
                 </div>
 
             </div>
-            <Footer />
-        </div>
+        </Page>
     )
 };
 

@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from 'components/landing/navbar';
-import Footer from 'components/landing/footer';
 import AutoInput from 'utils/auto-complete';
 import { States } from './states';
 import { connect } from 'react-redux'
@@ -17,6 +15,7 @@ import { url } from 'enums/Route';
 import { useNavigate } from 'react-router-dom';
 import './index.scss';
 import PhoneInput from 'utils/phone-input';
+import Page from 'components/reusable/page';
 
 interface IStateProps {
     auth : IAuth;
@@ -81,99 +80,97 @@ const Register= (props: IProps) => {
     });
 
     return(
-        <div className="register-page">
-            <Navbar />
-            <div className='register-main'>
+        <Page>
+            <div className="register-page">
+                <div className='register-main'>
+                    <div className="main-card">
+                        {responseMessage!?.length === 0 ?
+                            <>
+                                <h3>Register your organization</h3>
+                                {!loading && <p className='response-message'>{responseMessage}</p>}
 
-                <div className="main-card">
-                    {responseMessage!?.length === 0 ?
-                        <>
-                            <h3>Register your organization</h3>
-                            {!loading && <p className='response-message'>{responseMessage}</p>}
+                                <div className="input-area">
+                                    <p className="label">Email</p>
+                                    <input type="text" name='email' onChange={handleOnChange} value={ formDetails!?.email }
+                                        className={formError!?.email!?.length > 0 ? 'error' : ''} />
+                                    <ErrorTxt formError={ formError } value={'email'} />
+                                </div>
 
-                            <div className="input-area">
-                                <p className="label">Email</p>
-                                <input type="text" name='email' onChange={handleOnChange} value={ formDetails!?.email }
-                                    className={formError!?.email!?.length > 0 ? 'error' : ''} />
-                                <ErrorTxt formError={ formError } value={'email'} />
-                            </div>
+                                <div className="input-area">
+                                    <p className="label">Address</p>
+                                    <textarea name='address' rows={4} onChange={handleOnChange} value={ formDetails!?.address }
+                                        className={formError!?.address!?.length > 0 ? 'error' : ''}/>
+                                    <ErrorTxt formError={ formError } value={'address'} />
+                                </div>
 
-                            <div className="input-area">
-                                <p className="label">Address</p>
-                                <textarea name='address' rows={4} onChange={handleOnChange} value={ formDetails!?.address }
-                                    className={formError!?.address!?.length > 0 ? 'error' : ''}/>
-                                <ErrorTxt formError={ formError } value={'address'} />
-                            </div>
+                                <div className="input-area">
+                                    <p className="label">Organization Name</p>
+                                    <input type="text" name='organizationName' onChange={handleOnChange} value={ formDetails!?.organizationName } className={formError!?.organizationName!?.length > 0 ? 'error' : ''} />
+                                    <ErrorTxt formError={ formError } value={'organizationName'} />
+                                </div>
 
-                            <div className="input-area">
-                                <p className="label">Organization Name</p>
-                                <input type="text" name='organizationName' onChange={handleOnChange} value={ formDetails!?.organizationName } className={formError!?.organizationName!?.length > 0 ? 'error' : ''} />
-                                <ErrorTxt formError={ formError } value={'organizationName'} />
-                            </div>
+                                <div className="input-area">
+                                    <p className="label">State</p>
+                                    <AutoInput options={stateOptions} name='state' onChange={handleOnChange} onLIClick={handleLIClick} 
+                                        className={formError!?.state!?.length > 0 ? 'error' : ''}/>
+                                    <ErrorTxt formError={ formError } value={'state'} />
+                                </div>
 
-                            <div className="input-area">
-                                <p className="label">State</p>
-                                <AutoInput options={stateOptions} name='state' onChange={handleOnChange} onLIClick={handleLIClick} 
-                                    className={formError!?.state!?.length > 0 ? 'error' : ''}/>
-                                <ErrorTxt formError={ formError } value={'state'} />
-                            </div>
+                                <div className="input-area">
+                                    <p className="label">Employee Id</p>
+                                    <input type="text" name='employeeId' onChange={handleOnChange} value={ formDetails!?.employeeId }
+                                        className={formError!?.employeeId!?.length > 0 ? 'error' : ''}/>
+                                    <ErrorTxt formError={ formError } value={'employeeId'} />
+                                </div>
 
-                            <div className="input-area">
-                                <p className="label">Employee Id</p>
-                                <input type="text" name='employeeId' onChange={handleOnChange} value={ formDetails!?.employeeId }
-                                    className={formError!?.employeeId!?.length > 0 ? 'error' : ''}/>
-                                <ErrorTxt formError={ formError } value={'employeeId'} />
-                            </div>
+                                <div className="input-area">
+                                    <p className="label">Phone Number</p>
+                                    <PhoneInput className={formError!?.phoneNumber!?.length > 0 ? 'error' : ''} 
+                                        onChange={handleOnChange} name='phoneNumber'  placeholder='e.g. +234123456789' />
+                                    <ErrorTxt formError={ otherErrors } value={'phoneNumber'} />
+                                </div>
 
-                            <div className="input-area">
-                                <p className="label">Phone Number</p>
-                                <PhoneInput className={formError!?.phoneNumber!?.length > 0 ? 'error' : ''} 
-                                    onChange={handleOnChange} name='phoneNumber'  placeholder='e.g. +234123456789' />
-                                <ErrorTxt formError={ otherErrors } value={'phoneNumber'} />
-                            </div>
+                                <div className="input-area">
+                                    <p className="label">Password</p>
+                                    <input type="password" autoComplete='new-password' name='password' onChange={handleOnChange} value={formDetails!?.password} className={formError!?.password!?.length > 0 ? 'error' : ''}/>
+                                    <ErrorTxt formError={ otherErrors } value={'password'} />
+                                </div>
 
-                            <div className="input-area">
-                                <p className="label">Password</p>
-                                <input type="password" autoComplete='new-password' name='password' onChange={handleOnChange} value={formDetails!?.password} className={formError!?.password!?.length > 0 ? 'error' : ''}/>
-                                <ErrorTxt formError={ otherErrors } value={'password'} />
-                            </div>
+                                <div className="input-area">
+                                    <p className="label">Confirm Password</p>
+                                    <input type="password" autoComplete='new-password' name='confirmPassword' onChange={handleOnChange} value={formDetails!?.confirmPassword} className={formError!?.confirmPassword!?.length > 0 ? 'error' : ''}
+                                    onBlur={()=>validatePassword(formDetails, setOtherErrors, setOtherValidations )} 
+                                    />
+                                    <ErrorTxt formError={ otherErrors } value={'confirmPassword'} />
+                                    {formDetails!?.password!?.length > 0 && formDetails!?.password === formDetails.confirmPassword &&
+                                        <span style={{color: '#64FDE1', fontSize: '10px' }}>
+                                            <i className='fa fa-thumbs-up' style={{marginRight: '10px'}}></i>Passwords match
+                                        </span>
+                                    }
+                                </div>
 
-                            <div className="input-area">
-                                <p className="label">Confirm Password</p>
-                                <input type="password" autoComplete='new-password' name='confirmPassword' onChange={handleOnChange} value={formDetails!?.confirmPassword} className={formError!?.confirmPassword!?.length > 0 ? 'error' : ''}
-                                onBlur={()=>validatePassword(formDetails, setOtherErrors, setOtherValidations )} 
-                                />
-                                <ErrorTxt formError={ otherErrors } value={'confirmPassword'} />
-                                {formDetails!?.password!?.length > 0 && formDetails!?.password === formDetails.confirmPassword &&
-                                    <span style={{color: '#64FDE1', fontSize: '10px' }}>
-                                        <i className='fa fa-thumbs-up' style={{marginRight: '10px'}}></i>Passwords match
-                                    </span>
-                                }
-                            </div>
-
-                            {BTN}
-                        </>
-                        :
-                        isSuccessful ?                                
-                            <div className='verify-success'>
-                                <i className='fa fa-thumbs-up'></i>
-                                <p>{responseMessage}</p>
-                                <span>Check your email to confirm registration.</span>
-                                <button onClick={() => {clearOrgAuth(); navigate(url.LOGIN)}}>Proceed to login</button>
-                            </div>
+                                {BTN}
+                            </>
                             :
-                            <div className='verify-failure'>
-                                <i className='fa fa-exclamation-triangle'></i>
-                                <p>{responseMessage}</p>
-                                <button onClick={() => {clearOrgAuth()}}>Try Again</button>
-                            </div>
-                    }
-               
+                            isSuccessful ?                                
+                                <div className='verify-success'>
+                                    <i className='fa fa-thumbs-up'></i>
+                                    <p>{responseMessage}</p>
+                                    <span>Check your email to confirm registration.</span>
+                                    <button onClick={() => {clearOrgAuth(); navigate(url.LOGIN)}}>Proceed to login</button>
+                                </div>
+                                :
+                                <div className='verify-failure'>
+                                    <i className='fa fa-exclamation-triangle'></i>
+                                    <p>{responseMessage}</p>
+                                    <button onClick={() => {clearOrgAuth()}}>Try Again</button>
+                                </div>
+                        }
+                
+                    </div>
                 </div>
-
             </div>
-            <Footer />
-        </div>
+        </Page>
     )
 };
 

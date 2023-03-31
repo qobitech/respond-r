@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { MenuItems } from './menuItems';
 import { pageurl } from '../../utils/constants';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import logo from 'extras/images/car_logo.jpg';
-import "./navbar.scss";
 import { url } from "enums/Route";
+import { MenuItems } from "./menuItems";
+import "./navbar.scss";
 
-interface IProps { }
+interface NavbarProps {}
 
-const Navbar: React.FC<IProps> = (props) => {
+export const Navbar = (props: NavbarProps) => {
 	const [clicked, setClicked] = useState(false);
 	const handleClick = () => {
 		setClicked(!clicked);
@@ -51,5 +51,3 @@ const Navbar: React.FC<IProps> = (props) => {
         </nav>
     );
 };
-
-export default Navbar;
