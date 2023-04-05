@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import  React from 'react';
 import { connect } from "react-redux";
 // import { ActionEnums } from 'enums/ActionEnums'
 import { useStrictLoader } from 'hooks/useStrictLoader'

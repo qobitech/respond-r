@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import  React from 'react'
 import { IAppState } from "../../interfaces/IAppState";
 import { IAdmin } from "../../interfaces/IAdmin";
 import { connect } from 'react-redux';
@@ -32,7 +32,7 @@ interface IPagination extends IStateProps {
     categoryType?: string;
 }
 
-const Pagination : FC<IPagination> = ( props ) => {
+const Pagination = ( props: IPagination ) => {
     const { array, page, setPage, rowsPerPage, pageNumber, setPageNumber, eFunction, category, categoryType, pageName,
             indexA, setIndexA, indexB, setIndexB, admin, searchFunction, query, tCount, loading, isSearchEmpty
     } = props;

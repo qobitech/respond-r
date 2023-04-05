@@ -1,4 +1,4 @@
-import React,{ FC } from 'react'
+import React from 'react'
 import { getErrTxt, validateFormValues } from './validateForm'
 
 interface IProps {
@@ -8,7 +8,7 @@ interface IProps {
 
 export { validateFormValues };
 
-const ErrorTxt: FC<IProps> = ( props ) => {
+const ErrorTxt = ( props: IProps ) => {
 
     const { formError, value } = props
 

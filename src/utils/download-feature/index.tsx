@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import  React from 'react'
 import './index.scss'
 
 interface IProps {
@@ -22,7 +22,7 @@ interface IDC {
     onClick: React.MouseEventHandler<HTMLDivElement> | undefined;
 }
 
-const DownloadComponent:FC<IDC> = (props) => {
+const DownloadComponent = (props: IDC) => {
     const { multiple, type, onClick } = props
     return(
         <div className={`download-component ${type === "small" ? "small-btn" : type === 'big' ? 'big-btn' : type === 'thumbnail' ? 'thumbnail-btn' : ''}`}

@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import  React from 'react'
 import { separator, checkIfNull, checkIfUrl } from 'utils/helpers';
 
 type S = {sectionHeader : string, type : 'image' | 'no-image', moreDetails?: {[key: string]: any}, moreDetailsArray?: {[key: string]: any}[], CTA?: JSX.Element, cImages?: Array<string> }[]

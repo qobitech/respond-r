@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import  React from 'react';
 import './o-card.scss';
 
 interface ICComponent {
@@ -8,7 +8,7 @@ interface ICComponent {
     color?: string;
 }
 
-export const CardComponent : FC<ICComponent> = ( props ) => {
+export const CardComponent = ( props: ICComponent ) => {
 
     const { title = '', stats = '', icon = '', color = '' } = props
 

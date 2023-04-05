@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import  React from 'react';
 import DashboardNav from 'components/dashboard/navigations';
 import { IAuth } from 'interfaces/IAuth';
 import { IAppState } from 'interfaces/IAppState';

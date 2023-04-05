@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import  React from 'react';
 import Tooltip from 'utils/tooltip';
 
 interface ICProps {
@@ -8,7 +8,7 @@ interface ICProps {
     hasChildren?: boolean;
 }
 
-export const IconComponent: FC<ICProps> = ( props ) => {
+export const IconComponent = ( props: ICProps ) => {
 
     const { title, icon, isShow, hasChildren } = props
 

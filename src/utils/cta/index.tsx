@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import  React from 'react';
 import './index.scss';
 
 type S = { title: string, action: () => void, className?: string, font?: string, isLoad: boolean, show?: boolean }

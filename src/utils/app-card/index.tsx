@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import  React from 'react';
 import { useNavigate } from 'react-router-dom';
 // import CTAContent from 'utils/cta-content';
 import { pageName, url } from 'enums/Route';
@@ -11,7 +11,7 @@ interface IAppCard {
     date?: string;
 }
 
-const IAppCard:FC<IAppCard> = (props) => {
+const AppCard = (props: IAppCard) => {
 
     const { id = 0, title = '', description = '', date = '' } = props;
     const navigate = useNavigate();
@@ -39,7 +39,7 @@ const IAppCard:FC<IAppCard> = (props) => {
     )
 };
 
-export default IAppCard;
+export default AppCard;
 
 
 export const AppCards: Array<IAppCard> = [

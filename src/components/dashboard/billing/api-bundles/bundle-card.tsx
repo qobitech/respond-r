@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import  React from 'react';
 import { SuperAdmin } from 'utils/roles';
 import { handleAmount } from 'utils/thousand-sep';
 import './index.scss';
@@ -15,7 +15,7 @@ interface IAPIBundleCard {
     subscribedTo?: boolean;
 }
 
-const APIBundleCard:FC<IAPIBundleCard> = (props) => {
+const APIBundleCard = (props: IAPIBundleCard) => {
 
     const { code = '', description = '', noOfStars = 0, recommended = false, onDelClick, onUClick, onSelect, subscribed = false,
         subscribedTo = false } = props;

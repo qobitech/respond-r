@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import  React from 'react';
 import './index.scss';
 import loader from 'extras/images/loader/loader.svg';
 import NoResultsSVG from 'extras/images/NoResultsSVG';
@@ -40,7 +40,7 @@ interface IToggle {
     optionB: string;
 }
 
-export const Toggle: FC<IToggle> = (props) => {
+export const Toggle = (props: IToggle) => {
     const { onClick, toggle, position, optionA, optionB } = props;
 
     return (
@@ -58,7 +58,7 @@ interface IDownload {
     what?: string
 }
 
-export const Download:FC<IDownload> = (props) => {
+export const Download = (props: IDownload) => {
 
     const { href, what } = props;
 
@@ -71,7 +71,7 @@ export const Download:FC<IDownload> = (props) => {
 
 interface INoSearchResult {};
 
-export const NoSearchResults:FC<INoSearchResult> = (props) => {
+export const NoSearchResults = (props: INoSearchResult) => {
 
     return(
         <div className='no-result'>

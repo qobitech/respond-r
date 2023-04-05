@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import  React from 'react';
 import { connect } from "react-redux";
 import { useStrictLoader } from 'hooks/useStrictLoader'
 import { IAdmin } from 'interfaces/IAdmin';

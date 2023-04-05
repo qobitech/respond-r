@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import  React from 'react';
 import './index.scss';
 
 interface IAPIConfigCard {
@@ -11,7 +11,7 @@ interface IAPIConfigCard {
     discount: number;
 }
 
-const APIConfigCard:FC<IAPIConfigCard> = (props) => {
+const APIConfigCard = (props: IAPIConfigCard) => {
 
     const { code = '', apiName = '', apiRoute = '', description = '', perCallRate = 0, applyDiscountAfter = 0, discount = 0 } = props;
 

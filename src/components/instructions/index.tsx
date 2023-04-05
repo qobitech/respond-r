@@ -1,10 +1,10 @@
-import React, { FC } from 'react';
+import React from 'react';
 import Accordion from 'utils/accordion';
 import { HowTo } from './how-to';
 import './index.scss';
 import Page from 'components/reusable/page';
 
-const Instructions: FC = ( ) => {
+const Instructions = ( ) => {
 
     return(
         <Page fitContent>

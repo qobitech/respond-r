@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import  React from 'react';
 import { connect } from "react-redux";
 import { setTableIndex } from 'store/actions';
 import { NoSearchResults } from 'utils/refresh';
