@@ -1,13 +1,13 @@
 @import "../../../styles/variables.scss";
 
 .page_layout {
-    height: 100vh;
+    &.fitContent {
+        min-height: auto;
+        @media screen and (min-width:$md-breakpoint){
+            height: calc(100vh - 102.59px);
+        }
+    }
     .contents {
         height: 100%;
-        &.fitContent {
-            @media screen and (min-width:$md-breakpoint){
-                height: calc(100% - 102.59px);
-            }
-        }
     }
 }

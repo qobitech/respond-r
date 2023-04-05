@@ -11,9 +11,9 @@ interface PageProps {
 const Page = ({ isPublic, fitContent, children }: PageProps) => {
 
     return(
-        <div className="page_layout">
+        <div className={`page_layout ${fitContent ? 'fitContent' : ''}`}>
             <Navbar />
-            <div className={`contents ${fitContent ? 'fitContent' : ''}`}>
+            <div className="contents">
                 {children}
             </div>
             <Footer />

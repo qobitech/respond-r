@@ -7,7 +7,7 @@ import Page from 'components/reusable/page';
 const Instructions: FC = ( ) => {
 
     return(
-        <Page>
+        <Page fitContent>
             <div className='instructions-main'>
                 <div className='instructions-page'>
                     <div className='header'>
