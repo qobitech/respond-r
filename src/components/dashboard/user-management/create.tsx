@@ -7,12 +7,12 @@ import FormBuilder, { IFormComponent } from "utils/new/form-builder"
 import * as yup from "yup"
 import { useFormHook } from "utils/new/hook"
 import { IUser } from "interfaces/IUser"
+import { IRightSection } from "components/reusable/right-section"
 
 interface IProps {
   states?: IStates
   actions?: IAction
-  update?: boolean
-  user?: IUser | null
+  rsProps?: IRightSection<IUser>
 }
 
 export interface ICreateUserHookForm {
@@ -50,7 +50,9 @@ export const createUserSchema = {
     .required("Select at least one (1) role"),
 }
 
-const CreateUser: React.FC<IProps> = ({ states, actions, update, user }) => {
+const CreateUser: React.FC<IProps> = ({ states, actions, rsProps }) => {
+  const update = rsProps?.isView("update", "user")
+  const user = rsProps?.data
   const filterOnUpdate = (i: IFormComponent) =>
     update ? i.id !== "password" && i.id !== "confirmPassword" : i
   const createUserFC: IFormComponent[] = [
@@ -155,7 +157,7 @@ const CreateUser: React.FC<IProps> = ({ states, actions, update, user }) => {
   }, [])
 
   return (
-    <form className="app-form">
+    <form className="app-form" onSubmit={(e) => e.preventDefault()}>
       <div className="form-content fm-separator">
         <FormBuilder
           formComponent={createUserFC.filter(filterOnUpdate)}
@@ -164,7 +166,11 @@ const CreateUser: React.FC<IProps> = ({ states, actions, update, user }) => {
       </div>
       <div className="cta">
         <TypeButton title={update ? "UPDATE" : "CREATE"} />
-        <TypeSmallButton title="Cancel" buttonType="danger" />
+        <TypeSmallButton
+          title="Cancel"
+          buttonType="danger"
+          onClick={rsProps?.closeSection}
+        />
       </div>
     </form>
   )

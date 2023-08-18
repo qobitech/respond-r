@@ -15,7 +15,6 @@ import FilterComponent, { IFilterData } from "components/reusable/filter"
 import { Loader } from "utils/new/components"
 import { IAction } from "interfaces/IAction"
 import { IApplication } from "interfaces/IApplication"
-import Switch, { Case, Default } from "components/reusable/switch"
 
 interface IProps {
   states?: IStates
@@ -155,36 +154,21 @@ const Application: React.FC<IProps> = ({ states, ...props }) => {
         >
           <FilterComponent {...filterProps} />
         </CardTable>
-        <RightSection {...rsProps}>
-          <Switch>
-            <Case
-              condition={
-                rsProps.isView("create", "application") ||
-                rsProps.isView("update", "application")
-              }
-            >
-              <CreateApplication
-                states={states}
-                actions={props as unknown as IAction}
-                rsProps={rsProps}
-              />
-            </Case>
-            <Case
-              condition={
-                rsProps.isView("view", "application") ||
-                rsProps.isView("delete", "application")
-              }
-            >
-              <ViewApplication
-                states={states}
-                actions={props as unknown as IAction}
-                rsProps={rsProps}
-              />
-            </Case>
-            <Default>
-              <></>
-            </Default>
-          </Switch>
+        <RightSection rsProps={rsProps}>
+          {(rsProps.isView("create", "application") ||
+            rsProps.isView("update", "application")) && (
+            <CreateApplication
+              states={states}
+              actions={props as unknown as IAction}
+            />
+          )}
+          {(rsProps.isView("view", "application") ||
+            rsProps.isView("delete", "application")) && (
+            <ViewApplication
+              states={states}
+              actions={props as unknown as IAction}
+            />
+          )}
         </RightSection>
       </div>
       <Loader loader={componentState.load} />

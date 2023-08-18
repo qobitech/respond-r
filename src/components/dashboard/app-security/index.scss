@@ -13,6 +13,9 @@
       border-bottom: 1px solid #dbeaff;
       margin-bottom: 2.06rem;
     }
+    @media (max-width: $md-breakpoint) {
+      grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)) !important;
+    }
   }
   .allowed-scope {
     border-bottom: 1px solid #dbeaff;

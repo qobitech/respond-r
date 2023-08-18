@@ -1,3 +1,6 @@
+@import "../../../styles/variables.scss";
+@import "../../../styles/mixins.scss";
+
 .right_container {
   display: flex;
   flex-direction: column;
@@ -45,5 +48,11 @@
     height: 65vh;
     overflow: auto;
     padding: 3.12rem 0 11rem;
+  }
+  @media (max-width: $lg-breakpoint) {
+    width: -webkit-fill-available;
+  }
+  @media (max-width: $md-breakpoint) {
+    padding: 1.56rem 1.5625rem 3.56rem;
   }
 }

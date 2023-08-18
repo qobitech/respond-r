@@ -170,11 +170,11 @@ const APIBundles: React.FC<IProps> = ({ states, ...props }) => {
       >
         <FilterComponent {...filterProps} />
       </CardTable>
-      <RightSection {...rsProps}>
-        <div>
+      <RightSection rsProps={rsProps}>
+        <>
           {rsProps.action.type === "create" && <></>}
           {rsProps.action.type === "view" && <></>}
-        </div>
+        </>
       </RightSection>
     </div>
   )

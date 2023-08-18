@@ -175,37 +175,15 @@ const UserManagement: React.FC<IProps> = ({ states, ...props }) => {
         >
           <FilterComponent {...filterProps} />
         </CardTable>
-        <RightSection {...rsProps}>
-          <Switch>
-            <Case
-              condition={
-                rsProps.isView("create", "user") ||
-                rsProps.isView("update", "user")
-              }
-            >
-              <CreateUser
-                states={states}
-                actions={props as unknown as IAction}
-                update={rsProps.isView("update", "user")}
-                user={rsProps.data}
-              />
-            </Case>
-            <Case
-              condition={
-                rsProps.isView("view", "user") ||
-                rsProps.isView("delete", "user")
-              }
-            >
-              <ViewUser
-                states={states}
-                actions={props as unknown as IAction}
-                rsProps={rsProps}
-              />
-            </Case>
-            <Default>
-              <></>
-            </Default>
-          </Switch>
+        <RightSection rsProps={rsProps}>
+          {(rsProps.isView("create", "user") ||
+            rsProps.isView("update", "user")) && (
+            <CreateUser states={states} actions={props as unknown as IAction} />
+          )}
+          {(rsProps.isView("view", "user") ||
+            rsProps.isView("delete", "user")) && (
+            <ViewUser states={states} actions={props as unknown as IAction} />
+          )}
         </RightSection>
       </div>
       <Loader loader={componentState.load} />

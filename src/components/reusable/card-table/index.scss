@@ -42,11 +42,22 @@
       justify-content: flex-end;
       gap: 20px;
     }
+    @media (max-width: $md-breakpoint) {
+      flex-direction: column;
+      gap: 40px;
+      text-align: center;
+      .application-cta {
+        flex-direction: column;
+      }
+    }
   }
   .filter-section {
     padding: 2.44rem 0;
     display: flex;
     gap: 20px;
+    @media (max-width: $md-breakpoint) {
+      justify-content: center;
+    }
   }
 }
 
@@ -63,6 +74,24 @@
     &.show {
       flex-basis: 20%;
       height: auto;
+      @media (max-width: $lg-breakpoint) {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: #fff;
+        z-index: 10;
+        .filter-container {
+          width: 100%;
+          padding: 2.3625rem 1.5625rem;
+          .filter-header {
+            display: flex;
+            margin-bottom: 2.13625rem;
+            gap: 20px;
+          }
+        }
+      }
     }
   }
   .table-containers {

@@ -10,7 +10,7 @@ import { DeleteCTA } from "../application/view"
 interface IProps {
   states?: IStates
   actions?: IAction
-  rsProps: IRightSection<IUser>
+  rsProps?: IRightSection<IUser>
 }
 
 const contentItems = (user: IUser | null | undefined) => [
@@ -53,10 +53,10 @@ const contentItems = (user: IUser | null | undefined) => [
 ]
 
 const ViewUser: React.FC<IProps> = ({ states, actions, rsProps }) => {
-  const deleteApp = rsProps.isView("delete", "user")
-  const user = rsProps.data
-  const updateData = rsProps.updateData
-  const id = rsProps.queryId
+  const deleteApp = rsProps?.isView("delete", "user")
+  const user = rsProps?.data
+  const updateData = rsProps?.updateData
+  const id = rsProps?.queryId
 
   useEffect(() => {
     if (!user && id) {
@@ -66,7 +66,7 @@ const ViewUser: React.FC<IProps> = ({ states, actions, rsProps }) => {
   }, [])
 
   useEffect(() => {
-    if (states?.user.getUserById) updateData(states?.user.getUserById)
+    if (states?.user.getUserById) updateData?.(states?.user.getUserById)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [states?.user.getUserById])
 
@@ -91,12 +91,16 @@ const ViewUser: React.FC<IProps> = ({ states, actions, rsProps }) => {
       {!deleteApp ? (
         <div className="cta">
           <TypeButton title="CONTACT USER" />
-          <TypeSmallButton title="Delete User" buttonType="danger" />
+          <TypeSmallButton
+            title="Delete User"
+            buttonType="danger"
+            onClick={rsProps?.closeSection}
+          />
         </div>
       ) : (
         <DeleteCTA
           title="Delete User"
-          onCancel={rsProps.closeSection}
+          onCancel={rsProps?.closeSection}
           onDelete={() => {
             actions?.deleteUser?.(user?.id as string)
           }}

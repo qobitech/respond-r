@@ -172,11 +172,13 @@ const AppSecurity: React.FC<IProps> = ({ states, ...props }) => {
         >
           <FilterComponent {...filterProps} />
         </CardTable>
-        <RightSection {...rsProps}>
-          <div>
-            {rsProps.action.type === "create" && <CreateApplication />}
-            {rsProps.action.type === "view" && <ViewApplication />}
-          </div>
+        <RightSection rsProps={rsProps}>
+          <>
+            {(rsProps.isView("create", "role") ||
+              rsProps.isView("update", "role")) && <CreateApplication />}
+            {(rsProps.isView("view", "role") ||
+              rsProps.isView("delete", "role")) && <ViewApplication />}
+          </>
         </RightSection>
       </div>
     </div>

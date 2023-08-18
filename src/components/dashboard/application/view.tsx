@@ -10,10 +10,10 @@ import { IRightSection } from "components/reusable/right-section"
 interface IProps {
   states?: IStates
   actions?: IAction
-  rsProps: IRightSection<IApplication>
+  rsProps?: IRightSection<IApplication>
 }
 
-const contentItems = (application: IApplication | null) => [
+const contentItems = (application: IApplication | null | undefined) => [
   {
     label: "Application Name",
     value: application?.applicationName || "...",
@@ -39,10 +39,12 @@ const contentItems = (application: IApplication | null) => [
 ]
 
 const ViewApplication: React.FC<IProps> = ({ states, actions, rsProps }) => {
-  const deleteApp = rsProps.isView("delete", "application")
-  const application = rsProps.data
-  const updateData = rsProps.updateData
-  const id = rsProps.queryId
+  const deleteApp = rsProps?.isView("delete", "application")
+  const application = rsProps?.data
+  const updateData = rsProps?.updateData
+  const id = rsProps?.queryId
+
+  console.log(rsProps?.data)
 
   useEffect(() => {
     if (!application && id) {
@@ -53,7 +55,7 @@ const ViewApplication: React.FC<IProps> = ({ states, actions, rsProps }) => {
 
   useEffect(() => {
     if (states?.application.getApplicationById)
-      updateData(states?.application.getApplicationById)
+      updateData?.(states?.application.getApplicationById)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [states?.application.getApplicationById])
 
@@ -82,13 +84,17 @@ const ViewApplication: React.FC<IProps> = ({ states, actions, rsProps }) => {
 
           <div className="cta">
             <TypeButton title="ADD APPLICATION TO SUBSCRIPTION" />
-            <TypeSmallButton title="Cancel" buttonType="danger" />
+            <TypeSmallButton
+              title="Cancel"
+              buttonType="danger"
+              onClick={rsProps?.closeSection}
+            />
           </div>
         </>
       ) : (
         <DeleteCTA
           title="Delete Application"
-          onCancel={rsProps.closeSection}
+          onCancel={rsProps?.closeSection}
           onDelete={() => {
             actions?.deleteApplication?.(application?.id as number)
           }}

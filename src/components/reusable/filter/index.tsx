@@ -14,6 +14,7 @@ export interface IFilterData {
 export interface IFilter {
   filterData: IFilterData[]
   handleFilter: () => void
+  closeFilter?: () => void
   handleFilterClear: () => void
 }
 
@@ -21,9 +22,19 @@ const FilterComponent: React.FC<IFilter> = ({
   filterData,
   handleFilter,
   handleFilterClear,
+  closeFilter,
 }) => {
   return (
     <div className="filter-container">
+      <div className="filter-header">
+        <TypeSmallButton title="Filter" onClick={closeFilter} />
+        <TypeSmallButton
+          title=""
+          buttonType="danger"
+          close
+          onClick={closeFilter}
+        />
+      </div>
       <div className="filter-items">
         {filterData.map((i, index) => {
           if (i.type !== "select") {

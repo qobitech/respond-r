@@ -45,6 +45,7 @@
       gap: 45px;
       border-bottom: 1px solid #dbeaff;
       margin-bottom: 3.06rem;
+
       .tab-item {
         width: max-content;
         display: flex;
@@ -75,6 +76,15 @@
           .tab-bar {
             background: #06679e;
           }
+        }
+      }
+    }
+    @media (max-width: $md-breakpoint) {
+      overflow: auto;
+      .tab-header {
+        overflow: auto;
+        .tab-item {
+          flex-shrink: 0;
         }
       }
     }

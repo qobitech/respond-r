@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import "./index.scss"
 import { IStates } from "interfaces/IReducer"
@@ -20,7 +20,6 @@ import {
 } from "utils/new/svgs"
 import { IAction } from "interfaces/IAction"
 import { Loader } from "utils/new/components"
-import Switch, { Case, Default } from "components/reusable/switch"
 import { IApplication } from "interfaces/IApplication"
 
 interface IProps {
@@ -195,36 +194,21 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
           tag="Recently added"
           title="Applications"
         />
-        <RightSection {...rsProps}>
-          <Switch>
-            <Case
-              condition={
-                rsProps.isView("create", "application") ||
-                rsProps.isView("update", "application")
-              }
-            >
-              <CreateApplication
-                states={states}
-                actions={props as unknown as IAction}
-                rsProps={rsProps}
-              />
-            </Case>
-            <Case
-              condition={
-                rsProps.isView("view", "application") ||
-                rsProps.isView("delete", "application")
-              }
-            >
-              <ViewApplication
-                states={states}
-                actions={props as unknown as IAction}
-                rsProps={rsProps}
-              />
-            </Case>
-            <Default>
-              <></>
-            </Default>
-          </Switch>
+        <RightSection rsProps={rsProps}>
+          {(rsProps.isView("create", "application") ||
+            rsProps.isView("update", "application")) && (
+            <CreateApplication
+              states={states}
+              actions={props as unknown as IAction}
+            />
+          )}
+          {(rsProps.isView("view", "application") ||
+            rsProps.isView("delete", "application")) && (
+            <ViewApplication
+              states={states}
+              actions={props as unknown as IAction}
+            />
+          )}
         </RightSection>
       </div>
       <Loader loader={componentState.load} />

@@ -19,6 +19,9 @@
       overflow: auto;
       padding: 3.12rem 0;
     }
+    @media (max-width: $md-breakpoint) {
+      grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)) !important;
+    }
   }
   .allowed-scope-form {
     border-bottom: 1px solid #dbeaff;

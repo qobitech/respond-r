@@ -41,6 +41,13 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+    margin-bottom: 4.62rem;
+    @media (max-width: $md-breakpoint) {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 40px;
+    }
     .stats-title {
       .title {
         color: #274169;
@@ -60,7 +67,6 @@
         font-weight: 400;
         line-height: normal;
         margin: 0;
-        margin-bottom: 4.62rem;
       }
     }
     .stats-date {
@@ -86,12 +92,34 @@
           margin-bottom: 0.31rem;
         }
       }
+      @media (max-width: $md-breakpoint) {
+        flex-direction: column-reverse;
+        gap: 15px;
+        .date-content {
+          text-align: center;
+          margin: 0;
+        }
+      }
     }
   }
   .stats {
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-row: auto;
+    grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
     justify-content: space-between;
+    @media (max-width: $md-breakpoint) {
+      grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+      gap: 50px;
+      .stats-item {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 15px;
+        svg {
+          margin: 0 !important;
+        }
+      }
+    }
     .stats-item {
       display: flex;
       width: 100%;

@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import { useNavigate } from "react-router-dom"
 import "./index.scss"
 import { TypeButton, TypeSmallButton } from "utils/new/button"
 import Table from "utils/new/table"
@@ -33,8 +32,6 @@ const CardTable: React.FC<IProps> = ({
   children,
   inner,
 }) => {
-  const navigate = useNavigate()
-
   const isPagination = typeof handlePagination === "function"
 
   const [filter, setFilter] = useState<boolean>(false)
@@ -70,7 +67,7 @@ const CardTable: React.FC<IProps> = ({
       <div>
         <div className="table-filter">
           <div className={`filter-section ${filter ? "show" : ""}`}>
-            {children}
+            {React.cloneElement(children, { closeFilter: handleFilter })}
           </div>
           <div className={`table-containers ${filter ? "shrink" : ""}`}>
             <div className="table-section">

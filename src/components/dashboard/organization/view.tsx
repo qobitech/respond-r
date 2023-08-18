@@ -10,7 +10,7 @@ import { IOrganization } from "interfaces/IOrganization"
 interface IProps {
   states?: IStates
   actions?: IAction
-  rsProps: IRightSection<IOrganization>
+  rsProps?: IRightSection<IOrganization>
 }
 
 const contentItems = (org: IOrganization | null | undefined) => [
@@ -37,10 +37,10 @@ const contentItems = (org: IOrganization | null | undefined) => [
 ]
 
 const ViewOrganization: React.FC<IProps> = ({ states, actions, rsProps }) => {
-  const deleteApp = rsProps.isView("delete", "organization")
-  const organization = rsProps.data
-  const updateData = rsProps.updateData
-  const id = rsProps.queryId
+  const deleteApp = rsProps?.isView("delete", "organization")
+  const organization = rsProps?.data
+  const updateData = rsProps?.updateData
+  const id = rsProps?.queryId
 
   useEffect(() => {
     if (!organization && id) {
@@ -50,7 +50,7 @@ const ViewOrganization: React.FC<IProps> = ({ states, actions, rsProps }) => {
   }, [])
 
   useEffect(() => {
-    if (states?.user.getUserById) updateData(states?.user.getUserById)
+    if (states?.user.getUserById) updateData?.(states?.user.getUserById)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [states?.user.getUserById])
 
@@ -80,7 +80,7 @@ const ViewOrganization: React.FC<IProps> = ({ states, actions, rsProps }) => {
       ) : (
         <DeleteCTA
           title="Delete Organization"
-          onCancel={rsProps.closeSection}
+          onCancel={rsProps?.closeSection}
           onDelete={() => {
             actions?.deleteOrganization?.(organization?.id + "")
           }}

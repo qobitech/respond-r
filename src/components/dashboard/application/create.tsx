@@ -17,7 +17,7 @@ import { IRightSection } from "components/reusable/right-section"
 interface IProps {
   states?: IStates
   actions?: IAction
-  rsProps: IRightSection<IApplication>
+  rsProps?: IRightSection<IApplication>
 }
 
 export interface ICreateApplicationHookForm {
@@ -44,8 +44,8 @@ export const createApplicationSchema = {
 }
 
 const CreateApplication: React.FC<IProps> = ({ states, actions, rsProps }) => {
-  const update = rsProps.isView("update", "application")
-  const application = rsProps.data
+  const update = rsProps?.isView("update", "application")
+  const application = rsProps?.data
   const [hookForm] = useFormHook<ICreateApplicationHookForm>(
     createApplicationSchema
   )
@@ -136,7 +136,7 @@ const CreateApplication: React.FC<IProps> = ({ states, actions, rsProps }) => {
   }
 
   return (
-    <form className="app-form" onSubmit={hookForm.handleSubmit(submitForm)}>
+    <form className="app-form" onSubmit={(e) => e.preventDefault()}>
       <div className="form-content">
         <FormBuilder formComponent={createApplicationFC} hookForm={hookForm} />
       </div>
@@ -173,8 +173,13 @@ const CreateApplication: React.FC<IProps> = ({ states, actions, rsProps }) => {
         <TypeButton
           title={update ? "UPDATE" : "CREATE"}
           load={createApiScopesLoading}
+          onClick={hookForm.handleSubmit(submitForm)}
         />
-        <TypeSmallButton title="Cancel" buttonType="danger" />
+        <TypeSmallButton
+          title="Cancel"
+          buttonType="danger"
+          onClick={rsProps?.closeSection}
+        />
       </div>
     </form>
   )

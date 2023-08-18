@@ -7,12 +7,12 @@ import FormBuilder, { IFormComponent } from "utils/new/form-builder"
 import * as yup from "yup"
 import { useFormHook } from "utils/new/hook"
 import { IOrganization } from "interfaces/IOrganization"
+import { IRightSection } from "components/reusable/right-section"
 
 interface IProps {
   states?: IStates
   actions?: IAction
-  update?: boolean
-  organization?: IOrganization | null
+  rsProps?: IRightSection<IOrganization>
 }
 
 export interface ICreateOrganizationHookForm {
@@ -31,12 +31,9 @@ export const createOrganizationSchema = {
   phoneNumber: yup.string().required("phone number is required"),
 }
 
-const CreateOrganization: React.FC<IProps> = ({
-  states,
-  actions,
-  update,
-  organization,
-}) => {
+const CreateOrganization: React.FC<IProps> = ({ states, actions, rsProps }) => {
+  const update = rsProps?.isView("update", "organization")
+  const organization = rsProps?.data
   const filterOnUpdate = (i: IFormComponent) =>
     update ? i.id !== "password" && i.id !== "confirmPassword" : i
   const createOrganizationFC: IFormComponent[] = [

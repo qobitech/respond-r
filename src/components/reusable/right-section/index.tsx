@@ -158,40 +158,33 @@ interface ICTA {
   action?: () => void
 }
 
-interface IRSection {
+interface IRSection<T> {
   children?: any
-  openSection: boolean
-  closeSection: () => void
-  setAction: React.Dispatch<React.SetStateAction<IRSAction>>
-  action: IRSAction
-  title: string
-  ctas?: ICTA[] | null
-  setCtas: React.Dispatch<React.SetStateAction<ICTA[] | null>>
+  rsProps: IRightSection<T>
 }
 
-const RightSection: React.FC<IRSection> = ({
-  children,
-  openSection,
-  closeSection,
-  setAction,
-  action,
-  title,
-  ctas,
-  setCtas,
-}) => {
+const RightSection = <T extends {}>({ children, rsProps }: IRSection<T>) => {
   const handleClose = () => {
-    closeSection()
-    setAction({ component: null, type: null, id: null })
-    setCtas(null)
+    rsProps.closeSection()
+    rsProps.setAction({ component: null, type: null, id: null })
+    rsProps.setCtas(null)
   }
+
+  const matchChild: any = React.Children.map(children, (child) => {
+    if (child) return (child = { ...child, props: { ...child.props, rsProps } })
+    return child
+  })
+
   return (
     <div
-      className={`right_container ${openSection ? "menuopen" : "menuclose"}`}
+      className={`right_container ${
+        rsProps.openSection ? "menuopen" : "menuclose"
+      }`}
     >
       <div className="rs-header">
-        <h3>{title}</h3>
+        <h3>{rsProps.title}</h3>
         <div className="ctas">
-          {ctas?.map((i, index) => (
+          {rsProps.ctas?.map((i, index) => (
             <TypeSmallButton
               title={i.title}
               buttonType={i.type}
@@ -207,14 +200,7 @@ const RightSection: React.FC<IRSection> = ({
           />
         </div>
       </div>
-      <div className="rs-body">
-        {React.cloneElement(children, {
-          openSection,
-          closeSection,
-          setAction,
-          action,
-        })}
-      </div>
+      <div className="rs-body">{matchChild}</div>
     </div>
   )
 }

@@ -151,37 +151,21 @@ const Organization: React.FC<IProps> = ({ states, ...props }) => {
         >
           <FilterComponent {...filterProps} />
         </CardTable>
-        <RightSection {...rsProps}>
-          <Switch>
-            <Case
-              condition={
-                rsProps.isView("create", "organization") ||
-                rsProps.isView("update", "organization")
-              }
-            >
-              <CreateOrganization
-                states={states}
-                actions={props as unknown as IAction}
-                update={rsProps.isView("update", "organization")}
-                organization={rsProps.data}
-              />
-            </Case>
-            <Case
-              condition={
-                rsProps.isView("view", "organization") ||
-                rsProps.isView("delete", "organization")
-              }
-            >
-              <ViewOrganization
-                states={states}
-                actions={props as unknown as IAction}
-                rsProps={rsProps}
-              />
-            </Case>
-            <Default>
-              <></>
-            </Default>
-          </Switch>
+        <RightSection rsProps={rsProps}>
+          {(rsProps.isView("create", "organization") ||
+            rsProps.isView("update", "organization")) && (
+            <CreateOrganization
+              states={states}
+              actions={props as unknown as IAction}
+            />
+          )}
+          {(rsProps.isView("view", "organization") ||
+            rsProps.isView("delete", "organization")) && (
+            <ViewOrganization
+              states={states}
+              actions={props as unknown as IAction}
+            />
+          )}
         </RightSection>
       </div>
     </div>

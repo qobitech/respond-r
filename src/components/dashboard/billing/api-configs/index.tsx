@@ -129,7 +129,7 @@ const APIConfiguration: React.FC<IProps> = ({ states, ...props }) => {
       >
         <FilterComponent {...filterProps} />
       </CardTable>
-      <RightSection {...rsProps}>
+      <RightSection rsProps={rsProps}>
         <div>
           {rsProps.action.type === "create" && <></>}
           {rsProps.action.type === "view" && <></>}
