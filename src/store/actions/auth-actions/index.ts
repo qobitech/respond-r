@@ -1,98 +1,136 @@
-import axios, { AxiosResponse } from 'axios';
-import { url } from 'enums/Route';
-import { getRequest, postRequest } from 'store/services';
-import { ActionEnums } from '../../../enums/ActionEnums';
-import { etraffica_baseurl } from '../../../utils/constants';
-import { SET_ORGANIZATION_AUTH, SET_PASSWORD_RESET, SET_REFRESH_TOKEN, SET_GENERATED_TOKEN, SET_LOGGED_IN_DETAILS, SET_ADMIN_UNAUTHENTICATED, SET_ADMIN_AUTHENTICATED, SET_VERIFY_PASSWORD_RESET, SET_VERIFY_EMAIL } from '../types';
+import { url } from "enums/Route"
+import { etraffica_baseurl } from "../../../utils/constants"
+import * as utils from "../../services/new/utils"
+import { authType } from "store/types"
+import { ILogin } from "interfaces/IAuth"
 
 const setAuthorizationHeader = (token: string) => {
-	const CentralDatabaseToken = `Bearer ${token}`;
-	localStorage.setItem("CentralDatabaseToken", CentralDatabaseToken);
-	axios.defaults.headers.common["Authorization"] = CentralDatabaseToken;
-};
+  localStorage.setItem("CentralDatabaseToken", token)
+}
 
-export const registerOrganization = (adminDetails: object) => 
-	postRequest({
-		url: `${etraffica_baseurl}/UserManagement/OrganizationRegistration`,
-		actionEnum: ActionEnums.ORGANIZATION_REGISTRATION,
-		data: adminDetails, disPatch:[{ type : SET_ORGANIZATION_AUTH, payload : '' }]
-	});
+export const registerOrganization = (adminDetails: object) => {
+  return utils.httpPostMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/UserManagement/OrganizationRegistration`,
+      header: utils.headerNoAuth(),
+      data: adminDetails,
+    },
+    actionType: authType.registerOrganization,
+  })
+}
 
-export const clearOrgAuth = () => (dispatch:Function) => {
-	dispatch({ type: SET_ORGANIZATION_AUTH, payload: {} })
-};
+export const verifyEmail = (data: object) => {
+  return utils.httpPostMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/UserManagement/VerifyToken`,
+      header: utils.headerNoAuth(),
+      data,
+    },
+    actionType: authType.verifyEmail,
+  })
+}
 
-export const verifyEmail = (data : object) => 
-	postRequest({
-		url: `${etraffica_baseurl}/UserManagement/VerifyToken`,
-		actionEnum: ActionEnums.EMAIL_VERIFICATION,
-		data, disPatch:[{ type : SET_VERIFY_EMAIL, payload : '' }],
-	});
+export const userLogin = (data: {
+  username: string
+  password: string
+  rememberMe: boolean
+}) => {
+  return utils.httpPostMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/UserLogin`,
+      header: utils.headerNoAuth(),
+      data,
+    },
+    actionType: authType.userLogin,
+    onSuccess: (res: ILogin) => {
+      setAuthorizationHeader(res.token.accessToken)
+      setTimeout(() => {
+        window.location.reload()
+      }, 1500)
+    },
+  })
+}
 
-export const userLogin = ( data : object ) => 
-	postRequest({
-		url: `${etraffica_baseurl}/UserLogin`,
-		actionEnum: ActionEnums.LOGIN,
-		data, disPatch:[
-			{ type : SET_ADMIN_AUTHENTICATED },
-			{ type : SET_LOGGED_IN_DETAILS, payload : '' },
-			{ type : SET_REFRESH_TOKEN, payload : 'token' },
-		],
-		extraFunc: (res: AxiosResponse<any>) => {setAuthorizationHeader(res.data!?.token!?.accessToken); window.location.reload()}
-	});
+export const passwordReset = (data: object) => {
+  return utils.httpPostMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/UserManagement/PasswordReset/UpdatePassword`,
+      header: utils.headerNoAuth(),
+      data,
+    },
+    actionType: authType.passwordReset,
+  })
+}
 
-export const passwordReset = ( data : object ) => 
-	postRequest({
-		url: `${etraffica_baseurl}/UserManagement/PasswordReset/UpdatePassword`,
-		actionEnum: ActionEnums.PASSWORD_RESET,
-		data
-	});
+export const requestPasswordToken = (email: { [key: string]: any }) => {
+  return utils.httpPostMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/PasswordReset/TokenLink/${
+        email!?.email
+      }`,
+      header: utils.headerNoAuth(),
+    },
+    actionType: authType.requestPasswordToken,
+    onSuccess: (res) => {
+      if (res.status === 200) window.location.href = url.RESET_PASSWORD
+    },
+  })
+}
 
-export const requestPasswordToken = ( email : {[key: string]: any} ) => 
-	getRequest({
-		url: `${etraffica_baseurl}/PasswordReset/TokenLink/${email!?.email}`,
-		actionEnum: ActionEnums.PASSWORD_TOKEN_REQUEST,
-		disPatch:[{ type : SET_PASSWORD_RESET, payload : '' }],
-		extraFunc: (res: AxiosResponse<any>) => (res.status === 200 && window.location.href === url.RESET_PASSWORD)
-	});
+export const verifyPasswordResetToken = (data: object) => {
+  return utils.httpPostMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/PasswordReset/ValidateToken`,
+      header: utils.headerNoAuth(),
+      data,
+    },
+    actionType: authType.verifyPasswordResetToken,
+  })
+}
 
-export const clearPasswordReset = () => (dispatch:Function) => {
-	dispatch({ type: SET_PASSWORD_RESET, payload: {} })
-};
+export const updatePassword = (data: object) => {
+  return utils.httpPostMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/ChangePassword`,
+      header: utils.headerNoAuth(),
+      data,
+    },
+    actionType: authType.updatePassword,
+  })
+}
 
-export const verifyPasswordResetToken = ( data : object ) => 
-	postRequest({
-		url: `${etraffica_baseurl}/PasswordReset/ValidateToken`,
-		actionEnum: ActionEnums.PASSWORD_RESET_TOKEN_VERIFICATION,
-		data, disPatch:[{ type : SET_VERIFY_PASSWORD_RESET, payload : '' }]
-	});
+export const generateAccessToken = (data: object) => {
+  return utils.httpPostMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/connect/token`,
+      header: utils.headerNoAuth(),
+      data,
+    },
+    actionType: authType.generateAccessToken,
+  })
+}
 
-export const updatePassword = ( data : object ) =>
-	postRequest({
-		url: `${etraffica_baseurl}/ChangePassword`,
-		actionEnum: ActionEnums.PASSWORD_UPDATE,
-		data,
-	});
-
-export const generateAccessToken = ( data : object ) => 
-	postRequest({
-		url: `${etraffica_baseurl}/connect/token`,
-		actionEnum: ActionEnums.TOKEN_GENERATION,
-		data, disPatch:[{ type : SET_GENERATED_TOKEN, payload : '' }]
-	});
-
-
-export const getRefreshToken = ( data : object ) => 
-	postRequest({
-		url: `${etraffica_baseurl}/Session/RefreshToken`,
-		actionEnum: ActionEnums.TOKEN_REFRESH,
-		data, disPatch:[{ type : SET_REFRESH_TOKEN, payload : '' }]
-	});
+export const getRefreshToken = (data: object) => {
+  return utils.httpPostMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/Session/RefreshToken`,
+      header: utils.headerNoAuth(),
+      data,
+    },
+    actionType: authType.getRefreshToken,
+  })
+}
 
 export const logOut = () => (dispatch: Function) => {
-	localStorage.removeItem('CentralDatabaseToken');
-	dispatch({ type: SET_ADMIN_UNAUTHENTICATED });
-	delete axios.defaults.headers.common["Authorization"];
-	localStorage.clear();
-	window.location.href = url.LOGIN;
-};
+  localStorage.clear()
+  window.location.href = url.LOGIN
+}

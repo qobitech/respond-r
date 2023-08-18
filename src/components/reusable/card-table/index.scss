@@ -1,0 +1,81 @@
+@import "../../../styles/variables.scss";
+@import "../../../styles/mixins.scss";
+
+.application-card {
+  background-color: #fff;
+  padding: 2.44rem 2.45rem;
+  &.inner {
+    padding: 0;
+  }
+  .application-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .application-header-content {
+      h3 {
+        color: #274169;
+        font-family: Manrope;
+        font-size: 1.25rem;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        margin: 0;
+        margin-bottom: 0.75rem;
+        &.inner {
+          font-size: 1rem;
+          font-weight: 400;
+        }
+      }
+      p {
+        margin: 0;
+        color: #69696a;
+        font-family: Manrope;
+        font-size: 0.8125rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+      }
+    }
+    .application-cta {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 20px;
+    }
+  }
+  .filter-section {
+    padding: 2.44rem 0;
+    display: flex;
+    gap: 20px;
+  }
+}
+
+.table-filter {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  .filter-section {
+    flex-basis: 0;
+    transition: 0.2s ease;
+    overflow: hidden;
+    height: 0;
+    padding: 0;
+    &.show {
+      flex-basis: 20%;
+      height: auto;
+    }
+  }
+  .table-containers {
+    flex-basis: 100%;
+    transition: 0.2s ease;
+    width: 100%;
+    &.shrink {
+      flex-basis: 78%;
+      width: 0%;
+    }
+    .table-section {
+      width: 100%;
+      overflow: auto;
+    }
+  }
+}

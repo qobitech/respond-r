@@ -1,0 +1,30 @@
+.type-checkbox {
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    align-items: flex-start;
+    flex: 1;
+    margin-bottom: 2.06rem;
+  }
+  label {
+    color: #375c94;
+    font-family: Manrope;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0 0 0.81rem;
+  }
+  .checkbox-content {
+    display: flex;
+    align-items: center;
+    input {
+      outline: #dbeaff;
+      border-radius: 3px;
+      height: 14px;
+      width: 14px;
+      border: 1px solid #dbeaff !important;
+    }
+  }
+}

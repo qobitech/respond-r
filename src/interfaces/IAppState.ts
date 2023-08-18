@@ -1,9 +1,8 @@
-import { IAdmin } from "./IAdmin";
-import { IHttp } from './IHttp'
-import { IAuth } from './IAuth'
+import { IAdmin } from "./IAdmin"
+import { IAuth } from "./IAuth"
 
 export interface IAppState {
-    admin: IAdmin
-    http : IHttp
-    auth : IAuth
+  admin: IAdmin
+  http: any
+  auth: IAuth
 }

@@ -1,90 +1,152 @@
-import { ActionEnums } from 'enums/ActionEnums';
-import { deleteRequest, getRequest, postRequest } from 'store/services';
-import { etraffica_baseurl } from 'utils/constants';
-import { SET_API_BUNDLES, SET_API_BUNDLE_BY_ID, SET_API_CONFIGS, SET_API_CONFIG_GROUPS, SET_CLIENT_SUBSCRIPTIONS } from '../types';
+import { etraffica_baseurl } from "utils/constants"
+import * as utils from "../../services/new/utils"
+import { billing } from "store/types"
 
-const getAPIBundles = (PageNumber?: number, PageSize?: number, query?: string) => 
-	getRequest({
-		url: `${etraffica_baseurl}/api-bundles/GetAll`,
-		actionEnum: ActionEnums.GET_API_BUNDLES, disPatch: [{type: SET_API_BUNDLES, payload: 'bundles' }], PageNumber, PageSize, query
-	});
+export const getAPIBundles = (query: string) => {
+  return utils.httpGetMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/api-bundles/GetAll${query || ""}`,
+      header: utils.header(""),
+    },
+    actionType: billing.getAPIBundles,
+  })
+}
 
-const getAPIBundleById = (id: number) => 	
-	getRequest({
-		url: `${etraffica_baseurl}/api-bundles/Details`,
-		actionEnum: ActionEnums.GET_API_BUNDLE_BY_ID, disPatch: [{type: SET_API_BUNDLE_BY_ID, payload: 'bundle' }], id
-	});
+export const getAPIBundleById = (id: string) => {
+  return utils.httpGetMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/api-bundles/Details/${id}`,
+      header: utils.header(""),
+    },
+    actionType: billing.getAPIBundleById,
+  })
+}
 
-const clearAPIBundleById = () => (dispatch:Function) => {
-	dispatch({ type: SET_API_BUNDLE_BY_ID, payload: {} })
-};
+export const createAPIBundle = (data: object, update?: boolean) => {
+  return utils.httpPostMethod({
+    apiData: {
+      url: "",
+      customurl: update
+        ? `${etraffica_baseurl}/api-bundles/Update`
+        : `${etraffica_baseurl}/api-bundles/Create`,
+      header: utils.header(""),
+      data,
+    },
+    actionType: update ? billing.updateAPIBundle : billing.createAPIBundle,
+  })
+}
 
-const createAPIBundle = ( data : object, update?: boolean ) => 
-	postRequest({
-		url: update ? `${etraffica_baseurl}/api-bundles/Update` : `${etraffica_baseurl}/api-bundles/Create`,
-		actionEnum: update ? ActionEnums.UPDATE_API_BUNDLE : ActionEnums.CREATE_API_BUNDLE,
-		data, update
-	});
+export const deleteAPIBundle = (id: string) => {
+  return utils.httpDeleteMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/api-bundles/Delete/${id}`,
+      header: utils.header(""),
+    },
+    actionType: billing.deleteAPIBundle,
+  })
+}
 
-const deleteAPIBundle = (id: number) => 
-	deleteRequest({
-		url: `${etraffica_baseurl}/api-bundles/Delete`,
-		actionEnum: ActionEnums.DELETE_API_BUNDLE, id
-	});
+export const getAPIConfigs = (query: string) => {
+  return utils.httpGetMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/api-configurations/GetAll${query || ""}`,
+      header: utils.header(""),
+    },
+    actionType: billing.getAPIConfigs,
+  })
+}
 
-const getAPIConfigs = (PageNumber?: number, PageSize?: number, query?: string) => 
-	getRequest({
-		url: `${etraffica_baseurl}/api-configurations/GetAll`,
-		actionEnum: ActionEnums.GET_API_CONFIGS, disPatch: [{type: SET_API_CONFIGS, payload: 'configurations' }], PageNumber, PageSize, query
-	});
+export const createAPIConfig = (data: object, update?: boolean) => {
+  return utils.httpPostMethod({
+    apiData: {
+      url: "",
+      customurl: update
+        ? `${etraffica_baseurl}/api-configurations/Update`
+        : `${etraffica_baseurl}/api-configurations/Create`,
+      header: utils.header(""),
+      data,
+    },
+    actionType: update ? billing.updateAPIConfig : billing.createAPIConfig,
+  })
+}
 
-const createAPIConfig = ( data : object, update?: boolean ) => 
-	postRequest({
-		url: update ? `${etraffica_baseurl}/api-configurations/Update` : `${etraffica_baseurl}/api-configurations/Create`,
-		actionEnum: update ? ActionEnums.UPDATE_API_CONFIG : ActionEnums.CREATE_API_CONFIG,
-		data, update
-	});
+export const deleteAPIConfig = (id: string) => {
+  return utils.httpDeleteMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/api-configurations/Delete/${id}`,
+      header: utils.header(""),
+    },
+    actionType: billing.deleteAPIConfig,
+  })
+}
 
-const deleteAPIConfig = (id: number) =>
-	deleteRequest({
-		url: `${etraffica_baseurl}/api-configurations/Delete`,
-		actionEnum: ActionEnums.DELETE_API_CONFIG, id
-	});
+export const getAPIConfigGroups = (query: string) => {
+  return utils.httpGetMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/api-configurations/Group/GetAll${
+        query || ""
+      }`,
+      header: utils.header(""),
+    },
+    actionType: billing.getAPIConfigGroups,
+  })
+}
 
-const getAPIConfigGroups = (PageNumber?: number, PageSize?: number, query?: string) => 
-	getRequest({
-		url: `${etraffica_baseurl}/api-configurations/Group/GetAll`,
-		actionEnum: ActionEnums.GET_API_CONFIG_GROUPS, disPatch: [{type: SET_API_CONFIG_GROUPS, payload: 'configurationGroups' }], PageNumber, PageSize, query
-	});
+export const createAPIConfigGroup = (data: object, update?: boolean) => {
+  return utils.httpPostMethod({
+    apiData: {
+      url: "",
+      customurl: update
+        ? `${etraffica_baseurl}/api-configurations/Group/Create/Update`
+        : `${etraffica_baseurl}/api-configurations/Group/Create`,
+      header: utils.header(""),
+      data,
+    },
+    actionType: update
+      ? billing.updateAPIConfigGroup
+      : billing.createAPIConfigGroup,
+  })
+}
 
-const createAPIConfigGroup = ( data : object, update?: boolean ) => 
-	postRequest({
-		url: update ? `${etraffica_baseurl}/api-configurations/Group/Create/Update` : `${etraffica_baseurl}/api-configurations/Group/Create`,
-		actionEnum: update ? ActionEnums.UPDATE_API_CONFIG_GROUP : ActionEnums.CREATE_API_CONFIG_GROUP,
-		data, update
-	});
+export const getClientSubscriptions = (query: string) => {
+  return utils.httpGetMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/subscriptions/GetAll${query || ""}`,
+      header: utils.header(""),
+    },
+    actionType: billing.getClientSubscriptions,
+  })
+}
 
-const getClientSubscriptions = (PageNumber?: number, PageSize?: number, query?: string) => 
-	getRequest({
-		url: `${etraffica_baseurl}/subscriptions/GetAll`,
-		actionEnum: ActionEnums.GET_CLIENT_SUBSCRIPTIONS, disPatch: [{type: SET_CLIENT_SUBSCRIPTIONS, payload: 'subscriptions' }], PageNumber, PageSize, query
-	});
+export const subscribeToBundle = (data: object) => {
+  return utils.httpPostMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/subscriptions/Subscribe`,
+      header: utils.header(""),
+      data,
+    },
+    actionType: billing.subscribeToBundle,
+  })
+}
 
-const subscribeToBundle = ( data : object ) => 
-	postRequest({
-		url: `${etraffica_baseurl}/subscriptions/Subscribe`,
-		actionEnum: ActionEnums.SUBSCRIBE_TO_BUNDLE, data,
-	});
-
-const addAppsToSub = ( data: Array<{ applicationId: number, organizationSubscriptionId: number }> ) => 
-	postRequest({
-		url: `${etraffica_baseurl}/subscriptions/Subscribe/AddClient`,
-		actionEnum: ActionEnums.ADD_APP_TO_SUB, data,
-	});
-
-
-export { 
-	getAPIBundles, getAPIBundleById, clearAPIBundleById, createAPIBundle, deleteAPIBundle, getAPIConfigs, 
-	createAPIConfig, deleteAPIConfig, getAPIConfigGroups, createAPIConfigGroup, getClientSubscriptions, 
-	subscribeToBundle, addAppsToSub 
-};
+export const addAppsToSub = (
+  data: Array<{ applicationId: number; organizationSubscriptionId: number }>
+) => {
+  return utils.httpPostMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/subscriptions/Subscribe/AddClient`,
+      header: utils.header(""),
+      data,
+    },
+    actionType: billing.addAppsToSub,
+  })
+}

@@ -1,0 +1,11 @@
+@import "../../styles/variables.scss";
+
+.page_layout {
+  padding-top: 90px;
+  &.fitContent {
+    min-height: 100vh;
+  }
+  .contents {
+    height: 100%;
+  }
+}

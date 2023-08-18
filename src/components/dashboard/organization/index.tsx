@@ -1,129 +1,191 @@
-import React, { useState, useEffect } from 'react';
-import DashboardWrapper from '../dashboardwrapper';
-import { IAppState } from 'interfaces/IAppState';
-import { connect } from 'react-redux'
-import { IHttp } from 'interfaces/IHttp';
-import { IAdmin } from 'interfaces/IAdmin';
-import { getAllOrganizations } from 'store/actions';
-import { useStrictLoader } from 'hooks/useStrictLoader';
-import { ActionEnums } from 'enums/ActionEnums';
-import { IAuth } from 'interfaces/IAuth';
-import { useSearch } from 'hooks/useQuery';
-import { useNavigate, useParams } from 'react-router-dom';
-import { pageName, url } from 'enums/Route';
-import OrgFilter from './org-filter';
-import Table from 'utils/table';
-import OrgMD from './more-details';
-import { useModalWithArg } from 'hooks/useModal';
-import UpdateOrg from './update-org';
-import { IOrganization } from 'interfaces/IOrganization';
-import './index.scss';
+import React, { useEffect } from "react"
+import "./index.scss"
+import { IStates } from "interfaces/IReducer"
+import "../../../utils/new/pagination.scss"
+import "../../../utils/new/page.scss"
+import CardTable from "components/reusable/card-table"
+import RightSection, {
+  actionComponent,
+  useRightSection,
+} from "components/reusable/right-section"
+import { ITableRecord } from "../overview"
+import FilterComponent, { IFilterData } from "components/reusable/filter"
+import Switch, { Case, Default } from "components/reusable/switch"
+import CreateOrganization from "./create"
+import { IAction } from "interfaces/IAction"
+import { IOrganization } from "interfaces/IOrganization"
+import ViewOrganization from "./view"
 
-interface IStateProps {
-    admin : IAdmin;
-    http: IHttp;
-    auth: IAuth;
+interface IProps {
+  states?: IStates
 }
 
-interface IDispatchProps {
-    getAllOrganizations: (PageNumber: number, PageSize: number, query?: string) => void;
+const getAllStates = (states?: IStates) => {
+  const allOrg = states?.organization.getAllOrganizations
+  const loadOrg = states?.organization.getAllOrganizationsLoading
+
+  return {
+    allOrg,
+    load: loadOrg || false,
+  }
 }
 
-interface IProps extends IStateProps, IDispatchProps {};
-const Overview = (props: IProps) => {
-
-    const { admin, getAllOrganizations } = props;
-    const { loading = false, organizations = [] } = admin;
-    const navigate = useNavigate();
-    const { id } = useParams<{ id: string }>();
-    const [ isMoreOption, setIsMoreOption ] = useState( false );
-    const [ orgObject, setOrgObject ] = useState({} as IOrganization);
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(20);
-    const [pageNumber, setPageNumber] = useState(1);
-    const pageSize = 20;
-    
-    useEffect(()=>{
-        if(!id)
-        getAllOrganizations(pageNumber, pageSize, '');
+const Organization: React.FC<IProps> = ({ states, ...props }) => {
+  const rsProps = useRightSection<IOrganization>()
+  const component: actionComponent = "organization"
+  const componentState = getAllStates(states)
+  const { getAllUsers } = props as unknown as IAction
+  useEffect(() => {
+    if (!componentState.allOrg) getAllUsers("")
+    if (rsProps.queryAction === "create") {
+      rsProps.callSectionOnQuery()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[id]);
-
-    useEffect(() => {
-        if(id) {
-            setIsMoreOption(true)
-            setOrgObject(organizations!?.filter(u => u!?.id === parseInt(id))[0])
-        }else {
-            setIsMoreOption(false)
-            setOrgObject({} as IOrganization)
-        }
+  }, [])
+  useEffect(() => {
+    if (componentState.allOrg && rsProps.queryAction !== "create") {
+      const queryData = componentState.allOrg.organizations.filter(
+        (i) => i.id === parseInt(rsProps.queryId as string)
+      )?.[0]
+      rsProps.callSectionOnQuery(queryData)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[id]);
-
-    const [ setValueFunc, ModalComponent ] = useModalWithArg( [ <UpdateOrg /> ], { updateOrg: false } );
-
-    const [ orgList, isSearch, isSearchEmpty, setSearchMode, searchMode, cancelQuery ] = useSearch( { loading, request : organizations, requestBySearch : organizations } );
-
-    const rows = orgList!?.map((i) => {
-        return { id: i!?.id, b: i!?.organizationName, c: i!?.address, d: i!?.email, e: new Date(i!?.createdAt).toDateString()}
-    });
-
-    const headCells = [
-        { id: 'id', label: 'ID' },
-        { id: 'name', label: 'Organization' },
-        { id: 'address', label: 'Address' },
-        { id: 'email', label: 'Email' },
-        { id: 'createdAt', label: 'Date Created' },
-    ];
-
-    const setMoreOptions = ( id: string ) => {
-        navigate(url.ORGANIZATION + `/${id}`, {state: {pageName: pageName.ORGANIZATION}});
-    };
-
-    let isPageLoad = useStrictLoader( admin.action, ActionEnums.GET_ALL_ORGANIZATIONS );
-
-    // const [ setValueFunc, ModalComponent ] = useModalWithArg( [ <UpdateOrg /> ], { createApp: false } );
-
-    return(
-        <DashboardWrapper loading={loading && isPageLoad}>
-            <div className="organization">
-
-                <div className="org-info">
-                    <div style={{padding: '1em'}}>
-                        {
-                            !isMoreOption ?
-                            
-                            <>
-                                <OrgFilter isSearch={isSearch} searchMode={searchMode} setSearchMode={setSearchMode} orgs={orgList} 
-                                    pageNumber={pageNumber} setPageNumber={setPageNumber} rowsPerPage={rowsPerPage} 
-                                    setRowsPerPage={setRowsPerPage} page={page} setPage={setPage}cancelQuery={ cancelQuery } 
-                                    isSearchEmpty={ isSearchEmpty } isMoreOption={isMoreOption} setIsMoreOption={setIsMoreOption}
-                                />
-                                <Table rows={rows} headCells={headCells} rowsPerPage={50} page={page} onUClick={() => void(0)} 
-                                    setMoreOptions={setMoreOptions} />
-                            </>
-
-                            :
-
-                            <OrgMD data={orgObject} setIsMoreOption={setIsMoreOption} setValueFunc={setValueFunc} />
-                        }
-                    </div>
-
-                </div>
-                {ModalComponent}
-            </div>   
-        </DashboardWrapper>
-    )
-};
-
-const mapStateToProps = (state: IAppState): IStateProps => ({
-    admin: state.admin,
-    http : state.http,
-    auth: state.auth
-});
-
-const mapDispatchToProps: IDispatchProps = {
-    getAllOrganizations
+  }, [componentState.allOrg])
+  const tableData: ITableRecord[] = componentState.allOrg?.organizations?.map(
+    (i) => ({
+      id: i.id + "",
+      row: [
+        {
+          value: i.organizationName || "",
+          isLink: false,
+          url: "",
+          action: () => {},
+        },
+        {
+          value: i.email || "",
+          isLink: false,
+          url: "",
+          action: () => {},
+        },
+        {
+          value: new Date(i.createdAt).toDateString(),
+          isLink: false,
+          url: "",
+          action: () => {},
+        },
+      ],
+      rowActions: [
+        {
+          value: "View",
+          isLink: true,
+          url: "",
+          action: () => {
+            rsProps.callSection("view", component, i.id + "", i)
+          },
+          buttonType: "bold",
+        },
+        {
+          value: "Edit",
+          isLink: true,
+          url: "",
+          action: () => {
+            rsProps.callSection("update", component, i.id + "", i)
+          },
+          buttonType: "bold",
+        },
+        {
+          value: "Delete",
+          isLink: true,
+          url: "",
+          action: () => {
+            rsProps.callSection("delete", component, i.id + "", i)
+          },
+          buttonType: "danger",
+        },
+      ],
+    })
+  ) as ITableRecord[]
+  const handlePagination = (selectedItem: { selected: number }) => {}
+  const handleFilter = () => {}
+  const handleFilterClear = () => {}
+  const filterData: IFilterData[] = [
+    {
+      placeholder: "application name",
+      type: "text",
+      value: "",
+    },
+    {
+      placeholder: "client id",
+      type: "text",
+      value: "",
+    },
+    {
+      placeholder: "ennvironment type",
+      type: "text",
+      value: "",
+    },
+  ]
+  const filterProps = {
+    handleFilter,
+    handleFilterClear,
+    filterData,
+  }
+  return (
+    <div className="main-page">
+      <div className="pg-container">
+        <CardTable
+          cta={[
+            {
+              title: "CREATE NEW",
+              action: () => {
+                rsProps.callSection("create", component)
+              },
+            },
+          ]}
+          tableData={tableData}
+          tableHeader={["Organization", "Email", "Date Created", "Action"]}
+          tag="Lorem ipsum"
+          title="Organizations"
+          handlePagination={handlePagination}
+          isFilter
+        >
+          <FilterComponent {...filterProps} />
+        </CardTable>
+        <RightSection {...rsProps}>
+          <Switch>
+            <Case
+              condition={
+                rsProps.isView("create", "organization") ||
+                rsProps.isView("update", "organization")
+              }
+            >
+              <CreateOrganization
+                states={states}
+                actions={props as unknown as IAction}
+                update={rsProps.isView("update", "organization")}
+                organization={rsProps.data}
+              />
+            </Case>
+            <Case
+              condition={
+                rsProps.isView("view", "organization") ||
+                rsProps.isView("delete", "organization")
+              }
+            >
+              <ViewOrganization
+                states={states}
+                actions={props as unknown as IAction}
+                rsProps={rsProps}
+              />
+            </Case>
+            <Default>
+              <></>
+            </Default>
+          </Switch>
+        </RightSection>
+      </div>
+    </div>
+  )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps) ( Overview );
+export default Organization

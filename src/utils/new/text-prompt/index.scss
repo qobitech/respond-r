@@ -1,0 +1,28 @@
+.text-prompt {
+  p {
+    margin: 0;
+    font-family: Manrope;
+    font-size: 0.6875rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+    display: flex;
+    align-items: center;
+
+    &.cursor-pointer {
+      cursor: pointer;
+    }
+
+    &.underline {
+      text-decoration: underline;
+    }
+
+    &.success {
+      color: #0f9979;
+    }
+
+    &.danger {
+      color: #f56e9d;
+    }
+  }
+}

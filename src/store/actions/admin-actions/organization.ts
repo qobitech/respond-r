@@ -1,25 +1,36 @@
-import { ActionEnums } from 'enums/ActionEnums';
-import { deleteRequest, getRequest } from 'store/services';
-import { etraffica_baseurl } from 'utils/constants';
-import { SET_ALL_ORGANIZATIONS,SET_ORGANIZATION_INFO } from '../types';
+import { etraffica_baseurl } from "utils/constants"
+import * as utils from "../../services/new/utils"
+import { organization } from "store/types"
 
-const getOrganizationInfo = ( PageNumber?: number, PageSize?: number, query?: string ) => 
-	getRequest({
-		url: `${etraffica_baseurl}/Organization/GetAll`,
-		actionEnum: ActionEnums.GET_ORGANIZATION_INFO, disPatch: [{type: SET_ORGANIZATION_INFO, payload: 'organizations' }],
-		PageNumber, PageSize, query
-	});
+export const getOrganizationInfo = (query: string) => {
+  return utils.httpGetMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/Organization/GetAll${query}`,
+      header: utils.header(""),
+    },
+    actionType: organization.getOrganizationInfo,
+  })
+}
 
-const getAllOrganizations = (PageNumber?: number, PageSize?: number, query?: string) => 	
-	getRequest({
-		url: `${etraffica_baseurl}/Organization/GetAll`,
-		actionEnum: ActionEnums.GET_ALL_ORGANIZATIONS, disPatch: [{type: SET_ALL_ORGANIZATIONS, payload: 'organizations' }], PageNumber, PageSize, query
-	});
+export const getAllOrganizations = (query: string) => {
+  return utils.httpGetMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/Organization/GetAll${query}`,
+      header: utils.header(""),
+    },
+    actionType: organization.getAllOrganizations,
+  })
+}
 
-const deleteOrganization = ( id : number ) => 
-	deleteRequest({
-		url: `${etraffica_baseurl}/Organization/Delete`,
-		actionEnum: ActionEnums.DELETE_ORGANIZATION, id
-	});
-
-export { getOrganizationInfo, getAllOrganizations, deleteOrganization, };
+export const deleteOrganization = (id: string) => {
+  return utils.httpDeleteMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/Organization/Delete`,
+      header: utils.header(""),
+    },
+    actionType: organization.deleteOrganization,
+  })
+}

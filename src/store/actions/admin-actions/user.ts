@@ -1,25 +1,52 @@
-import { ActionEnums } from 'enums/ActionEnums';
-import { deleteRequest, getRequest, postRequest } from 'store/services';
-import { etraffica_baseurl } from 'utils/constants';
-import { SET_ALL_USERS } from '../types';
+import { etraffica_baseurl } from "utils/constants"
+import * as utils from "../../services/new/utils"
+import { user } from "store/types"
 
-const createUser = ( data : object, update?: boolean ) => 
-	postRequest({
-		url: update ? `${etraffica_baseurl}/Admin/UserManagement/UpdateUserDetails` : `${etraffica_baseurl}/Admin/UserManagement/CreateUser`,
-		actionEnum: update ? ActionEnums.UPDATE_USER : ActionEnums.CREATE_USER,
-		data, update
-	});
+export const createUser = (data: object, update?: boolean) => {
+  return utils.httpPostMethod({
+    apiData: {
+      url: "",
+      customurl: update
+        ? `${etraffica_baseurl}/Admin/UserManagement/UpdateUserDetails`
+        : `${etraffica_baseurl}/Admin/UserManagement/CreateUser`,
+      header: utils.header(""),
+      data,
+    },
+    actionType: update ? user.updateUser : user.createUser,
+  })
+}
 
-const getAllUsers = (PageNumber?: number, PageSize?: number, query?: string) => 
-	getRequest({
-		url: `${etraffica_baseurl}/Admin/UserManagement/GetAllUsers`,
-		actionEnum: ActionEnums.GET_ALL_USERS,  disPatch: [{type: SET_ALL_USERS, payload: 'users' }], PageNumber, PageSize, query
-	});
+export const getAllUsers = (query: string) => {
+  return utils.httpGetMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/Admin/UserManagement/GetAllUsers${
+        query || ""
+      }`,
+      header: utils.header(""),
+    },
+    actionType: user.getAllUsers,
+  })
+}
 
-const deleteUser = ( id : string ) => 
-	deleteRequest({
-		url: `${etraffica_baseurl}/Admin/UserManagement/DeleteUser`,
-		actionEnum: ActionEnums.DELETE_USER, id: parseInt(id)
-	});
+export const getUserById = (id: string) => {
+  return utils.httpGetMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/Admin/UserManagement/${id || ""}`,
+      header: utils.header(""),
+    },
+    actionType: user.getUserById,
+  })
+}
 
-export { createUser, getAllUsers, deleteUser };
+export const deleteUser = (id: string) => {
+  return utils.httpDeleteMethod({
+    apiData: {
+      url: "",
+      customurl: `${etraffica_baseurl}/Admin/UserManagement/DeleteUser`,
+      header: utils.header(""),
+    },
+    actionType: user.deleteUser,
+  })
+}

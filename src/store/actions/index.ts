@@ -1,27 +1,19 @@
-import { 
-        generateAccessToken, getRefreshToken, logOut, passwordReset, registerOrganization, clearOrgAuth, requestPasswordToken,
-        clearPasswordReset, updatePassword, userLogin, verifyEmail, verifyPasswordResetToken, 
-} from '../actions/auth-actions';
+import * as authactions from "../actions/auth-actions"
+import * as globalactions from "./global"
+import * as apiscopeactions from "./admin-actions/api-scope"
+import * as applicationactions from "./admin-actions/application"
+import * as billingactions from "./admin-actions/billing"
+import * as organizationactions from "./admin-actions/organization"
+import * as roleactions from "./admin-actions/role"
+import * as useractions from "./admin-actions/user"
 
-import { clearNotification, setTableIndex, createUser, getAllUsers, deleteUser, getAllApplications, createApplication,
-        getOrganizationInfo, getAllOrganizations, deleteOrganization, getAPIScopes, createAPIScope, getAllRoles, 
-        createRole, deleteRole, getPermissions, getAPIBundles, getAPIBundleById, clearAPIBundleById, deleteAPIBundle, 
-        createAPIBundle, getAPIConfigs, createAPIConfig, deleteAPIConfig, getAPIConfigGroups, createAPIConfigGroup, 
-        getClientSubscriptions, subscribeToBundle, addAppsToSub } 
-from '../actions/admin-actions'
-
-import { clearHttp } from './httpAction';
-
-export { 
-//AUTH-ACTIONS
-generateAccessToken, getRefreshToken, logOut, passwordReset, registerOrganization, clearOrgAuth, requestPasswordToken, clearPasswordReset, updatePassword, userLogin, verifyEmail, verifyPasswordResetToken, clearNotification, setTableIndex,
-
-//ADMIN-ACTIONS
-createUser, getAllUsers, deleteUser, getAllApplications, createApplication, getOrganizationInfo, getAllOrganizations, 
-deleteOrganization, getAPIScopes, createAPIScope, getAllRoles, createRole, deleteRole, getPermissions, getAPIBundles, 
-getAPIBundleById, clearAPIBundleById, deleteAPIBundle, createAPIBundle, getAPIConfigs, createAPIConfig, deleteAPIConfig, 
-getAPIConfigGroups, createAPIConfigGroup, getClientSubscriptions, subscribeToBundle, addAppsToSub,
-  
-//HTTP-ACTIONS
-clearHttp
-};
+export const actions = {
+  ...authactions,
+  ...globalactions,
+  ...apiscopeactions,
+  ...applicationactions,
+  ...billingactions,
+  ...organizationactions,
+  ...roleactions,
+  ...useractions,
+}

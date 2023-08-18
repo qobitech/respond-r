@@ -1,0 +1,56 @@
+.type-phone-input {
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    align-items: flex-start;
+    flex: 1;
+    margin-bottom: 2.06rem;
+  }
+  label {
+    color: #375c94;
+    font-family: Manrope;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0 0 0.81rem;
+  }
+  input {
+    width: 100% !important;
+    height: 3.125rem !important;
+    border: 1px solid #dbeaff !important;
+    border-radius: 0 !important;
+    padding: 0 1.24rem;
+    font-family: Manrope !important;
+    box-shadow: none !important;
+    box-sizing: border-box !important;
+    outline: none;
+    &::placeholder {
+      color: #a1a1a1 !important;
+      font-family: Manrope !important;
+      font-size: 0.8125rem !important;
+      font-style: normal !important;
+      font-weight: 300 !important;
+      line-height: normal !important;
+    }
+    &:focus {
+      border: 1px solid #6a8dc3 !important;
+      &.is-error {
+        border: 1px solid #f56e9d !important;
+      }
+    }
+    &.is-error {
+      border: 1px solid #f56e9d !important;
+      // margin-bottom: 0.81rem !important;
+    }
+  }
+  // .react-tel-input .selected-flag .flag {
+  //   position: absolute;
+  //   top: 50% !important;
+  //   margin-top: -12px;
+  // }
+  .div-error {
+    margin-top: 0.81rem !important;
+  }
+}

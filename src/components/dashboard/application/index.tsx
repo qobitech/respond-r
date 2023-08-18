@@ -1,134 +1,195 @@
-import React, { useEffect, useState } from 'react';
-import DashboardWrapper from '../dashboardwrapper';
-import AppCard from 'utils/app-card';
-import { IAppState } from 'interfaces/IAppState';
-import { connect } from 'react-redux'
-import { IHttp } from 'interfaces/IHttp';
-import { IAdmin } from 'interfaces/IAdmin';
-import { getAllApplications, addAppsToSub } from 'store/actions';
-import { useStrictLoader } from 'hooks/useStrictLoader';
-import { ActionEnums } from 'enums/ActionEnums';
-import { useModalWithArg } from 'hooks/useModal';
-import AppFilter from './app-filter';
-import { useSearch } from 'hooks/useQuery';
-import { useParams } from 'react-router-dom';
-import { IApplication } from 'interfaces/IApplication';
-import AppMD from './more-details';
-import { NoSearchResults } from 'utils/refresh';
-import { useNavigate } from 'react-router-dom';
-import { pageName, url } from 'enums/Route';
-import './index.scss';
+import React, { useEffect } from "react"
+import "./index.scss"
+import { IStates } from "interfaces/IReducer"
+import "../../../utils/new/pagination.scss"
+import "../../../utils/new/page.scss"
+import CardTable from "components/reusable/card-table"
+import RightSection, {
+  actionComponent,
+  useRightSection,
+} from "components/reusable/right-section"
+import { ITableRecord } from "../overview"
+import CreateApplication from "./create"
+import ViewApplication from "./view"
+import FilterComponent, { IFilterData } from "components/reusable/filter"
+import { Loader } from "utils/new/components"
+import { IAction } from "interfaces/IAction"
+import { IApplication } from "interfaces/IApplication"
+import Switch, { Case, Default } from "components/reusable/switch"
 
-interface IStateProps {
-    admin : IAdmin;
-    http: IHttp;
+interface IProps {
+  states?: IStates
 }
 
-interface IDispatchProps {
-    getAllApplications : (PageNumber?: number, PageSize?: number, query?: string) => void;
-    addAppsToSub: (data: Array<{ applicationId: number, organizationSubscriptionId: number }>) => void;
+const getAllStates = (states?: IStates) => {
+  const allApplications = states?.application.getAllApplications
+  const loadApplications = states?.application.getAllApplicationsLoading
+
+  return {
+    allApplications,
+    load: loadApplications || false,
+  }
 }
 
-interface IProps extends IStateProps, IDispatchProps {};
-const Applications = (props: IProps) => {
+const Application: React.FC<IProps> = ({ states, ...props }) => {
+  const rsProps = useRightSection<IApplication>()
+  const component: actionComponent = "application"
+  const componentState = getAllStates(states)
+  const { getAllApplications } = props as unknown as IAction
 
-    const { admin, getAllApplications, addAppsToSub } = props;
-    const { applications = [], loading = false, organizationInfo } = admin;
-    const { organizationSubscription } = organizationInfo![0] || {};
-    const { id: orgSubId = 0 } = organizationSubscription || {};
-    const { id } = useParams<{ id: string }>();
-    const [ isMoreOption, setIsMoreOption ] = useState( false );
-    const [ appObject, setAppObject ] = useState({} as IApplication);
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(50);
-    const [pageNumber, setPageNumber] = useState(1);
-    const pageSize = 20;
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if(!id)
-        getAllApplications(pageNumber, pageSize, '')
+  useEffect(() => {
+    if (!componentState.allApplications) getAllApplications("")
+    if (rsProps.queryAction === "create") {
+      rsProps.callSectionOnQuery()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id]);
+  }, [])
 
-    useEffect(() => {
-        if(id) {
-            setIsMoreOption(true)
-            setAppObject(applications!?.filter(u => u!?.id === parseInt(id))[0])
-        }else {
-            setIsMoreOption(false)
-            setAppObject({} as IApplication)
-        }
+  useEffect(() => {
+    if (componentState.allApplications && rsProps.queryAction !== "create") {
+      const queryData = componentState.allApplications.applications.filter(
+        (i) => i.id === parseInt(rsProps.queryId as string)
+      )?.[0]
+      rsProps.callSectionOnQuery(queryData)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[id]);
+  }, [componentState.allApplications])
 
-    const [ appList, isSearch, isSearchEmpty, setSearchMode, searchMode, cancelQuery ] = useSearch( { loading, request : applications, requestBySearch : applications } );
-
-    let isPageLoad = useStrictLoader( admin.action, ActionEnums.GET_ALL_APPLICATIONS );
-
-    const [ setValueFunc, ModalComponent ] = useModalWithArg( [ <></> ], { deleteApp: false } );
-
-    const filterCTAContent = [
-        {title: 'Create Application', action: () => {navigate(url.CREATE_APP, {state: {pageName: pageName.CREATE_APP}})}, font: '', isLoad: false }
-    ];
-
-    return(
-        <DashboardWrapper loading={loading && isPageLoad}>
-            <div className="applications">
-                {/* <Prompt reference={filterRef} trigger={true} content={<p>Boom</p>} /> */}
-                {
-                    !isMoreOption ?
-
-                    <>
-                        <div>
-                            <AppFilter isSearch={isSearch} searchMode={searchMode} setSearchMode={setSearchMode} users={appList} 
-                                pageNumber={pageNumber} setPageNumber={setPageNumber} rowsPerPage={rowsPerPage} 
-                                setRowsPerPage={setRowsPerPage} page={page} setPage={setPage}cancelQuery={ cancelQuery } 
-                                isSearchEmpty={ isSearchEmpty } isMoreOption={isMoreOption} setIsMoreOption={setIsMoreOption}
-                                filterCTAContent={filterCTAContent}
-                            />
-                        </div>
-
-                        {appList!?.length > 0 ?
-                            <div className="app-preview">
-                                {appList!?.map((a, index) => {
-                                    const { id = 0, applicationName = '', createdAt = '' } = a || {};
-                                    return(
-                                        <div key={index} >
-                                            <AppCard id={id} title={applicationName} description={applicationName} 
-                                                date={new Date(createdAt).toDateString()} />
-                                        </div>
-                                    )
-                                })}
-                            </div>
-
-                            :
-
-                            <NoSearchResults />
-                        }
-
-                    </>
-
-                    :
-
-                    <AppMD data={appObject} setIsMoreOption={setIsMoreOption} setValueFunc={setValueFunc} 
-                        addAppsToSub={addAppsToSub} orgSubId={orgSubId} loading={loading} />
-                }
-                    
-                {ModalComponent}
-            </div>   
-        </DashboardWrapper>
-    )
-};
-
-const mapStateToProps = (state: IAppState): IStateProps => ({
-    admin: state.admin,
-    http : state.http
-});
-
-const mapDispatchToProps: IDispatchProps = {
-    getAllApplications,
-    addAppsToSub
+  const tableData = componentState.allApplications?.applications?.map(
+    (i, index) => ({
+      id: index + "",
+      row: [
+        {
+          value: i.applicationName,
+          isLink: false,
+          url: "",
+          action: () => {},
+        },
+        {
+          value: new Date(i.createdAt).toDateString(),
+          isLink: false,
+          url: "",
+          action: () => {},
+        },
+        {
+          value: i.description,
+          isLink: false,
+          url: "",
+          action: () => {},
+        },
+      ],
+      rowActions: [
+        {
+          value: "View",
+          isLink: true,
+          url: "",
+          action: () => {
+            rsProps.callSection("view", "application", i.id + "", i)
+          },
+          buttonType: "bold",
+        },
+        {
+          value: "Edit",
+          isLink: true,
+          url: "",
+          action: () => {
+            rsProps.callSection("update", "application", i.id + "", i)
+          },
+          buttonType: "bold",
+        },
+        {
+          value: "Delete",
+          isLink: true,
+          url: "",
+          action: () => {
+            rsProps.callSection("delete", "application", i.id + "", i)
+          },
+          buttonType: "danger",
+        },
+      ],
+    })
+  ) as ITableRecord[]
+  const handlePagination = (selectedItem: { selected: number }) => {}
+  const handleFilter = () => {}
+  const handleFilterClear = () => {}
+  const filterData: IFilterData[] = [
+    {
+      placeholder: "application name",
+      type: "text",
+      value: "",
+    },
+    {
+      placeholder: "client id",
+      type: "text",
+      value: "",
+    },
+    {
+      placeholder: "ennvironment type",
+      type: "text",
+      value: "",
+    },
+  ]
+  const filterProps = {
+    handleFilter,
+    handleFilterClear,
+    filterData,
+  }
+  return (
+    <div className="main-page">
+      <div className="pg-container">
+        <CardTable
+          cta={[
+            {
+              title: "CREATE NEW",
+              action: () => {
+                rsProps.callSection("create", component)
+              },
+            },
+          ]}
+          tableData={tableData}
+          tableHeader={["Name", "Date", "Description", "Action"]}
+          tag="Lorem ipsum"
+          title="Applications"
+          handlePagination={handlePagination}
+          isFilter
+        >
+          <FilterComponent {...filterProps} />
+        </CardTable>
+        <RightSection {...rsProps}>
+          <Switch>
+            <Case
+              condition={
+                rsProps.isView("create", "application") ||
+                rsProps.isView("update", "application")
+              }
+            >
+              <CreateApplication
+                states={states}
+                actions={props as unknown as IAction}
+                rsProps={rsProps}
+              />
+            </Case>
+            <Case
+              condition={
+                rsProps.isView("view", "application") ||
+                rsProps.isView("delete", "application")
+              }
+            >
+              <ViewApplication
+                states={states}
+                actions={props as unknown as IAction}
+                rsProps={rsProps}
+              />
+            </Case>
+            <Default>
+              <></>
+            </Default>
+          </Switch>
+        </RightSection>
+      </div>
+      <Loader loader={componentState.load} />
+    </div>
+  )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps) ( Applications );
+export default Application

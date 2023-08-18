@@ -1,0 +1,22 @@
+.toast-container {
+  width: 100%;
+  height: auto;
+  background: #df271f;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0;
+  gap: 10px;
+  &.success {
+    background: #00851d;
+  }
+  & p {
+    font-family: Manrope;
+    font-size: 13px;
+    font-weight: 500;
+    margin: 0;
+    color: #fff;
+    text-transform: capitalize;
+  }
+}

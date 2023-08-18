@@ -1,123 +1,165 @@
-@import '../../../styles/variables.scss';
-@import '../../../styles/mixins.scss';
+@import "../../../styles/variables.scss";
+@import "../../../styles/mixins.scss";
 
-.overview{
-    min-height: 100vh;
+.stats-card {
+  height: auto;
+  flex-shrink: 0;
+  background-color: #fff;
+  padding: 2.44rem 2.5rem;
+  margin-bottom: 6.12rem;
 
-    .card-section{
-        padding: 0 2em;
+  // .organization-section {
+  //   display: flex;
+  //   align-items: center;
+  //   margin-bottom: 1.62rem;
+  //   p {
+  //     margin: 0;
+  //     color: #000;
+  //     font-family: Manrope;
+  //     font-size: 0.8125rem;
+  //     font-style: normal;
 
-        .cards{
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
+  //     line-height: normal;
+  //   }
+  //   .title {
+  //     letter-spacing: 0.065rem;
+  //     font-weight: 300;
+  //   }
+  //   .hyphen {
+  //     width: 0.56594rem;
+  //     height: 0.0625rem;
+  //     background: #000;
+  //     margin: 0 0.44rem;
+  //   }
+  //   .value {
+  //     color: #052d69;
+  //     font-weight: 600;
+  //   }
+  // }
 
-            @media screen and (max-width:$md-breakpoint){
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-            }
-        }
+  .stats-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    .stats-title {
+      .title {
+        color: #274169;
+        font-family: Manrope;
+        font-size: 1.875rem;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        margin: 0;
+        margin-bottom: 0.56rem;
+      }
+      .description {
+        color: #69696a;
+        font-family: Manrope;
+        font-size: 0.8125rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        margin: 0;
+        margin-bottom: 4.62rem;
+      }
     }
+    .stats-date {
+      display: flex;
+      align-items: center;
+      .date-content {
+        margin-right: 1rem;
+        text-align: right;
+        p {
+          margin: 0;
+          color: #69696a;
 
-    .app-section{
-        margin-top: 80px;
-        padding: 0 2em;
-
-        .app-header{
-            margin: 0;
+          font-family: Manrope;
+          font-size: 0.8125rem;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
         }
-
-        .app-cta{
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-top: 5px;
-            text-align: center;
-
-            .recent{
-
-                display: flex;
-                align-items: center;
-                cursor: pointer;
-
-                p{
-                    font-size: 10px;
-                    letter-spacing: 2px;
-                    margin: 0;
-                }
-
-                i{
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-            }
-
-            .add-app{
-                width: 24px;
-
-                i{
-                    font-size: 24px;
-                    cursor: pointer;
-                    color: #E1AD01;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-            }
+        .last {
+          color: #8f8f8f;
+          font-size: 0.6875rem;
+          font-weight: 400;
+          margin-bottom: 0.31rem;
         }
-
-        .app-preview{
-            min-height: max-content;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            padding: 2em 0;
-
-            @media screen and (max-width:$md-breakpoint){
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-            }
-        }
-
-        .view-all-apps{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            p, i{           
-                font-size: 14px;
-                color: #E1AD01;
-                cursor: pointer;
-                margin: 0;
-            }
-
-            i{
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            
-        }
+      }
     }
-
-    .payments-section{
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        margin-top: 80px;
-        padding: 0 2em;
-
-        .payment-accordion{
-            background: #fff;
-            padding: 1em;
-            border-radius: 10px;
-            height: 40px;
-            margin-bottom: .5em;
-            box-shadow: 0px 0px 4px 0.2px rgb(223, 223, 223);
+  }
+  .stats {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .stats-item {
+      display: flex;
+      width: 100%;
+      svg {
+        margin-right: 1.56rem;
+      }
+      .stats-data {
+        p {
+          margin: 0;
+          margin-bottom: 0.5rem;
+          color: #485e82;
+          font-family: Manrope;
+          font-size: 0.875rem;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
         }
+        h5 {
+          margin: 0;
+          color: #485e82;
+          font-family: Manrope;
+          font-size: 1.25rem;
+          font-style: normal;
+          font-weight: 700;
+          line-height: normal;
+        }
+      }
     }
+  }
+}
+
+.application-card {
+  background-color: #fff;
+  padding: 2.44rem 2.45rem;
+  .application-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    // margin-bottom: 4.5rem;
+    .application-header-content {
+      h3 {
+        color: #274169;
+        font-family: Manrope;
+        font-size: 1.25rem;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        margin: 0;
+        margin-bottom: 0.75rem;
+      }
+      p {
+        margin: 0;
+        color: #69696a;
+        font-family: Manrope;
+        font-size: 0.8125rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+      }
+    }
+    .application-cta {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 20px;
+    }
+  }
+  .filter-section {
+    padding: 2.44rem 0;
+  }
 }

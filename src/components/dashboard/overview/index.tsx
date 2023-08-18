@@ -1,150 +1,235 @@
-import React, { useEffect } from 'react';
-import DashboardWrapper from '../dashboardwrapper';
-import { CardComponent, OverviewCards } from './o-card';
-import AppCard from 'utils/app-card';
-import { IAppState } from 'interfaces/IAppState';
-import { connect } from 'react-redux'
-import { IHttp } from 'interfaces/IHttp';
-import { IAdmin } from 'interfaces/IAdmin';
-import { getAllApplications, getOrganizationInfo } from 'store/actions';
-import { useStrictLoader } from 'hooks/useStrictLoader';
-import { ActionEnums } from 'enums/ActionEnums';
-import { NoSearchResults } from 'utils/refresh';
-import { useNavigate } from 'react-router-dom';
-import { pageName, url } from 'enums/Route';
-import { IAuth } from 'interfaces/IAuth';
-import Tour from 'components/dashboard/user-onboarding';
-import { TOUR_STEPS } from './tour';
-import Prompt from 'utils/prompt';
-import './index.scss';
+import React, { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import "./index.scss"
+import { IStates } from "interfaces/IReducer"
+import { ICell, ICellAction } from "utils/new/table"
+import "../../../utils/new/pagination.scss"
+import "../../../utils/new/page.scss"
+import CardTable from "components/reusable/card-table"
+import RightSection, {
+  useRightSection,
+} from "components/reusable/right-section"
+import { url } from "enums/Route"
+import CreateApplication from "../application/create"
+import ViewApplication from "../application/view"
+import {
+  ApplicationsSVG,
+  CalendarSVG,
+  IntegrationSVG,
+  UsersSVG,
+} from "utils/new/svgs"
+import { IAction } from "interfaces/IAction"
+import { Loader } from "utils/new/components"
+import Switch, { Case, Default } from "components/reusable/switch"
+import { IApplication } from "interfaces/IApplication"
 
-interface IStateProps {
-    admin : IAdmin;
-    http: IHttp;
-    auth: IAuth;
+interface IProps {
+  states?: IStates
 }
 
-interface IDispatchProps {
-    getAllApplications : (PageNumber?: number, PageSize?: number, query?: string) => void;
-    getOrganizationInfo : ( PageNumber: number, PageSize: number, query?: string) => void;
+const getAllStates = (states?: IStates) => {
+  const allApplications = states?.application.getAllApplications
+  const loadApplications = states?.application.getAllApplicationsLoading
+  const allUsers = states?.user.getAllUsers
+  const loadUsers = states?.user.getAllUsersLoading
+  const allOrganizations = states?.organization.getAllOrganizations
+
+  return {
+    allApplications,
+    allUsers,
+    allOrganizations,
+    load: (loadApplications && loadUsers) || false,
+  }
 }
 
-interface IProps extends IStateProps, IDispatchProps {};
-const Overview = (props: IProps) => {
+export interface ITableRecord {
+  id: string
+  row: ICell[]
+  rowActions: ICellAction[]
+}
 
-    const { admin, getAllApplications, getOrganizationInfo, auth } = props;
-    const { applications = [], loading = false, organizationInfo } = admin;
-    const { organizationSubscription } = ( organizationInfo && organizationInfo![0] ) || {};
-    const { loggedInDetails } = auth || {};
-    const { user } = loggedInDetails || {};
-    const { organizationId } = user || {};
-    const navigate = useNavigate();
+const Overview: React.FC<IProps> = ({ states, ...props }) => {
+  const navigate = useNavigate()
+  const { getAllApplications, getAllUsers } = props as unknown as IAction
 
-    useEffect(() => {
-        getAllApplications(1,3,'');
-        getOrganizationInfo(1, 1, `OrgId=${organizationId}`);
+  const componentState = getAllStates(states)
+
+  useEffect(() => {
+    if (!componentState.allApplications) getAllApplications("")
+    if (!componentState.allUsers) getAllUsers("")
+    if (rsProps.queryAction === "create") rsProps.callSectionOnQuery()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+  }, [])
 
-    useEffect(() => {
-        if(Object.keys(loggedInDetails)!?.length === 0){
-            void(0)
-        }
-    }, [loggedInDetails])
+  useEffect(() => {
+    if (rsProps.queryAction !== "create" && componentState.allApplications) {
+      const queryData = componentState.allApplications.applications.filter(
+        (i) => i.id === parseInt(rsProps.queryId as string)
+      )?.[0]
+      rsProps.callSectionOnQuery(queryData)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [componentState.allApplications])
 
-    let isPageLoad = useStrictLoader( admin.action, ActionEnums.GET_ALL_APPLICATIONS, ActionEnums.GET_ORGANIZATION_INFO );
+  const statsData = [
+    {
+      icon: <UsersSVG />,
+      title: "Active Users",
+      stats: componentState.allUsers?.users?.length || 0,
+    },
+    {
+      icon: <ApplicationsSVG />,
+      title: "Applications",
+      stats: componentState.allApplications?.applications?.length || 0,
+    },
+    {
+      icon: <IntegrationSVG />,
+      title: "Integrations",
+      stats: 0,
+    },
+  ]
 
-    return(
-        <DashboardWrapper loading={loading && isPageLoad}>
-            <div className="overview">
-                <Prompt trigger={!!organizationSubscription} content={<p>
-                    It appears you aren't subscribed... <br />
-                    <b onClick={() => navigate(url.API_BUNDLES, {state: {pageName: pageName.API_BUNDLES}})}
-                        style={{cursor: 'pointer'}}
-                    >
-                        Subscribe to a bundle
-                    </b>
-                    </p>} 
-                />
+  const rsProps = useRightSection<IApplication>()
 
-                <div className="card-section">
-                    <div className="cards">
-                        {
-                            OverviewCards!?.map((c, index) => {
-                                const { title = '', icon = '', stats = '' } = c || {};
-                                return(
-                                    <div key={index} >
-                                        <CardComponent title={title} stats={stats} icon={icon} />
-                                    </div>
-                                )
-                            })
-                        }
-                    </div>
+  const tableData = componentState.allApplications?.applications
+    ?.map((i, index) => ({
+      id: index + "",
+      row: [
+        {
+          value: i.applicationName,
+          isLink: false,
+          url: "",
+          action: () => {},
+        },
+        {
+          value: new Date(i.createdAt).toDateString(),
+          isLink: false,
+          url: "",
+          action: () => {},
+        },
+        {
+          value: i.description,
+          isLink: false,
+          url: "",
+          action: () => {},
+        },
+      ],
+      rowActions: [
+        {
+          value: "View",
+          isLink: true,
+          url: "",
+          action: () => {
+            rsProps.callSection("view", "application", i.id + "", i)
+          },
+          buttonType: "bold",
+        },
+        {
+          value: "Edit",
+          isLink: true,
+          url: "",
+          action: () => {
+            rsProps.callSection("update", "application", i.id + "", i)
+          },
+          buttonType: "bold",
+        },
+        {
+          value: "Delete",
+          isLink: true,
+          url: "",
+          action: () => {
+            rsProps.callSection("delete", "application", i.id + "", i)
+          },
+          buttonType: "danger",
+        },
+      ],
+    }))
+    .slice(0, 3) as ITableRecord[]
+
+  return (
+    <div className="main-page">
+      <div className="pg-container">
+        <div className="stats-card">
+          <div className="stats-header">
+            <div className="stats-title">
+              <h1 className="title">Hello Admin</h1>
+              <p className="description">Track progress</p>
+            </div>
+            <div className="stats-date">
+              <div className="date-content">
+                <p className="last">Last login</p>
+                <p>28th July, 2023</p>
+              </div>
+              <CalendarSVG />
+            </div>
+          </div>
+          <div className="stats">
+            {statsData.map((i, index) => (
+              <div className="stats-item" key={index}>
+                {i.icon}
+                <div className="stats-data">
+                  <p>{i.title}</p>
+                  <h5>{i.stats}</h5>
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <CardTable
+          cta={[
+            {
+              title: "CREATE NEW",
+              action: () => {
+                rsProps.callSection("create", "application")
+              },
+            },
+            {
+              title: "VIEW ALL",
+              action: () => {
+                navigate(url.APPLICATIONS)
+              },
+            },
+          ]}
+          tableData={tableData}
+          tableHeader={["Name", "Date", "Description", "Action"]}
+          tag="Recently added"
+          title="Applications"
+        />
+        <RightSection {...rsProps}>
+          <Switch>
+            <Case
+              condition={
+                rsProps.isView("create", "application") ||
+                rsProps.isView("update", "application")
+              }
+            >
+              <CreateApplication
+                states={states}
+                actions={props as unknown as IAction}
+                rsProps={rsProps}
+              />
+            </Case>
+            <Case
+              condition={
+                rsProps.isView("view", "application") ||
+                rsProps.isView("delete", "application")
+              }
+            >
+              <ViewApplication
+                states={states}
+                actions={props as unknown as IAction}
+                rsProps={rsProps}
+              />
+            </Case>
+            <Default>
+              <></>
+            </Default>
+          </Switch>
+        </RightSection>
+      </div>
+      <Loader loader={componentState.load} />
+    </div>
+  )
+}
 
-                <div className="app-section">
-
-                    <h3 className='app-header'>Applications</h3>
-
-                    <div className="app-cta">
-
-                        <div className='recent'>
-                            <p>Most Recent</p>
-                            <i className="fa fa-angle-down"></i>
-                        </div>
-
-                        <div className="add-app" onClick={ () => navigate(url.CREATE_APP, {state: {pageName: pageName.CREATE_APP}})}>
-                            <i className="fa fa-plus-circle"></i>
-                        </div>
-
-                    </div>
-
-                    {applications!?.length > 0 ?
-                        <>
-                            <div className="app-preview">
-                                {applications!?.slice(0, 3)!?.map((a, index) => {
-                                    const { id = 0, applicationName = '', createdAt = '', description = '' } = a || {};
-                                    return(
-                                        <div key={index}>
-                                            <AppCard id={id} title={applicationName} description={description} date={new Date(createdAt).toDateString()} />
-                                        </div>
-                                    )
-                                })}
-                            </div>
-                            <div className="view-all-apps">
-                                <p onClick={() => navigate(url.APPLICATIONS, {state: {pageName: pageName.APPLICATIONS}})}>View all</p>
-                                <i className="fa fa-angle-right"></i>
-                            </div>
-                        </>
-                        :
-                        <NoSearchResults />
-                    }
-                    
-                </div>
-
-                {/* <div className="payments-section">
-                    <h3>Outstanding Payments</h3>
-
-                    <div className="payment-accordion"></div>
-                    <div className="payment-accordion"></div>
-                    <div className="payment-accordion"></div>
-                </div> */}
-
-                <Tour steps={TOUR_STEPS} /> 
-            </div>  
-        </DashboardWrapper>
-    )
-};
-
-const mapStateToProps = (state: IAppState): IStateProps => ({
-    admin: state.admin,
-    http : state.http,
-    auth: state.auth
-});
-
-const mapDispatchToProps: IDispatchProps = {
-    getAllApplications,
-    getOrganizationInfo
-};
-
-export default connect(mapStateToProps, mapDispatchToProps) ( Overview );
+export default Overview
