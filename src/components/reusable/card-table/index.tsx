@@ -40,6 +40,15 @@ const CardTable: React.FC<IProps> = ({
     setFilter(!filter)
   }
 
+  const matchChild: any = React.Children.map(children, (child) => {
+    if (child)
+      return (child = {
+        ...child,
+        props: { ...child.props, closeFilter: handleFilter },
+      })
+    return child
+  })
+
   return (
     <div className={`application-card ${inner ? "inner" : ""}`}>
       <div className="application-header">
@@ -67,7 +76,7 @@ const CardTable: React.FC<IProps> = ({
       <div>
         <div className="table-filter">
           <div className={`filter-section ${filter ? "show" : ""}`}>
-            {React.cloneElement(children, { closeFilter: handleFilter })}
+            {matchChild}
           </div>
           <div className={`table-containers ${filter ? "shrink" : ""}`}>
             <div className="table-section">
