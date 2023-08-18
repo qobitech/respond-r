@@ -154,6 +154,9 @@
 .application-card {
   background-color: #fff;
   padding: 2.44rem 2.45rem;
+  @media (max-width: $md-breakpoint) {
+    padding: 2.44rem 1.45rem;
+  }
   .application-header {
     display: flex;
     align-items: center;
