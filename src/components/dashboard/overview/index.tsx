@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import "./index.scss"
 import { IStates } from "interfaces/IReducer"
 import { ICell, ICellAction } from "utils/new/table"
@@ -8,6 +8,9 @@ import { Loader } from "utils/new/components"
 import { VideoSVG } from "utils/new/svgs"
 import { IVS, videostreamData } from "./mock-data"
 import sample from "../../../extras/images/sample.jpg"
+import RightSection, {
+  useRightSection,
+} from "components/reusable/right-section"
 
 interface IProps {
   states?: IStates
@@ -26,66 +29,89 @@ const tabEnum = {
 }
 
 const Overview: React.FC<IProps> = ({ states, ...props }) => {
+  const rightSectionProps = states?.global.rightSection
+
   const [tab, setTab] = useState<string>(tabEnum.VEHICLEINFO)
 
   const [mainView, setMainView] = useState<IVS | null>(null)
 
   const handleMainView = (streamData: IVS) => setMainView(streamData)
 
+  const rsProps = useRightSection()
+
+  useEffect(() => {
+    if (rightSectionProps?.action) {
+      rsProps.callSection(rightSectionProps.action, rightSectionProps.component)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rightSectionProps])
+
+  useEffect(() => {
+    if (rsProps.queryAction !== "create") {
+      rsProps.callSectionOnQuery()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
-    <div className="main-page">
-      <div className="pg-container">
-        <div className="overview-page">
-          {mainView ? (
-            <div className="video-section">
-              <h3 className="camera-title">Camera: {mainView.cameraName}</h3>
-              <div className="video-container">
-                <video controls>
-                  <source src="" />
-                </video>
-              </div>
-              <div className="tab-section">
-                <div className="tab-header">
-                  {Object.values(tabEnum).map((i, index) => (
-                    <div
-                      className={`tab-item ${i === tab ? "active" : ""}`}
-                      key={index}
-                      onClick={() => setTab(i)}
-                    >
-                      <p>{i}</p>
-                    </div>
-                  ))}
+    <>
+      <RightSection rsProps={rsProps}>
+        {rsProps.isView("custom", "settings") ? <Configuration /> : null}
+      </RightSection>
+      <div className="main-page">
+        <div className="pg-container">
+          <div className="overview-page">
+            {mainView ? (
+              <div className="video-section">
+                <h3 className="camera-title">Camera: {mainView.cameraName}</h3>
+                <div className="video-container">
+                  <video controls>
+                    <source src="" />
+                  </video>
                 </div>
-                <div className="tab-body">
-                  {tab === tabEnum.VEHICLEINFO ? (
-                    <VehicleInfoSection
-                      classification={mainView.classification || "..."}
-                      code={mainView.code || "..."}
-                      make={mainView.make}
-                      model={mainView.model}
-                      orientation={mainView.orientation}
-                      regNumber={mainView.regNumber}
-                      type={mainView.vehicleType}
-                      color={mainView.color}
-                    />
-                  ) : null}
+                <div className="tab-section">
+                  <div className="tab-header">
+                    {Object.values(tabEnum).map((i, index) => (
+                      <div
+                        className={`tab-item ${i === tab ? "active" : ""}`}
+                        key={index}
+                        onClick={() => setTab(i)}
+                      >
+                        <p>{i}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="tab-body">
+                    {tab === tabEnum.VEHICLEINFO ? (
+                      <VehicleInfoSection
+                        classification={mainView.classification || "..."}
+                        code={mainView.code || "..."}
+                        make={mainView.make}
+                        model={mainView.model}
+                        orientation={mainView.orientation}
+                        regNumber={mainView.regNumber}
+                        type={mainView.vehicleType}
+                        color={mainView.color}
+                      />
+                    ) : null}
+                  </div>
                 </div>
               </div>
+            ) : (
+              <div className="no-video-selected-section">
+                <VideoSVG />
+                <p style={{ color: "#E21B1B" }}>NO VIDEO STREAM</p>
+                <p>Select Live feed to watch</p>
+              </div>
+            )}
+            <div className="stream-section">
+              <LiveFeedComponent setMainView={handleMainView} />
             </div>
-          ) : (
-            <div className="no-video-selected-section">
-              <VideoSVG />
-              <p style={{ color: "#E21B1B" }}>NO VIDEO STREAM</p>
-              <p>Select Live feed to watch</p>
-            </div>
-          )}
-          <div className="stream-section">
-            <LiveFeedComponent setMainView={handleMainView} />
           </div>
         </div>
+        <Loader loader={false} />
       </div>
-      <Loader loader={false} />
-    </div>
+    </>
   )
 }
 
@@ -96,27 +122,43 @@ const LiveFeedComponent = ({
 }: {
   setMainView: (streamData: IVS) => void
 }) => {
+  const filters = [`Hits (${0})`, `All Feeds (${videostreamData.length || 0})`]
+  const useFilterProps = useFilterSection(filters[0])
   return (
     <div className="live-feed-component">
-      <p className="lf-header">
-        LIVE FEEDS &nbsp;&nbsp;({videostreamData.length})
-      </p>
+      <p className="lf-header">LIVE FEED</p>
+      <LiveFeedFilterSection filterProps={useFilterProps} filters={filters} />
       <div className="live-feed-component-wrapper">
-        {videostreamData.map((i, index) => (
-          <LiveFeedItemComponent
-            key={index}
-            carColor={i.color}
-            carMake={i.make}
-            carType={i.vehicleType}
-            imgSrc={sample}
-            offense="Eating fufu"
-            regNumber={i.regNumber}
-            handleOnClick={() => {
-              setMainView(i)
-            }}
-          />
-        ))}
+        {useFilterProps.selectedFilter === filters[1] ? (
+          videostreamData.map((i, index) => (
+            <LiveFeedItemComponent
+              key={index}
+              carColor={i.color}
+              carMake={i.make}
+              carType={i.vehicleType}
+              imgSrc={sample}
+              offense="Playing amampiano"
+              regNumber={i.regNumber}
+              handleOnClick={() => {
+                setMainView(i)
+              }}
+            />
+          ))
+        ) : useFilterProps.selectedFilter === filters[0] ? (
+          <NoFeeds />
+        ) : (
+          <NoFeeds />
+        )}
       </div>
+    </div>
+  )
+}
+
+const NoFeeds = () => {
+  return (
+    <div className="no-feeds">
+      <VideoSVG width="20" height="20" />
+      <p>No feed</p>
     </div>
   )
 }
@@ -142,7 +184,11 @@ const LiveFeedItemComponent: FC<ILFIC> = (props) => {
         <p className="lf-info-section-value lf-reg-number">{props.regNumber}</p>
         <p className="lf-info-section-label">Make & Type</p>
         <div className="lf-make-type">
-          <div className="lf-color" style={{ background: props.carColor }} />
+          <div
+            className={`lf-color ${props.carColor === "white" ? "border" : ""}`}
+            style={{ background: props.carColor }}
+            title={props.carColor}
+          />
           <p className="lf-info-section-value">{props.carMake}</p>
           <div className="lf-text-separator" />
           <p className="lf-info-section-value">{props.carType}</p>
@@ -215,15 +261,56 @@ const VehicleInfoSectionColorItem = ({
       <p className="vehicle-info-label">{label}</p>
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <div
-          style={{
-            width: "20px",
-            height: "20px",
-            background: value,
-            borderRadius: "50%",
-          }}
+          className={`vehicle-info-color ${value === "white" ? "border" : ""}`}
+          title={value}
+          style={{ background: value }}
         />
-        <p className="vehicle-info-value">{value}</p>
+        <p className={`vehicle-info-value`}>{value}</p>
       </div>
+    </div>
+  )
+}
+
+const Configuration = () => {
+  return <div>Under development</div>
+}
+
+interface IUFS {
+  handleFilter: (selectedFilter?: string) => void
+  selectedFilter: string | undefined
+}
+
+const useFilterSection = (defaultSelected: string): IUFS => {
+  const [selectedFilter, setSelectedFilter] = useState<string | undefined>(
+    defaultSelected
+  )
+
+  const handleFilter = (selectedFilter?: string) => {
+    setSelectedFilter(selectedFilter)
+  }
+  return {
+    selectedFilter,
+    handleFilter,
+  }
+}
+
+interface ILFS {
+  filterProps: IUFS
+  filters: string[]
+}
+
+const LiveFeedFilterSection: FC<ILFS> = ({ filterProps, filters }) => {
+  return (
+    <div className="live-feed-filter-section">
+      {filters.map((i, index) => (
+        <button
+          className={filterProps.selectedFilter === i ? "active" : ""}
+          key={index}
+          onClick={() => filterProps.handleFilter(i)}
+        >
+          {i}
+        </button>
+      ))}
     </div>
   )
 }

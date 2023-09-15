@@ -3,18 +3,14 @@ import "./index.scss"
 import { TypeSmallButton } from "utils/new/button"
 import { useNavigate, useSearchParams } from "react-router-dom"
 
-export type actionType = "create" | "view" | "update" | "delete" | null
-export type actionComponent =
-  | "application"
-  | "user"
-  | "notification"
-  | "organization"
-  | "api bundle"
-  | "api configuration"
-  | "configuration group"
-  | "client subscription"
-  | "role"
+export type actionType =
+  | "create"
+  | "view"
+  | "update"
+  | "delete"
+  | "custom"
   | null
+export type actionComponent = "settings" | null
 export type actionId = string | null
 
 interface IRSAction {
@@ -115,7 +111,11 @@ export const useRightSection = <K extends {}>(): IRightSection<K> => {
     data?: T
   ) {
     setAction({ type: action, component, id })
-    setTitle(`${action?.toUpperCase()} ${component?.toUpperCase()}`)
+    setTitle(
+      `${
+        action === "custom" ? "" : action?.toUpperCase()
+      } ${component?.toUpperCase()}`
+    )
     setCtas(getCTA(action, component, id))
     setOpenSection(true)
     navigate(`?action=${action}&component=${component}${id ? "&id=" + id : ""}`)
@@ -176,32 +176,37 @@ const RightSection = <T extends {}>({ children, rsProps }: IRSection<T>) => {
   })
 
   return (
-    <div
-      className={`right_container ${
-        rsProps.openSection ? "menuopen" : "menuclose"
-      }`}
-    >
-      <div className="rs-header">
-        <h3>{rsProps.title}</h3>
-        <div className="ctas">
-          {rsProps.ctas?.map((i, index) => (
+    <>
+      {rsProps.openSection ? (
+        <div className="back-drop" onClick={rsProps.closeSection} />
+      ) : null}
+      <div
+        className={`right_container ${
+          rsProps.openSection ? "menuopen" : "menuclose"
+        }`}
+      >
+        <div className="rs-header">
+          <h3>{rsProps.title}</h3>
+          <div className="ctas">
+            {rsProps.ctas?.map((i, index) => (
+              <TypeSmallButton
+                title={i.title}
+                buttonType={i.type}
+                onClick={i.action}
+                key={index}
+              />
+            ))}
             <TypeSmallButton
-              title={i.title}
-              buttonType={i.type}
-              onClick={i.action}
-              key={index}
+              title=""
+              close
+              buttonType="danger"
+              onClick={handleClose}
             />
-          ))}
-          <TypeSmallButton
-            title=""
-            close
-            buttonType="danger"
-            onClick={handleClose}
-          />
+          </div>
         </div>
+        <div className="rs-body">{matchChild}</div>
       </div>
-      <div className="rs-body">{matchChild}</div>
-    </div>
+    </>
   )
 }
 

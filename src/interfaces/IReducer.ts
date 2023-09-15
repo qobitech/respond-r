@@ -1,3 +1,4 @@
+import { ICallRightSection } from "store/actions/global"
 import { IAPIScopes, IAllApplications } from "./IApplication"
 import { ILogin } from "./IAuth"
 import { INotification } from "./IGlobal"
@@ -44,6 +45,9 @@ export interface IGlobalReducer {
   notifyUser: INotification
   notifyUserLoading: boolean
   notifyUserError: any
+  rightSection: ICallRightSection
+  rightSectionLoading: boolean
+  rightSectionError: any
 }
 
 export interface IAPIScopeReducer {

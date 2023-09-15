@@ -5,21 +5,15 @@ import { MenuItems } from "./menuItems"
 import "./navbar.scss"
 import Toast from "utils/new/toast"
 import { INotification } from "interfaces/IGlobal"
-import { USERTOKEN, isLogged } from "utils/new/constants"
-import {
-  CogSVG,
-  EllipsisSVG,
-  HamburgerSVG,
-  LogoSVG,
-  NotificationtSVG,
-  UserSVG,
-} from "utils/new/svgs"
-import { TypeInput } from "utils/new/input"
+import { isLogged } from "utils/new/constants"
+import { CogSVG, EllipsisSVG, HamburgerSVG, LogoSVG } from "utils/new/svgs"
+import { ICallRightSection } from "store/actions/global"
 
 interface NavbarProps {
   notifyUser: INotification | undefined
   setMenuOpen: (menuOpen: boolean) => (dispatch: any) => void
   menuOpen: boolean
+  callRightSection: (props: ICallRightSection) => (dispatch: any) => void
 }
 
 const Navbar = (props: NavbarProps) => {
@@ -48,7 +42,14 @@ const Navbar = (props: NavbarProps) => {
           <div className="nav-other-components">
             <SearchComponent />
             <div className="nav-separator" />
-            <ConfigurationComponent />
+            <ConfigurationComponent
+              openSettings={() => {
+                props.callRightSection({
+                  action: "custom",
+                  component: "settings",
+                })
+              }}
+            />
           </div>
         )}
         {!isLogged ? (
@@ -90,19 +91,6 @@ const Navbar = (props: NavbarProps) => {
   )
 }
 
-const NotificationWidget = () => {
-  const navigate = useNavigate()
-  return (
-    <div
-      className="notification-widget"
-      // onClick={() => navigate(url.NOTIFICATION)}
-    >
-      <div className="notification-alert" />
-      <NotificationtSVG />
-    </div>
-  )
-}
-
 export default Navbar
 
 const SearchComponent = () => {
@@ -113,9 +101,13 @@ const SearchComponent = () => {
   )
 }
 
-const ConfigurationComponent = () => {
+const ConfigurationComponent = ({
+  openSettings,
+}: {
+  openSettings: () => void
+}) => {
   return (
-    <div className="nav-config-component">
+    <div className="nav-config-component" onClick={openSettings}>
       <CogSVG />
       <p>Settings</p>
     </div>

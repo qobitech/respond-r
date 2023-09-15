@@ -440,8 +440,8 @@ export const VideoSVG = ({ width, height }: ISVG) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="79"
-      height="55"
+      width={width || "79"}
+      height={height || "55"}
       viewBox="0 0 79 55"
       fill="none"
     >

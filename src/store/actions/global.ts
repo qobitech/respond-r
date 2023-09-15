@@ -1,3 +1,4 @@
+import { actionComponent, actionType } from "components/reusable/right-section"
 import * as utils from "../services/new/utils"
 import { globalType } from "../types"
 
@@ -26,5 +27,18 @@ export const setNotificationStatus =
     dispatch({
       type: globalType.notifyUser.dataAction,
       payload: { notice, status },
+    })
+  }
+
+export interface ICallRightSection {
+  action: actionType
+  component: actionComponent
+}
+
+export const callRightSection =
+  (props: ICallRightSection) => (dispatch: any) => {
+    dispatch({
+      type: globalType.rightSection.dataAction,
+      payload: props,
     })
   }

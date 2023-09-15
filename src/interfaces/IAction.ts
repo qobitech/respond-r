@@ -1,3 +1,4 @@
+import { ICallRightSection } from "store/actions/global"
 import * as utils from "../store/services/new/utils"
 interface IAuth {
   setAuthorizationHeader: (token: string) => void
@@ -84,6 +85,7 @@ interface IGlobalActions {
     notice: string,
     status: boolean
   ) => (dispatch: any) => void
+  callRightSection: (props: ICallRightSection) => (dispatch: any) => void
 }
 
 export interface IAction

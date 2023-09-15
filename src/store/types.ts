@@ -38,6 +38,7 @@ export const globalType = generateActionTypes([
   "menuOpen",
   "subMenuOpen",
   "notifyUser",
+  "rightSection",
 ])
 
 export const apiScopeType = generateActionTypes([

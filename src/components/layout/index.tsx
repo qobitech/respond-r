@@ -14,7 +14,7 @@ interface PageProps {
 }
 
 const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
-  const { setNotificationStatus, setMenuOpen, logOut } =
+  const { setNotificationStatus, setMenuOpen, logOut, callRightSection } =
     props as unknown as IAction
 
   const notifyUser = states?.global.notifyUser
@@ -43,6 +43,7 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
           notifyUser={notifyUser}
           setMenuOpen={setMenuOpen}
           menuOpen={menuOpen || false}
+          callRightSection={callRightSection}
         />
         <ScrollIntoViewController>
           <div className="contents">{children}</div>

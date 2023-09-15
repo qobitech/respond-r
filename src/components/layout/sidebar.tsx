@@ -2,7 +2,6 @@ import React from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import "./sidebar.scss"
 import { url } from "enums/Route"
-import logo from "extras/images/car_logo.svg"
 import { HamburgerSVG, HomeSVG, LogoSVG, LogoutSVG } from "utils/new/svgs"
 
 interface IProps {
