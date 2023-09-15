@@ -66,11 +66,7 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
                 <h3 className="camera-title">Camera: {mainView.cameraName}</h3>
                 <div className="video-container">
                   <video controls>
-                    <source
-                      src={
-                        "https://vimeo.com/864840844?autoplay=1&loop=1&autopause=0&api=1&controls=0&muted=1?playsinline=0"
-                      }
-                    />
+                    <source src="" />
                   </video>
                 </div>
                 <div className="tab-section">
