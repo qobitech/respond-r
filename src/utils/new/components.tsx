@@ -1,6 +1,5 @@
 import React from "react"
 import traffic from "../../extras/images/animation/animation_llang3ye.json"
-import logo from "../../extras/images/car_logo.svg"
 import { PRIMARY_COLOR } from "./constants"
 import Lottie from "react-lottie"
 import loaderGIF from "../../extras/images/loader.gif"
