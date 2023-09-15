@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import { NavLink, useNavigate } from "react-router-dom"
-import logo from "extras/images/car_logo.svg"
 import { url } from "enums/Route"
 import { MenuItems } from "./menuItems"
 import "./navbar.scss"
@@ -8,11 +7,14 @@ import Toast from "utils/new/toast"
 import { INotification } from "interfaces/IGlobal"
 import { USERTOKEN, isLogged } from "utils/new/constants"
 import {
+  CogSVG,
   EllipsisSVG,
   HamburgerSVG,
+  LogoSVG,
   NotificationtSVG,
   UserSVG,
 } from "utils/new/svgs"
+import { TypeInput } from "utils/new/input"
 
 interface NavbarProps {
   notifyUser: INotification | undefined
@@ -38,20 +40,17 @@ const Navbar = (props: NavbarProps) => {
           </div>
         ) : null}
         {!props.menuOpen && (
-          <img
-            src={logo}
-            alt="...logo"
-            width="200px"
-            onClick={() => navigate(url.LANDING_PAGE)}
-          />
-        )}
-        {/* {isLogged && (
-          <div className="organization-section">
-            <p className="title">ORGANIZATION</p>
-            <div className="hyphen" />
-            <p className="value">DORIME</p>
+          <div onClick={() => navigate(url.LANDING_PAGE)}>
+            <LogoSVG />
           </div>
-        )} */}
+        )}
+        {isLogged && (
+          <div className="nav-other-components">
+            <SearchComponent />
+            <div className="nav-separator" />
+            <ConfigurationComponent />
+          </div>
+        )}
         {!isLogged ? (
           <ul className={clicked ? "nav-menu active" : "nav-menu"}>
             {MenuItems.map((item, index) => (
@@ -80,12 +79,7 @@ const Navbar = (props: NavbarProps) => {
             </button>
           </ul>
         ) : (
-          <div className="user">
-            <NotificationWidget />
-            {/* <UserSVG /> */}
-            <p>{USERTOKEN.username}</p>
-            <EllipsisSVG />
-          </div>
+          <UserComponent imgSrc="" name="" />
         )}
       </nav>
       <Toast
@@ -110,3 +104,34 @@ const NotificationWidget = () => {
 }
 
 export default Navbar
+
+const SearchComponent = () => {
+  return (
+    <div className="nav-search-component">
+      <input placeholder="Search" />
+    </div>
+  )
+}
+
+const ConfigurationComponent = () => {
+  return (
+    <div className="nav-config-component">
+      <CogSVG />
+      <p>Settings</p>
+    </div>
+  )
+}
+
+const UserComponent = ({ name, imgSrc }: { name: string; imgSrc: string }) => {
+  return (
+    <div className="nav-user-component">
+      <div className="nav-profile">
+        <div className="nav-user-profile">
+          <img src={imgSrc || ""} alt="" />
+        </div>
+        <p>{name || "User"}</p>
+      </div>
+      <EllipsisSVG />
+    </div>
+  )
+}

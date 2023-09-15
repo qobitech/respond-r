@@ -6,7 +6,7 @@ export enum url {
   REGISTER = "/register",
   VERIFY_EMAIL = "/verify-email",
   INSTRUCTIONS = "/how-to",
-  OVERVIEW = "/organization-dashboard/overview",
+  OVERVIEW = "/dashboard/overview",
   APPLICATIONS = "/organization-dashboard/applications",
   CREATE_APP = "/organization-dashboard/application/create-app",
   USERS = "/organization-dashboard/user-management",
