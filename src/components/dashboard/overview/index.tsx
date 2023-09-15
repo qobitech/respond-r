@@ -75,7 +75,7 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
           ) : (
             <div className="no-video-selected-section">
               <VideoSVG />
-              <p style={{ color: "#E21B1B" }}>NO VIDEO STREAM SELECTED</p>
+              <p style={{ color: "#E21B1B" }}>NO LIVE STREAM SELECTED</p>
               <p>Select to watch</p>
             </div>
           )}
