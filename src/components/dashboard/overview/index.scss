@@ -6,7 +6,7 @@
   align-items: flex-start;
   justify-content: space-between;
   .video-section {
-    flex-basis: 65%;
+    flex-basis: 63%;
     width: 0;
     overflow: auto;
     max-height: 82vh;
@@ -91,12 +91,21 @@
           font-style: normal;
           font-weight: 600;
           line-height: normal;
-          letter-spacing: 0.35rem;
           margin: 0;
+          width: 100%;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          &.reg-number {
+            letter-spacing: 0.55rem;
+            color: #8d1d1d;
+          }
         }
         .vehicle-info-color {
           width: 20px;
           height: 20px;
+          min-width: 20px;
+          min-height: 20px;
           border-radius: 50%;
           &.border {
             border: 1px solid #e8e8e8;
@@ -106,7 +115,7 @@
     }
   }
   .no-video-selected-section {
-    flex-basis: 65%;
+    flex-basis: 63%;
     width: 0;
     display: flex;
     flex-direction: column;
@@ -127,7 +136,7 @@
     }
   }
   .stream-section {
-    flex-basis: 35%;
+    flex-basis: 37%;
     width: 0;
 
     .live-feed-component {
@@ -190,6 +199,10 @@
               font-style: normal;
               font-weight: 600;
               line-height: normal;
+              width: 100%;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
               margin: 0 0 0.88rem;
               &.lf-reg-number {
                 letter-spacing: 0.30625rem;
@@ -205,6 +218,7 @@
               margin-bottom: 0.88rem;
               .lf-info-section-value {
                 margin: 0;
+                width: max-content;
               }
             }
             .lf-color {

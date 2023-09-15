@@ -66,7 +66,11 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
                 <h3 className="camera-title">Camera: {mainView.cameraName}</h3>
                 <div className="video-container">
                   <video controls>
-                    <source src="" />
+                    <source
+                      src={
+                        "https://vimeo.com/864840844?autoplay=1&loop=1&autopause=0&api=1&controls=0&muted=1?playsinline=0"
+                      }
+                    />
                   </video>
                 </div>
                 <div className="tab-section">
@@ -189,9 +193,13 @@ const LiveFeedItemComponent: FC<ILFIC> = (props) => {
             style={{ background: props.carColor }}
             title={props.carColor}
           />
-          <p className="lf-info-section-value">{props.carMake}</p>
+          <p className="lf-info-section-value" title={props.carMake}>
+            {props.carMake}
+          </p>
           <div className="lf-text-separator" />
-          <p className="lf-info-section-value">{props.carType}</p>
+          <p className="lf-info-section-value" title={props.carType}>
+            {props.carType}
+          </p>
         </div>
         <p className="lf-info-section-label">Flagged for</p>
         <p className="lf-info-section-value lf-info-bottom-value">
@@ -244,7 +252,13 @@ const VehicleInfoSectionItem = ({
   return (
     <div className="vehicle-info-section-item">
       <p className="vehicle-info-label">{label}</p>
-      <p className="vehicle-info-value">{value}</p>
+      <p
+        className={`vehicle-info-value ${
+          label.includes("Reg") ? "reg-number" : ""
+        }`}
+      >
+        {value}
+      </p>
     </div>
   )
 }
