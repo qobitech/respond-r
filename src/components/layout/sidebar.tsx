@@ -3,17 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import "./sidebar.scss"
 import { url } from "enums/Route"
 import logo from "extras/images/car_logo.svg"
-import {
-  ApplicationsSVG,
-  BillingSVG,
-  HamburgerSVG,
-  HomeSVG,
-  LogoutSVG,
-  OrganizationsSVG,
-  ProfileSVG,
-  SecuritySVG,
-  UsersSVG,
-} from "utils/new/svgs"
+import { HamburgerSVG, HomeSVG, LogoSVG, LogoutSVG } from "utils/new/svgs"
 
 interface IProps {
   setMenuOpen: (menuOpen: boolean) => (dispatch: any) => void
@@ -35,43 +25,6 @@ const SideBar = ({ setMenuOpen, menuOpen, logOut }: IProps) => {
       isActive: _isUrl(url.OVERVIEW),
       url: url.OVERVIEW,
     },
-    {
-      title: "Applications",
-      imgsrc: <ApplicationsSVG />,
-      isActive: _isUrl(url.APPLICATIONS),
-      url: url.APPLICATIONS,
-    },
-    {
-      title: "User Management",
-      imgsrc: <UsersSVG />,
-      isActive: _isUrl(url.USERS),
-      url: url.USERS,
-    },
-    {
-      title: "Organizations",
-      imgsrc: <OrganizationsSVG />,
-      isActive: _isUrl(url.ORGANIZATION),
-      url: url.ORGANIZATION,
-    },
-    {
-      title: "Billing",
-      imgsrc: <BillingSVG />,
-      isActive: _isUrl(url.BILLING),
-      url: url.BILLING,
-    },
-    {
-      title: "App Security",
-      imgsrc: <SecuritySVG />,
-      isActive: _isUrl(url.APP_SECURITY),
-      url: url.APP_SECURITY,
-    },
-    {
-      title: "Profile",
-      imgsrc: <ProfileSVG />,
-      imgalt: "profile",
-      isActive: _isUrl(url.PROFILE),
-      url: url.PROFILE,
-    },
   ]
 
   const handleMenu = () => {
@@ -86,13 +39,9 @@ const SideBar = ({ setMenuOpen, menuOpen, logOut }: IProps) => {
         <div className="hamburger" onClick={handleMenu}>
           <HamburgerSVG />
         </div>
-
-        <img
-          src={logo}
-          alt="...logo"
-          width="200px"
-          onClick={() => navigate(url.LANDING_PAGE)}
-        />
+        <div onClick={() => navigate(url.LANDING_PAGE)}>
+          <LogoSVG />
+        </div>
       </div>
 
       <nav className="side-menu-container">

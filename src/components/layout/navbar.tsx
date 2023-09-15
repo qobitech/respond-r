@@ -95,7 +95,7 @@ const NotificationWidget = () => {
   return (
     <div
       className="notification-widget"
-      onClick={() => navigate(url.NOTIFICATION)}
+      // onClick={() => navigate(url.NOTIFICATION)}
     >
       <div className="notification-alert" />
       <NotificationtSVG />
