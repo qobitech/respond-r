@@ -8,28 +8,39 @@
   align-items: center;
 
   .container {
-    max-width: 72.4375rem;
+    max-width: 85rem;
     width: 100%;
     margin: 0 auto;
   }
 
   .hero-section {
-    padding: 4.38rem 0 7.38rem;
+    padding: 8.38rem 0 7.38rem;
     position: relative;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: space-between;
+    .left-section {
+      width: 40%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      p {
+        font-size: 1.3525rem;
+        line-height: 2rem;
+        margin: 0 0 5.75rem;
+      }
+    }
 
     h1 {
       color: #04356e;
       font-family: Inter;
-      font-size: 2.875rem;
+      font-size: 3.375rem;
       font-style: normal;
-      font-weight: 400;
+      font-weight: 500;
       line-height: 4.2525rem;
-      max-width: 28.25rem;
-      margin: 0;
-      margin-bottom: 5.75rem;
+      max-width: 40.25rem;
+      margin: 0 0 1.7rem;
       & span {
         color: #06679e;
         font-family: Inter;
@@ -44,7 +55,7 @@
       width: 90%;
       position: absolute;
       top: -40px;
-      right: -115px;
+      right: 0px;
     }
   }
 

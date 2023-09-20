@@ -54,7 +54,7 @@ const Navbar = (props: NavbarProps) => {
         )}
         {!isLogged ? (
           <ul className={clicked ? "nav-menu active" : "nav-menu"}>
-            {MenuItems.map((item, index) => (
+            {/* {MenuItems.map((item, index) => (
               <div className="menu-item" key={index}>
                 <NavLink
                   key={index}
@@ -71,12 +71,12 @@ const Navbar = (props: NavbarProps) => {
                   {item.title}
                 </NavLink>
               </div>
-            ))}
+            ))} */}
             <button
               onClick={() => navigate(url.REGISTER)}
               className="button-cta"
             >
-              REGISTER
+              LOGIN
             </button>
           </ul>
         ) : (

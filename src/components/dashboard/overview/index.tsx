@@ -11,6 +11,9 @@ import sample from "../../../extras/images/sample.jpg"
 import RightSection, {
   useRightSection,
 } from "components/reusable/right-section"
+import io from "socket.io-client"
+import { TypeInput } from "utils/new/input"
+import { TypeButton, TypeSmallButton } from "utils/new/button"
 
 interface IProps {
   states?: IStates
@@ -26,6 +29,68 @@ const tabEnum = {
   VEHICLEINFO: "Vehicle Info",
   OFFENSES: "Offenses",
   LOCATION: "Location",
+}
+
+// interface IUES {
+//   message: any
+//   setMessage: React.Dispatch<any>
+// }
+
+// const useEventSource = (): IUES => {
+//   const [message, setMessage] = useState<any>()
+
+//   useEffect(() => {
+//     const eventSource = new EventSource("http://localhost:8080/api/sse")
+
+//     if (typeof EventSource !== "undefined") {
+//       eventSource.onmessage = (ev: MessageEvent<any>) => {
+//         const event = JSON.parse(ev.data)
+//         setMessage(event)
+//       }
+//       eventSource.onerror = (ev: Event) => {
+//         eventSource.close()
+//       }
+//     }
+//     return () => eventSource.close()
+//   }, [])
+
+//   return {
+//     setMessage,
+//     message,
+//   }
+// }
+
+interface IUS {
+  hits: any
+  feeds: any
+  sendRequest: (url: string) => void
+}
+
+const useSocketIO = (): IUS => {
+  const [hits, setHits] = useState<any>()
+  const [feeds, setFeeds] = useState<any>()
+  const socket = io("http://localhost:8000")
+
+  const sendRequest = (url: string) => {
+    socket.emit("request_url", {
+      url,
+    })
+  }
+
+  useEffect(() => {
+    socket.on("hit", (data) => {
+      setHits(data)
+    })
+    socket.on("feeds", (data) => {
+      setFeeds(data)
+    })
+  }, [socket])
+
+  return {
+    hits,
+    feeds,
+    sendRequest,
+  }
 }
 
 const Overview: React.FC<IProps> = ({ states, ...props }) => {
@@ -53,10 +118,20 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // const useEventProps = useEventSource()
+
+  // console.log(useEventProps.message, "juju")
+
+  const socketProps = useSocketIO()
+
+  console.log(socketProps.feeds, socketProps.hits, "juju")
+
   return (
     <>
       <RightSection rsProps={rsProps}>
-        {rsProps.isView("custom", "settings") ? <Configuration /> : null}
+        {rsProps.isView("custom", "settings") ? (
+          <Configuration socketProps={socketProps} />
+        ) : null}
       </RightSection>
       <div className="main-page">
         <div className="pg-container">
@@ -281,8 +356,38 @@ const VehicleInfoSectionColorItem = ({
   )
 }
 
-const Configuration = () => {
-  return <div>Under development</div>
+const Configuration = ({ socketProps }: { socketProps: IUS }) => {
+  const [inputValue, setInputValue] = useState<string>("")
+
+  const handleOnChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = target
+    setInputValue(value)
+  }
+
+  const handleSubmit = () => {
+    if (inputValue) socketProps.sendRequest(inputValue)
+  }
+
+  const cancelFeed = () => {
+    socketProps.sendRequest("")
+    setInputValue("")
+  }
+
+  return (
+    <div>
+      <form onSubmit={(e) => e.preventDefault()}>
+        <TypeInput placeholder="Enter url" onChange={handleOnChange} />
+        <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+          <TypeButton title="Request Feed" onClick={handleSubmit} />
+          <TypeSmallButton
+            title="Cancel Feed"
+            buttonType="danger"
+            onClick={cancelFeed}
+          />
+        </div>
+      </form>
+    </div>
+  )
 }
 
 interface IUFS {
