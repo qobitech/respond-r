@@ -20,8 +20,8 @@ io.on("connection", (socket) => {
     console.log(`User connected: ${socket.id}`)
   }
 
-  socket.on("request_url", ({ url }) => {
-    if (url) {
+  socket.on("request_url", (data) => {
+    if (data.url) {
       //   let connection = new signalR.HubConnectionBuilder()
       //     .withUrl(url, {
       //       skipNegotiation: true,
