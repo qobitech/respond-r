@@ -69,7 +69,11 @@ interface IUS {
 const useSocketIO = (): IUS => {
   const [hits, setHits] = useState<any>()
   const [feeds, setFeeds] = useState<any>()
-  const socket = io("https://dev-respond-r.netlify.app:8000")
+  const url =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost"
+      : "https://dev-respond-r.netlify.app"
+  const socket = io(`${url}:8000`)
 
   const sendRequest = (url: string) => {
     socket.emit("request_url", {

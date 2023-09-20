@@ -42,16 +42,13 @@ io.on("connection", (socket) => {
 
       //   connection.start()
       // .then(() => connection.invoke("SendMessage", "Hello"));
-    } else {
-      socket.leave("hit")
-      socket.leave("feeds")
     }
   })
 })
 
-io.on("error", () => {
-  io.close()
-})
+// io.on("error", () => {
+//   io.close()
+// })
 
 server.listen(8000, () => {
   console.log("SERVER IS RUNNING")
