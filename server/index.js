@@ -21,28 +21,28 @@ io.on("connection", (socket) => {
   }
 
   socket.on("request_url", (data) => {
-    if (data.url) {
-      //   let connection = new signalR.HubConnectionBuilder()
-      //     .withUrl(url, {
-      //       skipNegotiation: true,
-      //       transport: signalR.HttpTransportType.WebSockets,
-      //     })
-      //     .configureLogging(signalR.LogLevel.Trace)
-      //     // .withUrl("https://et-ms-broadcast-service-fd86485c64c5.herokuapp.com/notificationHub")
-      //     .withAutomaticReconnect()
-      //     .build()
+    // if (data.url) {
+    //   let connection = new signalR.HubConnectionBuilder()
+    //     .withUrl(url, {
+    //       skipNegotiation: true,
+    //       transport: signalR.HttpTransportType.WebSockets,
+    //     })
+    //     .configureLogging(signalR.LogLevel.Trace)
+    //     // .withUrl("https://et-ms-broadcast-service-fd86485c64c5.herokuapp.com/notificationHub")
+    //     .withAutomaticReconnect()
+    //     .build()
 
-      //   connection.on("SendNotification", (data) => {
-      socket.broadcast.emit("feeds", { feed: data.url + "/feeds" })
-      //   })
+    //   connection.on("SendNotification", (data) => {
+    socket.broadcast.emit("feeds", { feed: data.url + "/feeds" })
+    //   })
 
-      //   connection.on("SendHits", (data) => {
-      socket.broadcast.emit("hit", { hit: data.url + "/hits" })
-      //   })
+    //   connection.on("SendHits", (data) => {
+    socket.broadcast.emit("hit", { hit: data.url + "/hits" })
+    //   })
 
-      //   connection.start()
-      // .then(() => connection.invoke("SendMessage", "Hello"));
-    }
+    //   connection.start()
+    // .then(() => connection.invoke("SendMessage", "Hello"));
+    // }
   })
 })
 
