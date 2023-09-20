@@ -21,7 +21,8 @@ io.on("connection", (socket) => {
   //   }
 
   socket.on("request_url", (data) => {
-    if (data.url) {
+    setTimeout(() => {
+      // if (data.url) {
       //   let connection = new signalR.HubConnectionBuilder()
       //     .withUrl(url, {
       //       skipNegotiation: true,
@@ -42,7 +43,8 @@ io.on("connection", (socket) => {
 
       //   connection.start()
       // .then(() => connection.invoke("SendMessage", "Hello"));
-    }
+      // }
+    }, 4000)
   })
 })
 
