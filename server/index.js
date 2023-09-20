@@ -3,7 +3,7 @@ const app = express()
 const http = require("http")
 const { Server } = require("socket.io")
 const cors = require("cors")
-const signalR = require("@microsoft/signalr")
+// const signalR = require("@microsoft/signalr")
 
 app.use(cors({ origin: "*" }))
 
@@ -22,25 +22,25 @@ io.on("connection", (socket) => {
 
   socket.on("request_url", ({ url }) => {
     if (url) {
-      let connection = new signalR.HubConnectionBuilder()
-        .withUrl(url, {
-          skipNegotiation: true,
-          transport: signalR.HttpTransportType.WebSockets,
-        })
-        .configureLogging(signalR.LogLevel.Trace)
-        // .withUrl("https://et-ms-broadcast-service-fd86485c64c5.herokuapp.com/notificationHub")
-        .withAutomaticReconnect()
-        .build()
+      //   let connection = new signalR.HubConnectionBuilder()
+      //     .withUrl(url, {
+      //       skipNegotiation: true,
+      //       transport: signalR.HttpTransportType.WebSockets,
+      //     })
+      //     .configureLogging(signalR.LogLevel.Trace)
+      //     // .withUrl("https://et-ms-broadcast-service-fd86485c64c5.herokuapp.com/notificationHub")
+      //     .withAutomaticReconnect()
+      //     .build()
 
-      connection.on("SendNotification", (data) => {
-        socket.broadcast.emit("feeds", { feed: "plenty feeds" })
-      })
+      //   connection.on("SendNotification", (data) => {
+      socket.broadcast.emit("feeds", { feed: url + "/feeds" })
+      //   })
 
-      connection.on("SendHits", (data) => {
-        socket.broadcast.emit("hit", { hit: "plenty hit" })
-      })
+      //   connection.on("SendHits", (data) => {
+      socket.broadcast.emit("hit", { hit: url + "/hits" })
+      //   })
 
-      connection.start()
+      //   connection.start()
       // .then(() => connection.invoke("SendMessage", "Hello"));
     } else {
       socket.leave("hit")
