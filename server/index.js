@@ -16,9 +16,9 @@ const io = new Server(server, {
 })
 
 io.on("connection", (socket) => {
-  if (process.env.NODE_ENV === "development") {
-    console.log(`User connected: ${socket.id}`)
-  }
+  //   if (process.env.NODE_ENV === "development") {
+  console.log(`User connected: ${socket.id}`)
+  //   }
 
   socket.on("request_url", (data) => {
     if (data.url) {
