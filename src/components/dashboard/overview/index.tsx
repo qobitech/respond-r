@@ -365,7 +365,9 @@ const Configuration = ({ socketProps }: { socketProps: IUS }) => {
   }
 
   const handleSubmit = () => {
-    if (inputValue) socketProps.sendRequest(inputValue)
+    console.log("clicked")
+    // if (inputValue)
+    socketProps.sendRequest(inputValue)
   }
 
   const cancelFeed = () => {
