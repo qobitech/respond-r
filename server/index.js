@@ -33,11 +33,11 @@ io.on("connection", (socket) => {
       //     .build()
 
       //   connection.on("SendNotification", (data) => {
-      socket.broadcast.emit("feeds", { feed: url + "/feeds" })
+      socket.broadcast.emit("feeds", { feed: data.url + "/feeds" })
       //   })
 
       //   connection.on("SendHits", (data) => {
-      socket.broadcast.emit("hit", { hit: url + "/hits" })
+      socket.broadcast.emit("hit", { hit: data.url + "/hits" })
       //   })
 
       //   connection.start()
