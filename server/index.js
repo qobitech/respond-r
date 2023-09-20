@@ -5,13 +5,14 @@ const { Server } = require("socket.io")
 const cors = require("cors")
 // const signalR = require("@microsoft/signalr")
 
-app.use(cors({ origin: "*" }))
+app.use(cors({ origin: "https://dev-respond-r.netlify.app" }))
 
 const server = http.createServer(app)
 
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: "https://dev-respond-r.netlify.app",
+    methods: ["GET", "POST"],
   },
 })
 
