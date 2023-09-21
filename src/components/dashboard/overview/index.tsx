@@ -69,15 +69,12 @@ interface IUS {
 const useSocketIO = (): IUS => {
   const [hits, setHits] = useState<any>()
   const [feeds, setFeeds] = useState<any>()
-  const socket = io(`dev-respond-r.netlify.app:8000`)
+  const socket = io(`respond-r-bb.vercel.app`)
 
   const sendRequest = (url: string) => {
-    // socket.emit("request_url", {
-    //   url,
-    // })
-    fetch("/api/sse")
-      .then((res) => res.json())
-      .then((res) => console.log(res, "juju"))
+    socket.emit("request_url", {
+      url,
+    })
   }
 
   useEffect(() => {
