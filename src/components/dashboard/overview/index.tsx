@@ -69,7 +69,7 @@ interface IUS {
 const useSocketIO = (): IUS => {
   const [hits, setHits] = useState<any>()
   const [feeds, setFeeds] = useState<any>()
-  const socket = io(`192.168.1.13:8000`)
+  const socket = io(`dev-respond-r.netlify.app`)
 
   const sendRequest = (url: string) => {
     socket.emit("request_url", {
