@@ -1,2 +1,2 @@
-/* https://dev-respond-r.netlify.app:8000 200
+/api/* https://dev-respond-r.netlify.app:8000/:splat 200
 /*    /index.html   200

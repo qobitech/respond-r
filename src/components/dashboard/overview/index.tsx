@@ -72,9 +72,12 @@ const useSocketIO = (): IUS => {
   const socket = io(`dev-respond-r.netlify.app:8000`)
 
   const sendRequest = (url: string) => {
-    socket.emit("request_url", {
-      url,
-    })
+    // socket.emit("request_url", {
+    //   url,
+    // })
+    fetch("/api/sse")
+      .then((res) => res.json())
+      .then((res) => console.log(res, "juju"))
   }
 
   useEffect(() => {
