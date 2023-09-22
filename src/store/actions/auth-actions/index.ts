@@ -2,7 +2,7 @@ import { url } from "enums/Route"
 import { etraffica_baseurl } from "../../../utils/constants"
 import * as utils from "../../services/new/utils"
 import { authType } from "store/types"
-import { ILogin } from "interfaces/IAuth"
+// import { ILogin } from "interfaces/IAuth"
 
 const setAuthorizationHeader = (token: string) => {
   localStorage.setItem("CentralDatabaseToken", token)
@@ -45,7 +45,7 @@ export const userLogin = (data: {
       data,
     },
     actionType: authType.userLogin,
-    onSuccess: (res: ILogin) => {
+    onSuccess: (res: any) => {
       setAuthorizationHeader(res.token.accessToken)
       setTimeout(() => {
         window.location.reload()
