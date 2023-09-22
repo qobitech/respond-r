@@ -36,7 +36,8 @@ const tabEnum = {
 const getConnection = () => {
   return new signalR.HubConnectionBuilder()
     .withUrl(
-      "https://et-ms-broadcast-service-fd86485c64c5.herokuapp.com/notificationHub",
+      // "https://et-ms-broadcast-service-fd86485c64c5.herokuapp.com/notificationHub",
+      "https://df22636a607b.ngrok.app/notificationHub",
       {
         skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets,
@@ -66,9 +67,9 @@ const useSocketIO = (): IUS => {
     useState<typeConnectionStatus>("connecting")
 
   useEffect(() => {
-    setConnection(getConnection())
-    getConnection()
-      .start()
+    const connection = getConnection()
+    connection
+      ?.start()
       .then(() => {
         getConnection().invoke("SendMessage", "Hello")
         setConnectionStatus("connected")
@@ -77,6 +78,7 @@ const useSocketIO = (): IUS => {
         console.log(reason)
         setConnectionStatus("closed")
       })
+    setConnection(connection)
   }, [])
 
   useEffect(() => {
@@ -250,6 +252,9 @@ const LiveFeedComponent = ({
           <span className={`lf-status-bop ${socketProps.connectionStatus}`} />
           {socketProps.connectionStatus}
         </p>
+        {socketProps.connectionStatus === "closed" ? (
+          <p className="lf-data-refresh">Refresh</p>
+        ) : null}
       </div>
       <LiveFeedFilterSection filterProps={useFilterProps} filters={filters} />
       <div className="live-feed-component-wrapper">
