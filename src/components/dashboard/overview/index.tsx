@@ -234,11 +234,17 @@ const getFeed = (i: IFeed, index: number) => ({
   flags: i.flags,
 })
 
-const LiveFeedStatusComponent = ({ socketProps }: { socketProps: IUS }) => {
+const LiveFeedStatusComponent = ({
+  socketProps,
+  title,
+}: {
+  socketProps: IUS
+  title?: string
+}) => {
   return (
     <div className="live-feed-component">
       <div className="live-feed-header-section">
-        <p className="lf-header">LIVE FEED</p>
+        <p className="lf-header">{title || "LIVE FEED"}</p>
         <p className={`lf-status ${socketProps.connectionStatus}`}>
           <span className={`lf-status-bop ${socketProps.connectionStatus}`} />
           {socketProps.connectionStatus}
@@ -446,8 +452,16 @@ const Configuration = ({
     if (inputValue) socketProps.startConnection(inputValue)
   }
 
+  const btnTitle =
+    socketProps.connectionStatus === "connected" &&
+    !!hookForm.watch().inputValue
+      ? "Refresh Feed"
+      : "Request Feed"
+
   return (
     <div>
+      <LiveFeedStatusComponent socketProps={socketProps} title="Status" />
+      <div style={{ paddingBottom: "20px" }} />
       <form onSubmit={(e) => e.preventDefault()}>
         <TypeInput
           placeholder="Enter url"
@@ -457,7 +471,7 @@ const Configuration = ({
         />
         <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
           <TypeButton
-            title="Request Feed"
+            title={btnTitle}
             onClick={hookForm.handleSubmit(handleSubmit)}
           />
           <TypeSmallButton
