@@ -451,6 +451,7 @@ const Configuration = ({
       <form onSubmit={(e) => e.preventDefault()}>
         <TypeInput
           placeholder="Enter url"
+          label="Connection URL"
           {...hookForm.register("inputValue")}
           error={hookForm.formState.errors.inputValue?.message}
         />
