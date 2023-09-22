@@ -141,14 +141,42 @@
 
     .live-feed-component {
       padding-left: 2rem;
-      .lf-header {
-        color: #444;
-        font-family: Inter;
-        font-size: 0.6875rem;
-        font-style: normal;
-        font-weight: 500;
-        line-height: normal;
+      .live-feed-header-section {
+        display: flex;
+        align-items: center;
+        gap: 30px;
         margin: 0 0 1.62rem;
+        .lf-header,
+        .lf-status {
+          font-family: Inter;
+          font-size: 0.6875rem;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+          margin: 0;
+        }
+        .lf-status {
+          transition: 0.2s ease all;
+          text-transform: capitalize;
+          &.connecting {
+            color: #e3a11e;
+          }
+          &.connected {
+            color: #298e4c;
+          }
+          &.interrupted {
+            color: #c21f1f;
+          }
+          &.re-connecting {
+            color: #e3a11e;
+          }
+          &.failed {
+            color: #c21f1f;
+          }
+        }
+        .lf-header {
+          color: #444;
+        }
       }
       .live-feed-component-wrapper {
         overflow: auto;

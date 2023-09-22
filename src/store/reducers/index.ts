@@ -1,11 +1,7 @@
 import { combineReducers } from "redux"
 import {
-  IAPIScopeReducer,
-  IApplicationReducer,
   IAuthReducer,
-  IBillingReducer,
   IGlobalReducer,
-  IOrganizationReducer,
   IRoleReducer,
   IStates,
   IUserReducer,
@@ -14,10 +10,6 @@ import {
 const rootReducer = combineReducers<IStates>({
   auth: reducer<IAuthReducer>,
   global: reducer<IGlobalReducer>,
-  apiscope: reducer<IAPIScopeReducer>,
-  application: reducer<IApplicationReducer>,
-  billing: reducer<IBillingReducer>,
-  organization: reducer<IOrganizationReducer>,
   role: reducer<IRoleReducer>,
   user: reducer<IUserReducer>,
 })

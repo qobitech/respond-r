@@ -6,14 +6,16 @@ import "../../../utils/new/pagination.scss"
 import "../../../utils/new/page.scss"
 import { Loader } from "utils/new/components"
 import { VideoSVG } from "utils/new/svgs"
-import { IVS, videostreamData } from "./mock-data"
+import { IVS } from "./mock-data"
 import sample from "../../../extras/images/sample.jpg"
 import RightSection, {
   useRightSection,
 } from "components/reusable/right-section"
-import io from "socket.io-client"
 import { TypeInput } from "utils/new/input"
 import { TypeButton, TypeSmallButton } from "utils/new/button"
+import { IFeed, IHit } from "interfaces/IStream"
+import { handleDataStream } from "./data"
+import * as signalR from "@microsoft/signalr"
 
 interface IProps {
   states?: IStates
@@ -31,65 +33,69 @@ const tabEnum = {
   LOCATION: "Location",
 }
 
-// interface IUES {
-//   message: any
-//   setMessage: React.Dispatch<any>
-// }
+const getConnection = () => {
+  return new signalR.HubConnectionBuilder()
+    .withUrl(
+      "https://et-ms-broadcast-service-fd86485c64c5.herokuapp.com/notificationHub",
+      {
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets,
+      }
+    )
+    .configureLogging(signalR.LogLevel.Trace)
+    .withAutomaticReconnect()
+    .build()
+}
 
-// const useEventSource = (): IUES => {
-//   const [message, setMessage] = useState<any>()
-
-//   useEffect(() => {
-//     const eventSource = new EventSource("http://localhost:8080/api/sse")
-
-//     if (typeof EventSource !== "undefined") {
-//       eventSource.onmessage = (ev: MessageEvent<any>) => {
-//         const event = JSON.parse(ev.data)
-//         setMessage(event)
-//       }
-//       eventSource.onerror = (ev: Event) => {
-//         eventSource.close()
-//       }
-//     }
-//     return () => eventSource.close()
-//   }, [])
-
-//   return {
-//     setMessage,
-//     message,
-//   }
-// }
-
+type typeConnectionStatus =
+  | "connecting"
+  | "connected"
+  | "interrupted"
+  | "re-connecting"
+  | "failed"
 interface IUS {
-  hits: any
-  feeds: any
-  sendRequest: (url: string) => void
+  hits: IHit[]
+  feeds: IFeed[]
+  connectionStatus: typeConnectionStatus
 }
 
 const useSocketIO = (): IUS => {
-  const [hits, setHits] = useState<any>()
-  const [feeds, setFeeds] = useState<any>()
-  const socket = io(`respond-r-bb.vercel.app`)
-
-  const sendRequest = (url: string) => {
-    socket.emit("request_url", {
-      url,
-    })
-  }
+  const [connection, setConnection] = useState<signalR.HubConnection>()
+  const [hits, setHits] = useState<IHit[]>([])
+  const [feeds, setFeeds] = useState<IFeed[]>([])
+  const [connectionStatus, setConnectionStatus] =
+    useState<typeConnectionStatus>("connecting")
 
   useEffect(() => {
-    socket.on("hit", (data) => {
-      setHits(data)
+    setConnection(getConnection())
+    getConnection()
+      .start()
+      .then(() => {
+        getConnection().invoke("SendMessage", "Hello")
+        setConnectionStatus("connected")
+      })
+      .catch((reason) => {
+        console.log(reason)
+        setConnectionStatus("interrupted")
+      })
+  }, [])
+
+  useEffect(() => {
+    connection?.on("SendNotification", (data: IHit) => {
+      console.log(data, "hits")
+      setHits(handleDataStream(hits)(data))
     })
-    socket.on("feeds", (data) => {
-      setFeeds(data)
+    connection?.on("SendHits", (data: IFeed) => {
+      console.log(data, "feeds")
+      setFeeds(handleDataStream(feeds)(data))
     })
-  }, [socket])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [connection])
 
   return {
     hits,
     feeds,
-    sendRequest,
+    connectionStatus,
   }
 }
 
@@ -118,13 +124,11 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // const useEventProps = useEventSource()
-
-  // console.log(useEventProps.message, "juju")
-
   const socketProps = useSocketIO()
 
   console.log(socketProps.feeds, socketProps.hits, "juju")
+
+  const lck = socketProps.feeds.length + socketProps.hits.length
 
   return (
     <>
@@ -180,7 +184,11 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
               </div>
             )}
             <div className="stream-section">
-              <LiveFeedComponent setMainView={handleMainView} />
+              <LiveFeedComponent
+                setMainView={handleMainView}
+                socketProps={socketProps}
+                key={lck}
+              />
             </div>
           </div>
         </div>
@@ -192,35 +200,82 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
 
 export default Overview
 
+const getFeed = (i: IFeed, index: number) => ({
+  _id: {
+    $oid: index + "",
+  },
+  cameraName: i.cameraName,
+  classification: i.classification,
+  code: i.code,
+  color: i.colour,
+  createdAt: {
+    $date: "",
+  },
+  filePath: i.filePath,
+  make: i.make,
+  model: i.model,
+  orientation: i.orientation,
+  regNumber: i.regNumber,
+  status: "",
+  timeStamp: i.timeStamp,
+  updatedAt: {
+    $date: "",
+  },
+  vehicleType: i.vehicleType,
+  flags: i.flags,
+})
+
 const LiveFeedComponent = ({
   setMainView,
+  socketProps,
 }: {
   setMainView: (streamData: IVS) => void
+  socketProps: IUS
 }) => {
-  const filters = [`Hits (${0})`, `All Feeds (${videostreamData.length || 0})`]
+  const filters = [`Hits`, `All Feeds`]
   const useFilterProps = useFilterSection(filters[0])
   return (
     <div className="live-feed-component">
-      <p className="lf-header">LIVE FEED</p>
+      <div className="live-feed-header-section">
+        <p className="lf-header">LIVE FEED</p>
+        <p className={`lf-status ${socketProps.connectionStatus}`}>
+          {socketProps.connectionStatus}
+        </p>
+      </div>
       <LiveFeedFilterSection filterProps={useFilterProps} filters={filters} />
       <div className="live-feed-component-wrapper">
-        {useFilterProps.selectedFilter === filters[1] ? (
-          videostreamData.map((i, index) => (
+        {useFilterProps.selectedFilter === filters[1] &&
+        socketProps.feeds[0] ? (
+          socketProps.feeds.map((i, index) => (
             <LiveFeedItemComponent
               key={index}
-              carColor={i.color}
+              carColor={i.colour}
               carMake={i.make}
               carType={i.vehicleType}
               imgSrc={sample}
               offense="Playing amampiano"
               regNumber={i.regNumber}
               handleOnClick={() => {
-                setMainView(i)
+                setMainView(getFeed(i, index))
               }}
             />
           ))
-        ) : useFilterProps.selectedFilter === filters[0] ? (
-          <NoFeeds />
+        ) : useFilterProps.selectedFilter === filters[0] &&
+          socketProps.hits[0] ? (
+          socketProps.hits.map((i, index) => (
+            <LiveFeedItemComponent
+              key={index}
+              carColor={i.colour}
+              carMake={i.make}
+              carType={""}
+              imgSrc={sample}
+              offense="Playing amampiano"
+              regNumber={i.regNumber}
+              handleOnClick={() => {
+                // setMainView(getFeed(i, index))
+              }}
+            />
+          ))
         ) : (
           <NoFeeds />
         )}
@@ -366,19 +421,20 @@ const Configuration = ({ socketProps }: { socketProps: IUS }) => {
 
   const handleSubmit = () => {
     console.log("clicked")
-    // if (inputValue)
-    socketProps.sendRequest(inputValue)
   }
 
   const cancelFeed = () => {
-    socketProps.sendRequest("")
     setInputValue("")
   }
 
   return (
     <div>
       <form onSubmit={(e) => e.preventDefault()}>
-        <TypeInput placeholder="Enter url" onChange={handleOnChange} />
+        <TypeInput
+          placeholder="Enter url"
+          onChange={handleOnChange}
+          value={inputValue}
+        />
         <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
           <TypeButton title="Request Feed" onClick={handleSubmit} />
           <TypeSmallButton

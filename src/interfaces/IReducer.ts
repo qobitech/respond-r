@@ -1,8 +1,5 @@
 import { ICallRightSection } from "store/actions/global"
-import { IAPIScopes, IAllApplications } from "./IApplication"
-import { ILogin } from "./IAuth"
 import { INotification } from "./IGlobal"
-import { IAllOrganizations } from "./IOrganization"
 import { IAllUsers } from "./IUser"
 
 export interface IAuthReducer {
@@ -12,7 +9,7 @@ export interface IAuthReducer {
   verifyEmail: any
   verifyEmailLoading: boolean
   verifyEmailError: any
-  userLogin: ILogin
+  userLogin: any
   userLoginLoading: boolean
   userLoginError: string
   passwordReset: any
@@ -50,92 +47,6 @@ export interface IGlobalReducer {
   rightSectionError: any
 }
 
-export interface IAPIScopeReducer {
-  getAPIScopes: IAPIScopes
-  getAPIScopesLoading: boolean
-  getAPIScopesError: string
-  createAPIScope: any
-  createAPIScopeLoading: boolean
-  createAPIScopeError: string
-  updateAPIScope: any
-  updateAPIScopeLoading: boolean
-  updateAPIScopeError: string
-}
-export interface IApplicationReducer {
-  getAllApplications: IAllApplications
-  getAllApplicationsLoading: boolean
-  getAllApplicationsError: string
-  getApplicationById: any
-  getApplicationByIdLoading: boolean
-  getApplicationByIdError: string
-  createApplication: any
-  createApplicationLoading: boolean
-  createApplicationError: string
-  updateApplication: any
-  updateApplicationLoading: boolean
-  updateApplicationError: string
-  deleteApplication: any
-  deleteApplicationLoading: boolean
-  deleteApplicationError: string
-}
-export interface IBillingReducer {
-  getAPIBundles: any
-  getAPIBundlesLoading: boolean
-  getAPIBundlesError: string
-  getAPIBundleById: any
-  getAPIBundleByIdLoading: boolean
-  getAPIBundleByIdError: string
-  createAPIBundle: any
-  createAPIBundleLoading: boolean
-  createAPIBundleError: string
-  updateAPIBundle: any
-  updateAPIBundleLoading: boolean
-  updateAPIBundleError: string
-  deleteAPIBundle: any
-  deleteAPIBundleLoading: boolean
-  deleteAPIBundleError: string
-  getAPIConfigs: any
-  getAPIConfigsLoading: boolean
-  getAPIConfigsError: string
-  createAPIConfig: any
-  createAPIConfigLoading: boolean
-  createAPIConfigError: string
-  updateAPIConfig: any
-  updateAPIConfigLoading: boolean
-  updateAPIConfigError: string
-  deleteAPIConfig: any
-  deleteAPIConfigLoading: boolean
-  deleteAPIConfigError: string
-  getAPIConfigGroups: any
-  getAPIConfigGroupsLoading: boolean
-  getAPIConfigGroupsError: string
-  createAPIConfigGroup: any
-  createAPIConfigGroupLoading: boolean
-  createAPIConfigGroupError: string
-  updateAPIConfigGroup: any
-  updateAPIConfigGroupLoading: boolean
-  updateAPIConfigGroupError: string
-  getClientSubscriptions: any
-  getClientSubscriptionsLoading: boolean
-  getClientSubscriptionsError: string
-  subscribeToBundle: any
-  subscribeToBundleLoading: boolean
-  subscribeToBundleError: string
-  addAppsToSub: any
-  addAppsToSubLoading: boolean
-  addAppsToSubError: string
-}
-export interface IOrganizationReducer {
-  getOrganizationInfo: any
-  getOrganizationInfoLoading: boolean
-  getOrganizationInfoError: string
-  getAllOrganizations: IAllOrganizations
-  getAllOrganizationsLoading: boolean
-  getAllOrganizationsError: string
-  deleteOrganization: any
-  deleteOrganizationLoading: boolean
-  deleteOrganizationError: string
-}
 export interface IRoleReducer {
   getAllRoles: any
   getAllRolesLoading: boolean
@@ -174,10 +85,6 @@ export interface IUserReducer {
 export interface IStates {
   auth: IAuthReducer
   global: IGlobalReducer
-  apiscope: IAPIScopeReducer
-  application: IApplicationReducer
-  billing: IBillingReducer
-  organization: IOrganizationReducer
   role: IRoleReducer
   user: IUserReducer
 }
