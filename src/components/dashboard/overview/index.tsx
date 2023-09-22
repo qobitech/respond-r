@@ -9,6 +9,7 @@ import { VideoSVG } from "utils/new/svgs"
 import { IVS } from "./mock-data"
 import sample from "../../../extras/images/sample.jpg"
 import RightSection, {
+  IRightSection,
   useRightSection,
 } from "components/reusable/right-section"
 import { TypeInput } from "utils/new/input"
@@ -16,6 +17,8 @@ import { TypeButton, TypeSmallButton } from "utils/new/button"
 import { IFeed, IHit } from "interfaces/IStream"
 import { handleDataStream } from "./data"
 import * as signalR from "@microsoft/signalr"
+import { useFormHook } from "utils/new/hook"
+import * as yup from "yup"
 
 interface IProps {
   states?: IStates
@@ -33,16 +36,12 @@ const tabEnum = {
   LOCATION: "Location",
 }
 
-const getConnection = () => {
+const getConnection = (url: string) => {
   return new signalR.HubConnectionBuilder()
-    .withUrl(
-      // "https://et-ms-broadcast-service-fd86485c64c5.herokuapp.com/notificationHub",
-      "https://df22636a607b.ngrok.app/notificationHub",
-      {
-        skipNegotiation: true,
-        transport: signalR.HttpTransportType.WebSockets,
-      }
-    )
+    .withUrl(url, {
+      skipNegotiation: true,
+      transport: signalR.HttpTransportType.WebSockets,
+    })
     .configureLogging(signalR.LogLevel.Trace)
     .withAutomaticReconnect()
     .build()
@@ -57,6 +56,7 @@ interface IUS {
   hits: IHit[]
   feeds: IFeed[]
   connectionStatus: typeConnectionStatus
+  startConnection: (url: string) => void
 }
 
 const useSocketIO = (): IUS => {
@@ -64,36 +64,32 @@ const useSocketIO = (): IUS => {
   const [hits, setHits] = useState<IHit[]>([])
   const [feeds, setFeeds] = useState<IFeed[]>([])
   const [connectionStatus, setConnectionStatus] =
-    useState<typeConnectionStatus>("connecting")
+    useState<typeConnectionStatus>("closed")
 
-  useEffect(() => {
-    const connection = getConnection()
+  const startConnection = (url: string) => {
+    const connection = getConnection(url)
     connection
       ?.start()
       .then(() => {
-        getConnection().invoke("SendMessage", "Hello")
         setConnectionStatus("connected")
       })
-      .catch((reason) => {
-        console.log(reason)
+      .catch(() => {
         setConnectionStatus("closed")
       })
     setConnection(connection)
-  }, [])
+  }
 
   useEffect(() => {
     connection?.on("SendNotification", (data: IHit) => {
-      console.log(data, "hits")
       setHits(handleDataStream(hits)(data))
     })
     connection?.on("SendHits", (data: IFeed) => {
-      console.log(data, "feeds")
       setFeeds(handleDataStream(feeds)(data))
     })
-    connection?.onreconnecting((error) => {
+    connection?.onreconnecting(() => {
       setConnectionStatus("connected")
     })
-    connection?.onreconnected((error) => {
+    connection?.onreconnected(() => {
       setConnectionStatus("re-connecting")
     })
     connection?.onclose(() => {
@@ -106,6 +102,7 @@ const useSocketIO = (): IUS => {
     hits,
     feeds,
     connectionStatus,
+    startConnection,
   }
 }
 
@@ -136,9 +133,9 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
 
   const socketProps = useSocketIO()
 
-  console.log(socketProps.feeds, socketProps.hits, "juju")
+  console.log(socketProps.hits, "juju")
 
-  const lck = socketProps.feeds.length + socketProps.hits.length
+  const lck = socketProps.hits?.[0]?.regNumber
 
   return (
     <>
@@ -149,6 +146,7 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
       </RightSection>
       <div className="main-page">
         <div className="pg-container">
+          <LiveFeedStatusComponent socketProps={socketProps} />
           <div className="overview-page">
             {mainView ? (
               <div className="video-section">
@@ -235,6 +233,23 @@ const getFeed = (i: IFeed, index: number) => ({
   flags: i.flags,
 })
 
+const LiveFeedStatusComponent = ({ socketProps }: { socketProps: IUS }) => {
+  return (
+    <div className="live-feed-component">
+      <div className="live-feed-header-section">
+        <p className="lf-header">LIVE FEED</p>
+        <p className={`lf-status ${socketProps.connectionStatus}`}>
+          <span className={`lf-status-bop ${socketProps.connectionStatus}`} />
+          {socketProps.connectionStatus}
+        </p>
+        {/* {socketProps.connectionStatus === "closed" ? (
+          <p className="lf-data-refresh">Refresh</p>
+        ) : null} */}
+      </div>
+    </div>
+  )
+}
+
 const LiveFeedComponent = ({
   setMainView,
   socketProps,
@@ -246,16 +261,6 @@ const LiveFeedComponent = ({
   const useFilterProps = useFilterSection(filters[0])
   return (
     <div className="live-feed-component">
-      <div className="live-feed-header-section">
-        <p className="lf-header">LIVE FEED</p>
-        <p className={`lf-status ${socketProps.connectionStatus}`}>
-          <span className={`lf-status-bop ${socketProps.connectionStatus}`} />
-          {socketProps.connectionStatus}
-        </p>
-        {socketProps.connectionStatus === "closed" ? (
-          <p className="lf-data-refresh">Refresh</p>
-        ) : null}
-      </div>
       <LiveFeedFilterSection filterProps={useFilterProps} filters={filters} />
       <div className="live-feed-component-wrapper">
         {useFilterProps.selectedFilter === filters[1] &&
@@ -425,20 +430,19 @@ const VehicleInfoSectionColorItem = ({
   )
 }
 
-const Configuration = ({ socketProps }: { socketProps: IUS }) => {
-  const [inputValue, setInputValue] = useState<string>("")
+const Configuration = ({
+  socketProps,
+  rsProps,
+}: {
+  socketProps: IUS
+  rsProps?: IRightSection<{}>
+}) => {
+  const [hookForm] = useFormHook<{ inputValue: string }>({
+    inputValue: yup.string().required("url required"),
+  })
 
-  const handleOnChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = target
-    setInputValue(value)
-  }
-
-  const handleSubmit = () => {
-    console.log("clicked")
-  }
-
-  const cancelFeed = () => {
-    setInputValue("")
+  const handleSubmit = ({ inputValue }: { inputValue: string }) => {
+    if (inputValue) socketProps.startConnection(inputValue)
   }
 
   return (
@@ -446,15 +450,22 @@ const Configuration = ({ socketProps }: { socketProps: IUS }) => {
       <form onSubmit={(e) => e.preventDefault()}>
         <TypeInput
           placeholder="Enter url"
-          onChange={handleOnChange}
-          value={inputValue}
+          {...hookForm.register("inputValue")}
+          error={hookForm.formState.errors.inputValue?.message}
         />
         <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-          <TypeButton title="Request Feed" onClick={handleSubmit} />
+          <TypeButton
+            title="Request Feed"
+            onClick={hookForm.handleSubmit(handleSubmit)}
+          />
           <TypeSmallButton
-            title="Cancel Feed"
+            title=""
             buttonType="danger"
-            onClick={cancelFeed}
+            onClick={() => {
+              rsProps?.closeSection()
+              hookForm.reset()
+            }}
+            close
           />
         </div>
       </form>

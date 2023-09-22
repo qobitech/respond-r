@@ -141,64 +141,7 @@
 
     .live-feed-component {
       padding-left: 2rem;
-      .live-feed-header-section {
-        display: flex;
-        align-items: center;
-        gap: 30px;
-        margin: 0 0 1.62rem;
-        .lf-header,
-        .lf-status,
-        .lf-data-refresh {
-          font-family: Inter;
-          font-size: 0.6875rem;
-          font-style: normal;
-          font-weight: 500;
-          line-height: normal;
-          margin: 0;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          .lf-status-bop {
-            width: 10px;
-            min-width: 10px;
-            height: 10px;
-            min-height: 10px;
-            display: inline-block;
-            border-radius: 50%;
-            &.connecting {
-              background: #e3a11e;
-            }
-            &.connected {
-              background: #298e4c;
-            }
-            &.re-connecting {
-              background: #e3a11e;
-            }
-            &.closed {
-              background: #c21f1f;
-            }
-          }
-        }
-        .lf-status {
-          transition: 0.2s ease all;
-          text-transform: capitalize;
-          &.connecting {
-            color: #e3a11e;
-          }
-          &.connected {
-            color: #298e4c;
-          }
-          &.re-connecting {
-            color: #e3a11e;
-          }
-          &.closed {
-            color: #c21f1f;
-          }
-        }
-        .lf-header {
-          color: #444;
-        }
-      }
+
       .live-feed-component-wrapper {
         overflow: auto;
         max-height: 71vh;
@@ -290,6 +233,65 @@
         }
       }
     }
+  }
+}
+
+.live-feed-header-section {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin: 0 0 1.62rem;
+  .lf-header,
+  .lf-status,
+  .lf-data-refresh {
+    font-family: Inter;
+    font-size: 0.6875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    .lf-status-bop {
+      width: 10px;
+      min-width: 10px;
+      height: 10px;
+      min-height: 10px;
+      display: inline-block;
+      border-radius: 50%;
+      &.connecting {
+        background: #e3a11e;
+      }
+      &.connected {
+        background: #298e4c;
+      }
+      &.re-connecting {
+        background: #e3a11e;
+      }
+      &.closed {
+        background: #c21f1f;
+      }
+    }
+  }
+  .lf-status {
+    transition: 0.2s ease all;
+    text-transform: capitalize;
+    &.connecting {
+      color: #e3a11e;
+    }
+    &.connected {
+      color: #298e4c;
+    }
+    &.re-connecting {
+      color: #e3a11e;
+    }
+    &.closed {
+      color: #c21f1f;
+    }
+  }
+  .lf-header {
+    color: #444;
   }
 }
 

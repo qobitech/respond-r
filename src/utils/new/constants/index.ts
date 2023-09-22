@@ -1,11 +1,12 @@
-import { IUserToken } from "interfaces/IAuth"
-import jwtDecode from "jwt-decode"
+// import { IUserToken } from "interfaces/IAuth"
+// import jwtDecode from "jwt-decode"
 
 export const TOKEN = localStorage.getItem("CentralDatabaseToken")
 
 export const getUserToken = () => {
-  const token: IUserToken = TOKEN ? jwtDecode(TOKEN) : ({} as IUserToken)
-  return token
+  // const token: IUserToken = TOKEN ? jwtDecode(TOKEN) : ({} as IUserToken)
+  // return token
+  return ""
 }
 
 export const USERTOKEN = getUserToken()
