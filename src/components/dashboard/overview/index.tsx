@@ -50,9 +50,8 @@ const getConnection = () => {
 type typeConnectionStatus =
   | "connecting"
   | "connected"
-  | "interrupted"
   | "re-connecting"
-  | "failed"
+  | "closed"
 interface IUS {
   hits: IHit[]
   feeds: IFeed[]
@@ -76,7 +75,7 @@ const useSocketIO = (): IUS => {
       })
       .catch((reason) => {
         console.log(reason)
-        setConnectionStatus("interrupted")
+        setConnectionStatus("closed")
       })
   }, [])
 
@@ -88,6 +87,15 @@ const useSocketIO = (): IUS => {
     connection?.on("SendHits", (data: IFeed) => {
       console.log(data, "feeds")
       setFeeds(handleDataStream(feeds)(data))
+    })
+    connection?.onreconnecting((error) => {
+      setConnectionStatus("connected")
+    })
+    connection?.onreconnected((error) => {
+      setConnectionStatus("re-connecting")
+    })
+    connection?.onclose(() => {
+      setConnectionStatus("closed")
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connection])
@@ -239,6 +247,7 @@ const LiveFeedComponent = ({
       <div className="live-feed-header-section">
         <p className="lf-header">LIVE FEED</p>
         <p className={`lf-status ${socketProps.connectionStatus}`}>
+          <span className={`lf-status-bop ${socketProps.connectionStatus}`} />
           {socketProps.connectionStatus}
         </p>
       </div>

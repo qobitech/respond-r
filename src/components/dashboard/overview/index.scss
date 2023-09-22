@@ -154,6 +154,29 @@
           font-weight: 500;
           line-height: normal;
           margin: 0;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          .lf-status-bop {
+            width: 10px;
+            min-width: 10px;
+            height: 10px;
+            min-height: 10px;
+            display: inline-block;
+            border-radius: 50%;
+            &.connecting {
+              background: #e3a11e;
+            }
+            &.connected {
+              background: #298e4c;
+            }
+            &.re-connecting {
+              background: #e3a11e;
+            }
+            &.closed {
+              background: #c21f1f;
+            }
+          }
         }
         .lf-status {
           transition: 0.2s ease all;
@@ -164,13 +187,10 @@
           &.connected {
             color: #298e4c;
           }
-          &.interrupted {
-            color: #c21f1f;
-          }
           &.re-connecting {
             color: #e3a11e;
           }
-          &.failed {
+          &.closed {
             color: #c21f1f;
           }
         }
