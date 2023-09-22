@@ -67,6 +67,7 @@ const useSocketIO = (): IUS => {
     useState<typeConnectionStatus>("closed")
 
   const startConnection = (url: string) => {
+    setConnectionStatus("connecting")
     const connection = getConnection(url)
     connection
       ?.start()
