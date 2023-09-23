@@ -9,21 +9,21 @@
     flex-basis: 66%;
     width: 0;
     overflow: auto;
-    max-height: 82vh;
+    max-height: 76vh;
     .camera-title {
       color: #2e1919;
       font-family: Inter;
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       font-style: normal;
       font-weight: 400;
       line-height: normal;
-      margin: 0 0 1.7625rem;
+      margin: 0 0 1.4625rem;
     }
     .video-container {
       border-radius: 1.5625rem;
       background: #252323;
       overflow: hidden;
-      margin: 0 0 2.88rem;
+      margin: 0 0 1.48rem;
       video {
         height: 25rem;
         width: 100%;
@@ -31,7 +31,7 @@
     }
     .tab-section {
       .tab-header {
-        border-top: 1px solid #dedede;
+        // border-top: 1px solid #dedede;
         border-bottom: 1px solid #dedede;
         margin: 0 0 3rem;
         display: flex;
@@ -144,7 +144,7 @@
 
       .live-feed-component-wrapper {
         overflow: auto;
-        max-height: 71vh;
+        max-height: 69vh;
         display: flex;
         flex-direction: column;
         gap: 20px;
