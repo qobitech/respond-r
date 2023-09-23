@@ -65,6 +65,12 @@ const useSocketIO = (): IUS => {
   const [feeds, setFeeds] = useState<IFeed[]>([])
   const [connectionStatus, setConnectionStatus] =
     useState<typeConnectionStatus>("closed")
+  const [trigger, setTrigger] = useState<number>(0)
+
+  const handleTrigger = () => {
+    const temp = Math.random()
+    setTrigger(temp === trigger ? temp + 1 : temp)
+  }
 
   const startConnection = (url: string) => {
     setConnectionStatus("connecting")
@@ -82,9 +88,11 @@ const useSocketIO = (): IUS => {
 
   useEffect(() => {
     connection?.on("SendNotification", (data: IHit) => {
+      handleTrigger()
       setHits(handleDataStream(hits)(data))
     })
     connection?.on("SendHits", (data: IFeed) => {
+      handleTrigger()
       setFeeds(handleDataStream(feeds)(data))
     })
     connection?.onreconnecting(() => {
@@ -134,9 +142,9 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
 
   const socketProps = useSocketIO()
 
-  console.log(socketProps.hits, "juju")
+  // console.log(socketProps.hits, "juju")
 
-  const lck = socketProps.hits?.[0]?.regNumber
+  // const lck = socketProps.hits?.[0]?.regNumber
 
   return (
     <>
@@ -196,7 +204,6 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
               <LiveFeedComponent
                 setMainView={handleMainView}
                 socketProps={socketProps}
-                key={lck}
               />
             </div>
           </div>
@@ -274,7 +281,7 @@ const LiveFeedComponent = ({
         socketProps.feeds[0] ? (
           socketProps.feeds.map((i, index) => (
             <LiveFeedItemComponent
-              key={index}
+              key={i.regNumber}
               carColor={i.colour}
               carMake={i.make}
               carType={i.vehicleType}
