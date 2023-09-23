@@ -6,7 +6,6 @@ import "../../../utils/new/pagination.scss"
 import "../../../utils/new/page.scss"
 import { Loader } from "utils/new/components"
 import { VideoSVG } from "utils/new/svgs"
-import { IVS } from "./mock-data"
 import sample from "../../../extras/images/sample.jpg"
 import RightSection, {
   IRightSection,
@@ -20,8 +19,9 @@ import * as signalR from "@microsoft/signalr"
 import { useFormHook } from "utils/new/hook"
 import * as yup from "yup"
 import { IAction } from "interfaces/IAction"
-import { IVehicle, IVehicleById } from "interfaces/IVehicle"
+import { IVehicle } from "interfaces/IVehicle"
 import { vehicles } from "store/types"
+// import hitmp3 from "../../../extras/audio/hit.mp3"
 
 interface IProps {
   states?: IStates
@@ -89,6 +89,13 @@ const useSocketIO = (): IUS => {
     setConnection(connection)
   }
 
+  const hit = new Audio(require("../../../extras/audio/hit.mp3"))
+  const playHit = () => {
+    hit.play().then(() => {
+      // hit.remove()
+    })
+  }
+
   const mapDataArray = (i: IHit | IFeed) => {
     return i.regNumber
   }
@@ -101,6 +108,7 @@ const useSocketIO = (): IUS => {
     connection?.on("SendHits", (data: IFeed) => {
       handleTrigger()
       setFeeds(handleDataStream(feeds, mapDataArray, "regNumber")(data))
+      playHit()
     })
     connection?.onreconnecting(() => {
       setConnectionStatus("re-connecting")
@@ -514,6 +522,7 @@ const Configuration = ({
 
   useEffect(() => {
     if (getUrl()) hookForm.setValue("inputValue", getUrl() || "")
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const URLKEY = "data-url"
