@@ -158,7 +158,7 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
         <div className="pg-container">
           <LiveFeedStatusComponent socketProps={socketProps} />
           <div className="overview-page">
-            {vehicle?.getVehicleByRegNumber.isSuccessful ? (
+            {vehicle?.getVehicleByRegNumber?.isSuccessful ? (
               <MainView vehicle={vehicle} />
             ) : (
               <div className="no-video-selected-section">
