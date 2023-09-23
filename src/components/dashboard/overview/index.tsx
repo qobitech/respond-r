@@ -89,14 +89,18 @@ const useSocketIO = (): IUS => {
     setConnection(connection)
   }
 
+  const mapDataArray = (i: IHit | IFeed) => {
+    return i.regNumber
+  }
+
   useEffect(() => {
     connection?.on("SendNotification", (data: IHit) => {
       handleTrigger()
-      setHits(handleDataStream(hits)(data))
+      setHits(handleDataStream(hits, mapDataArray, "regNumber")(data))
     })
     connection?.on("SendHits", (data: IFeed) => {
       handleTrigger()
-      setFeeds(handleDataStream(feeds)(data))
+      setFeeds(handleDataStream(feeds, mapDataArray, "regNumber")(data))
     })
     connection?.onreconnecting(() => {
       setConnectionStatus("connected")
@@ -256,45 +260,58 @@ const LiveFeedComponent = ({
 }) => {
   const filters = [`Hits`, `All Feeds`]
   const useFilterProps = useFilterSection(filters[0])
+
+  const isFeed = useFilterProps.selectedFilter === filters[1]
+  const isHit = useFilterProps.selectedFilter === filters[0]
+
   return (
     <div className="live-feed-component">
       <LiveFeedFilterSection filterProps={useFilterProps} filters={filters} />
       <div className="live-feed-component-wrapper">
-        {useFilterProps.selectedFilter === filters[1] &&
-        socketProps.feeds[0] ? (
-          socketProps.feeds.map((i, index) => (
-            <LiveFeedItemComponent
-              key={i.regNumber}
-              carColor={i.colour}
-              carMake={i.make || "..."}
-              carType={i.vehicleType || "..."}
-              imgSrc={i.filePath || sample}
-              offense={i.flags?.[0] ? i.flags.length + "" : "0"}
-              regNumber={i.regNumber}
-              handleOnClick={() => {
-                handleVehicleRequest(i.regNumber, i.cameraName)
-              }}
-            />
-          ))
-        ) : useFilterProps.selectedFilter === filters[0] &&
-          socketProps.hits[0] ? (
-          socketProps.hits.map((i, index) => (
-            <LiveHitItemComponent
-              key={index}
-              carColor={i.colour}
-              carMake={i.make || "..."}
-              carModel={i.model || "..."}
-              imgSrc={i.displayUrl || sample}
-              offense={i.flag?.[0] ? i.flag.length + "" : "0"}
-              regNumber={i.regNumber}
-              handleOnClick={() => {
-                handleVehicleRequest(i.regNumber, "")
-              }}
-            />
-          ))
-        ) : (
-          <NoFeeds />
-        )}
+        {isFeed ? (
+          <>
+            {socketProps.feeds[0] ? (
+              socketProps.feeds.map((i, index) => (
+                <LiveFeedItemComponent
+                  key={i.regNumber + i.timeStamp}
+                  carColor={i.colour}
+                  carMake={i.make || "..."}
+                  carType={i.model || "..."}
+                  imgSrc={i.filePath || sample}
+                  offense={i.flags?.[0] ? i.flags.length + "" : "0"}
+                  regNumber={i.regNumber}
+                  handleOnClick={() => {
+                    handleVehicleRequest(i.regNumber, i.cameraName)
+                  }}
+                />
+              ))
+            ) : (
+              <NoFeeds />
+            )}
+          </>
+        ) : null}
+        {isHit ? (
+          <>
+            {socketProps.hits[0] ? (
+              socketProps.hits.map((i, index) => (
+                <LiveHitItemComponent
+                  key={i.regNumber + index}
+                  carColor={i.colour}
+                  carMake={i.make || "..."}
+                  carModel={i.model || "..."}
+                  imgSrc={i.displayUrl || sample}
+                  offense={i.flag?.[0] ? i.flag.length + "" : "0"}
+                  regNumber={i.regNumber}
+                  handleOnClick={() => {
+                    handleVehicleRequest(i.regNumber, "")
+                  }}
+                />
+              ))
+            ) : (
+              <NoFeeds />
+            )}
+          </>
+        ) : null}
       </div>
     </div>
   )
@@ -563,7 +580,7 @@ const LiveFeedFilterSection: FC<ILFS> = ({ filterProps, filters }) => {
       {filters.map((i, index) => (
         <button
           className={filterProps.selectedFilter === i ? "active" : ""}
-          key={index}
+          key={i}
           onClick={() => filterProps.handleFilter(i)}
         >
           {i}
