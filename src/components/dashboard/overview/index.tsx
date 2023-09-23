@@ -283,26 +283,26 @@ const LiveFeedComponent = ({
             <LiveFeedItemComponent
               key={i.regNumber}
               carColor={i.colour}
-              carMake={i.make}
-              carType={i.vehicleType}
-              imgSrc={sample}
-              offense="Playing amampiano"
+              carMake={i.make || "..."}
+              carType={i.vehicleType || "..."}
+              imgSrc={i.filePath || sample}
+              offense={i.flags?.[0] ? i.flags.length + "" : "0"}
               regNumber={i.regNumber}
               handleOnClick={() => {
-                setMainView(getFeed(i, index))
+                // setMainView(getFeed(i, index))
               }}
             />
           ))
         ) : useFilterProps.selectedFilter === filters[0] &&
           socketProps.hits[0] ? (
           socketProps.hits.map((i, index) => (
-            <LiveFeedItemComponent
+            <LiveHitItemComponent
               key={index}
               carColor={i.colour}
-              carMake={i.make}
-              carType={""}
-              imgSrc={sample}
-              offense="Playing amampiano"
+              carMake={i.make || "..."}
+              carModel={i.model || "..."}
+              imgSrc={i.displayUrl || sample}
+              offense={i.flag?.[0] ? i.flag.length + "" : "0"}
               regNumber={i.regNumber}
               handleOnClick={() => {
                 // setMainView(getFeed(i, index))
@@ -322,6 +322,53 @@ const NoFeeds = () => {
     <div className="no-feeds">
       <VideoSVG width="20" height="20" />
       <p>No feed</p>
+    </div>
+  )
+}
+
+interface ILHIC {
+  imgSrc: string
+  regNumber: string
+  carMake: string
+  carModel: string
+  carColor: string
+  offense: string
+  handleOnClick?: () => void
+}
+
+const LiveHitItemComponent: FC<ILHIC> = (props) => {
+  return (
+    <div className="live-feed-item-component" onClick={props.handleOnClick}>
+      <div className="lf-media-section">
+        <img src={props.imgSrc} alt="" />
+      </div>
+      <div className="lf-info-section">
+        <p className="lf-info-section-label">Reg Number</p>
+        <p className="lf-info-section-value lf-reg-number">{props.regNumber}</p>
+        <p className="lf-info-section-label">Make & Model</p>
+        <div className="lf-make-type">
+          {props.carColor ? (
+            <div
+              className={`lf-color ${
+                props.carColor === "white" ? "border" : ""
+              }`}
+              style={{ background: props.carColor }}
+              title={props.carColor}
+            />
+          ) : null}
+          <p className="lf-info-section-value" title={props.carMake}>
+            {props.carMake}
+          </p>
+          <div className="lf-text-separator" />
+          <p className="lf-info-section-value" title={props.carModel}>
+            {props.carModel}
+          </p>
+        </div>
+        <p className="lf-info-section-label flag">Number of Flags</p>
+        <p className="lf-info-section-value lf-info-bottom-value">
+          {props.offense}
+        </p>
+      </div>
     </div>
   )
 }
@@ -347,11 +394,15 @@ const LiveFeedItemComponent: FC<ILFIC> = (props) => {
         <p className="lf-info-section-value lf-reg-number">{props.regNumber}</p>
         <p className="lf-info-section-label">Make & Type</p>
         <div className="lf-make-type">
-          <div
-            className={`lf-color ${props.carColor === "white" ? "border" : ""}`}
-            style={{ background: props.carColor }}
-            title={props.carColor}
-          />
+          {props.carColor ? (
+            <div
+              className={`lf-color ${
+                props.carColor === "white" ? "border" : ""
+              }`}
+              style={{ background: props.carColor }}
+              title={props.carColor}
+            />
+          ) : null}
           <p className="lf-info-section-value" title={props.carMake}>
             {props.carMake}
           </p>
@@ -360,7 +411,7 @@ const LiveFeedItemComponent: FC<ILFIC> = (props) => {
             {props.carType}
           </p>
         </div>
-        <p className="lf-info-section-label">Flagged for</p>
+        <p className="lf-info-section-label flag">Number of Flags</p>
         <p className="lf-info-section-value lf-info-bottom-value">
           {props.offense}
         </p>

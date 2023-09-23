@@ -183,6 +183,9 @@
               font-weight: 400;
               line-height: normal;
               margin: 0;
+              &.flag {
+                color: #c21f1f;
+              }
             }
             .lf-info-section-value {
               color: #000;

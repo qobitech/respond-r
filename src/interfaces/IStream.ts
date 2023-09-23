@@ -11,7 +11,7 @@ export interface IFeed {
   cameraName: string
   timeStamp: string
   isOnBlackList: boolean
-  flags: null
+  flags: Array<string | null>
   isUploaded: boolean
 }
 
