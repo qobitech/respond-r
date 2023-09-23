@@ -273,7 +273,7 @@ const LiveFeedComponent = ({
             {socketProps.feeds[0] ? (
               socketProps.feeds.map((i, index) => (
                 <LiveFeedItemComponent
-                  key={i.regNumber + i.timeStamp}
+                  key={i.regNumber}
                   carColor={i.colour}
                   carMake={i.make || "..."}
                   carType={i.model || "..."}
@@ -295,7 +295,7 @@ const LiveFeedComponent = ({
             {socketProps.hits[0] ? (
               socketProps.hits.map((i, index) => (
                 <LiveHitItemComponent
-                  key={i.regNumber + index}
+                  key={i.regNumber}
                   carColor={i.colour}
                   carMake={i.make || "..."}
                   carModel={i.model || "..."}

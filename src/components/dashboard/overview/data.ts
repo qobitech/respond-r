@@ -33,10 +33,9 @@ export const handleDataStream = <T extends IT>(
   keyId: string
 ) => {
   return (data: T) => {
+    if (isDataExist(data, dataArray, mapDataArray, keyId)) return dataArray
     if (dataArray.length < MAX_DATA_COUNTER) {
-      if (!isDataExist(data, dataArray, mapDataArray, keyId))
-        return stackData(data, dataArray)
-      return dataArray
+      return stackData(data, dataArray)
     }
     if (dataArray.length === MAX_DATA_COUNTER) {
       const temp = removeData(dataArray)
