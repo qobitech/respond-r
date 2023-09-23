@@ -103,10 +103,10 @@ const useSocketIO = (): IUS => {
       setFeeds(handleDataStream(feeds, mapDataArray, "regNumber")(data))
     })
     connection?.onreconnecting(() => {
-      setConnectionStatus("connected")
+      setConnectionStatus("re-connecting")
     })
     connection?.onreconnected(() => {
-      setConnectionStatus("re-connecting")
+      setConnectionStatus("connected")
     })
     connection?.onclose(() => {
       setConnectionStatus("closed")
