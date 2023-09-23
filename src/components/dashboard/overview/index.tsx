@@ -512,8 +512,32 @@ const Configuration = ({
     inputValue: yup.string().required("url required"),
   })
 
+  useEffect(() => {
+    if (getUrl()) hookForm.setValue("inputValue", getUrl() || "")
+  }, [])
+
+  const URLKEY = "data-url"
+
+  const getUrl = () => {
+    const url = localStorage.getItem(URLKEY)
+    return url
+  }
+
+  const isUrlExist = (url: string) => {
+    return getUrl() === url
+  }
+
+  const setUrl = (url: string) => {
+    if (isUrlExist(url)) return
+    localStorage.clear()
+    localStorage.setItem(URLKEY, url)
+  }
+
   const handleSubmit = ({ inputValue }: { inputValue: string }) => {
-    if (inputValue) socketProps.startConnection(inputValue)
+    if (inputValue) {
+      socketProps.startConnection(inputValue)
+      setUrl(inputValue)
+    }
   }
 
   const btnTitle =
