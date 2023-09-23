@@ -6,6 +6,7 @@ import * as billingactions from "./admin-actions/billing"
 import * as organizationactions from "./admin-actions/organization"
 import * as roleactions from "./admin-actions/role"
 import * as useractions from "./admin-actions/user"
+import * as vehicleactions from "./admin-actions/vehicles"
 
 export const actions = {
   ...authactions,
@@ -16,4 +17,5 @@ export const actions = {
   ...organizationactions,
   ...roleactions,
   ...useractions,
+  ...vehicleactions,
 }

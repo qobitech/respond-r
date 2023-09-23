@@ -88,6 +88,10 @@ interface IGlobalActions {
   callRightSection: (props: ICallRightSection) => (dispatch: any) => void
 }
 
+interface IVehicleActions {
+  getVehicleByRegNumber: (query: string) => (dispatch: any) => void
+}
+
 export interface IAction
   extends IAuth,
     IGlobalActions,
@@ -95,4 +99,5 @@ export interface IAction
     IApplication,
     IBilling,
     IOrganization,
-    IUser {}
+    IUser,
+    IVehicleActions {}

@@ -1,6 +1,7 @@
 import { ICallRightSection } from "store/actions/global"
 import { INotification } from "./IGlobal"
 import { IAllUsers } from "./IUser"
+import { IVehicleById } from "./IVehicle"
 
 export interface IAuthReducer {
   registerOrganization: any
@@ -82,9 +83,16 @@ export interface IUserReducer {
   getUserByIdError: string
 }
 
+export interface IVehicleReducer {
+  getVehicleByRegNumber: IVehicleById
+  getVehicleByRegNumberLoading: boolean
+  getVehicleByRegNumberError: any
+}
+
 export interface IStates {
   auth: IAuthReducer
   global: IGlobalReducer
   role: IRoleReducer
   user: IUserReducer
+  vehicle: IVehicleReducer
 }

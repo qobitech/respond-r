@@ -5,6 +5,7 @@ import {
   IRoleReducer,
   IStates,
   IUserReducer,
+  IVehicleReducer,
 } from "interfaces/IReducer"
 
 const rootReducer = combineReducers<IStates>({
@@ -12,6 +13,7 @@ const rootReducer = combineReducers<IStates>({
   global: reducer<IGlobalReducer>,
   role: reducer<IRoleReducer>,
   user: reducer<IUserReducer>,
+  vehicle: reducer<IVehicleReducer>,
 })
 
 function reducer<T>(state = {} as T, action: { type: string; payload: any }) {

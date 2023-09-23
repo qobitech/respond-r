@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react"
 import "./index.scss"
-import { IStates } from "interfaces/IReducer"
+import { IStates, IVehicleReducer } from "interfaces/IReducer"
 import { ICell, ICellAction } from "utils/new/table"
 import "../../../utils/new/pagination.scss"
 import "../../../utils/new/page.scss"
@@ -19,6 +19,9 @@ import { handleDataStream } from "./data"
 import * as signalR from "@microsoft/signalr"
 import { useFormHook } from "utils/new/hook"
 import * as yup from "yup"
+import { IAction } from "interfaces/IAction"
+import { IVehicle, IVehicleById } from "interfaces/IVehicle"
+import { vehicles } from "store/types"
 
 interface IProps {
   states?: IStates
@@ -116,13 +119,15 @@ const useSocketIO = (): IUS => {
 }
 
 const Overview: React.FC<IProps> = ({ states, ...props }) => {
+  const { getVehicleByRegNumber, clearAction } = props as unknown as IAction
   const rightSectionProps = states?.global.rightSection
+  const vehicle = states?.vehicle
 
-  const [tab, setTab] = useState<string>(tabEnum.VEHICLEINFO)
-
-  const [mainView, setMainView] = useState<IVS | null>(null)
-
-  const handleMainView = (streamData: IVS) => setMainView(streamData)
+  const handleVehicleRequest = (regNumber: string, camera: string) => {
+    // get vehicle by reg number
+    clearAction(vehicles.getVehicleByRegNumber)
+    getVehicleByRegNumber(regNumber)
+  }
 
   const rsProps = useRightSection()
 
@@ -142,10 +147,6 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
 
   const socketProps = useSocketIO()
 
-  // console.log(socketProps.hits, "juju")
-
-  // const lck = socketProps.hits?.[0]?.regNumber
-
   return (
     <>
       <RightSection rsProps={rsProps}>
@@ -157,52 +158,24 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
         <div className="pg-container">
           <LiveFeedStatusComponent socketProps={socketProps} />
           <div className="overview-page">
-            {mainView ? (
-              <div className="video-section">
-                <h3 className="camera-title">Camera: {mainView.cameraName}</h3>
-                <div className="video-container">
-                  <video controls>
-                    <source src="" />
-                  </video>
-                </div>
-                <div className="tab-section">
-                  <div className="tab-header">
-                    {Object.values(tabEnum).map((i, index) => (
-                      <div
-                        className={`tab-item ${i === tab ? "active" : ""}`}
-                        key={index}
-                        onClick={() => setTab(i)}
-                      >
-                        <p>{i}</p>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="tab-body">
-                    {tab === tabEnum.VEHICLEINFO ? (
-                      <VehicleInfoSection
-                        classification={mainView.classification || "..."}
-                        code={mainView.code || "..."}
-                        make={mainView.make}
-                        model={mainView.model}
-                        orientation={mainView.orientation}
-                        regNumber={mainView.regNumber}
-                        type={mainView.vehicleType}
-                        color={mainView.color}
-                      />
-                    ) : null}
-                  </div>
-                </div>
-              </div>
+            {vehicle?.getVehicleByRegNumber.isSuccessful ? (
+              <MainView vehicle={vehicle} />
             ) : (
               <div className="no-video-selected-section">
-                <VideoSVG />
-                <p style={{ color: "#E21B1B" }}>NO VIDEO STREAM</p>
-                <p>Select Live feed to watch</p>
+                {vehicle?.getVehicleByRegNumberLoading ? (
+                  <>Loading...</>
+                ) : (
+                  <>
+                    <VideoSVG />
+                    <p style={{ color: "#E21B1B" }}>NO VIDEO STREAM</p>
+                    <p>Select Live feed to watch</p>
+                  </>
+                )}
               </div>
             )}
             <div className="stream-section">
               <LiveFeedComponent
-                setMainView={handleMainView}
+                handleVehicleRequest={handleVehicleRequest}
                 socketProps={socketProps}
               />
             </div>
@@ -216,30 +189,40 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
 
 export default Overview
 
-const getFeed = (i: IFeed, index: number) => ({
-  _id: {
-    $oid: index + "",
-  },
-  cameraName: i.cameraName,
-  classification: i.classification,
-  code: i.code,
-  color: i.colour,
-  createdAt: {
-    $date: "",
-  },
-  filePath: i.filePath,
-  make: i.make,
-  model: i.model,
-  orientation: i.orientation,
-  regNumber: i.regNumber,
-  status: "",
-  timeStamp: i.timeStamp,
-  updatedAt: {
-    $date: "",
-  },
-  vehicleType: i.vehicleType,
-  flags: i.flags,
-})
+const MainView = ({ vehicle }: { vehicle: IVehicleReducer | undefined }) => {
+  const [tab, setTab] = useState<string>(tabEnum.VEHICLEINFO)
+
+  const vehicleData = vehicle?.getVehicleByRegNumber.data
+
+  return (
+    <div className="video-section">
+      <h3 className="camera-title">Camera:</h3>
+      <div className="video-container">
+        <video controls>
+          <source src="" />
+        </video>
+      </div>
+      <div className="tab-section">
+        <div className="tab-header">
+          {Object.values(tabEnum).map((i, index) => (
+            <div
+              className={`tab-item ${i === tab ? "active" : ""}`}
+              key={index}
+              onClick={() => setTab(i)}
+            >
+              <p>{i}</p>
+            </div>
+          ))}
+        </div>
+        <div className="tab-body">
+          {tab === tabEnum.VEHICLEINFO ? (
+            <VehicleInfoSection vehicleData={vehicleData} />
+          ) : null}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 const LiveFeedStatusComponent = ({
   socketProps,
@@ -265,10 +248,10 @@ const LiveFeedStatusComponent = ({
 }
 
 const LiveFeedComponent = ({
-  setMainView,
   socketProps,
+  handleVehicleRequest,
 }: {
-  setMainView: (streamData: IVS) => void
+  handleVehicleRequest: (regNumber: string, camera: string) => void
   socketProps: IUS
 }) => {
   const filters = [`Hits`, `All Feeds`]
@@ -289,7 +272,7 @@ const LiveFeedComponent = ({
               offense={i.flags?.[0] ? i.flags.length + "" : "0"}
               regNumber={i.regNumber}
               handleOnClick={() => {
-                // setMainView(getFeed(i, index))
+                handleVehicleRequest(i.regNumber, i.cameraName)
               }}
             />
           ))
@@ -305,7 +288,7 @@ const LiveFeedComponent = ({
               offense={i.flag?.[0] ? i.flag.length + "" : "0"}
               regNumber={i.regNumber}
               handleOnClick={() => {
-                // setMainView(getFeed(i, index))
+                handleVehicleRequest(i.regNumber, "")
               }}
             />
           ))
@@ -421,33 +404,39 @@ const LiveFeedItemComponent: FC<ILFIC> = (props) => {
 }
 
 interface IVIS {
-  regNumber: string
-  code: string
-  classification: string
-  orientation: string
-  type: string
-  make: string
-  model: string
-  color: string
+  vehicleData: IVehicle | undefined
 }
 
-const VehicleInfoSection: FC<IVIS> = (props) => {
+const VehicleInfoSection: FC<IVIS> = ({ vehicleData }) => {
   return (
     <div className="vehicle-info-section">
       <VehicleInfoSectionItem
         label="Vehicle Reg Number"
-        value={props.regNumber}
+        value={vehicleData?.regNumber}
       />
-      <VehicleInfoSectionItem label="Code" value={props.code} />
+      <VehicleInfoSectionItem label="Code" value={vehicleData?.code} />
       <VehicleInfoSectionItem
         label="Classification"
-        value={props.classification}
+        value={vehicleData?.classification}
       />
-      <VehicleInfoSectionItem label="Orientation" value={props.orientation} />
-      <VehicleInfoSectionItem label="Vehicle Type" value={props.type} />
-      <VehicleInfoSectionItem label="Vehicle Make" value={props.make} />
-      <VehicleInfoSectionItem label="Vehicle Model" value={props.model} />
-      <VehicleInfoSectionColorItem label="Vehicle Color" value={props.color} />
+      <VehicleInfoSectionItem
+        label="Chasis Number"
+        value={vehicleData?.chassisNumber}
+      />
+      <VehicleInfoSectionItem label="Vehicle Type" value={vehicleData?.code} />
+      <VehicleInfoSectionColorItem
+        label="Vehicle Color"
+        value={vehicleData?.color}
+      />
+      <VehicleInfoSectionItem
+        label="Engine Number"
+        value={vehicleData?.engineNumber}
+      />
+      <VehicleInfoSectionItem label="Vehicle Make" value={vehicleData?.make} />
+      <VehicleInfoSectionItem
+        label="Vehicle Model"
+        value={vehicleData?.model}
+      />
     </div>
   )
 }
@@ -457,7 +446,7 @@ const VehicleInfoSectionItem = ({
   value,
 }: {
   label: string
-  value: string
+  value: string | undefined
 }) => {
   return (
     <div className="vehicle-info-section-item">
@@ -467,7 +456,7 @@ const VehicleInfoSectionItem = ({
           label.includes("Reg") ? "reg-number" : ""
         }`}
       >
-        {value}
+        {value || "..."}
       </p>
     </div>
   )
@@ -478,7 +467,7 @@ const VehicleInfoSectionColorItem = ({
   value,
 }: {
   label: string
-  value: string
+  value: string | undefined
 }) => {
   return (
     <div className="vehicle-info-section-item">
@@ -535,10 +524,7 @@ const Configuration = ({
           <TypeSmallButton
             title=""
             buttonType="danger"
-            onClick={() => {
-              rsProps?.closeSection()
-              hookForm.reset()
-            }}
+            onClick={rsProps?.closeSection}
             close
           />
         </div>

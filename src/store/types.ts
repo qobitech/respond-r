@@ -77,6 +77,8 @@ export const user = generateActionTypes([
   "getUserById",
 ])
 
+export const vehicles = generateActionTypes(["getVehicleByRegNumber"])
+
 export const billing = generateActionTypes([
   "getAPIBundles",
   "getAPIBundleById",
