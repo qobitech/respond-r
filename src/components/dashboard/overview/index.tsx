@@ -289,7 +289,7 @@ const useFilePath = (file: string): IUFP => {
         txt = xmlhttp.responseText
       }
     }
-    xmlhttp.open("GET", "http://172.26.128.1:8080/" + filePath, true)
+    xmlhttp.open("GET", "172.26.128.1:8080/" + filePath, true)
     xmlhttp.send()
     return txt
   }
