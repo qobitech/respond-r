@@ -473,7 +473,7 @@ interface ILFIC {
 }
 
 const LiveFeedItemComponent: FC<ILFIC> = (props) => {
-  const file = useFilePath(props.imgSrc)
+  // const file = useFilePath(props.imgSrc)
 
   const getFrameSrc = () => {
     if (document.getElementById(props.regNumber)) {
@@ -486,7 +486,7 @@ const LiveFeedItemComponent: FC<ILFIC> = (props) => {
   return (
     <div className="live-feed-item-component" onClick={props.handleOnClick}>
       <div className="lf-media-section">
-        <img src={"localhost:8080/" + props.imgSrc} alt="" />
+        <img src={"http://localhost:8080/" + props.imgSrc} alt="" />
         {/* <iframe
           src={props.imgSrc}
           title="car"
