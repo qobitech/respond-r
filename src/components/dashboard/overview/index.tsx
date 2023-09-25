@@ -486,7 +486,7 @@ const LiveFeedItemComponent: FC<ILFIC> = (props) => {
   return (
     <div className="live-feed-item-component" onClick={props.handleOnClick}>
       <div className="lf-media-section">
-        <img src={"http://172.26.128.1:8080/" + props.imgSrc} alt="" />
+        <img src={props.imgSrc} alt="" />
         {/* <iframe
           src={props.imgSrc}
           title="car"
