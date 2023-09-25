@@ -275,19 +275,30 @@ const useFilePath = (file: string): IUFP => {
   const [filePath, setFilePath] = useState<string>("")
 
   async function createFile(filePath: string) {
-    let response = await fetch(filePath)
-    let data = await response.blob()
-    let metadata = {
-      type: "image/jpeg",
+    // let response = await fetch(filePath)
+    // let data = await response.blob()
+    // let metadata = {
+    //   type: "image/jpeg",
+    // }
+    // let file = new File([data], "test.jpg", metadata)
+    // return URL.createObjectURL(file)
+    let txt = ""
+    var xmlhttp = new XMLHttpRequest()
+    xmlhttp.onreadystatechange = function () {
+      if (xmlhttp.status === 200 && xmlhttp.readyState === 4) {
+        txt = xmlhttp.responseText
+      }
     }
-    let file = new File([data], "test.jpg", metadata)
-    return URL.createObjectURL(file)
+    xmlhttp.open("GET", filePath, true)
+    xmlhttp.send()
+    return txt
   }
 
   useEffect(() => {
     createFile(file).then((data) => {
       setFilePath(data)
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return {
