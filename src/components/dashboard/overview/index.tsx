@@ -348,9 +348,8 @@ const LiveFeedComponent = ({
   const getFilePath = (i: IFeed) => {
     if (!i.filePath) return sample
     if (!getUrl("filePath")) return sample
-    return (getUrl("filePath") + `\\` + i.filePath)
-      .replaceAll("\\", "/")
-      .replace("/", "//")
+    return (getUrl("filePath") + `\\` + i.filePath).replaceAll("\\", "/")
+    // .replace("/", "//")
   }
 
   return (
@@ -486,15 +485,15 @@ const LiveFeedItemComponent: FC<ILFIC> = (props) => {
   return (
     <div className="live-feed-item-component" onClick={props.handleOnClick}>
       <div className="lf-media-section">
-        {/* <img src={file.filePath} alt="" /> */}
-        <iframe
+        <img src={props.imgSrc} alt="" />
+        {/* <iframe
           src={props.imgSrc}
           title="car"
           width={100}
           height={100}
           id={props.regNumber}
           name={props.regNumber}
-        />
+        /> */}
       </div>
       <div className="lf-info-section">
         <p className="lf-info-section-label">Reg Number</p>
