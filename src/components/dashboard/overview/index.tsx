@@ -461,6 +461,8 @@ interface ILFIC {
 
 const LiveFeedItemComponent: FC<ILFIC> = (props) => {
   const file = useFilePath(props.imgSrc)
+
+  console.log(file.filePath, "juju")
   return (
     <div className="live-feed-item-component" onClick={props.handleOnClick}>
       <div className="lf-media-section">
