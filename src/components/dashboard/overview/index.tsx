@@ -306,6 +306,12 @@ const LiveFeedComponent = ({
   const isFeed = useFilterProps.selectedFilter === filters[1]
   const isHit = useFilterProps.selectedFilter === filters[0]
 
+  const getFilePath = (i: IFeed) => {
+    if (!i.filePath) return sample
+    if (!getUrl("filePath")) return sample
+    return getUrl("filePath") + `\\` + i.filePath
+  }
+
   return (
     <div className="live-feed-component">
       <LiveFeedFilterSection filterProps={useFilterProps} filters={filters} />
@@ -319,7 +325,7 @@ const LiveFeedComponent = ({
                   carColor={i.colour}
                   carMake={i.make || "..."}
                   carType={i.model || "..."}
-                  imgSrc={i.filePath || sample}
+                  imgSrc={getFilePath(i)}
                   offense={i.flags?.[0] ? i.flags.length + "" : "0"}
                   regNumber={i.regNumber}
                   handleOnClick={() => {
