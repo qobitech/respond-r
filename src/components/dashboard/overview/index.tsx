@@ -267,45 +267,6 @@ const MainView = ({ vehicle }: { vehicle: IVehicleReducer | undefined }) => {
   )
 }
 
-// interface IUFP {
-//   filePath: string
-// }
-
-// const useFilePath = (file: string): IUFP => {
-//   const [filePath, setFilePath] = useState<string>("")
-
-//   async function createFile(filePath: string) {
-//     // let response = await fetch(filePath)
-//     // let data = await response.blob()
-//     // let metadata = {
-//     //   type: "image/jpeg",
-//     // }
-//     // let file = new File([data], "test.jpg", metadata)
-//     // return URL.createObjectURL(file)
-//     let txt = ""
-//     var xmlhttp = new XMLHttpRequest()
-//     xmlhttp.onreadystatechange = function () {
-//       if (xmlhttp.status === 200 && xmlhttp.readyState === 4) {
-//         txt = xmlhttp.responseText
-//       }
-//     }
-//     xmlhttp.open("GET", filePath, true)
-//     xmlhttp.send()
-//     return txt
-//   }
-
-//   useEffect(() => {
-//     createFile(file).then((data) => {
-//       setFilePath(data)
-//     })
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, [])
-
-//   return {
-//     filePath,
-//   }
-// }
-
 const LiveFeedStatusComponent = ({
   socketProps,
   title,
@@ -345,10 +306,10 @@ const LiveFeedComponent = ({
   const isFeed = useFilterProps.selectedFilter === filters[1]
   const isHit = useFilterProps.selectedFilter === filters[0]
 
-  const getFilePath = (i: IFeed) => {
-    if (!i.filePath) return sample
+  const getFilePath = (i: string) => {
+    if (!i) return sample
     if (!getUrl("filePath")) return sample
-    return (getUrl("filePath") + `\\` + i.filePath)
+    return (getUrl("filePath") + `\\` + i)
       .replaceAll("\\", "/")
       .replace("/", "//")
   }
@@ -366,7 +327,7 @@ const LiveFeedComponent = ({
                   carColor={i.colour}
                   carMake={i.make || "..."}
                   carType={i.model || "..."}
-                  imgSrc={getFilePath(i)}
+                  imgSrc={getFilePath(i.filePath)}
                   offense={i.flags?.[0] ? i.flags.length + "" : "0"}
                   regNumber={i.regNumber}
                   handleOnClick={() => {
@@ -382,13 +343,13 @@ const LiveFeedComponent = ({
         {isHit ? (
           <>
             {socketProps.hits[0] ? (
-              socketProps.hits.map((i, index) => (
+              socketProps.hits.map((i) => (
                 <LiveHitItemComponent
                   key={i.regNumber}
                   carColor={i.colour}
                   carMake={i.make || "..."}
                   carModel={i.model || "..."}
-                  imgSrc={i.displayUrl || sample}
+                  imgSrc={getFilePath(i.displayUrl)}
                   offense={i.flag?.[0] ? i.flag.length + "" : "0"}
                   regNumber={i.regNumber}
                   handleOnClick={() => {
@@ -473,28 +434,10 @@ interface ILFIC {
 }
 
 const LiveFeedItemComponent: FC<ILFIC> = (props) => {
-  // const file = useFilePath(props.imgSrc)
-
-  const getFrameSrc = () => {
-    if (document.getElementById(props.regNumber)) {
-      console.log(document.getElementById("iframe_id"), "juju")
-    }
-  }
-
-  getFrameSrc()
-
   return (
     <div className="live-feed-item-component" onClick={props.handleOnClick}>
       <div className="lf-media-section">
         <img src={props.imgSrc} alt="" />
-        {/* <iframe
-          src={props.imgSrc}
-          title="car"
-          width={100}
-          height={100}
-          id={props.regNumber}
-          name={props.regNumber}
-        /> */}
       </div>
       <div className="lf-info-section">
         <p className="lf-info-section-label">Reg Number</p>
