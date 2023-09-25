@@ -364,7 +364,7 @@ const LiveFeedComponent = ({
                   carColor={i.colour}
                   carMake={i.make || "..."}
                   carType={i.model || "..."}
-                  imgSrc={"file:///" + getFilePath(i)}
+                  imgSrc={"http://" + getFilePath(i)}
                   offense={i.flags?.[0] ? i.flags.length + "" : "0"}
                   regNumber={i.regNumber}
                   handleOnClick={() => {
@@ -474,7 +474,7 @@ const LiveFeedItemComponent: FC<ILFIC> = (props) => {
   // const file = useFilePath(props.imgSrc)
 
   const getFrameSrc = () => {
-    if (document.getElementById("iframe_id")) {
+    if (document.getElementById(props.regNumber)) {
       console.log(document.getElementById("iframe_id"), "juju")
     }
   }
