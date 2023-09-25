@@ -271,13 +271,16 @@ const LiveFeedStatusComponent = ({
   socketProps: IUS
   title?: string
 }) => {
+  const isConnect = socketProps.connectionStatus === "closed"
   return (
     <div className="live-feed-component">
       <div className="live-feed-header-section">
         <p className="lf-header">{title || "LIVE FEED"}</p>
         <p
           className={`lf-status ${socketProps.connectionStatus}`}
-          onClick={() => socketProps.startConnection("")}
+          onClick={() => {
+            if (isConnect) socketProps.startConnection("")
+          }}
         >
           <span className={`lf-status-bop ${socketProps.connectionStatus}`} />
           {socketProps.connectionStatus}
