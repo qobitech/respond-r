@@ -309,7 +309,7 @@ const LiveFeedComponent = ({
   const getFilePath = (i: IFeed) => {
     if (!i.filePath) return sample
     if (!getUrl("filePath")) return sample
-    return ("file://" + getUrl("filePath") + `\\` + i.filePath)
+    return (getUrl("filePath") + `\\` + i.filePath)
       .replaceAll("\\", "/")
       .replace("/", "//")
   }
@@ -327,7 +327,7 @@ const LiveFeedComponent = ({
                   carColor={i.colour}
                   carMake={i.make || "..."}
                   carType={i.model || "..."}
-                  imgSrc={getFilePath(i)}
+                  imgSrc={"file://" + getFilePath(i)}
                   offense={i.flags?.[0] ? i.flags.length + "" : "0"}
                   regNumber={i.regNumber}
                   handleOnClick={() => {
