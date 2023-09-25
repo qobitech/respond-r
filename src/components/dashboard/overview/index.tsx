@@ -267,44 +267,44 @@ const MainView = ({ vehicle }: { vehicle: IVehicleReducer | undefined }) => {
   )
 }
 
-interface IUFP {
-  filePath: string
-}
+// interface IUFP {
+//   filePath: string
+// }
 
-const useFilePath = (file: string): IUFP => {
-  const [filePath, setFilePath] = useState<string>("")
+// const useFilePath = (file: string): IUFP => {
+//   const [filePath, setFilePath] = useState<string>("")
 
-  async function createFile(filePath: string) {
-    // let response = await fetch(filePath)
-    // let data = await response.blob()
-    // let metadata = {
-    //   type: "image/jpeg",
-    // }
-    // let file = new File([data], "test.jpg", metadata)
-    // return URL.createObjectURL(file)
-    let txt = ""
-    var xmlhttp = new XMLHttpRequest()
-    xmlhttp.onreadystatechange = function () {
-      if (xmlhttp.status === 200 && xmlhttp.readyState === 4) {
-        txt = xmlhttp.responseText
-      }
-    }
-    xmlhttp.open("GET", "http://172.26.128.1:8080/" + filePath, true)
-    xmlhttp.send()
-    return txt
-  }
+//   async function createFile(filePath: string) {
+//     // let response = await fetch(filePath)
+//     // let data = await response.blob()
+//     // let metadata = {
+//     //   type: "image/jpeg",
+//     // }
+//     // let file = new File([data], "test.jpg", metadata)
+//     // return URL.createObjectURL(file)
+//     let txt = ""
+//     var xmlhttp = new XMLHttpRequest()
+//     xmlhttp.onreadystatechange = function () {
+//       if (xmlhttp.status === 200 && xmlhttp.readyState === 4) {
+//         txt = xmlhttp.responseText
+//       }
+//     }
+//     xmlhttp.open("GET", filePath, true)
+//     xmlhttp.send()
+//     return txt
+//   }
 
-  useEffect(() => {
-    createFile(file).then((data) => {
-      setFilePath(data)
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+//   useEffect(() => {
+//     createFile(file).then((data) => {
+//       setFilePath(data)
+//     })
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, [])
 
-  return {
-    filePath,
-  }
-}
+//   return {
+//     filePath,
+//   }
+// }
 
 const LiveFeedStatusComponent = ({
   socketProps,
@@ -346,11 +346,11 @@ const LiveFeedComponent = ({
   const isHit = useFilterProps.selectedFilter === filters[0]
 
   const getFilePath = (i: IFeed) => {
-    // if (!i.filePath) return sample
-    // if (!getUrl("filePath")) return sample
-    // return (getUrl("filePath") + `\\` + i.filePath).replaceAll("\\", "/")
-    return i.filePath.replaceAll("\\", "/")
-    // .replace("/", "//")
+    if (!i.filePath) return sample
+    if (!getUrl("filePath")) return sample
+    return (getUrl("filePath") + `\\` + i.filePath)
+      .replaceAll("\\", "/")
+      .replace("/", "//")
   }
 
   return (
@@ -475,18 +475,18 @@ interface ILFIC {
 const LiveFeedItemComponent: FC<ILFIC> = (props) => {
   // const file = useFilePath(props.imgSrc)
 
-  // const getFrameSrc = () => {
-  //   if (document.getElementById(props.regNumber)) {
-  //     console.log(document.getElementById("iframe_id"), "juju")
-  //   }
-  // }
+  const getFrameSrc = () => {
+    if (document.getElementById(props.regNumber)) {
+      console.log(document.getElementById("iframe_id"), "juju")
+    }
+  }
 
-  // getFrameSrc()
+  getFrameSrc()
 
   return (
     <div className="live-feed-item-component" onClick={props.handleOnClick}>
       <div className="lf-media-section">
-        <img src={"http://localhost:8080/" + props.imgSrc} alt="" />
+        <img src={"http://172.26.128.1:8080/" + props.imgSrc} alt="" />
         {/* <iframe
           src={props.imgSrc}
           title="car"
