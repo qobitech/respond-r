@@ -281,6 +281,7 @@
   .lf-status {
     transition: 0.2s ease all;
     text-transform: capitalize;
+    cursor: pointer;
     &.connecting {
       color: #e3a11e;
     }

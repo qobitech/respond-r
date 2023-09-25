@@ -45,9 +45,9 @@
     }
   }
   .rs-body {
-    height: 65vh;
+    height: 85vh;
     overflow: auto;
-    padding: 3.12rem 0 11rem;
+    padding: 3.12rem 0;
   }
   @media (max-width: $lg-breakpoint) {
     width: -webkit-fill-available;

@@ -62,6 +62,35 @@ interface IUS {
   startConnection: (url: string) => void
 }
 
+const configFormEnums = {
+  connectionUrl: "connectionUrl",
+  filePath: "filePath",
+  rstpUrl: "rstpUrl",
+} as const
+
+type chkType = (typeof configFormEnums)[keyof typeof configFormEnums]
+
+const getUrl = (urlKey: chkType) => {
+  const url = localStorage.getItem(urlKey)
+  return url
+}
+
+const isUrlExist = (urlKey: chkType, url: string) => {
+  return getUrl(urlKey) === url
+}
+
+const setUrl = (urlKey: chkType, value: string) => {
+  if (isUrlExist(urlKey, value)) return
+  localStorage.removeItem(urlKey)
+  localStorage.setItem(urlKey, value)
+}
+
+const setUrls = (data: any) => {
+  for (let i in data) {
+    setUrl(i as chkType, data[i])
+  }
+}
+
 const useSocketIO = (): IUS => {
   const [connection, setConnection] = useState<signalR.HubConnection>()
   const [hits, setHits] = useState<IHit[]>([])
@@ -77,7 +106,8 @@ const useSocketIO = (): IUS => {
 
   const startConnection = (url: string) => {
     setConnectionStatus("connecting")
-    const connection = getConnection(url)
+    const storedUrl = getUrl("connectionUrl") || ""
+    const connection = getConnection(url || storedUrl)
     connection
       ?.start()
       .then(() => {
@@ -245,7 +275,10 @@ const LiveFeedStatusComponent = ({
     <div className="live-feed-component">
       <div className="live-feed-header-section">
         <p className="lf-header">{title || "LIVE FEED"}</p>
-        <p className={`lf-status ${socketProps.connectionStatus}`}>
+        <p
+          className={`lf-status ${socketProps.connectionStatus}`}
+          onClick={() => socketProps.startConnection("")}
+        >
           <span className={`lf-status-bop ${socketProps.connectionStatus}`} />
           {socketProps.connectionStatus}
         </p>
@@ -507,6 +540,12 @@ const VehicleInfoSectionColorItem = ({
   )
 }
 
+interface IConfigHookForm {
+  connectionUrl: string
+  filePath: string
+  rstpUrl: string
+}
+
 const Configuration = ({
   socketProps,
   rsProps,
@@ -514,42 +553,28 @@ const Configuration = ({
   socketProps: IUS
   rsProps?: IRightSection<{}>
 }) => {
-  const [hookForm] = useFormHook<{ inputValue: string }>({
-    inputValue: yup.string().required("url required"),
+  const [hookForm] = useFormHook<IConfigHookForm>({
+    connectionUrl: yup.string().required("connection url is required"),
+    filePath: yup.string().required("file path is required"),
+    rstpUrl: yup.string().required("rstp url is required"),
   })
 
+  const handleSubmit = (data: IConfigHookForm) => {
+    socketProps.startConnection(data.connectionUrl)
+    setUrls(data)
+  }
+
   useEffect(() => {
-    if (getUrl()) hookForm.setValue("inputValue", getUrl() || "")
+    for (let i in configFormEnums) {
+      if (getUrl(i as chkType))
+        hookForm.setValue(i as chkType, getUrl(i as chkType) || "")
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const URLKEY = "data-url"
-
-  const getUrl = () => {
-    const url = localStorage.getItem(URLKEY)
-    return url
-  }
-
-  const isUrlExist = (url: string) => {
-    return getUrl() === url
-  }
-
-  const setUrl = (url: string) => {
-    if (isUrlExist(url)) return
-    localStorage.clear()
-    localStorage.setItem(URLKEY, url)
-  }
-
-  const handleSubmit = ({ inputValue }: { inputValue: string }) => {
-    if (inputValue) {
-      socketProps.startConnection(inputValue)
-      setUrl(inputValue)
-    }
-  }
-
   const btnTitle =
     socketProps.connectionStatus === "connected" &&
-    !!hookForm.watch().inputValue
+    !!hookForm.watch().connectionUrl
       ? "Refresh Feed"
       : "Request Feed"
 
@@ -561,8 +586,20 @@ const Configuration = ({
         <TypeInput
           placeholder="Enter url"
           label="Connection URL"
-          {...hookForm.register("inputValue")}
-          error={hookForm.formState.errors.inputValue?.message}
+          {...hookForm.register("connectionUrl")}
+          error={hookForm.formState.errors.connectionUrl?.message}
+        />
+        <TypeInput
+          placeholder="Enter url"
+          label="File Path"
+          {...hookForm.register("filePath")}
+          error={hookForm.formState.errors.filePath?.message}
+        />
+        <TypeInput
+          placeholder="Enter url"
+          label="RTSP URL"
+          {...hookForm.register("rstpUrl")}
+          error={hookForm.formState.errors.rstpUrl?.message}
         />
         <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
           <TypeButton
