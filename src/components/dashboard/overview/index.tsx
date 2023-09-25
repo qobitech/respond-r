@@ -91,9 +91,7 @@ const useSocketIO = (): IUS => {
 
   const hit = new Audio(require("../../../extras/audio/hit.mp3"))
   const playHit = () => {
-    hit.play().then(() => {
-      // hit.remove()
-    })
+    hit.play()
   }
 
   const mapDataArray = (i: IHit | IFeed) => {
@@ -101,14 +99,14 @@ const useSocketIO = (): IUS => {
   }
 
   useEffect(() => {
-    connection?.on("SendNotification", (data: IHit) => {
-      handleTrigger()
-      setHits(handleDataStream(hits, mapDataArray, "regNumber")(data))
-    })
-    connection?.on("SendHits", (data: IFeed) => {
+    connection?.on("SendNotification", (data: IFeed) => {
       handleTrigger()
       setFeeds(handleDataStream(feeds, mapDataArray, "regNumber")(data))
       playHit()
+    })
+    connection?.on("SendHits", (data: IHit) => {
+      handleTrigger()
+      setHits(handleDataStream(hits, mapDataArray, "regNumber")(data))
     })
     connection?.onreconnecting(() => {
       setConnectionStatus("re-connecting")
