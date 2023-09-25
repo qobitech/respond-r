@@ -36,7 +36,10 @@ export interface ITableRecord {
 const tabEnum = {
   VEHICLEINFO: "Vehicle Info",
   OFFENSES: "Offenses",
-  LOCATION: "Location",
+  OWNERINFO: "Owner Info",
+  SOT: "SOT",
+  INSTANCE: "Instance",
+  MEDIA: "Media",
 }
 
 const getConnection = (url: string) => {
@@ -285,9 +288,6 @@ const LiveFeedStatusComponent = ({
           <span className={`lf-status-bop ${socketProps.connectionStatus}`} />
           {socketProps.connectionStatus}
         </p>
-        {/* {socketProps.connectionStatus === "closed" ? (
-          <p className="lf-data-refresh">Refresh</p>
-        ) : null} */}
       </div>
     </div>
   )
