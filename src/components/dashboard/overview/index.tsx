@@ -325,7 +325,7 @@ const LiveFeedComponent = ({
                   carColor={i.colour}
                   carMake={i.make || "..."}
                   carType={i.model || "..."}
-                  imgSrc={"file://" + getFilePath(i)}
+                  imgSrc={"file:///" + getFilePath(i)}
                   offense={i.flags?.[0] ? i.flags.length + "" : "0"}
                   regNumber={i.regNumber}
                   handleOnClick={() => {
