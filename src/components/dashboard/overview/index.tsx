@@ -475,13 +475,13 @@ interface ILFIC {
 const LiveFeedItemComponent: FC<ILFIC> = (props) => {
   // const file = useFilePath(props.imgSrc)
 
-  const getFrameSrc = () => {
-    if (document.getElementById(props.regNumber)) {
-      console.log(document.getElementById("iframe_id"), "juju")
-    }
-  }
+  // const getFrameSrc = () => {
+  //   if (document.getElementById(props.regNumber)) {
+  //     console.log(document.getElementById("iframe_id"), "juju")
+  //   }
+  // }
 
-  getFrameSrc()
+  // getFrameSrc()
 
   return (
     <div className="live-feed-item-component" onClick={props.handleOnClick}>
