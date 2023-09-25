@@ -267,6 +267,34 @@ const MainView = ({ vehicle }: { vehicle: IVehicleReducer | undefined }) => {
   )
 }
 
+interface IUFP {
+  filePath: string
+}
+
+const useFilePath = (file: string): IUFP => {
+  const [filePath, setFilePath] = useState<string>("")
+
+  async function createFile(filePath: string) {
+    let response = await fetch(filePath)
+    let data = await response.blob()
+    let metadata = {
+      type: "image/jpeg",
+    }
+    let file = new File([data], "test.jpg", metadata)
+    return URL.createObjectURL(file)
+  }
+
+  useEffect(() => {
+    createFile(file).then((data) => {
+      setFilePath(data)
+    })
+  }, [])
+
+  return {
+    filePath,
+  }
+}
+
 const LiveFeedStatusComponent = ({
   socketProps,
   title,
@@ -432,10 +460,11 @@ interface ILFIC {
 }
 
 const LiveFeedItemComponent: FC<ILFIC> = (props) => {
+  const file = useFilePath(props.imgSrc)
   return (
     <div className="live-feed-item-component" onClick={props.handleOnClick}>
       <div className="lf-media-section">
-        <img src={props.imgSrc} alt="" />
+        <img src={file.filePath} alt="" />
       </div>
       <div className="lf-info-section">
         <p className="lf-info-section-label">Reg Number</p>
