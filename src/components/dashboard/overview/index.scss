@@ -6,7 +6,7 @@
   align-items: flex-start;
   justify-content: space-between;
   .video-section {
-    flex-basis: 66%;
+    flex-basis: 63%;
     width: 0;
     overflow: auto;
     max-height: 76vh;
@@ -115,7 +115,7 @@
     }
   }
   .no-video-selected-section {
-    flex-basis: 66%;
+    flex-basis: 63%;
     width: 0;
     display: flex;
     flex-direction: column;
@@ -136,7 +136,7 @@
     }
   }
   .stream-section {
-    flex-basis: 34%;
+    flex-basis: 37%;
     width: 0;
     // border: 1px solid;
     .live-feed-component {
