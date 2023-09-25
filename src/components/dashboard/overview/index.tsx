@@ -102,11 +102,11 @@ const useSocketIO = (): IUS => {
     connection?.on("SendNotification", (data: IFeed) => {
       handleTrigger()
       setFeeds(handleDataStream(feeds, mapDataArray, "regNumber")(data))
-      playHit()
     })
     connection?.on("SendHits", (data: IHit) => {
       handleTrigger()
       setHits(handleDataStream(hits, mapDataArray, "regNumber")(data))
+      playHit()
     })
     connection?.onreconnecting(() => {
       setConnectionStatus("re-connecting")
