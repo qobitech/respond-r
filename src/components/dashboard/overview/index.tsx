@@ -348,7 +348,9 @@ const LiveFeedComponent = ({
   const getFilePath = (i: IFeed) => {
     if (!i.filePath) return sample
     if (!getUrl("filePath")) return sample
-    return (getUrl("filePath") + `\\` + i.filePath).replaceAll("\\", "/")
+    return (getUrl("filePath") + `\\` + i.filePath)
+      .replaceAll("\\", "/")
+      .replace("/", "//")
   }
 
   return (
@@ -364,7 +366,7 @@ const LiveFeedComponent = ({
                   carColor={i.colour}
                   carMake={i.make || "..."}
                   carType={i.model || "..."}
-                  imgSrc={"http://" + getFilePath(i)}
+                  imgSrc={getFilePath(i)}
                   offense={i.flags?.[0] ? i.flags.length + "" : "0"}
                   regNumber={i.regNumber}
                   handleOnClick={() => {
@@ -491,6 +493,7 @@ const LiveFeedItemComponent: FC<ILFIC> = (props) => {
           width={100}
           height={100}
           id={props.regNumber}
+          name={props.regNumber}
         />
       </div>
       <div className="lf-info-section">
