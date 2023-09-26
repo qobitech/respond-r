@@ -309,9 +309,7 @@ const LiveFeedComponent = ({
   const getFilePath = (i: string) => {
     if (!i) return sample
     if (!getUrl("filePath")) return sample
-    return (getUrl("filePath") + `\\` + i)
-      .replaceAll("\\", "/")
-      .replace("/", "//")
+    return getUrl("filePath") + `/` + i.replaceAll("\\", "/")
   }
 
   return (
