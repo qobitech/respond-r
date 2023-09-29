@@ -54,7 +54,7 @@ interface IInstance {
   imageUrl: string
 }
 
-interface IVehicleOffense {
+export interface IVehicleOffense {
   id: string
   transactionId: string
   createdAt: string

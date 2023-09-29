@@ -19,8 +19,10 @@ import * as signalR from "@microsoft/signalr"
 import { useFormHook } from "utils/new/hook"
 import * as yup from "yup"
 import { IAction } from "interfaces/IAction"
-import { IVehicle } from "interfaces/IVehicle"
+import { IVehicle, IVehicleOffense } from "interfaces/IVehicle"
 import { vehicles } from "store/types"
+import { Accordion, useAccordion } from "components/reusable/accordion"
+import Switch, { Case } from "components/reusable/switch"
 // import hitmp3 from "../../../extras/audio/hit.mp3"
 
 interface IProps {
@@ -260,6 +262,12 @@ const MainView = ({ vehicle }: { vehicle: IVehicleReducer | undefined }) => {
         <div className="tab-body">
           {tab === tabEnum.VEHICLEINFO ? (
             <VehicleInfoSection vehicleData={vehicleData} />
+          ) : null}
+          {tab === tabEnum.OFFENSES ? (
+            <VehicleOffensesSection vehicleData={vehicleData} />
+          ) : null}
+          {tab === tabEnum.OWNERINFO ? (
+            <VehicleOwnerInfoSection vehicleData={vehicleData} />
           ) : null}
         </div>
       </div>
@@ -501,6 +509,109 @@ const VehicleInfoSection: FC<IVIS> = ({ vehicleData }) => {
       <VehicleInfoSectionItem
         label="Vehicle Model"
         value={vehicleData?.model}
+      />
+    </div>
+  )
+}
+
+const VehicleOffensesSection: FC<IVIS> = ({ vehicleData }) => {
+  const accordionProps = useAccordion()
+
+  const accordionData = vehicleData?.vehicleOffenses?.map(
+    (i) => i.offense.name
+  ) || [""]
+  return (
+    <div>
+      <Accordion data={accordionData} accordionProps={accordionProps}>
+        <Switch>
+          {vehicleData?.vehicleOffenses?.map((i, index) => (
+            <Case
+              condition={accordionProps.isAccordion(accordionData[index])}
+              key={i.id}
+            >
+              <VehicleOffenseItem vehicleOffense={i} />
+            </Case>
+          ))}
+        </Switch>
+      </Accordion>
+    </div>
+  )
+}
+
+const VehicleOwnerInfoSection: FC<IVIS> = ({ vehicleData }) => {
+  return (
+    <div className="vehicle-info-section">
+      <VehicleInfoSectionItem
+        label="Full Name"
+        value={vehicleData?.currentOwner?.fullName}
+      />
+      <VehicleInfoSectionItem
+        label="Address"
+        value={vehicleData?.currentOwner?.address}
+      />
+      <VehicleInfoSectionItem
+        label="Email"
+        value={vehicleData?.currentOwner?.email}
+      />
+      <VehicleInfoSectionItem
+        label="Phone"
+        value={vehicleData?.currentOwner?.phone}
+      />
+    </div>
+  )
+}
+
+const VehicleOffenseItem = ({
+  vehicleOffense,
+}: {
+  vehicleOffense: IVehicleOffense
+}) => {
+  return (
+    <div className="vehicle-info-section">
+      <VehicleInfoSectionItem
+        label="Title"
+        value={vehicleOffense.offense.name}
+      />
+      <VehicleInfoSectionItem
+        label="Description"
+        value={vehicleOffense.offense.description}
+      />
+      <VehicleInfoSectionItem
+        label="Fine"
+        value={vehicleOffense?.offense?.fineAmount?.toLocaleString()}
+      />
+      <VehicleInfoSectionItem
+        label="Point"
+        value={vehicleOffense?.offense?.finePoint?.toString()}
+      />
+      <VehicleInfoSectionItem
+        label="Code"
+        value={vehicleOffense?.offense?.code}
+      />
+      <VehicleInfoSectionItem
+        label="Additional"
+        value={vehicleOffense?.offense?.additional || "None"}
+      />
+      <VehicleInfoSectionColorItem
+        label="Status"
+        value={vehicleOffense?.status?.name}
+      />
+      <VehicleInfoSectionItem
+        label="Device"
+        value={vehicleOffense?.devise?.name}
+      />
+      <VehicleInfoSectionItem
+        label="Longitude"
+        value={vehicleOffense?.longitude}
+      />
+      <VehicleInfoSectionItem
+        label="Latitude"
+        value={vehicleOffense?.latitude}
+      />
+      <VehicleInfoSectionItem label="Address" value={vehicleOffense?.address} />
+      <VehicleInfoSectionItem
+        label="User"
+        value={vehicleOffense?.user?.userName}
       />
     </div>
   )
