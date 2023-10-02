@@ -11,7 +11,7 @@ interface ICarLocation {
   address: string
 }
 
-interface ISOTDetails {
+export interface ISOTDetails {
   state: string
   regNumber: string
   owner: {
@@ -48,7 +48,7 @@ interface IMedia {
   createdAt: string
 }
 
-interface IInstance {
+export interface IInstance {
   camera: string
   createdAt: string
   imageUrl: string

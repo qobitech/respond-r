@@ -19,7 +19,7 @@ import * as signalR from "@microsoft/signalr"
 import { useFormHook } from "utils/new/hook"
 import * as yup from "yup"
 import { IAction } from "interfaces/IAction"
-import { IVehicle, IVehicleOffense } from "interfaces/IVehicle"
+import { ISOTDetails, IVehicle, IVehicleOffense } from "interfaces/IVehicle"
 import { vehicles } from "store/types"
 import { Accordion, useAccordion } from "components/reusable/accordion"
 import Switch, { Case } from "components/reusable/switch"
@@ -269,6 +269,12 @@ const MainView = ({ vehicle }: { vehicle: IVehicleReducer | undefined }) => {
           ) : null}
           {tab === tabEnum.OWNERINFO ? (
             <VehicleOwnerInfoSection vehicleData={vehicleData} />
+          ) : null}
+          {tab === tabEnum.SOT ? (
+            <VehicleSOTSection vehicleData={vehicleData} />
+          ) : null}
+          {tab === tabEnum.INSTANCE ? (
+            <VehicleInstanceSection vehicleData={vehicleData} />
           ) : null}
         </div>
       </div>
@@ -581,6 +587,103 @@ const VehicleOffensesSection: FC<IVIS> = ({ vehicleData }) => {
   )
 }
 
+const VehicleInstanceSection: FC<IVIS> = ({ vehicleData }) => {
+  const tableData = vehicleData?.instances?.map((i, index) => ({
+    id: index + "",
+    row: [
+      {
+        value: i.camera,
+        isLink: false,
+        url: "",
+        action: () => {},
+      },
+      {
+        value: new Date(i.createdAt).toDateString(),
+        isLink: false,
+        url: "",
+        action: () => {},
+      },
+    ],
+    rowActions: [
+      {
+        value: "View",
+        isLink: true,
+        url: "",
+        action: () => {},
+        buttonType: "bold",
+      },
+    ],
+  })) as ITableRecord[]
+
+  return (
+    <div className="table-container-section">
+      <TableSection header={["Camera", "Date", "Action"]} record={tableData} />
+    </div>
+  )
+}
+
+const VehicleSOTSection: FC<IVIS> = ({ vehicleData }) => {
+  const [vehicleSOTItem, setVehicleSOTItem] = useState<ISOTDetails | null>(null)
+
+  const tableData = vehicleData?.sotDetails?.map((i, index) => ({
+    id: index + "",
+    row: [
+      {
+        value: i.owner.fullName,
+        isLink: false,
+        url: "",
+        action: () => {},
+      },
+      {
+        value: i.regNumber,
+        isLink: false,
+        url: "",
+        action: () => {},
+      },
+      {
+        value: i.make,
+        isLink: false,
+        url: "",
+        action: () => {},
+      },
+      {
+        value: i.model,
+        isLink: false,
+        url: "",
+        action: () => {},
+      },
+    ],
+    rowActions: [
+      {
+        value: "View",
+        isLink: true,
+        url: "",
+        action: () => {
+          setVehicleSOTItem(i)
+        },
+        buttonType: "bold",
+      },
+    ],
+  })) as ITableRecord[]
+
+  const handlePrev = () => {
+    setVehicleSOTItem(null)
+  }
+
+  return (
+    <div className="table-container-section">
+      {vehicleSOTItem ? (
+        <VehicleSOTItem sot={vehicleSOTItem} handlePrev={handlePrev} />
+      ) : (
+        <TableSection
+          header={["Owner", "Reg Number", "Make", "Model", "Action"]}
+          record={tableData}
+        />
+      )}
+    </div>
+  )
+}
+
 const VehicleOwnerInfoSection: FC<IVIS> = ({ vehicleData }) => {
   return (
     <div className="vehicle-info-section">
@@ -600,6 +703,101 @@ const VehicleOwnerInfoSection: FC<IVIS> = ({ vehicleData }) => {
         label="Phone"
         value={vehicleData?.currentOwner?.phone}
       />
+    </div>
+  )
+}
+
+const VehicleSOTItem = ({
+  sot,
+  handlePrev,
+}: {
+  sot: ISOTDetails | null
+  handlePrev: () => void
+}) => {
+  const accordionProps = useAccordion()
+
+  const accordionData = ["Vehicle Owner", "Vehicle Info", "Vehicle License"]
+  return (
+    <div>
+      <div className="vehicle-cta-back">
+        <TypeSmallButton title="Go back" onClick={handlePrev} />
+      </div>
+      <Accordion data={accordionData} accordionProps={accordionProps}>
+        <Switch>
+          <Case condition={accordionProps.isAccordion(accordionData[0])}>
+            <div className="vehicle-info-section">
+              <VehicleInfoSectionItem
+                label="Owner"
+                value={sot?.owner?.fullName}
+              />
+              <VehicleInfoSectionItem
+                label="Address"
+                value={sot?.owner?.address}
+              />
+              <VehicleInfoSectionItem label="Email" value={sot?.owner?.email} />
+              <VehicleInfoSectionItem label="Phone" value={sot?.owner?.phone} />
+            </div>
+          </Case>
+          <Case condition={accordionProps.isAccordion(accordionData[1])}>
+            <div className="vehicle-info-section">
+              <VehicleInfoSectionItem
+                label="Reg Number"
+                value={sot?.regNumber}
+              />
+              <VehicleInfoSectionItem
+                label="Chassis Number"
+                value={sot?.chassisNumber}
+              />
+              <VehicleInfoSectionItem
+                label="Engine Number"
+                value={sot?.engineNumber}
+              />
+              <VehicleInfoSectionColorItem label="Color" value={sot?.colour} />
+              <VehicleInfoSectionItem label="Make" value={sot?.make} />
+              <VehicleInfoSectionItem label="Model" value={sot?.model} />
+              <VehicleInfoSectionItem
+                label="Registration Date"
+                value={sot?.registrationDate}
+              />
+              <VehicleInfoSectionItem
+                label="Transaction ID"
+                value={sot?.transactionId}
+              />
+              <VehicleInfoSectionItem
+                label="Transaction ID"
+                value={sot?.state}
+              />
+              <VehicleInfoSectionItem label="Year" value={sot?.year} />
+            </div>
+          </Case>
+          <Case condition={accordionProps.isAccordion(accordionData[2])}>
+            <div className="vehicle-info-section">
+              <VehicleInfoSectionItem
+                label="Inspection"
+                value={sot?.service.inspection || ""}
+              />
+              <VehicleInfoSectionItem
+                label="License Expiry Date"
+                value={sot?.service.license.expiryDate || ""}
+              />
+              <VehicleInfoSectionItem
+                label="License Active"
+                value={sot?.service.license.isActive ? "True" : "False"}
+              />
+              <VehicleInfoSectionItem
+                label="Road Worthiness Expiry Date"
+                value={sot?.service?.roadWorthiness?.expiryDate}
+              />
+              <VehicleInfoSectionItem
+                label="Road Worthiness Active"
+                value={
+                  sot?.service?.roadWorthiness?.isActive ? "True" : "False"
+                }
+              />
+            </div>
+          </Case>
+        </Switch>
+      </Accordion>
     </div>
   )
 }
