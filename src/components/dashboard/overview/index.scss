@@ -77,6 +77,17 @@
         padding: 0 1.06rem;
       }
     }
+    .table-container-section {
+      overflow: auto;
+    }
+    .vehicle-cta-back {
+      padding-bottom: 0.96525rem;
+      margin-bottom: 1.6525rem;
+      border-bottom: 1px solid #e8e8e8;
+      button {
+        outline: none;
+      }
+    }
     .vehicle-info-section {
       display: grid;
       grid-row: auto;

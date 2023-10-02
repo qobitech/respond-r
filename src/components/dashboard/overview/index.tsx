@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react"
 import "./index.scss"
 import { IStates, IVehicleReducer } from "interfaces/IReducer"
-import { ICell, ICellAction } from "utils/new/table"
+import Table, { ICell, ICellAction } from "utils/new/table"
 import "../../../utils/new/pagination.scss"
 import "../../../utils/new/page.scss"
 import { Loader } from "utils/new/components"
@@ -23,6 +23,7 @@ import { IVehicle, IVehicleOffense } from "interfaces/IVehicle"
 import { vehicles } from "store/types"
 import { Accordion, useAccordion } from "components/reusable/accordion"
 import Switch, { Case } from "components/reusable/switch"
+import ReactPaginate from "react-paginate"
 // import hitmp3 from "../../../extras/audio/hit.mp3"
 
 interface IProps {
@@ -515,25 +516,67 @@ const VehicleInfoSection: FC<IVIS> = ({ vehicleData }) => {
 }
 
 const VehicleOffensesSection: FC<IVIS> = ({ vehicleData }) => {
-  const accordionProps = useAccordion()
+  const [vehicleOffenseItem, setVehicleOffenseItem] =
+    useState<IVehicleOffense | null>(null)
 
-  const accordionData = vehicleData?.vehicleOffenses?.map(
-    (i) => i.offense.name
-  ) || [""]
+  const tableData = vehicleData?.vehicleOffenses?.map((i, index) => ({
+    id: index + "",
+    row: [
+      {
+        value: i.offense.name,
+        isLink: false,
+        url: "",
+        action: () => {},
+      },
+      {
+        value: new Date(i.createdAt).toDateString(),
+        isLink: false,
+        url: "",
+        action: () => {},
+      },
+      {
+        value: i.offense.fineAmount,
+        isLink: false,
+        url: "",
+        action: () => {},
+      },
+      {
+        value: i.offense.code,
+        isLink: false,
+        url: "",
+        action: () => {},
+      },
+    ],
+    rowActions: [
+      {
+        value: "View",
+        isLink: true,
+        url: "",
+        action: () => {
+          setVehicleOffenseItem(i)
+        },
+        buttonType: "bold",
+      },
+    ],
+  })) as ITableRecord[]
+
+  const handlePrev = () => {
+    setVehicleOffenseItem(null)
+  }
+
   return (
-    <div>
-      <Accordion data={accordionData} accordionProps={accordionProps}>
-        <Switch>
-          {vehicleData?.vehicleOffenses?.map((i, index) => (
-            <Case
-              condition={accordionProps.isAccordion(accordionData[index])}
-              key={i.id}
-            >
-              <VehicleOffenseItem vehicleOffense={i} />
-            </Case>
-          ))}
-        </Switch>
-      </Accordion>
+    <div className="table-container-section">
+      {vehicleOffenseItem ? (
+        <VehicleOffenseItem
+          vehicleOffense={vehicleOffenseItem}
+          handlePrev={handlePrev}
+        />
+      ) : (
+        <TableSection
+          header={["Title", "Date", "Fine", "Code", "Action"]}
+          record={tableData}
+        />
+      )}
     </div>
   )
 }
@@ -563,56 +606,66 @@ const VehicleOwnerInfoSection: FC<IVIS> = ({ vehicleData }) => {
 
 const VehicleOffenseItem = ({
   vehicleOffense,
+  handlePrev,
 }: {
-  vehicleOffense: IVehicleOffense
+  vehicleOffense: IVehicleOffense | null
+  handlePrev: () => void
 }) => {
   return (
-    <div className="vehicle-info-section">
-      <VehicleInfoSectionItem
-        label="Title"
-        value={vehicleOffense.offense.name}
-      />
-      <VehicleInfoSectionItem
-        label="Description"
-        value={vehicleOffense.offense.description}
-      />
-      <VehicleInfoSectionItem
-        label="Fine"
-        value={vehicleOffense?.offense?.fineAmount?.toLocaleString()}
-      />
-      <VehicleInfoSectionItem
-        label="Point"
-        value={vehicleOffense?.offense?.finePoint?.toString()}
-      />
-      <VehicleInfoSectionItem
-        label="Code"
-        value={vehicleOffense?.offense?.code}
-      />
-      <VehicleInfoSectionItem
-        label="Additional"
-        value={vehicleOffense?.offense?.additional || "None"}
-      />
-      <VehicleInfoSectionColorItem
-        label="Status"
-        value={vehicleOffense?.status?.name}
-      />
-      <VehicleInfoSectionItem
-        label="Device"
-        value={vehicleOffense?.devise?.name}
-      />
-      <VehicleInfoSectionItem
-        label="Longitude"
-        value={vehicleOffense?.longitude}
-      />
-      <VehicleInfoSectionItem
-        label="Latitude"
-        value={vehicleOffense?.latitude}
-      />
-      <VehicleInfoSectionItem label="Address" value={vehicleOffense?.address} />
-      <VehicleInfoSectionItem
-        label="User"
-        value={vehicleOffense?.user?.userName}
-      />
+    <div>
+      <div className="vehicle-cta-back">
+        <TypeSmallButton title="Go back" onClick={handlePrev} />
+      </div>
+      <div className="vehicle-info-section">
+        <VehicleInfoSectionItem
+          label="Title"
+          value={vehicleOffense?.offense?.name}
+        />
+        <VehicleInfoSectionItem
+          label="Description"
+          value={vehicleOffense?.offense?.description}
+        />
+        <VehicleInfoSectionItem
+          label="Fine"
+          value={vehicleOffense?.offense?.fineAmount?.toLocaleString()}
+        />
+        <VehicleInfoSectionItem
+          label="Point"
+          value={vehicleOffense?.offense?.finePoint?.toString()}
+        />
+        <VehicleInfoSectionItem
+          label="Code"
+          value={vehicleOffense?.offense?.code}
+        />
+        <VehicleInfoSectionItem
+          label="Additional"
+          value={vehicleOffense?.offense?.additional || "None"}
+        />
+        <VehicleInfoSectionItem
+          label="Status"
+          value={vehicleOffense?.status?.name || "..."}
+        />
+        <VehicleInfoSectionItem
+          label="Device"
+          value={vehicleOffense?.devise?.name}
+        />
+        <VehicleInfoSectionItem
+          label="Longitude"
+          value={vehicleOffense?.longitude}
+        />
+        <VehicleInfoSectionItem
+          label="Latitude"
+          value={vehicleOffense?.latitude}
+        />
+        <VehicleInfoSectionItem
+          label="Address"
+          value={vehicleOffense?.address}
+        />
+        <VehicleInfoSectionItem
+          label="User"
+          value={vehicleOffense?.user?.userName}
+        />
+      </div>
     </div>
   )
 }
@@ -774,6 +827,44 @@ const LiveFeedFilterSection: FC<ILFS> = ({ filterProps, filters }) => {
           {i}
         </button>
       ))}
+    </div>
+  )
+}
+
+const TableSection = ({
+  header,
+  record,
+  handlePagination,
+}: {
+  header: string[]
+  record: Array<{
+    id: string
+    row: ICell[]
+    rowActions: ICellAction[]
+  }>
+  handlePagination?: (selectedItem: { selected: number }) => void
+}) => {
+  const isPagination = typeof handlePagination === "function"
+  return (
+    <div>
+      <div className="table-section">
+        <Table header={header} record={record} hideCheck hideNumbering />
+      </div>
+      {isPagination && (
+        <div className="pagination-container">
+          <ReactPaginate
+            breakLabel="..."
+            previousLabel="<<"
+            nextLabel=">>"
+            pageCount={1}
+            onPageChange={handlePagination}
+            containerClassName={"pagination"}
+            activeClassName={"active"}
+            renderOnZeroPageCount={undefined}
+            forcePage={1}
+          />
+        </div>
+      )}
     </div>
   )
 }
