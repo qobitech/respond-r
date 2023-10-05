@@ -5,7 +5,9 @@ export const getVehicleByRegNumber = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: "",
-      customurl: `https://etraffika-m-vehicle-query.herokuapp.com/api/v1/Vehicle/${query}`,
+      customurl: `https://etraffika-m-vehicle-query.herokuapp.com/api/v1/Vehicle/${
+        query || "kwl76bz"
+      }`,
       header: utils.header(""),
     },
     actionType: vehicles.getVehicleByRegNumber,

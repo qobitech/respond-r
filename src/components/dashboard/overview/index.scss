@@ -20,6 +20,19 @@
     width: 0;
     overflow: auto;
     max-height: 76vh;
+    .video-cta-title {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.4625rem;
+      p {
+        margin: 0;
+        margin-left: auto;
+        font-size: 0.7625rem;
+        border: 1px solid #252323;
+        padding: 0.2rem 0.4625rem;
+        cursor: pointer;
+      }
+    }
     .camera-title {
       color: #2e1919;
       font-family: Inter;
@@ -27,7 +40,7 @@
       font-style: normal;
       font-weight: 400;
       line-height: normal;
-      margin: 0 0 1.4625rem;
+      margin: 0;
     }
     .video-container {
       border-radius: 1.5625rem;
@@ -93,7 +106,7 @@
       grid-row: auto;
       grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
       justify-content: space-between;
-      gap: 30px;
+      gap: 40px;
       margin-bottom: 3rem;
       .vehicle-info-section-item {
         .vehicle-info-label {
@@ -121,6 +134,10 @@
             letter-spacing: 0.55rem;
             color: #8d1d1d;
           }
+          &.status-text {
+            width: max-content;
+            text-overflow: unset;
+          }
         }
         .vehicle-info-color {
           width: 20px;
@@ -132,6 +149,15 @@
             border: 1px solid #e8e8e8;
           }
         }
+      }
+    }
+    .vehicle-row-item {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      button {
+        cursor: default;
+        outline: none;
       }
     }
   }

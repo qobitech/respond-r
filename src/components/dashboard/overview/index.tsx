@@ -240,14 +240,23 @@ const MainView = ({ vehicle }: { vehicle: IVehicleReducer | undefined }) => {
 
   const vehicleData = vehicle?.getVehicleByRegNumber.data
 
+  const [isMedia, setIsMedia] = useState<boolean>(false)
+
   return (
     <div className="video-section">
-      <h3 className="camera-title">Camera:</h3>
-      <div className="video-container">
-        <video controls>
-          <source src="" />
-        </video>
+      <div className="video-cta-title">
+        {isMedia ? <h3 className="camera-title">Camera:</h3> : null}
+        <p onClick={() => setIsMedia(!isMedia)}>
+          {!isMedia ? "Show" : "Hide"} Media
+        </p>
       </div>
+      {isMedia ? (
+        <div className="video-container">
+          <video controls>
+            <source src="" />
+          </video>
+        </div>
+      ) : null}
       <div className="tab-section">
         <div className="tab-header">
           {Object.values(tabEnum).map((i, index) => (
@@ -487,9 +496,42 @@ interface IVIS {
   vehicleData: IVehicle | undefined
 }
 
+// const isDateExpired = (val: string) => {
+//   const date = new Date(parseInt(`${val}`))
+//   const currentDate = new Date()
+//   return date > currentDate
+// }
+
+const getStatus = (val?: boolean) => {
+  // if (!val) return "Expired"
+  // const dateExpired = isDateExpired(val)
+  if (val) return "Valid"
+  return "Expired"
+}
+
+const getDate = (val: string) => {
+  return new Date(val).toDateString()
+}
+
 const VehicleInfoSection: FC<IVIS> = ({ vehicleData }) => {
+  const sot = vehicleData?.sotDetails?.[0]
   return (
     <div className="vehicle-info-section">
+      <VehicleInfoSectionItem
+        label="License"
+        value={getDate(sot?.service?.license?.expiryDate || "")}
+        status={sot?.service?.license?.isActive}
+      />
+      <VehicleInfoSectionItem
+        label="Insurance"
+        value={getDate(vehicleData?.vehicleInsurance?.expiryDate || "")}
+        status={vehicleData?.vehicleInsurance?.isValid}
+      />
+      <VehicleInfoSectionItem
+        label="Road Worthiness"
+        value={getDate(sot?.service?.roadWorthiness?.expiryDate || "")}
+        status={sot?.service?.roadWorthiness?.isActive}
+      />
       <VehicleInfoSectionItem
         label="Vehicle Reg Number"
         value={vehicleData?.regNumber}
@@ -771,7 +813,7 @@ const VehicleSOTItem = ({
             </div>
           </Case>
           <Case condition={accordionProps.isAccordion(accordionData[2])}>
-            <div className="vehicle-info-section">
+            {/* <div className="vehicle-info-section">
               <VehicleInfoSectionItem
                 label="Inspection"
                 value={sot?.service.inspection || ""}
@@ -794,7 +836,7 @@ const VehicleSOTItem = ({
                   sot?.service?.roadWorthiness?.isActive ? "True" : "False"
                 }
               />
-            </div>
+            </div> */}
           </Case>
         </Switch>
       </Accordion>
@@ -871,20 +913,31 @@ const VehicleOffenseItem = ({
 const VehicleInfoSectionItem = ({
   label,
   value,
+  status,
 }: {
   label: string
   value: string | undefined
+  status?: boolean
 }) => {
+  const isStatus = typeof status !== "undefined"
   return (
     <div className="vehicle-info-section-item">
       <p className="vehicle-info-label">{label}</p>
-      <p
-        className={`vehicle-info-value ${
-          label.includes("Reg") ? "reg-number" : ""
-        }`}
-      >
-        {value || "..."}
-      </p>
+      <div className="vehicle-row-item">
+        <p
+          className={`vehicle-info-value ${
+            label.includes("Reg") ? "reg-number" : ""
+          } ${isStatus ? "status-text" : ""}`}
+        >
+          {value || "..."}
+        </p>
+        {isStatus ? (
+          <TypeSmallButton
+            title={getStatus(status || false)}
+            buttonType={status ? "outlined" : "danger"}
+          />
+        ) : null}
+      </div>
     </div>
   )
 }
