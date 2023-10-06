@@ -242,47 +242,48 @@ const MainView = ({ vehicle }: { vehicle: IVehicleReducer | undefined }) => {
 
   const [isMedia, setIsMedia] = useState<boolean>(false)
 
+  const carTags = [
+    {
+      title: "VIOLATIONS",
+      status: vehicleData?.hasViolation,
+      class: "danger",
+    },
+    {
+      title: "WARNINGS",
+      status: vehicleData?.hasWarning,
+      class: "warning",
+    },
+    {
+      title: "IS ANONYMOUS",
+      status: vehicleData?.isAnonymous,
+      class: "",
+    },
+    {
+      title: "IS STOLEN",
+      status: vehicleData?.isStolen,
+      class: "",
+    },
+    {
+      title: "MIS MATCH",
+      status: vehicleData?.hasMisMatch,
+      class: "danger",
+    },
+  ]
+
   return (
     <div className="video-section">
-      <div className="video-cta-title">
+      <div className="video-cta-title start">
         <div className="vehicle-init-props">
-          {vehicleData?.hasViolation && (
+          {carTags.map((i, index) => (
             <p
-              onClick={() => setIsMedia(!isMedia)}
-              className="p-btn-status danger"
+              className={`p-btn-status ${i.class} ${
+                i.status ? "" : "hide-btn"
+              } no-btn`}
+              key={index}
             >
-              HAS VIOLATIONS
+              {i.title}
             </p>
-          )}
-          {vehicleData?.hasWarning && (
-            <p
-              onClick={() => setIsMedia(!isMedia)}
-              className="p-btn-status warning"
-            >
-              HAS WARNINGS
-            </p>
-          )}
-          {vehicleData?.isAnonymous && (
-            <p onClick={() => setIsMedia(!isMedia)} className="p-btn-status">
-              IS ANONYMOUS
-            </p>
-          )}
-          {vehicleData?.isStolen && (
-            <p
-              onClick={() => setIsMedia(!isMedia)}
-              className="p-btn-status danger"
-            >
-              STOLEN
-            </p>
-          )}
-          {vehicleData?.hasMisMatch && (
-            <p
-              onClick={() => setIsMedia(!isMedia)}
-              className="p-btn-status danger"
-            >
-              MIS MATCH
-            </p>
-          )}
+          ))}
         </div>
         <p onClick={() => setIsMedia(!isMedia)} className="p-btn-status">
           {!isMedia ? "Show" : "Hide"} Media

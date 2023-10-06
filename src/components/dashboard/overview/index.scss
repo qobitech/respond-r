@@ -24,6 +24,9 @@
       display: flex;
       align-items: center;
       margin-bottom: 1.4625rem;
+      &.start {
+        align-items: flex-start;
+      }
     }
     .vehicle-init-props {
       display: flex;
@@ -419,5 +422,8 @@
   &.no-btn {
     cursor: default;
     margin-left: 0;
+  }
+  &.hide-btn {
+    display: none;
   }
 }
