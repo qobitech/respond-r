@@ -245,17 +245,60 @@ const MainView = ({ vehicle }: { vehicle: IVehicleReducer | undefined }) => {
   return (
     <div className="video-section">
       <div className="video-cta-title">
-        {isMedia ? <h3 className="camera-title">Camera:</h3> : null}
-        <p onClick={() => setIsMedia(!isMedia)}>
+        <div className="vehicle-init-props">
+          {vehicleData?.hasViolation && (
+            <p
+              onClick={() => setIsMedia(!isMedia)}
+              className="p-btn-status danger"
+            >
+              HAS VIOLATIONS
+            </p>
+          )}
+          {vehicleData?.hasWarning && (
+            <p
+              onClick={() => setIsMedia(!isMedia)}
+              className="p-btn-status warning"
+            >
+              HAS WARNINGS
+            </p>
+          )}
+          {vehicleData?.isAnonymous && (
+            <p onClick={() => setIsMedia(!isMedia)} className="p-btn-status">
+              IS ANONYMOUS
+            </p>
+          )}
+          {vehicleData?.isStolen && (
+            <p
+              onClick={() => setIsMedia(!isMedia)}
+              className="p-btn-status danger"
+            >
+              STOLEN
+            </p>
+          )}
+          {vehicleData?.hasMisMatch && (
+            <p
+              onClick={() => setIsMedia(!isMedia)}
+              className="p-btn-status danger"
+            >
+              MIS MATCH
+            </p>
+          )}
+        </div>
+        <p onClick={() => setIsMedia(!isMedia)} className="p-btn-status">
           {!isMedia ? "Show" : "Hide"} Media
         </p>
       </div>
       {isMedia ? (
-        <div className="video-container">
-          <video controls>
-            <source src="" />
-          </video>
-        </div>
+        <>
+          <div className="video-cta-title">
+            <h3 className="camera-title">Camera:</h3>
+          </div>
+          <div className="video-container">
+            <video controls>
+              <source src="" />
+            </video>
+          </div>
+        </>
       ) : null}
       <div className="tab-section">
         <div className="tab-header">
@@ -574,7 +617,9 @@ const VehicleOffensesSection: FC<IVIS> = ({ vehicleData }) => {
         value: i.offense.name,
         isLink: false,
         url: "",
-        action: () => {},
+        action: () => {
+          setVehicleOffenseItem(i)
+        },
       },
       {
         value: new Date(i.createdAt).toDateString(),
@@ -925,17 +970,16 @@ const VehicleInfoSectionItem = ({
       <p className="vehicle-info-label">{label}</p>
       <div className="vehicle-row-item">
         <p
-          className={`vehicle-info-value ${
+          className={`vehicle-info-value overflow ${
             label.includes("Reg") ? "reg-number" : ""
           } ${isStatus ? "status-text" : ""}`}
         >
           {value || "..."}
         </p>
         {isStatus ? (
-          <TypeSmallButton
-            title={getStatus(status || false)}
-            buttonType={status ? "outlined" : "danger"}
-          />
+          <p className={`p-btn-status no-btn ${status ? "success" : "danger"}`}>
+            {getStatus(status || false)}
+          </p>
         ) : null}
       </div>
     </div>

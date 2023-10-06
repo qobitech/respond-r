@@ -24,14 +24,14 @@
       display: flex;
       align-items: center;
       margin-bottom: 1.4625rem;
-      p {
-        margin: 0;
-        margin-left: auto;
-        font-size: 0.7625rem;
-        border: 1px solid #252323;
-        padding: 0.2rem 0.4625rem;
-        cursor: pointer;
-      }
+    }
+    .vehicle-init-props {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      // p {
+      //   border: 1px solid #d6d6d6;
+      // }
     }
     .camera-title {
       color: #2e1919;
@@ -136,7 +136,12 @@
           }
           &.status-text {
             width: max-content;
+          }
+          &.overflow {
             text-overflow: unset;
+            white-space: unset;
+            overflow-wrap: break-word;
+            overflow: visible;
           }
         }
         .vehicle-info-color {
@@ -383,5 +388,36 @@
   p {
     margin: 0;
     color: #898989;
+  }
+}
+
+.p-btn-status {
+  margin: 0;
+  margin-left: auto;
+  font-size: 0.7625rem;
+  border: 1px solid #252323;
+  padding: 0.2rem 0.4625rem;
+  cursor: pointer;
+  &.success {
+    background: #f5fbf7;
+    color: #16612d;
+    border: 1px solid #16612d;
+    margin-left: 0;
+  }
+  &.danger {
+    background: #faf5f7;
+    color: #f56e9d;
+    border: 1px solid #f56e9d;
+    margin-left: 0;
+  }
+  &.warning {
+    border: 1px solid #e3a11e;
+    color: #e3a11e;
+    background: #faf9f6;
+    margin-left: 0;
+  }
+  &.no-btn {
+    cursor: default;
+    margin-left: 0;
   }
 }
