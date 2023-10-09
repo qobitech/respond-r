@@ -116,6 +116,15 @@ interface IVehicleWarning {
   }
 }
 
+export interface IVehicleNote {
+  message: string
+  createdAt: string
+  createdBy: {
+    id: number
+    userName: string
+  }
+}
+
 export interface IVehicle {
   id: string
   regNumber: string
@@ -178,7 +187,7 @@ export interface IVehicle {
   instances: IInstance[]
   vehicleOffenses: IVehicleOffense[]
   vehicleWarnings: IVehicleWarning[]
-  notes: null
+  notes: IVehicleNote[]
   tags: null
   flags: null
 }

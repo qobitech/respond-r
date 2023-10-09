@@ -19,7 +19,12 @@ import * as signalR from "@microsoft/signalr"
 import { useFormHook } from "utils/new/hook"
 import * as yup from "yup"
 import { IAction } from "interfaces/IAction"
-import { ISOTDetails, IVehicle, IVehicleOffense } from "interfaces/IVehicle"
+import {
+  ISOTDetails,
+  IVehicle,
+  IVehicleNote,
+  IVehicleOffense,
+} from "interfaces/IVehicle"
 import { vehicles } from "store/types"
 import { Accordion, useAccordion } from "components/reusable/accordion"
 import Switch, { Case } from "components/reusable/switch"
@@ -179,8 +184,6 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
   const [flags, setFlags] = useState<string[]>([])
   const [camera, setCamera] = useState<string>()
 
-  console.log(mediaUrl, "juju")
-
   const handleFeedRequest = (i: IFeed) => {
     // get vehicle by reg number
     clearAction(vehicles.getVehicleByRegNumber)
@@ -311,6 +314,8 @@ const MainView = ({
     },
   ]
 
+  const vehicleNotes = vehicle?.getVehicleByRegNumber.data.notes
+
   return (
     <div className="video-section">
       <div className="video-cta-title start">
@@ -358,15 +363,9 @@ const MainView = ({
         <div className="tab-body">
           {tab === tabEnum.VEHICLEINFO ? (
             <div>
-              <CarFlags
-                flags={[
-                  "playing loud music",
-                  "driving too fast",
-                  "no car documents",
-                ]}
-              />
+              <CarFlags flags={flags} />
               <CarNotes
-                notes={["playing loud music"]}
+                notes={vehicleNotes}
                 setTab={setTab}
                 isViewAll
                 title="Note"
@@ -388,12 +387,7 @@ const MainView = ({
           ) : null}
           {tab === tabEnum.NOTES ? (
             <CarNotes
-              notes={[
-                "playing loud music",
-                "louder",
-                "SMH...see the way he's drive",
-                "Stolen Vehicle!!!",
-              ]}
+              notes={vehicleNotes}
               title="All Notes"
               setTab={setTab}
               isViewAll={false}
@@ -859,17 +853,18 @@ const CarNotes = ({
   isViewAll,
   title,
 }: {
-  notes: string[]
+  notes: IVehicleNote[] | undefined | null
   setTab: React.Dispatch<React.SetStateAction<string>>
   isViewAll: boolean
   title: string
 }) => {
   if (!notes?.[0])
     return (
-      <div className="no-flags">
-        <NoteSVG color="#f56e9d" />
-        <p>No Notes</p>
-      </div>
+      // <div className="no-flags">
+      //   <NoteSVG color="#f56e9d" />
+      //   <p>No Notes</p>
+      // </div>
+      <></>
     )
 
   return (
@@ -883,9 +878,15 @@ const CarNotes = ({
           </p>
         ) : null}
       </div>
-      {notes.map((i, index) => (
+      {notes?.map((i, index) => (
         <div className="vehicle-car-notes" key={index}>
-          <p>{i}</p>
+          <p className="author">
+            {i.createdBy.userName}&nbsp;&nbsp;&nbsp;
+            <span className="date-authored">
+              {new Date(i.createdAt).toDateString()}
+            </span>
+          </p>
+          <p>{i.message}</p>
         </div>
       ))}
     </div>
@@ -895,10 +896,11 @@ const CarNotes = ({
 const CarFlags = ({ flags }: { flags: string[] }) => {
   if (!flags?.[0])
     return (
-      <div className="no-flags">
-        <FlagSVG color="#f56e9d" />
-        <p>No Flags</p>
-      </div>
+      // <div className="no-flags mb-4 pb-1">
+      //   <FlagSVG color="#f56e9d" />
+      //   <p>No Flags</p>
+      // </div>
+      <></>
     )
 
   return (
