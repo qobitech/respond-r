@@ -1,29 +1,38 @@
 .accordion {
-  border: 1px solid #dbeaff;
+  border-bottom: 1px solid #dbeaff;
   .accordionitem {
     height: auto;
+    // border-top: 1px solid #dbeaff;
     border-bottom: 1px solid #dbeaff;
     &.islast {
       border-bottom: none;
     }
     .accordionheader {
-      height: 3.65rem;
+      height: 2.65rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 1.4825rem;
+      .accordionheadertext {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        p {
+          font-size: clamp(0.625rem, -0.875rem + 8.333vw, 0.8625rem);
+          margin: 0;
+          text-transform: capitalize;
+        }
+        svg {
+          width: 10px;
+        }
+      }
       &.active {
         border-bottom: 1px solid #dbeaff;
         margin-bottom: 2.1425rem;
       }
       cursor: pointer;
-      p {
-        font-size: clamp(0.625rem, -0.875rem + 8.333vw, 1rem);
-        margin: 0;
-        text-transform: capitalize;
-      }
       svg {
-        width: clamp(0.625rem, -0.875rem + 8.333vw, 1.25rem);
+        width: clamp(0.625rem, -0.875rem + 8.333vw, 1rem);
       }
     }
     .accordionbody {

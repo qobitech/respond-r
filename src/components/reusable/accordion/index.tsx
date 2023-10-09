@@ -7,6 +7,7 @@ interface IClass {
   accordionitem: any
   islast: any
   accordionheader: any
+  accordionheadertext: any
   accordionbody: any
   active: any
   nodata: any
@@ -36,10 +37,12 @@ export const Accordion = ({
   data,
   children,
   accordionProps,
+  icon,
 }: {
   data: string[]
   children?: ReactNode
   accordionProps: IUA
+  icon?: React.JSX.Element
 }) => {
   const isProject = data.every((i) => i.length > 0)
   return (
@@ -65,7 +68,10 @@ export const Accordion = ({
                     )
                   }
                 >
-                  <p>{i}</p>
+                  <div className={styleh.accordionheadertext}>
+                    {icon}
+                    <p>{i}</p>
+                  </div>
                   {accordionProps.accordion !== i + "" ? (
                     <PlusSVG />
                   ) : (

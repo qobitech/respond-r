@@ -10,6 +10,7 @@ interface ITP {
   url?: string
   underline?: boolean
   iconPosition?: "left" | "right"
+  textColor?: string
 }
 
 const TextPrompt: React.FC<ITP> = ({
@@ -19,6 +20,7 @@ const TextPrompt: React.FC<ITP> = ({
   url,
   underline,
   iconPosition,
+  textColor,
 }) => {
   const navigate = useNavigate()
   return (
@@ -40,7 +42,7 @@ const TextPrompt: React.FC<ITP> = ({
                 &nbsp;&nbsp;
               </span>
             ))}
-          {prompt}
+          <span style={{ color: textColor || "" }}>{prompt}</span>
           {iconPosition === "right" && (
             <span>
               &nbsp;&nbsp;

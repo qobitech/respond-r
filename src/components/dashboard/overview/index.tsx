@@ -5,7 +5,7 @@ import Table, { ICell, ICellAction } from "utils/new/table"
 import "../../../utils/new/pagination.scss"
 import "../../../utils/new/page.scss"
 import { Loader } from "utils/new/components"
-import { VideoSVG } from "utils/new/svgs"
+import { FlagSVG, NoteSVG, VideoSVG } from "utils/new/svgs"
 import sample from "../../../extras/images/sample.jpg"
 import RightSection, {
   IRightSection,
@@ -24,6 +24,7 @@ import { vehicles } from "store/types"
 import { Accordion, useAccordion } from "components/reusable/accordion"
 import Switch, { Case } from "components/reusable/switch"
 import ReactPaginate from "react-paginate"
+import TextPrompt from "utils/new/text-prompt"
 // import hitmp3 from "../../../extras/audio/hit.mp3"
 
 interface IProps {
@@ -42,7 +43,7 @@ const tabEnum = {
   OWNERINFO: "Owner Info",
   SOT: "SOT",
   INSTANCE: "Instance",
-  MEDIA: "Media",
+  NOTES: "Notes",
 }
 
 const getConnection = (url: string) => {
@@ -164,15 +165,39 @@ const useSocketIO = (): IUS => {
   }
 }
 
+const getFilePath = (i: string) => {
+  if (!i) return sample
+  if (!getUrl("filePath")) return sample
+  return getUrl("filePath") + `/` + i.replaceAll("\\", "/")
+}
+
 const Overview: React.FC<IProps> = ({ states, ...props }) => {
   const { getVehicleByRegNumber, clearAction } = props as unknown as IAction
   const rightSectionProps = states?.global.rightSection
   const vehicle = states?.vehicle
+  const [mediaUrl, setMediaUrl] = useState<string>("")
+  const [flags, setFlags] = useState<string[]>([])
+  const [camera, setCamera] = useState<string>()
 
-  const handleVehicleRequest = (regNumber: string, camera: string) => {
+  console.log(mediaUrl, "juju")
+
+  const handleFeedRequest = (i: IFeed) => {
     // get vehicle by reg number
     clearAction(vehicles.getVehicleByRegNumber)
-    getVehicleByRegNumber(regNumber)
+    getVehicleByRegNumber(i.regNumber)
+    console.log("feed")
+    setFlags(i.flags as string[])
+    setCamera(i.cameraName)
+    setMediaUrl(getFilePath(i.filePath))
+  }
+
+  const handleHitRequest = (i: IHit) => {
+    // get vehicle by reg number
+    clearAction(vehicles.getVehicleByRegNumber)
+    getVehicleByRegNumber(i.regNumber)
+    console.log("hit")
+    setFlags(i.flag as string[])
+    setMediaUrl(getFilePath(i.displayUrl))
   }
 
   const rsProps = useRightSection()
@@ -205,7 +230,12 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
           <LiveFeedStatusComponent socketProps={socketProps} />
           <div className="overview-page">
             {vehicle?.getVehicleByRegNumber?.isSuccessful ? (
-              <MainView vehicle={vehicle} />
+              <MainView
+                vehicle={vehicle}
+                mediaUrl={mediaUrl}
+                camera={camera!}
+                flags={flags!}
+              />
             ) : (
               <div className="no-video-selected-section">
                 {vehicle?.getVehicleByRegNumberLoading ? (
@@ -221,7 +251,8 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
             )}
             <div className="stream-section">
               <LiveFeedComponent
-                handleVehicleRequest={handleVehicleRequest}
+                handleFeedRequest={handleFeedRequest}
+                handleHitRequest={handleHitRequest}
                 socketProps={socketProps}
               />
             </div>
@@ -235,7 +266,17 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
 
 export default Overview
 
-const MainView = ({ vehicle }: { vehicle: IVehicleReducer | undefined }) => {
+const MainView = ({
+  vehicle,
+  mediaUrl,
+  camera,
+  flags,
+}: {
+  vehicle: IVehicleReducer | undefined
+  mediaUrl: string
+  camera: string
+  flags: string[]
+}) => {
   const [tab, setTab] = useState<string>(tabEnum.VEHICLEINFO)
 
   const vehicleData = vehicle?.getVehicleByRegNumber.data
@@ -292,12 +333,13 @@ const MainView = ({ vehicle }: { vehicle: IVehicleReducer | undefined }) => {
       {isMedia ? (
         <>
           <div className="video-cta-title">
-            <h3 className="camera-title">Camera:</h3>
+            <h3 className="camera-title">Camera: {camera}</h3>
           </div>
           <div className="video-container">
-            <video controls>
+            {/* <video controls>
               <source src="" />
-            </video>
+            </video> */}
+            <img src={mediaUrl} alt="media" />
           </div>
         </>
       ) : null}
@@ -315,7 +357,22 @@ const MainView = ({ vehicle }: { vehicle: IVehicleReducer | undefined }) => {
         </div>
         <div className="tab-body">
           {tab === tabEnum.VEHICLEINFO ? (
-            <VehicleInfoSection vehicleData={vehicleData} />
+            <div>
+              <CarFlags
+                flags={[
+                  "playing loud music",
+                  "driving too fast",
+                  "no car documents",
+                ]}
+              />
+              <CarNotes
+                notes={["playing loud music"]}
+                setTab={setTab}
+                isViewAll
+                title="Note"
+              />
+              <VehicleInfoSection vehicleData={vehicleData} />
+            </div>
           ) : null}
           {tab === tabEnum.OFFENSES ? (
             <VehicleOffensesSection vehicleData={vehicleData} />
@@ -328,6 +385,19 @@ const MainView = ({ vehicle }: { vehicle: IVehicleReducer | undefined }) => {
           ) : null}
           {tab === tabEnum.INSTANCE ? (
             <VehicleInstanceSection vehicleData={vehicleData} />
+          ) : null}
+          {tab === tabEnum.NOTES ? (
+            <CarNotes
+              notes={[
+                "playing loud music",
+                "louder",
+                "SMH...see the way he's drive",
+                "Stolen Vehicle!!!",
+              ]}
+              title="All Notes"
+              setTab={setTab}
+              isViewAll={false}
+            />
           ) : null}
         </div>
       </div>
@@ -363,9 +433,11 @@ const LiveFeedStatusComponent = ({
 
 const LiveFeedComponent = ({
   socketProps,
-  handleVehicleRequest,
+  handleHitRequest,
+  handleFeedRequest,
 }: {
-  handleVehicleRequest: (regNumber: string, camera: string) => void
+  handleHitRequest: (i: IHit) => void
+  handleFeedRequest: (i: IFeed) => void
   socketProps: IUS
 }) => {
   const filters = [`Hits`, `All Feeds`]
@@ -374,12 +446,6 @@ const LiveFeedComponent = ({
   const isFeed = useFilterProps.selectedFilter === filters[1]
   const isHit = useFilterProps.selectedFilter === filters[0]
 
-  const getFilePath = (i: string) => {
-    if (!i) return sample
-    if (!getUrl("filePath")) return sample
-    return getUrl("filePath") + `/` + i.replaceAll("\\", "/")
-  }
-
   return (
     <div className="live-feed-component">
       <LiveFeedFilterSection filterProps={useFilterProps} filters={filters} />
@@ -387,17 +453,17 @@ const LiveFeedComponent = ({
         {isFeed ? (
           <>
             {socketProps.feeds[0] ? (
-              socketProps.feeds.map((i, index) => (
+              socketProps.feeds.map((i) => (
                 <LiveFeedItemComponent
                   key={i.regNumber}
                   carColor={i.colour}
                   carMake={i.make || "..."}
                   carType={i.model || "..."}
                   imgSrc={getFilePath(i.filePath)}
-                  offense={i.flags?.[0] ? i.flags.length + "" : "0"}
+                  offense={i.flags?.[0] ? i.flags?.length + "" : "0"}
                   regNumber={i.regNumber}
                   handleOnClick={() => {
-                    handleVehicleRequest(i.regNumber, i.cameraName)
+                    handleFeedRequest(i)
                   }}
                 />
               ))
@@ -416,10 +482,10 @@ const LiveFeedComponent = ({
                   carMake={i.make || "..."}
                   carModel={i.model || "..."}
                   imgSrc={getFilePath(i.displayUrl)}
-                  offense={i.flag?.[0] ? i.flag.length + "" : "0"}
+                  offense={i.flag?.[0] ? i.flag?.length + "" : "0"}
                   regNumber={i.regNumber}
                   handleOnClick={() => {
-                    handleVehicleRequest(i.regNumber, "")
+                    handleHitRequest(i)
                   }}
                 />
               ))
@@ -540,15 +606,7 @@ interface IVIS {
   vehicleData: IVehicle | undefined
 }
 
-// const isDateExpired = (val: string) => {
-//   const date = new Date(parseInt(`${val}`))
-//   const currentDate = new Date()
-//   return date > currentDate
-// }
-
 const getStatus = (val?: boolean) => {
-  // if (!val) return "Expired"
-  // const dateExpired = isDateExpired(val)
   if (val) return "Valid"
   return "Expired"
 }
@@ -560,7 +618,7 @@ const getDate = (val: string) => {
 const VehicleInfoSection: FC<IVIS> = ({ vehicleData }) => {
   const sot = vehicleData?.sotDetails?.[0]
   return (
-    <div className="vehicle-info-section">
+    <div className="vehicle-info-section" style={{ marginTop: "40px" }}>
       <VehicleInfoSectionItem
         label="License"
         value={getDate(sot?.service?.license?.expiryDate || "")}
@@ -581,23 +639,23 @@ const VehicleInfoSection: FC<IVIS> = ({ vehicleData }) => {
         value={vehicleData?.regNumber}
       />
       <VehicleInfoSectionItem label="Code" value={vehicleData?.code} />
-      <VehicleInfoSectionItem
+      {/* <VehicleInfoSectionItem
         label="Classification"
         value={vehicleData?.classification}
-      />
-      <VehicleInfoSectionItem
+      /> */}
+      {/* <VehicleInfoSectionItem
         label="Chasis Number"
         value={vehicleData?.chassisNumber}
-      />
+      /> */}
       <VehicleInfoSectionItem label="Vehicle Type" value={vehicleData?.code} />
       <VehicleInfoSectionColorItem
         label="Vehicle Color"
         value={vehicleData?.color}
       />
-      <VehicleInfoSectionItem
+      {/* <VehicleInfoSectionItem
         label="Engine Number"
         value={vehicleData?.engineNumber}
-      />
+      /> */}
       <VehicleInfoSectionItem label="Vehicle Make" value={vehicleData?.make} />
       <VehicleInfoSectionItem
         label="Vehicle Model"
@@ -791,6 +849,71 @@ const VehicleOwnerInfoSection: FC<IVIS> = ({ vehicleData }) => {
         label="Phone"
         value={vehicleData?.currentOwner?.phone}
       />
+    </div>
+  )
+}
+
+const CarNotes = ({
+  notes,
+  setTab,
+  isViewAll,
+  title,
+}: {
+  notes: string[]
+  setTab: React.Dispatch<React.SetStateAction<string>>
+  isViewAll: boolean
+  title: string
+}) => {
+  if (!notes?.[0])
+    return (
+      <div className="no-flags">
+        <NoteSVG color="#f56e9d" />
+        <p>No Notes</p>
+      </div>
+    )
+
+  return (
+    <div className="vehicle-car-flags-container">
+      <div className="no-flags">
+        <NoteSVG color="#f56e9d" />
+        <p>{title}</p>
+        {isViewAll ? (
+          <p className="view-all-notes" onClick={() => setTab(tabEnum.NOTES)}>
+            View all
+          </p>
+        ) : null}
+      </div>
+      {notes.map((i, index) => (
+        <div className="vehicle-car-notes" key={index}>
+          <p>{i}</p>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+const CarFlags = ({ flags }: { flags: string[] }) => {
+  if (!flags?.[0])
+    return (
+      <div className="no-flags">
+        <FlagSVG color="#f56e9d" />
+        <p>No Flags</p>
+      </div>
+    )
+
+  return (
+    <div className="vehicle-car-flags-container">
+      <div className="no-flags">
+        <FlagSVG color="#f56e9d" />
+        <p>Flags ({flags?.length})</p>
+      </div>
+      <div className="vehicle-car-flags">
+        {flags.map((i, index) => (
+          <div key={index} className="vehicle-car-flag-item">
+            <p>{i}</p>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -1117,7 +1240,7 @@ const LiveFeedFilterSection: FC<ILFS> = ({ filterProps, filters }) => {
       {filters.map((i, index) => (
         <button
           className={filterProps.selectedFilter === i ? "active" : ""}
-          key={i}
+          key={index}
           onClick={() => filterProps.handleFilter(i)}
         >
           {i}

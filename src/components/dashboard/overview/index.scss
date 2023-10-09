@@ -50,16 +50,18 @@
       background: #252323;
       overflow: hidden;
       margin: 0 0 1.48rem;
-      video {
-        height: 25rem;
+      video,
+      img {
+        height: 25.5rem;
         width: 100%;
+        object-fit: contain;
       }
     }
     .tab-section {
       .tab-header {
         // border-top: 1px solid #dedede;
         border-bottom: 1px solid #dedede;
-        margin: 0 0 3rem;
+        margin: 0 0 1.7rem;
         display: flex;
         align-items: center;
         gap: 20px;
@@ -426,4 +428,56 @@
   &.hide-btn {
     display: none;
   }
+}
+.vehicle-car-flags-container {
+  margin-bottom: 1rem;
+}
+.vehicle-car-flags,
+.vehicle-car-notes {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 1.6525rem;
+  .vehicle-car-flag-item {
+    border: 1px solid #d6d6d6;
+    border-radius: 25px;
+    padding: 0.2625rem 0.5625rem;
+    p {
+      margin: 0;
+      font-size: 0.7625rem;
+    }
+  }
+}
+
+.vehicle-car-notes {
+  border: 1px solid #e8e8e8;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 0.8525rem;
+  p {
+    margin: 0;
+  }
+}
+
+.no-flags {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 15px;
+  color: #f56e9d;
+  p {
+    margin: 0;
+    font-size: 0.7625rem;
+  }
+  svg {
+    width: 10px;
+  }
+  .view-all-notes {
+    margin-left: 1rem;
+    text-decoration: underline !important;
+    color: #777777;
+    cursor: pointer;
+  }
+  margin-bottom: 0.8rem;
 }

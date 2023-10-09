@@ -15,6 +15,10 @@ export interface IFeed {
   isUploaded: boolean
 }
 
+export function isFeed(item: any): item is IFeed {
+  return "filePath" in item
+}
+
 export interface IHit {
   regNumber: string
   vehicleId: string
@@ -23,4 +27,8 @@ export interface IHit {
   colour: string
   displayUrl: string
   flag: Array<string | null>
+}
+
+export function isHit(item: any): item is IHit {
+  return "displayUrl" in item
 }
