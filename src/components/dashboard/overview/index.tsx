@@ -29,8 +29,9 @@ import { vehicles } from "store/types"
 import { Accordion, useAccordion } from "components/reusable/accordion"
 import Switch, { Case } from "components/reusable/switch"
 import ReactPaginate from "react-paginate"
-import TextPrompt from "utils/new/text-prompt"
-// import hitmp3 from "../../../extras/audio/hit.mp3"
+import HLSPlayer from "./hlsplayer"
+import VideoJSPlayerComponent from "./videoplayer"
+import axios from "axios"
 
 interface IProps {
   states?: IStates
@@ -103,7 +104,25 @@ const setUrls = (data: any) => {
   }
 }
 
-const useSocketIO = (): IUS => {
+interface IUSIO {
+  sendRTSPURL: (url: string) => void
+  rtspURL: string | null
+}
+
+const useRTSP = (): IUSIO => {
+  const [rtspURL, setRtspURL] = useState<string | null>(null)
+
+  const sendRTSPURL = (url: string) => {
+    setRtspURL(url)
+  }
+
+  return {
+    sendRTSPURL,
+    rtspURL,
+  }
+}
+
+const useSignalR = (): IUS => {
   const [connection, setConnection] = useState<signalR.HubConnection>()
   const [hits, setHits] = useState<IHit[]>([])
   const [feeds, setFeeds] = useState<IFeed[]>([])
@@ -219,18 +238,20 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const socketProps = useSocketIO()
+  const signalRProps = useSignalR()
+
+  const rtspProps = useRTSP()
 
   return (
     <>
       <RightSection rsProps={rsProps}>
         {rsProps.isView("custom", "settings") ? (
-          <Configuration socketProps={socketProps} />
+          <Configuration signalRProps={signalRProps} rtspProps={rtspProps} />
         ) : null}
       </RightSection>
       <div className="main-page">
         <div className="pg-container">
-          <LiveFeedStatusComponent socketProps={socketProps} />
+          <LiveFeedStatusComponent signalRProps={signalRProps} />
           <div className="overview-page">
             {vehicle?.getVehicleByRegNumber?.isSuccessful ? (
               <MainView
@@ -238,6 +259,7 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
                 mediaUrl={mediaUrl}
                 camera={camera!}
                 flags={flags!}
+                rtspProps={rtspProps}
               />
             ) : (
               <div className="no-video-selected-section">
@@ -256,7 +278,7 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
               <LiveFeedComponent
                 handleFeedRequest={handleFeedRequest}
                 handleHitRequest={handleHitRequest}
-                socketProps={socketProps}
+                signalRProps={signalRProps}
               />
             </div>
           </div>
@@ -274,11 +296,13 @@ const MainView = ({
   mediaUrl,
   camera,
   flags,
+  rtspProps,
 }: {
   vehicle: IVehicleReducer | undefined
   mediaUrl: string
   camera: string
   flags: string[]
+  rtspProps: IUSIO
 }) => {
   const [tab, setTab] = useState<string>(tabEnum.VEHICLEINFO)
 
@@ -316,6 +340,11 @@ const MainView = ({
 
   const vehicleNotes = vehicle?.getVehicleByRegNumber.data.notes
 
+  const [selectedView, setSelectedView] = useState<number>(0)
+
+  const isImage = selectedView === 0
+  const isRtsp = selectedView === 1
+
   return (
     <div className="video-section">
       <div className="video-cta-title start">
@@ -340,11 +369,27 @@ const MainView = ({
           <div className="video-cta-title">
             <h3 className="camera-title">Camera: {camera}</h3>
           </div>
+          <div className="video-section-header-tab">
+            <p
+              className={isImage ? "active" : ""}
+              onClick={() => setSelectedView(0)}
+            >
+              IMAGE
+            </p>
+            <p
+              className={isRtsp ? "active" : ""}
+              onClick={() => setSelectedView(1)}
+            >
+              RTSP FEED
+            </p>
+          </div>
           <div className="video-container">
-            {/* <video controls>
-              <source src="" />
-            </video> */}
-            <img src={mediaUrl} alt="media" />
+            <div className={`media-box ${isRtsp ? "" : "hide"}`}>
+              <RTSPFeedComponent url={rtspProps.rtspURL || ""} />
+            </div>
+            <div className={`media-box ${isImage ? "" : "hide"}`}>
+              <img src={mediaUrl} alt="media" />
+            </div>
           </div>
         </>
       ) : null}
@@ -399,26 +444,61 @@ const MainView = ({
   )
 }
 
+const RTSPFeedComponent = ({ url }: { url: string }) => {
+  // const [isVideo, setIsVideo] = useState<boolean>(false)
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`http://localhost:3001/stream?rtsp=${url || ""}`)
+  //     .then(() => {
+  //       setIsVideo(true)
+  //     })
+  //     .catch((err) => {
+  //       console.log(err, "juju")
+  //     })
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
+
+  const videoJsOptions = {
+    controls: true,
+    // sources: [
+    //   {
+    //     src: `http://localhost:3001/stream`, // Replace with your server URL
+    //     type: "video/mp4",
+    //   },
+    // ],
+    sources: [
+      {
+        src: `http://localhost:3001/hls?rtsp=${url || ""}`, // Replace with your server URL
+        type: "application/x-mpegURL",
+        // type: "video/mp4",
+      },
+    ],
+  }
+  // return <>{isVideo ? <HLSPlayer {...videoJsOptions} /> : <p>...Loading</p>}</>
+  return <HLSPlayer {...videoJsOptions} />
+}
+
 const LiveFeedStatusComponent = ({
-  socketProps,
+  signalRProps,
   title,
 }: {
-  socketProps: IUS
+  signalRProps: IUS
   title?: string
 }) => {
-  const isConnect = socketProps.connectionStatus === "closed"
+  const isConnect = signalRProps.connectionStatus === "closed"
   return (
     <div className="live-feed-component">
       <div className="live-feed-header-section">
         <p className="lf-header">{title || "LIVE FEED"}</p>
         <p
-          className={`lf-status ${socketProps.connectionStatus}`}
+          className={`lf-status ${signalRProps.connectionStatus}`}
           onClick={() => {
-            if (isConnect) socketProps.startConnection("")
+            if (isConnect) signalRProps.startConnection("")
           }}
         >
-          <span className={`lf-status-bop ${socketProps.connectionStatus}`} />
-          {socketProps.connectionStatus}
+          <span className={`lf-status-bop ${signalRProps.connectionStatus}`} />
+          {signalRProps.connectionStatus}
         </p>
       </div>
     </div>
@@ -426,13 +506,13 @@ const LiveFeedStatusComponent = ({
 }
 
 const LiveFeedComponent = ({
-  socketProps,
+  signalRProps,
   handleHitRequest,
   handleFeedRequest,
 }: {
   handleHitRequest: (i: IHit) => void
   handleFeedRequest: (i: IFeed) => void
-  socketProps: IUS
+  signalRProps: IUS
 }) => {
   const filters = [`Hits`, `All Feeds`]
   const useFilterProps = useFilterSection(filters[0])
@@ -446,8 +526,8 @@ const LiveFeedComponent = ({
       <div className="live-feed-component-wrapper">
         {isFeed ? (
           <>
-            {socketProps.feeds[0] ? (
-              socketProps.feeds.map((i) => (
+            {signalRProps.feeds[0] ? (
+              signalRProps.feeds.map((i) => (
                 <LiveFeedItemComponent
                   key={i.regNumber}
                   carColor={i.colour}
@@ -468,8 +548,8 @@ const LiveFeedComponent = ({
         ) : null}
         {isHit ? (
           <>
-            {socketProps.hits[0] ? (
-              socketProps.hits.map((i) => (
+            {signalRProps.hits[0] ? (
+              signalRProps.hits.map((i) => (
                 <LiveHitItemComponent
                   key={i.regNumber}
                   carColor={i.colour}
@@ -1141,10 +1221,12 @@ interface IConfigHookForm {
 }
 
 const Configuration = ({
-  socketProps,
+  signalRProps,
   rsProps,
+  rtspProps,
 }: {
-  socketProps: IUS
+  signalRProps: IUS
+  rtspProps: IUSIO
   rsProps?: IRightSection<{}>
 }) => {
   const [hookForm] = useFormHook<IConfigHookForm>({
@@ -1154,7 +1236,8 @@ const Configuration = ({
   })
 
   const handleSubmit = (data: IConfigHookForm) => {
-    socketProps.startConnection(data.connectionUrl)
+    signalRProps.startConnection(data.connectionUrl)
+    rtspProps.sendRTSPURL(data.rstpUrl)
     setUrls(data)
   }
 
@@ -1167,14 +1250,14 @@ const Configuration = ({
   }, [])
 
   const btnTitle =
-    socketProps.connectionStatus === "connected" &&
+    signalRProps.connectionStatus === "connected" &&
     !!hookForm.watch().connectionUrl
       ? "Refresh Feed"
       : "Request Feed"
 
   return (
     <div>
-      <LiveFeedStatusComponent socketProps={socketProps} title="Status" />
+      <LiveFeedStatusComponent signalRProps={signalRProps} title="Status" />
       <div style={{ paddingBottom: "20px" }} />
       <form onSubmit={(e) => e.preventDefault()}>
         <TypeInput

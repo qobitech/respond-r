@@ -42,7 +42,7 @@ export const Accordion = ({
   data: string[]
   children?: ReactNode
   accordionProps: IUA
-  icon?: React.JSX.Element
+  icon?: any
 }) => {
   const isProject = data.every((i) => i.length > 0)
   return (
