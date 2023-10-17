@@ -279,15 +279,15 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
         <div className="pg-container">
           <LiveFeedStatusComponent signalRProps={signalRProps} />
           <div className="overview-page">
-            {/* {vehicle?.getVehicleByRegNumber?.isSuccessful ? ( */}
-            <MainView
-              vehicle={vehicle}
-              mediaUrl={mediaUrl}
-              camera={camera!}
-              flags={flags!}
-              rtspProps={rtspProps}
-            />
-            {/* ) : (
+            {vehicle?.getVehicleByRegNumber?.isSuccessful ? (
+              <MainView
+                vehicle={vehicle}
+                mediaUrl={mediaUrl}
+                camera={camera!}
+                flags={flags!}
+                rtspProps={rtspProps}
+              />
+            ) : (
               <div className="no-video-selected-section">
                 {vehicle?.getVehicleByRegNumberLoading ? (
                   <>Loading...</>
@@ -299,7 +299,7 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
                   </>
                 )}
               </div>
-            )} */}
+            )}
             <div className="stream-section">
               <LiveFeedComponent
                 handleFeedRequest={handleFeedRequest}
