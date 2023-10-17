@@ -341,7 +341,7 @@ const MediaRTSPToggle = ({
   return (
     <div className="video-section-header-tab">
       <p className={isImage ? "active" : ""} onClick={() => setSelectedView(0)}>
-        IMAGE
+        SIGNAL R
       </p>
       <p className={isRtsp ? "active" : ""} onClick={() => setSelectedView(1)}>
         RTSP FEED
