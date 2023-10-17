@@ -268,6 +268,11 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
 
   const rtspProps = useRTSP()
 
+  const [selectedView, setSelectedView] = useState<number>(0)
+
+  const isImage = selectedView === 0
+  const isRtsp = selectedView === 1
+
   return (
     <>
       <RightSection rsProps={rsProps}>
@@ -277,15 +282,22 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
       </RightSection>
       <div className="main-page">
         <div className="pg-container">
-          <LiveFeedStatusComponent signalRProps={signalRProps} />
+          <LiveFeedStatusComponent
+            signalRProps={signalRProps}
+            setSelectedView={setSelectedView}
+            isImage={isImage}
+            isRtsp={isRtsp}
+            showToggle
+          />
           <div className="overview-page">
-            {vehicle?.getVehicleByRegNumber?.isSuccessful ? (
+            {vehicle?.getVehicleByRegNumber?.isSuccessful || isRtsp ? (
               <MainView
                 vehicle={vehicle}
                 mediaUrl={mediaUrl}
                 camera={camera!}
                 flags={flags!}
-                rtspProps={rtspProps}
+                isImage={isImage}
+                isRtsp={isRtsp}
               />
             ) : (
               <div className="no-video-selected-section">
@@ -317,18 +329,41 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
 
 export default Overview
 
+const MediaRTSPToggle = ({
+  isImage,
+  isRtsp,
+  setSelectedView,
+}: {
+  isImage: boolean
+  isRtsp: boolean
+  setSelectedView: (value: React.SetStateAction<number>) => void
+}) => {
+  return (
+    <div className="video-section-header-tab">
+      <p className={isImage ? "active" : ""} onClick={() => setSelectedView(0)}>
+        IMAGE
+      </p>
+      <p className={isRtsp ? "active" : ""} onClick={() => setSelectedView(1)}>
+        RTSP FEED
+      </p>
+    </div>
+  )
+}
+
 const MainView = ({
   vehicle,
   mediaUrl,
   camera,
   flags,
-  rtspProps,
+  isImage,
+  isRtsp,
 }: {
   vehicle: IVehicleReducer | undefined
   mediaUrl: string
   camera: string
   flags: string[]
-  rtspProps: IUSIO
+  isImage: boolean
+  isRtsp: boolean
 }) => {
   const [tab, setTab] = useState<string>(tabEnum.VEHICLEINFO)
 
@@ -366,11 +401,6 @@ const MainView = ({
 
   const vehicleNotes = vehicle?.getVehicleByRegNumber?.data?.notes
 
-  const [selectedView, setSelectedView] = useState<number>(0)
-
-  const isImage = selectedView === 0
-  const isRtsp = selectedView === 1
-
   return (
     <div className="video-section">
       <div className="video-cta-title start">
@@ -386,86 +416,71 @@ const MainView = ({
             </p>
           ))}
         </div>
-        <p onClick={() => setIsMedia(!isMedia)} className="p-btn-status">
-          {!isMedia ? "Show" : "Hide"} Media
-        </p>
+        {isMedia ? (
+          <p onClick={() => setIsMedia(!isMedia)} className="p-btn-status">
+            {!isMedia ? "Show" : "Hide"} Media
+          </p>
+        ) : null}
+      </div>
+      <div className="video-container">
+        <div className={`media-box ${isRtsp ? "" : "hide"}`}>
+          <Stream />
+        </div>
+        {isMedia ? (
+          <div className={`media-box ${isImage ? "" : "hide"}`}>
+            <img src={mediaUrl} alt="media" />
+          </div>
+        ) : null}
       </div>
       {isMedia ? (
-        <>
-          <div className="video-cta-title">
-            <h3 className="camera-title">Camera: {camera}</h3>
+        <div className="tab-section">
+          <div className="tab-header">
+            {Object.values(tabEnum).map((i, index) => (
+              <div
+                className={`tab-item ${i === tab ? "active" : ""}`}
+                key={index}
+                onClick={() => setTab(i)}
+              >
+                <p>{i}</p>
+              </div>
+            ))}
           </div>
-          <div className="video-section-header-tab">
-            <p
-              className={isImage ? "active" : ""}
-              onClick={() => setSelectedView(0)}
-            >
-              IMAGE
-            </p>
-            <p
-              className={isRtsp ? "active" : ""}
-              onClick={() => setSelectedView(1)}
-            >
-              RTSP FEED
-            </p>
-          </div>
-          <div className="video-container">
-            <div className={`media-box ${isRtsp ? "" : "hide"}`}>
-              <Stream />
-            </div>
-            <div className={`media-box ${isImage ? "" : "hide"}`}>
-              <img src={mediaUrl} alt="media" />
-            </div>
-          </div>
-        </>
-      ) : null}
-      <div className="tab-section">
-        <div className="tab-header">
-          {Object.values(tabEnum).map((i, index) => (
-            <div
-              className={`tab-item ${i === tab ? "active" : ""}`}
-              key={index}
-              onClick={() => setTab(i)}
-            >
-              <p>{i}</p>
-            </div>
-          ))}
-        </div>
-        <div className="tab-body">
-          {tab === tabEnum.VEHICLEINFO ? (
-            <div>
-              <CarFlags flags={flags} />
+          <div className="tab-body">
+            {tab === tabEnum.VEHICLEINFO ? (
+              <div>
+                <CarFlags flags={flags} />
+                <CarNotes
+                  notes={vehicleNotes}
+                  setTab={setTab}
+                  isViewAll
+                  title="Note"
+                />
+                <VehicleInfoSection vehicleData={vehicleData} />
+              </div>
+            ) : null}
+            {tab === tabEnum.OFFENSES ? (
+              <VehicleOffensesSection vehicleData={vehicleData} />
+            ) : null}
+            {tab === tabEnum.OWNERINFO ? (
+              <VehicleOwnerInfoSection vehicleData={vehicleData} />
+            ) : null}
+            {tab === tabEnum.SOT ? (
+              <VehicleSOTSection vehicleData={vehicleData} />
+            ) : null}
+            {tab === tabEnum.INSTANCE ? (
+              <VehicleInstanceSection vehicleData={vehicleData} />
+            ) : null}
+            {tab === tabEnum.NOTES ? (
               <CarNotes
                 notes={vehicleNotes}
+                title="All Notes"
                 setTab={setTab}
-                isViewAll
-                title="Note"
+                isViewAll={false}
               />
-              <VehicleInfoSection vehicleData={vehicleData} />
-            </div>
-          ) : null}
-          {tab === tabEnum.OFFENSES ? (
-            <VehicleOffensesSection vehicleData={vehicleData} />
-          ) : null}
-          {tab === tabEnum.OWNERINFO ? (
-            <VehicleOwnerInfoSection vehicleData={vehicleData} />
-          ) : null}
-          {tab === tabEnum.SOT ? (
-            <VehicleSOTSection vehicleData={vehicleData} />
-          ) : null}
-          {tab === tabEnum.INSTANCE ? (
-            <VehicleInstanceSection vehicleData={vehicleData} />
-          ) : null}
-          {tab === tabEnum.NOTES ? (
-            <CarNotes
-              notes={vehicleNotes}
-              title="All Notes"
-              setTab={setTab}
-              isViewAll={false}
-            />
-          ) : null}
+            ) : null}
+          </div>
         </div>
-      </div>
+      ) : null}
     </div>
   )
 }
@@ -473,11 +488,20 @@ const MainView = ({
 const LiveFeedStatusComponent = ({
   signalRProps,
   title,
+  setSelectedView,
+  isImage,
+  isRtsp,
+  showToggle,
 }: {
   signalRProps: IUS
   title?: string
+  setSelectedView?: (value: React.SetStateAction<number>) => void
+  isImage?: boolean
+  isRtsp?: boolean
+  showToggle?: boolean
 }) => {
   const isConnect = signalRProps.connectionStatus === "closed"
+
   return (
     <div className="live-feed-component">
       <div className="live-feed-header-section">
@@ -492,6 +516,13 @@ const LiveFeedStatusComponent = ({
           {signalRProps.connectionStatus}
         </p>
       </div>
+      {showToggle ? (
+        <MediaRTSPToggle
+          isImage={isImage!}
+          isRtsp={isRtsp!}
+          setSelectedView={setSelectedView!}
+        />
+      ) : null}
     </div>
   )
 }
