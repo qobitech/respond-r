@@ -1,12 +1,11 @@
-import React, { useState } from "react"
-import { NavLink, useNavigate } from "react-router-dom"
+import React from "react"
+import { useNavigate } from "react-router-dom"
 import { url } from "enums/Route"
-import { MenuItems } from "./menuItems"
 import "./navbar.scss"
 import Toast from "utils/new/toast"
 import { INotification } from "interfaces/IGlobal"
 import { isLogged } from "utils/new/constants"
-import { CogSVG, EllipsisSVG, HamburgerSVG, LogoSVG } from "utils/new/svgs"
+import { CogSVG, HamburgerSVG, LogoSVG } from "utils/new/svgs"
 import { ICallRightSection } from "store/actions/global"
 
 interface NavbarProps {
@@ -17,7 +16,7 @@ interface NavbarProps {
 }
 
 const Navbar = (props: NavbarProps) => {
-  const [clicked, setClicked] = useState(false)
+  // const [clicked, setClicked] = useState(false)
   const handleClick = () => {
     props.setMenuOpen(!props.menuOpen)
   }
@@ -52,9 +51,9 @@ const Navbar = (props: NavbarProps) => {
             />
           </div>
         )}
-        {!isLogged ? (
+        {/* {!isLogged ? (
           <ul className={clicked ? "nav-menu active" : "nav-menu"}>
-            {/* {MenuItems.map((item, index) => (
+            {MenuItems.map((item, index) => (
               <div className="menu-item" key={index}>
                 <NavLink
                   key={index}
@@ -71,7 +70,7 @@ const Navbar = (props: NavbarProps) => {
                   {item.title}
                 </NavLink>
               </div>
-            ))} */}
+            ))}
             <button
               onClick={() => navigate(url.REGISTER)}
               className="button-cta"
@@ -81,7 +80,7 @@ const Navbar = (props: NavbarProps) => {
           </ul>
         ) : (
           <UserComponent imgSrc="" name="" />
-        )}
+        )} */}
       </nav>
       <Toast
         status={props.notifyUser?.status || false}
@@ -114,16 +113,16 @@ const ConfigurationComponent = ({
   )
 }
 
-const UserComponent = ({ name, imgSrc }: { name: string; imgSrc: string }) => {
-  return (
-    <div className="nav-user-component">
-      <div className="nav-profile">
-        <div className="nav-user-profile">
-          <img src={imgSrc || ""} alt="" />
-        </div>
-        <p>{name || "User"}</p>
-      </div>
-      <EllipsisSVG />
-    </div>
-  )
-}
+// const UserComponent = ({ name, imgSrc }: { name: string; imgSrc: string }) => {
+//   return (
+//     <div className="nav-user-component">
+//       <div className="nav-profile">
+//         <div className="nav-user-profile">
+//           <img src={imgSrc || ""} alt="" />
+//         </div>
+//         <p>{name || "User"}</p>
+//       </div>
+//       <EllipsisSVG />
+//     </div>
+//   )
+// }

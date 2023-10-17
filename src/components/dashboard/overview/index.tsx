@@ -29,8 +29,7 @@ import { vehicles } from "store/types"
 import { Accordion, useAccordion } from "components/reusable/accordion"
 import Switch, { Case } from "components/reusable/switch"
 import ReactPaginate from "react-paginate"
-import HLSPlayer from "./hlsplayer"
-import VideoJSPlayerComponent from "./videoplayer"
+import Stream from "./stream-player"
 import axios from "axios"
 
 interface IProps {
@@ -78,7 +77,7 @@ interface IUS {
 const configFormEnums = {
   connectionUrl: "connectionUrl",
   filePath: "filePath",
-  rstpUrl: "rstpUrl",
+  rtspUrl: "rtspUrl",
 } as const
 
 type chkType = (typeof configFormEnums)[keyof typeof configFormEnums]
@@ -100,25 +99,52 @@ const setUrl = (urlKey: chkType, value: string) => {
 
 const setUrls = (data: any) => {
   for (let i in data) {
-    setUrl(i as chkType, data[i])
+    if (data[i]) setUrl(i as chkType, data[i])
   }
 }
 
 interface IUSIO {
   sendRTSPURL: (url: string) => void
-  rtspURL: string | null
+  streamStatus: streamTypes | null
+  stopRTSPFeed: () => void
+}
+
+export type streamTypes = "started" | "loading" | "error"
+export const streamEnums = {
+  STARTED: "started",
+  LOADING: "loading",
+  ERROR: "error",
 }
 
 const useRTSP = (): IUSIO => {
-  const [rtspURL, setRtspURL] = useState<string | null>(null)
+  const [streamStatus, setStreamStatus] = useState<streamTypes | null>(null)
+  const rtspurl = getUrl("rtspUrl")
 
-  const sendRTSPURL = (url: string) => {
-    setRtspURL(url)
+  const httpRequest = (url: string) => {
+    axios
+      .get(`http://127.0.0.1:3002/stream?rtsp=${url}`)
+      .then(() => {
+        setStreamStatus(url === "stop" ? null : "started")
+      })
+      .catch(() => {
+        setStreamStatus("error")
+      })
+  }
+
+  const sendRTSPURL = (url?: string) => {
+    setStreamStatus("loading")
+    if (url && url !== rtspurl) setUrl("rtspUrl", url)
+    httpRequest(url || rtspurl || "")
+  }
+
+  const stopRTSPFeed = () => {
+    httpRequest("stop")
   }
 
   return {
     sendRTSPURL,
-    rtspURL,
+    streamStatus,
+    stopRTSPFeed,
   }
 }
 
@@ -253,15 +279,15 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
         <div className="pg-container">
           <LiveFeedStatusComponent signalRProps={signalRProps} />
           <div className="overview-page">
-            {vehicle?.getVehicleByRegNumber?.isSuccessful ? (
-              <MainView
-                vehicle={vehicle}
-                mediaUrl={mediaUrl}
-                camera={camera!}
-                flags={flags!}
-                rtspProps={rtspProps}
-              />
-            ) : (
+            {/* {vehicle?.getVehicleByRegNumber?.isSuccessful ? ( */}
+            <MainView
+              vehicle={vehicle}
+              mediaUrl={mediaUrl}
+              camera={camera!}
+              flags={flags!}
+              rtspProps={rtspProps}
+            />
+            {/* ) : (
               <div className="no-video-selected-section">
                 {vehicle?.getVehicleByRegNumberLoading ? (
                   <>Loading...</>
@@ -273,7 +299,7 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
                   </>
                 )}
               </div>
-            )}
+            )} */}
             <div className="stream-section">
               <LiveFeedComponent
                 handleFeedRequest={handleFeedRequest}
@@ -306,7 +332,7 @@ const MainView = ({
 }) => {
   const [tab, setTab] = useState<string>(tabEnum.VEHICLEINFO)
 
-  const vehicleData = vehicle?.getVehicleByRegNumber.data
+  const vehicleData = vehicle?.getVehicleByRegNumber?.data
 
   const [isMedia, setIsMedia] = useState<boolean>(false)
 
@@ -338,7 +364,7 @@ const MainView = ({
     },
   ]
 
-  const vehicleNotes = vehicle?.getVehicleByRegNumber.data.notes
+  const vehicleNotes = vehicle?.getVehicleByRegNumber?.data?.notes
 
   const [selectedView, setSelectedView] = useState<number>(0)
 
@@ -385,7 +411,7 @@ const MainView = ({
           </div>
           <div className="video-container">
             <div className={`media-box ${isRtsp ? "" : "hide"}`}>
-              <RTSPFeedComponent url={rtspProps.rtspURL || ""} />
+              <Stream />
             </div>
             <div className={`media-box ${isImage ? "" : "hide"}`}>
               <img src={mediaUrl} alt="media" />
@@ -442,41 +468,6 @@ const MainView = ({
       </div>
     </div>
   )
-}
-
-const RTSPFeedComponent = ({ url }: { url: string }) => {
-  // const [isVideo, setIsVideo] = useState<boolean>(false)
-
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://localhost:3001/stream?rtsp=${url || ""}`)
-  //     .then(() => {
-  //       setIsVideo(true)
-  //     })
-  //     .catch((err) => {
-  //       console.log(err, "juju")
-  //     })
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [])
-
-  const videoJsOptions = {
-    controls: true,
-    // sources: [
-    //   {
-    //     src: `http://localhost:3001/stream`, // Replace with your server URL
-    //     type: "video/mp4",
-    //   },
-    // ],
-    sources: [
-      {
-        src: `http://localhost:3001/hls?rtsp=${url || ""}`, // Replace with your server URL
-        type: "application/x-mpegURL",
-        // type: "video/mp4",
-      },
-    ],
-  }
-  // return <>{isVideo ? <HLSPlayer {...videoJsOptions} /> : <p>...Loading</p>}</>
-  return <HLSPlayer {...videoJsOptions} />
 }
 
 const LiveFeedStatusComponent = ({
@@ -1214,37 +1205,117 @@ const VehicleInfoSectionColorItem = ({
   )
 }
 
-interface IConfigHookForm {
-  connectionUrl: string
-  filePath: string
-  rstpUrl: string
-}
-
 const Configuration = ({
   signalRProps,
-  rsProps,
   rtspProps,
 }: {
   signalRProps: IUS
   rtspProps: IUSIO
   rsProps?: IRightSection<{}>
 }) => {
-  const [hookForm] = useFormHook<IConfigHookForm>({
-    connectionUrl: yup.string().required("connection url is required"),
-    filePath: yup.string().required("file path is required"),
-    rstpUrl: yup.string().required("rstp url is required"),
+  const tabEnums = { FEED: "Feed", RTSP: "RTSP" }
+
+  const [tab, setTab] = useState<string>(tabEnums.FEED)
+
+  return (
+    <div>
+      <LiveFeedStatusComponent signalRProps={signalRProps} title="Status" />
+      <div style={{ paddingBottom: "20px" }} />
+      <div className="tab-section">
+        <div className="tab-header">
+          {Object.values(tabEnums).map((i, index) => (
+            <div
+              className={`tab-item ${i === tab ? "active" : ""}`}
+              key={index}
+              onClick={() => setTab(i)}
+            >
+              <p>{i}</p>
+            </div>
+          ))}
+        </div>
+        <div className="tab-body">
+          {tab === tabEnums.FEED ? (
+            <FeedForm signalRProps={signalRProps} />
+          ) : null}
+          {tab === tabEnums.RTSP ? <RTSPForm rtspProps={rtspProps} /> : null}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const RTSPForm = ({ rtspProps }: { rtspProps: IUSIO }) => {
+  const [hookForm] = useFormHook<{ rtspUrl: string }>({
+    rtspUrl: yup.string().required("rstp url is required"),
   })
 
-  const handleSubmit = (data: IConfigHookForm) => {
-    signalRProps.startConnection(data.connectionUrl)
-    rtspProps.sendRTSPURL(data.rstpUrl)
-    setUrls(data)
+  useEffect(() => {
+    const rtspUrl = getUrl("rtspUrl")
+    if (!!rtspUrl) {
+      hookForm.setValue("rtspUrl", rtspUrl)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const btnTitle =
+    rtspProps.streamStatus === "started" && !!hookForm.watch("rtspUrl")
+      ? "Refresh RTSP Feed"
+      : "Request RTSP Feed"
+
+  const handleRTSPFeed = (data: { rtspUrl: string }) => {
+    if (hookForm.watch("rtspUrl")) {
+      rtspProps.sendRTSPURL(data.rtspUrl)
+      setUrl("rtspUrl", data.rtspUrl)
+    }
   }
 
+  const resetRTSPFeed = () => {
+    rtspProps.stopRTSPFeed()
+  }
+
+  return (
+    <form onSubmit={(e) => e.preventDefault()}>
+      <TypeInput
+        placeholder="Enter url"
+        label="RTSP URL"
+        {...hookForm.register("rtspUrl")}
+        error={hookForm.formState.errors.rtspUrl?.message}
+      />
+      <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+        <TypeButton
+          title={btnTitle}
+          onClick={hookForm.handleSubmit(handleRTSPFeed)}
+          load={rtspProps.streamStatus === "loading"}
+        />
+        <TypeButton
+          title="Stop RTSP Feed"
+          onClick={resetRTSPFeed}
+          buttonType={rtspProps.streamStatus === null ? "disabled" : "outlined"}
+        />
+      </div>
+    </form>
+  )
+}
+
+interface IFeedFormHK {
+  connectionUrl: string
+  filePath: string
+}
+
+const FeedForm = ({ signalRProps }: { signalRProps: IUS }) => {
+  const [hookForm] = useFormHook<IFeedFormHK>({
+    connectionUrl: yup.string().required("connection url is required"),
+    filePath: yup.string().required("file path is required"),
+  })
+
   useEffect(() => {
-    for (let i in configFormEnums) {
-      if (getUrl(i as chkType))
-        hookForm.setValue(i as chkType, getUrl(i as chkType) || "")
+    const storedData = getUrl("connectionUrl")
+    if (!!storedData) {
+      hookForm.setValue("connectionUrl", storedData)
+    }
+    const filePath = getUrl("filePath")
+    if (!!filePath) {
+      hookForm.setValue("filePath", filePath)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -1255,43 +1326,39 @@ const Configuration = ({
       ? "Refresh Feed"
       : "Request Feed"
 
+  const handleSubmit = (data: IFeedFormHK) => {
+    signalRProps.startConnection(data.connectionUrl)
+    setUrls(data)
+  }
+
   return (
-    <div>
-      <LiveFeedStatusComponent signalRProps={signalRProps} title="Status" />
-      <div style={{ paddingBottom: "20px" }} />
-      <form onSubmit={(e) => e.preventDefault()}>
-        <TypeInput
-          placeholder="Enter url"
-          label="Connection URL"
-          {...hookForm.register("connectionUrl")}
-          error={hookForm.formState.errors.connectionUrl?.message}
+    <form onSubmit={(e) => e.preventDefault()}>
+      <TypeInput
+        placeholder="Enter url"
+        label="Connection URL"
+        {...hookForm.register("connectionUrl")}
+        error={hookForm.formState.errors.connectionUrl?.message}
+      />
+      <TypeInput
+        placeholder="Enter url"
+        label="File Path"
+        {...hookForm.register("filePath")}
+        error={hookForm.formState.errors.filePath?.message}
+      />
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "20px",
+          marginBottom: "30px",
+        }}
+      >
+        <TypeButton
+          title={btnTitle}
+          onClick={hookForm.handleSubmit(handleSubmit)}
         />
-        <TypeInput
-          placeholder="Enter url"
-          label="File Path"
-          {...hookForm.register("filePath")}
-          error={hookForm.formState.errors.filePath?.message}
-        />
-        <TypeInput
-          placeholder="Enter url"
-          label="RTSP URL"
-          {...hookForm.register("rstpUrl")}
-          error={hookForm.formState.errors.rstpUrl?.message}
-        />
-        <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-          <TypeButton
-            title={btnTitle}
-            onClick={hookForm.handleSubmit(handleSubmit)}
-          />
-          <TypeSmallButton
-            title=""
-            buttonType="danger"
-            onClick={rsProps?.closeSection}
-            close
-          />
-        </div>
-      </form>
-    </div>
+      </div>
+    </form>
   )
 }
 

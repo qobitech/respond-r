@@ -57,51 +57,13 @@
         &.hide {
           display: none;
         }
-        .video-js,
+        .stream-canva-box,
         video,
         img {
           height: 25.5rem;
           width: 100%;
           object-fit: contain;
         }
-      }
-    }
-    .tab-section {
-      .tab-header {
-        // border-top: 1px solid #dedede;
-        border-bottom: 1px solid #dedede;
-        margin: 0 0 1.7rem;
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        overflow: auto;
-        .tab-item {
-          border-bottom: 3px solid #fff;
-          padding: 0.8625rem 0.3625rem;
-          cursor: pointer;
-          transition: 0.2s ease all;
-          flex-shrink: 0;
-          p {
-            color: #909090;
-            font-family: Inter;
-            font-size: 0.7125rem;
-            font-style: normal;
-            font-weight: 500;
-            line-height: normal;
-            margin: 0;
-            text-transform: uppercase;
-          }
-          &.active {
-            border-bottom: 3px solid #494949;
-            cursor: default;
-            p {
-              color: #000;
-            }
-          }
-        }
-      }
-      .tab-body {
-        padding: 0 1.06rem;
       }
     }
     .table-container-section {
@@ -537,10 +499,59 @@
 //   flex-direction: column;
 // }
 
-.video-controller-prime {
+// .video-controller-prime {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   gap: 20px;
+//   padding: 0.3625rem 0;
+// }
+
+.stream-canva-box {
+  height: 25.5rem;
+  width: 100%;
+  object-fit: contain;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 20px;
-  padding: 0.3625rem 0;
+}
+
+.tab-section {
+  .tab-header {
+    // border-top: 1px solid #dedede;
+    border-bottom: 1px solid #dedede;
+    margin: 0 0 1.7rem;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    overflow: auto;
+    .tab-item {
+      border-bottom: 3px solid #fff;
+      padding: 0.8625rem 0.3625rem;
+      cursor: pointer;
+      transition: 0.2s ease all;
+      flex-shrink: 0;
+      p {
+        color: #909090;
+        font-family: Inter;
+        font-size: 0.7125rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        margin: 0;
+        text-transform: uppercase;
+      }
+      &.active {
+        border-bottom: 3px solid #494949;
+        cursor: default;
+        p {
+          color: #000;
+        }
+      }
+    }
+  }
+  .tab-body {
+    padding: 0 1.06rem;
+  }
 }

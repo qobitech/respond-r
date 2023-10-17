@@ -2,11 +2,11 @@ import React from "react"
 import { useNavigate } from "react-router-dom"
 import { url } from "enums/Route"
 import "./index.scss"
-import trafficlight from "../../../extras/images/animation/animation_lkc6o54t.json"
+// import trafficlight from "../../../extras/images/animation/animation_lkc6o54t.json"
 import cars from "../../../extras/images/animation/animation_lmophnr9.json"
 import Lottie from "react-lottie"
 import { TypeButton } from "utils/new/button"
-import { ArrowRightSVG } from "utils/new/svgs"
+// import { ArrowRightSVG } from "utils/new/svgs"
 
 const LandingPage = () => {
   const navigate = useNavigate()

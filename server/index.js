@@ -1,11 +1,10 @@
 const express = require("express")
+const Stream = require("node-rtsp-stream")
+const cors = require("cors")
+
 const app = express()
-const ffmpeg = require("fluent-ffmpeg")
-const pathToFfmpeg = require("ffmpeg-static")
-
-ffmpeg.setFfmpegPath(pathToFfmpeg)
-
-var cors = require("cors")
+const port = 3002
+let stream = null
 
 app.use(
   cors({
@@ -14,42 +13,26 @@ app.use(
   })
 )
 
-app.get("/hls", (req, res) => {
-  const rtspUrl = req.query.rtsp // Replace with your RTSP stream URL
+app.get("/stream", (req, res) => {
+  const newRtspStreamUrl = req.query.rtsp
+  let currentRtspStreamUrl = ""
 
-  res.header("Content-Type", "application/vnd.apple.mpegurl")
+  // Create the WebSocket stream only if it doesn't exist or the RTSP URL has changed
+  if (!stream || currentRtspStreamUrl !== newRtspStreamUrl) {
+    if (stream || newRtspStreamUrl === "stop") {
+      stream.stop()
+    }
+    stream = new Stream({
+      name: "Camera Stream",
+      streamUrl: newRtspStreamUrl,
+      wsPort: 9999,
+    })
+    currentRtspStreamUrl = newRtspStreamUrl
+  }
 
-  ffmpeg()
-    .input(rtspUrl)
-    .inputFormat("rtsp")
-    .videoCodec("copy")
-    .audioCodec("copy")
-    // .outputOptions([
-    //   "-hls_time 10", // Set segment duration
-    //   "-hls_list_size 6", // Set playlist size
-    // ])
-    .outputOptions([
-      "-hls_time 10",
-      "-hls_list_size 6",
-      "-hls_flags delete_segments",
-      "-hls_segment_filename stream%03d.ts",
-    ])
-    .format("hls")
-    .pipe()
-    .on("start", (data) => {
-      console.log("stream started", data)
-    })
-    .on("end", () => {
-      console.log("HLS stream generation complete.")
-    })
-    .on("error", (err) => {
-      console.error("Error:", err)
-    })
-    .pipe(res, { end: true })
-  //   }
+  res.send(200).json({ url: `ws://127.0.0.1:9999` })
 })
 
-const port = 3001
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`)
+  console.log(`Server running on port ${port}`)
 })
