@@ -8,7 +8,7 @@ let stream = null
 
 app.use(
   cors({
-    origin: "*",
+    origin: "http://respondR:3000",
     credentials: true,
   })
 )

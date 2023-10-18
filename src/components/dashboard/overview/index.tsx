@@ -416,7 +416,7 @@ const MainView = ({
             </p>
           ))}
         </div>
-        {isMedia ? (
+        {isImage ? (
           <p onClick={() => setIsMedia(!isMedia)} className="p-btn-status">
             {!isMedia ? "Show" : "Hide"} Media
           </p>
@@ -426,13 +426,11 @@ const MainView = ({
         <div className={`media-box ${isRtsp ? "" : "hide"}`}>
           <Stream />
         </div>
-        {isMedia ? (
-          <div className={`media-box ${isImage ? "" : "hide"}`}>
-            <img src={mediaUrl} alt="media" />
-          </div>
-        ) : null}
+        <div className={`media-box ${isImage ? "" : "hide"}`}>
+          <img src={mediaUrl} alt="media" />
+        </div>
       </div>
-      {isMedia ? (
+      {isImage ? (
         <div className="tab-section">
           <div className="tab-header">
             {Object.values(tabEnum).map((i, index) => (
