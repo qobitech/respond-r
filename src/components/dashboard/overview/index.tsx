@@ -122,7 +122,7 @@ const useRTSP = (): IUSIO => {
 
   const httpRequest = (url: string) => {
     axios
-      .get(`http://respondR:3002/stream?rtsp=${url}`)
+      .get(`http://localhost:3002/stream?rtsp=${url}`)
       .then(() => {
         setStreamStatus(url === "stop" ? null : "started")
       })
@@ -426,9 +426,11 @@ const MainView = ({
         <div className={`media-box ${isRtsp ? "" : "hide"}`}>
           <Stream />
         </div>
-        <div className={`media-box ${isImage ? "" : "hide"}`}>
-          <img src={mediaUrl} alt="media" />
-        </div>
+        {isMedia ? (
+          <div className={`media-box ${isImage ? "" : "hide"}`}>
+            <img src={mediaUrl} alt="media" />
+          </div>
+        ) : null}
       </div>
       {isImage ? (
         <div className="tab-section">

@@ -1,7 +1,7 @@
 {
   "name": "central-database-application",
   "version": "0.1.0",
-  "proxy": "http://127.0.0.1:3002",
+  "proxy": "http://localhost:3002",
   "private": true,
   "dependencies": {
     "@cycjimmy/jsmpeg-player": "^5.0.0",
