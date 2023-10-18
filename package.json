@@ -1,7 +1,6 @@
 {
   "name": "central-database-application",
   "version": "0.1.0",
-  "proxy": "http://respondR:3002",
   "private": true,
   "dependencies": {
     "@cycjimmy/jsmpeg-player": "^5.0.0",
