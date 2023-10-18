@@ -1,7 +1,7 @@
 {
   "name": "central-database-application",
   "version": "0.1.0",
-  "proxy": "http://localhost:3002",
+  "proxy": "http://respondR:3002",
   "private": true,
   "dependencies": {
     "@cycjimmy/jsmpeg-player": "^5.0.0",
@@ -44,8 +44,7 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "server": "nodemon server --ignore client",
-    "dev": "run-p server start",
+    "dev": "run-p start",
     "start": "react-scripts start",
     "build": "CI=false && react-scripts build",
     "test": "react-scripts test",
