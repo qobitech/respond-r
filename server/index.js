@@ -30,7 +30,7 @@ app.get("/stream", (req, res) => {
     currentRtspStreamUrl = newRtspStreamUrl
   }
 
-  res.send(200).json({ url: `ws://127.0.0.1:9999` })
+  res.send(200).json({ url: `ws://respondR:9999` })
 })
 
 app.listen(port, () => {

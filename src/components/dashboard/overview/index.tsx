@@ -122,7 +122,7 @@ const useRTSP = (): IUSIO => {
 
   const httpRequest = (url: string) => {
     axios
-      .get(`http://127.0.0.1:3002/stream?rtsp=${url}`)
+      .get(`http://respondR:3002/stream?rtsp=${url}`)
       .then(() => {
         setStreamStatus(url === "stop" ? null : "started")
       })
