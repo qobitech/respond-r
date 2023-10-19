@@ -23,7 +23,7 @@ export default class Stream extends React.Component {
   }
   componentDidMount() {
     let canvas = document.getElementById("video-canvas")
-    let url = "ws://respondR:9999"
+    let url = "ws://localhost:9999"
 
     new JSMpeg.Player(url, { canvas: canvas })
   }
