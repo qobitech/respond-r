@@ -1,4 +1,4 @@
-import { etraffica_baseurl, identity_server } from "utils/constants"
+import { baseurl, identity_server } from "utils/constants"
 import * as utils from "../../services/new/utils"
 import { apiScopeType } from "store/types"
 
@@ -18,8 +18,8 @@ export const createAPIScope = (data: object, update?: boolean) => {
     apiData: {
       url: "",
       customurl: update
-        ? `${etraffica_baseurl}/Roles/CreateApiScope`
-        : `${etraffica_baseurl}/Admin/UserManagement/CreateUser`,
+        ? `${baseurl}/Roles/CreateApiScope`
+        : `${baseurl}/Admin/UserManagement/CreateUser`,
       header: utils.headerNoAuth(),
       data,
     },

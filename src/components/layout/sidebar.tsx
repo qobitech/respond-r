@@ -2,7 +2,14 @@ import React from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import "./sidebar.scss"
 import { url } from "enums/Route"
-import { HamburgerSVG, HomeSVG, LogoSVG, LogoutSVG } from "utils/new/svgs"
+import {
+  CarsSVG,
+  HamburgerSVG,
+  LogoSVG,
+  ManagementSVG,
+  PoliceSVG,
+  SwitchSVG,
+} from "utils/new/svgs"
 
 interface IProps {
   setMenuOpen: (menuOpen: boolean) => (dispatch: any) => void
@@ -19,10 +26,22 @@ const SideBar = ({ setMenuOpen, menuOpen, logOut }: IProps) => {
 
   const menuItems = [
     {
-      title: "Overview",
-      imgsrc: <HomeSVG />,
+      title: "Traffic",
+      imgsrc: <CarsSVG />,
       isActive: _isUrl(url.OVERVIEW),
       url: url.OVERVIEW,
+    },
+    {
+      title: "E-Police",
+      imgsrc: <PoliceSVG />,
+      isActive: _isUrl(url.POLICE),
+      url: url.POLICE,
+    },
+    {
+      title: "Management",
+      imgsrc: <ManagementSVG />,
+      isActive: _isUrl(url.MANAGEMENT),
+      url: url.MANAGEMENT,
     },
   ]
 
@@ -57,7 +76,7 @@ const SideBar = ({ setMenuOpen, menuOpen, logOut }: IProps) => {
       </nav>
       <nav className="side-menu-container logout" onClick={logOut}>
         <li className="side-menu-item">
-          <LogoutSVG />
+          <SwitchSVG />
           <p>Logout</p>
         </li>
       </nav>

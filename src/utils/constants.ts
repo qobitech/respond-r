@@ -6,13 +6,14 @@ export const pageurl = {
   REGISTER: "/register",
 }
 
-// export const etraffica_baseurl = process.env.REACT_APP_ETRAFFIKA_BASEURL;
+// export const baseurl = process.env.REACT_APP_ETRAFFIKA_BASEURL;
 
-export const etraffica_baseurl =
-  "https://identitymanager.myapiservices.net/api/v1"
+export const baseurl = "https://respondradmin.azurewebsites.net/api/v1"
+export const baseurlEPoliceTest =
+  "https://respondr-command-2b9239ad3a3a.herokuapp.com/api/v1"
 export const identity_server = "https://identityserver.myapiservices.net/api/v1"
 // https://identitymanager.myapiservices.net/api/v1/UserLogin
-// export const etraffica_baseurl = 'https://apigateway.myapiservices.net/identity-manager';
+// export const baseurl = 'https://apigateway.myapiservices.net/identity-manager';
 
 export const validEmailRegex = /\S+@\S+\.\S+/
 

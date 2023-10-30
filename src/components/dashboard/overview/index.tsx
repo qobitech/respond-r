@@ -51,7 +51,7 @@ const tabEnum = {
   NOTES: "Notes",
 }
 
-const getConnection = (url: string) => {
+export const getConnection = (url: string) => {
   return new signalR.HubConnectionBuilder()
     .withUrl(url, {
       skipNegotiation: true,
@@ -62,7 +62,7 @@ const getConnection = (url: string) => {
     .build()
 }
 
-type typeConnectionStatus =
+export type typeConnectionStatus =
   | "connecting"
   | "connected"
   | "re-connecting"
@@ -78,11 +78,12 @@ const configFormEnums = {
   connectionUrl: "connectionUrl",
   filePath: "filePath",
   rtspUrl: "rtspUrl",
+  policeSignalR: "policeSignalR",
 } as const
 
 type chkType = (typeof configFormEnums)[keyof typeof configFormEnums]
 
-const getUrl = (urlKey: chkType) => {
+export const getUrl = (urlKey: chkType) => {
   const url = localStorage.getItem(urlKey)
   return url
 }
@@ -91,7 +92,7 @@ const isUrlExist = (urlKey: chkType, url: string) => {
   return getUrl(urlKey) === url
 }
 
-const setUrl = (urlKey: chkType, value: string) => {
+export const setUrl = (urlKey: chkType, value: string) => {
   if (isUrlExist(urlKey, value)) return
   localStorage.removeItem(urlKey)
   localStorage.setItem(urlKey, value)
@@ -257,12 +258,12 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rightSectionProps])
 
-  useEffect(() => {
-    if (rsProps.queryAction !== "create") {
-      rsProps.callSectionOnQuery()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  // useEffect(() => {
+  //   if (rsProps.queryAction !== "create") {
+  //     rsProps.callSectionOnQuery()
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
 
   const signalRProps = useSignalR()
 
@@ -595,7 +596,7 @@ const LiveFeedComponent = ({
   )
 }
 
-const NoFeeds = () => {
+export const NoFeeds = () => {
   return (
     <div className="no-feeds">
       <VideoSVG width="20" height="20" />
@@ -1183,7 +1184,7 @@ const VehicleOffenseItem = ({
   )
 }
 
-const VehicleInfoSectionItem = ({
+export const VehicleInfoSectionItem = ({
   label,
   value,
   status,

@@ -77,6 +77,8 @@ export const user = generateActionTypes([
   "getUserById",
 ])
 
+export const demoActions = generateActionTypes(["getDemoEPoliceNotifications"])
+
 export const vehicles = generateActionTypes(["getVehicleByRegNumber"])
 
 export const billing = generateActionTypes([

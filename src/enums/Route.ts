@@ -7,6 +7,9 @@ export enum url {
   VERIFY_EMAIL = "/verify-email",
   INSTRUCTIONS = "/how-to",
   OVERVIEW = "/dashboard/overview",
+  TRAFFIC = "/dashboard/e-traffic",
+  POLICE = "/dashboard/e-police",
+  MANAGEMENT = "/dashboard/management",
   PAGE404 = "",
 }
 

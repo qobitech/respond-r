@@ -1,4 +1,4 @@
-import { etraffica_baseurl } from "utils/constants"
+import { baseurl } from "utils/constants"
 import * as utils from "../../services/new/utils"
 import { billing } from "store/types"
 
@@ -6,7 +6,7 @@ export const getAPIBundles = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: "",
-      customurl: `${etraffica_baseurl}/api-bundles/GetAll${query || ""}`,
+      customurl: `${baseurl}/api-bundles/GetAll${query || ""}`,
       header: utils.header(""),
     },
     actionType: billing.getAPIBundles,
@@ -17,7 +17,7 @@ export const getAPIBundleById = (id: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: "",
-      customurl: `${etraffica_baseurl}/api-bundles/Details/${id}`,
+      customurl: `${baseurl}/api-bundles/Details/${id}`,
       header: utils.header(""),
     },
     actionType: billing.getAPIBundleById,
@@ -29,8 +29,8 @@ export const createAPIBundle = (data: object, update?: boolean) => {
     apiData: {
       url: "",
       customurl: update
-        ? `${etraffica_baseurl}/api-bundles/Update`
-        : `${etraffica_baseurl}/api-bundles/Create`,
+        ? `${baseurl}/api-bundles/Update`
+        : `${baseurl}/api-bundles/Create`,
       header: utils.header(""),
       data,
     },
@@ -42,7 +42,7 @@ export const deleteAPIBundle = (id: string) => {
   return utils.httpDeleteMethod({
     apiData: {
       url: "",
-      customurl: `${etraffica_baseurl}/api-bundles/Delete/${id}`,
+      customurl: `${baseurl}/api-bundles/Delete/${id}`,
       header: utils.header(""),
     },
     actionType: billing.deleteAPIBundle,
@@ -53,7 +53,7 @@ export const getAPIConfigs = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: "",
-      customurl: `${etraffica_baseurl}/api-configurations/GetAll${query || ""}`,
+      customurl: `${baseurl}/api-configurations/GetAll${query || ""}`,
       header: utils.header(""),
     },
     actionType: billing.getAPIConfigs,
@@ -65,8 +65,8 @@ export const createAPIConfig = (data: object, update?: boolean) => {
     apiData: {
       url: "",
       customurl: update
-        ? `${etraffica_baseurl}/api-configurations/Update`
-        : `${etraffica_baseurl}/api-configurations/Create`,
+        ? `${baseurl}/api-configurations/Update`
+        : `${baseurl}/api-configurations/Create`,
       header: utils.header(""),
       data,
     },
@@ -78,7 +78,7 @@ export const deleteAPIConfig = (id: string) => {
   return utils.httpDeleteMethod({
     apiData: {
       url: "",
-      customurl: `${etraffica_baseurl}/api-configurations/Delete/${id}`,
+      customurl: `${baseurl}/api-configurations/Delete/${id}`,
       header: utils.header(""),
     },
     actionType: billing.deleteAPIConfig,
@@ -89,9 +89,7 @@ export const getAPIConfigGroups = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: "",
-      customurl: `${etraffica_baseurl}/api-configurations/Group/GetAll${
-        query || ""
-      }`,
+      customurl: `${baseurl}/api-configurations/Group/GetAll${query || ""}`,
       header: utils.header(""),
     },
     actionType: billing.getAPIConfigGroups,
@@ -103,8 +101,8 @@ export const createAPIConfigGroup = (data: object, update?: boolean) => {
     apiData: {
       url: "",
       customurl: update
-        ? `${etraffica_baseurl}/api-configurations/Group/Create/Update`
-        : `${etraffica_baseurl}/api-configurations/Group/Create`,
+        ? `${baseurl}/api-configurations/Group/Create/Update`
+        : `${baseurl}/api-configurations/Group/Create`,
       header: utils.header(""),
       data,
     },
@@ -118,7 +116,7 @@ export const getClientSubscriptions = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: "",
-      customurl: `${etraffica_baseurl}/subscriptions/GetAll${query || ""}`,
+      customurl: `${baseurl}/subscriptions/GetAll${query || ""}`,
       header: utils.header(""),
     },
     actionType: billing.getClientSubscriptions,
@@ -129,7 +127,7 @@ export const subscribeToBundle = (data: object) => {
   return utils.httpPostMethod({
     apiData: {
       url: "",
-      customurl: `${etraffica_baseurl}/subscriptions/Subscribe`,
+      customurl: `${baseurl}/subscriptions/Subscribe`,
       header: utils.header(""),
       data,
     },
@@ -143,7 +141,7 @@ export const addAppsToSub = (
   return utils.httpPostMethod({
     apiData: {
       url: "",
-      customurl: `${etraffica_baseurl}/subscriptions/Subscribe/AddClient`,
+      customurl: `${baseurl}/subscriptions/Subscribe/AddClient`,
       header: utils.header(""),
       data,
     },

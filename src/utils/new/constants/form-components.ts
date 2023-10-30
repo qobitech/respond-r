@@ -54,7 +54,7 @@ export const registerOrganizationFC: IFormComponent[] = [
 
 export const loginFC: IFormComponent[] = [
   {
-    id: "username",
+    id: "email",
     label: "Email",
     placeHolder: "Enter your email address",
     type: "text",

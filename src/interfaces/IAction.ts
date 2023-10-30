@@ -6,9 +6,8 @@ interface IAuth {
   clearOrgAuth: () => (dispatch: Function) => void
   verifyEmail: (data: object) => (dispatch: Function) => void
   userLogin: (data: {
-    username: string
+    email: string
     password: string
-    rememberMe: boolean
   }) => (dispatch: any) => void
   passwordReset: (data: object) => (dispatch: Function) => void
   requestPasswordToken: (email: {
@@ -92,6 +91,10 @@ interface IVehicleActions {
   getVehicleByRegNumber: (query: string) => (dispatch: any) => void
 }
 
+interface IDemoActions {
+  getDemoEPoliceNotifications: () => (dispatch: any) => void
+}
+
 export interface IAction
   extends IAuth,
     IGlobalActions,
@@ -100,4 +103,5 @@ export interface IAction
     IBilling,
     IOrganization,
     IUser,
+    IDemoActions,
     IVehicleActions {}

@@ -18,9 +18,8 @@ interface IProps {
 }
 
 interface ILoginHookForm {
-  username: string
+  email: string
   password: string
-  rememberMe: boolean
 }
 
 interface ILoginForm {
@@ -37,13 +36,13 @@ export const LoginForm: React.FC<ILoginForm> = ({
   error,
 }) => {
   const { handleSubmit } = hookForm
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   return (
     <form onSubmit={handleSubmit(handleAction)}>
       <FormBuilder hookForm={hookForm} formComponent={loginFC} />
-      <div className="forgot-password">
+      {/* <div className="forgot-password">
         <p onClick={() => navigate(url.FORGOT_PASSWORD)}>Forgot Password ?</p>
-      </div>
+      </div> */}
       <div className="cta">
         <TypeButton
           title="LOGIN"
@@ -70,12 +69,9 @@ const Login: React.FC<IProps> = ({ states, ...props }) => {
   const dataError = states?.auth.userLoginError
   const data = states?.auth.userLogin
 
-  const navigate = useNavigate()
-
   const loginSchema = {
-    username: yup.string().email().required("Email is required"),
+    email: yup.string().email().required("Email is required"),
     password: yup.string().required("Password is required"),
-    rememberMe: yup.boolean(),
   }
 
   const [hookForm] = useFormHook<ILoginHookForm>(loginSchema)
@@ -86,10 +82,10 @@ const Login: React.FC<IProps> = ({ states, ...props }) => {
   }
 
   useEffect(() => {
-    if (data?.loginSuccessful) {
+    if (data?.isSuccessful) {
       setNotificationStatus("Login Successful", true)
     }
-  }, [data?.loginSuccessful, setNotificationStatus])
+  }, [data?.isSuccessful, setNotificationStatus])
 
   useEffect(() => {
     return () => {
@@ -110,13 +106,6 @@ const Login: React.FC<IProps> = ({ states, ...props }) => {
         <h3>Login</h3>
         <div className="separator" />
         <LoginForm {...loginFormProps} />
-        <div className="separator" />
-        <div className="alt">
-          <p>Not registered yet ?</p>
-          <p className="action" onClick={() => navigate(url.REGISTER)}>
-            Create an account
-          </p>
-        </div>
       </div>
     </div>
   )

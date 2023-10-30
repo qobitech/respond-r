@@ -8,6 +8,7 @@ import RouteList from "./routes"
 import "./index.scss"
 import * as serviceWorker from "./serviceWorker"
 import { HelmetProvider } from "react-helmet-async"
+import "leaflet/dist/leaflet.css"
 
 const Routes = () => (
   <Router>

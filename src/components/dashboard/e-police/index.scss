@@ -5,19 +5,9 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  .video-section,
-  .no-video-selected-section {
-    flex-basis: 67%;
-
-    @media (min-width: $lg-max-breakpoint) {
-      flex-basis: 70%;
-    }
-    @media (min-width: $lg-major-breakpoint) {
-      flex-basis: 75%;
-    }
-  }
-  .video-section {
-    width: 0;
+  .map-section {
+    width: 100%;
+    padding-right: 30px;
     overflow: auto;
     max-height: 76vh;
     .video-cta-title {
@@ -163,19 +153,13 @@
       margin: 0;
     }
   }
-  .stream-section {
-    flex-basis: 33%;
-    @media (min-width: $lg-max-breakpoint) {
-      flex-basis: 30%;
-    }
-    @media (min-width: $lg-major-breakpoint) {
-      flex-basis: 25%;
-    }
-    width: 0;
-    // border: 1px solid;
+  .police-stream-section {
+    width: 100%;
+    max-width: 464px;
+    overflow: auto;
+    height: 80vh;
     .live-feed-component {
       padding-left: 2rem;
-
       .live-feed-component-wrapper {
         overflow: auto;
         max-height: 69vh;
@@ -187,14 +171,16 @@
   }
 }
 
-.live-feed-item-component {
+.map-feed-item-component {
   cursor: pointer;
   flex-shrink: 0;
   display: flex;
   align-items: center;
+  width: 400px;
+  border-bottom: 1px solid #eaeaea;
   .lf-media-section {
-    width: 14.375rem;
-    height: 11.8125rem;
+    width: 198px;
+    height: 9.8125rem;
     flex-shrink: 0;
     border-radius: 1.25rem;
     overflow: hidden;
@@ -213,6 +199,7 @@
     gap: 10px;
     flex: 1;
     height: 11.8125rem;
+    width: 202px;
     flex-shrink: 0;
     .lf-info-section-label {
       color: #4f4f4f;

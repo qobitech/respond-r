@@ -81,8 +81,8 @@ export const RegisterForm: React.FC<IRegisterForm> = ({
 const Register: React.FC<IProps> = ({ states, ...props }) => {
   const { registerOrganization, clearAction } = props as unknown as IAction
 
-  const dataLoading = states?.auth.registerOrganizationLoading
-  const dataError = states?.auth.registerOrganizationError
+  // const dataLoading = states?.auth.registerOrganizationLoading
+  // const dataError = states?.auth.registerOrganizationError
 
   const navigate = useNavigate()
 
@@ -99,18 +99,16 @@ const Register: React.FC<IProps> = ({ states, ...props }) => {
     }
   }, [clearAction])
 
-  const formProps = {
-    error: dataError || "",
-    loading: dataLoading || false,
-    handleAction: handleRegister,
-    hookForm,
-  }
-
-  console.log(hookForm.getValues(), "juju")
+  // const formProps = {
+  //   error: dataError || "",
+  //   loading: dataLoading || false,
+  //   handleAction: handleRegister,
+  //   hookForm,
+  // }
 
   return (
     <div className="register-page">
-      <div className="main-card">
+      {/* <div className="main-card">
         <h3>Register your organization</h3>
         <div className="separator" />
         <RegisterForm {...formProps} />
@@ -121,7 +119,7 @@ const Register: React.FC<IProps> = ({ states, ...props }) => {
             Login
           </p>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

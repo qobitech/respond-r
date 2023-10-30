@@ -4,7 +4,7 @@ import { url } from "enums/Route"
 import "./navbar.scss"
 import Toast from "utils/new/toast"
 import { INotification } from "interfaces/IGlobal"
-import { isLogged } from "utils/new/constants"
+import { USERTOKEN, isLogged } from "utils/new/constants"
 import { CogSVG, HamburgerSVG, LogoSVG } from "utils/new/svgs"
 import { ICallRightSection } from "store/actions/global"
 
@@ -33,8 +33,12 @@ const Navbar = (props: NavbarProps) => {
           </div>
         ) : null}
         {!props.menuOpen && (
-          <div onClick={() => navigate(url.LANDING_PAGE)}>
+          <div
+            onClick={() => navigate(url.LANDING_PAGE)}
+            className="logo-container"
+          >
             <LogoSVG />
+            {USERTOKEN.Role === "e-police" ? <p>POLICE</p> : null}
           </div>
         )}
         {isLogged && (

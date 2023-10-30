@@ -2,35 +2,13 @@ import { ICallRightSection } from "store/actions/global"
 import { INotification } from "./IGlobal"
 import { IAllUsers } from "./IUser"
 import { IVehicleById } from "./IVehicle"
+import { ILoginResponse } from "./IAuth"
+import { IDemoEPolice } from "./IDemo"
 
 export interface IAuthReducer {
-  registerOrganization: any
-  registerOrganizationLoading: boolean
-  registerOrganizationError: any
-  verifyEmail: any
-  verifyEmailLoading: boolean
-  verifyEmailError: any
-  userLogin: any
+  userLogin: ILoginResponse
   userLoginLoading: boolean
   userLoginError: string
-  passwordReset: any
-  passwordResetLoading: boolean
-  passwordResetError: any
-  requestPasswordToken: any
-  requestPasswordTokenLoading: boolean
-  requestPasswordTokenError: any
-  verifyPasswordResetToken: any
-  verifyPasswordResetTokenLoading: boolean
-  verifyPasswordResetTokenError: any
-  updatePassword: any
-  updatePasswordLoading: boolean
-  updatePasswordError: any
-  generateAccessToken: any
-  generateAccessTokenLoading: boolean
-  generateAccessTokenError: any
-  getRefreshToken: any
-  getRefreshTokenLoading: boolean
-  getRefreshTokenError: any
 }
 
 export interface IGlobalReducer {
@@ -89,10 +67,17 @@ export interface IVehicleReducer {
   getVehicleByRegNumberError: any
 }
 
+export interface IDemoReducer {
+  getDemoEPoliceNotifications: IDemoEPolice
+  getDemoEPoliceNotificationsLoading: boolean
+  getDemoEPoliceNotificationsError: any
+}
+
 export interface IStates {
   auth: IAuthReducer
   global: IGlobalReducer
   role: IRoleReducer
   user: IUserReducer
   vehicle: IVehicleReducer
+  demo: IDemoReducer
 }

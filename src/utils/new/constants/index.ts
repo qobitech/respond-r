@@ -1,21 +1,20 @@
-// import { IUserToken } from "interfaces/IAuth"
-// import jwtDecode from "jwt-decode"
+import { IToken } from "interfaces/IAuth"
+import jwtDecode from "jwt-decode"
 
-export const TOKEN = localStorage.getItem("CentralDatabaseToken")
+export const TOKENKEY = "respondr-token"
+
+export const TOKEN = localStorage.getItem(TOKENKEY)
 
 export const getUserToken = () => {
-  // const token: IUserToken = TOKEN ? jwtDecode(TOKEN) : ({} as IUserToken)
-  // return token
-  return ""
+  const token: IToken = TOKEN ? jwtDecode(TOKEN) : ({} as IToken)
+  return token
 }
 
 export const USERTOKEN = getUserToken()
 
-// export const isLogged = USERTOKEN?.exp
-//   ? !(USERTOKEN?.exp * 1000 < Date.now())
-//   : false
-
-export const isLogged = true
+export const isLogged = USERTOKEN?.exp
+  ? !(USERTOKEN?.exp * 1000 < Date.now())
+  : false
 
 // export enum userRoles {
 //   ADMIN = "Administrator",
@@ -31,8 +30,8 @@ export const PAGE_SIZE = 20
 
 export const PRIMARY_COLOR = "#202A3A"
 export const PRIMARY_COLOR_LIGHT = "#06679E"
-export const HEADER_COLOR = "#274169"
-export const LABEL_COLOR = "#274169"
+export const HEADER_COLOR = "#235A62"
+export const LABEL_COLOR = "#235A62"
 export const PLACEHOLDER_COLOR = "#949494"
 export const TEXT_COLOR = "#202A3A"
 export const TEXT_COLOR_LIGHT = "#485E82"

@@ -1,18 +1,19 @@
 import { url } from "enums/Route"
-import { etraffica_baseurl } from "../../../utils/constants"
+import { baseurl } from "../../../utils/constants"
 import * as utils from "../../services/new/utils"
 import { authType } from "store/types"
+import { TOKENKEY } from "utils/new/constants"
 // import { ILogin } from "interfaces/IAuth"
 
 const setAuthorizationHeader = (token: string) => {
-  localStorage.setItem("CentralDatabaseToken", token)
+  localStorage.setItem(TOKENKEY, token)
 }
 
 export const registerOrganization = (adminDetails: object) => {
   return utils.httpPostMethod({
     apiData: {
       url: "",
-      customurl: `${etraffica_baseurl}/UserManagement/OrganizationRegistration`,
+      customurl: `${baseurl}/UserManagement/OrganizationRegistration`,
       header: utils.headerNoAuth(),
       data: adminDetails,
     },
@@ -24,7 +25,7 @@ export const verifyEmail = (data: object) => {
   return utils.httpPostMethod({
     apiData: {
       url: "",
-      customurl: `${etraffica_baseurl}/UserManagement/VerifyToken`,
+      customurl: `${baseurl}/UserManagement/VerifyToken`,
       header: utils.headerNoAuth(),
       data,
     },
@@ -32,21 +33,17 @@ export const verifyEmail = (data: object) => {
   })
 }
 
-export const userLogin = (data: {
-  username: string
-  password: string
-  rememberMe: boolean
-}) => {
+export const userLogin = (data: { email: string; password: string }) => {
   return utils.httpPostMethod({
     apiData: {
       url: "",
-      customurl: `${etraffica_baseurl}/UserLogin`,
+      customurl: `${baseurl}/Auth/Login`,
       header: utils.headerNoAuth(),
       data,
     },
     actionType: authType.userLogin,
     onSuccess: (res: any) => {
-      setAuthorizationHeader(res.token.accessToken)
+      setAuthorizationHeader(res.token)
       setTimeout(() => {
         window.location.reload()
       }, 1500)
@@ -58,7 +55,7 @@ export const passwordReset = (data: object) => {
   return utils.httpPostMethod({
     apiData: {
       url: "",
-      customurl: `${etraffica_baseurl}/UserManagement/PasswordReset/UpdatePassword`,
+      customurl: `${baseurl}/UserManagement/PasswordReset/UpdatePassword`,
       header: utils.headerNoAuth(),
       data,
     },
@@ -70,9 +67,7 @@ export const requestPasswordToken = (email: { [key: string]: any }) => {
   return utils.httpPostMethod({
     apiData: {
       url: "",
-      customurl: `${etraffica_baseurl}/PasswordReset/TokenLink/${
-        email!?.email
-      }`,
+      customurl: `${baseurl}/PasswordReset/TokenLink/${email!?.email}`,
       header: utils.headerNoAuth(),
     },
     actionType: authType.requestPasswordToken,
@@ -86,7 +81,7 @@ export const verifyPasswordResetToken = (data: object) => {
   return utils.httpPostMethod({
     apiData: {
       url: "",
-      customurl: `${etraffica_baseurl}/PasswordReset/ValidateToken`,
+      customurl: `${baseurl}/PasswordReset/ValidateToken`,
       header: utils.headerNoAuth(),
       data,
     },
@@ -98,7 +93,7 @@ export const updatePassword = (data: object) => {
   return utils.httpPostMethod({
     apiData: {
       url: "",
-      customurl: `${etraffica_baseurl}/ChangePassword`,
+      customurl: `${baseurl}/ChangePassword`,
       header: utils.headerNoAuth(),
       data,
     },
@@ -110,7 +105,7 @@ export const generateAccessToken = (data: object) => {
   return utils.httpPostMethod({
     apiData: {
       url: "",
-      customurl: `${etraffica_baseurl}/connect/token`,
+      customurl: `${baseurl}/connect/token`,
       header: utils.headerNoAuth(),
       data,
     },
@@ -122,7 +117,7 @@ export const getRefreshToken = (data: object) => {
   return utils.httpPostMethod({
     apiData: {
       url: "",
-      customurl: `${etraffica_baseurl}/Session/RefreshToken`,
+      customurl: `${baseurl}/Session/RefreshToken`,
       header: utils.headerNoAuth(),
       data,
     },
