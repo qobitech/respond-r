@@ -29,8 +29,9 @@ import { vehicles } from "store/types"
 import { Accordion, useAccordion } from "components/reusable/accordion"
 import Switch, { Case } from "components/reusable/switch"
 import ReactPaginate from "react-paginate"
-import Stream from "./stream-player"
-import axios from "axios"
+// import Stream from "./stream-player"
+// import axios from "axios"
+import { IframeComponent } from "../fire-service"
 
 interface IProps {
   states?: IStates
@@ -108,6 +109,7 @@ interface IUSIO {
   sendRTSPURL: (url: string) => void
   streamStatus: streamTypes | null
   stopRTSPFeed: () => void
+  rtspurl: string | null
 }
 
 export type streamTypes = "started" | "loading" | "error"
@@ -118,34 +120,40 @@ export const streamEnums = {
 }
 
 const useRTSP = (): IUSIO => {
-  const [streamStatus, setStreamStatus] = useState<streamTypes | null>(null)
-  const rtspurl = getUrl("rtspUrl")
+  const [
+    streamStatus,
+    // setStreamStatus
+  ] = useState<streamTypes | null>(null)
+  const [rtspurl, setRtspURL] = useState<string | null>(getUrl("rtspUrl"))
 
-  const httpRequest = (url: string) => {
-    axios
-      .get(`http://localhost:3002/stream?rtsp=${url}`)
-      .then(() => {
-        setStreamStatus(url === "stop" ? null : "started")
-      })
-      .catch(() => {
-        setStreamStatus("error")
-      })
-  }
+  // const httpRequest = (url: string) => {
+  //   axios
+  //     .get(`http://localhost:3002/stream?rtsp=${url}`)
+  //     .then(() => {
+  //       setStreamStatus(url === "stop" ? null : "started")
+  //     })
+  //     .catch(() => {
+  //       setStreamStatus("error")
+  //     })
+  // }
 
   const sendRTSPURL = (url?: string) => {
-    setStreamStatus("loading")
+    // setStreamStatus("loading")
     if (url && url !== rtspurl) setUrl("rtspUrl", url)
-    httpRequest(url || rtspurl || "")
+    // httpRequest(url || rtspurl || "")
+    setRtspURL(url || "")
   }
 
   const stopRTSPFeed = () => {
-    httpRequest("stop")
+    // httpRequest("stop")
+    setRtspURL(null)
   }
 
   return {
     sendRTSPURL,
     streamStatus,
     stopRTSPFeed,
+    rtspurl,
   }
 }
 
@@ -299,6 +307,7 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
                 flags={flags!}
                 isImage={isImage}
                 isRtsp={isRtsp}
+                rtspProps={rtspProps}
               />
             ) : (
               <div className="no-video-selected-section">
@@ -358,6 +367,7 @@ const MainView = ({
   flags,
   isImage,
   isRtsp,
+  rtspProps,
 }: {
   vehicle: IVehicleReducer | undefined
   mediaUrl: string
@@ -365,6 +375,7 @@ const MainView = ({
   flags: string[]
   isImage: boolean
   isRtsp: boolean
+  rtspProps: IUSIO
 }) => {
   const [tab, setTab] = useState<string>(tabEnum.VEHICLEINFO)
 
@@ -425,7 +436,8 @@ const MainView = ({
       </div>
       <div className="video-container">
         <div className={`media-box ${isRtsp ? "" : "hide"}`}>
-          <Stream />
+          {/* <Stream /> */}
+          <IframeComponent src={rtspProps.rtspurl || ""} />
         </div>
         {isMedia ? (
           <div className={`media-box ${isImage ? "" : "hide"}`}>

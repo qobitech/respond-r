@@ -4,7 +4,7 @@ import { TypeButton, TypeSmallButton } from "utils/new/button"
 import Table from "utils/new/table"
 import ReactPaginate from "react-paginate"
 import "../../../utils/new/pagination.scss"
-import { ITableRecord } from "components/dashboard/overview"
+import { ITableRecord } from "components/dashboard/traffic"
 
 interface IProps {
   tableData: ITableRecord[]

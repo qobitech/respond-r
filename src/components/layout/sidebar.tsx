@@ -4,6 +4,7 @@ import "./sidebar.scss"
 import { url } from "enums/Route"
 import {
   CarsSVG,
+  FireExtinguisherSVG,
   HamburgerSVG,
   LogoSVG,
   ManagementSVG,
@@ -36,6 +37,12 @@ const SideBar = ({ setMenuOpen, menuOpen, logOut }: IProps) => {
       imgsrc: <PoliceSVG />,
       isActive: _isUrl(url.POLICE),
       url: url.POLICE,
+    },
+    {
+      title: "Fire Service",
+      imgsrc: <FireExtinguisherSVG />,
+      isActive: _isUrl(url.FIRESERVICE),
+      url: url.FIRESERVICE,
     },
     {
       title: "Management",

@@ -5,8 +5,8 @@ import {
   getUrl,
   setUrl,
   typeConnectionStatus,
-} from "../overview"
-import { handleDataStream } from "../overview/data"
+} from "../traffic"
+import { handleDataStream } from "../traffic/data"
 import RightSection, {
   useRightSection,
 } from "components/reusable/right-section"

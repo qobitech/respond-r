@@ -6,9 +6,10 @@ import ForgotPassword from "components/auth/login/forgot-password"
 import ResetPassword from "components/auth/login/reset-password"
 import Register from "components/auth/register"
 import VerifyEmail from "components/auth/register/verify-email"
-import Overview from "components/dashboard/overview"
-import IPolicePage from "components/dashboard/e-police/police"
+import Overview from "components/dashboard/traffic"
+import IPolicePage from "components/dashboard/e-police"
 import ManagementPage from "components/dashboard/management"
+import IFireServicePage from "components/dashboard/fire-service"
 export interface IUrl {
   id: number
   PageRenders: ((props?: any) => ReactElement | null)[]
@@ -54,6 +55,12 @@ export const routes: Array<IUrl> = [
     id: 9,
     PageRenders: [ManagementPage],
     paths: [url.MANAGEMENT],
+    routeType: "auth",
+  },
+  {
+    id: 10,
+    PageRenders: [IFireServicePage],
+    paths: [url.FIRESERVICE],
     routeType: "auth",
   },
 ]
