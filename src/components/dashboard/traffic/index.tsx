@@ -231,7 +231,10 @@ const getFilePath = (i: string) => {
 }
 
 const Overview: React.FC<IProps> = ({ states, ...props }) => {
-  const { getVehicleByRegNumber, clearAction } = props as unknown as IAction
+  const { getVehicleByRegNumber, clearAction, setSearch } =
+    props as unknown as IAction
+  const searchAction = states?.global.search
+
   const rightSectionProps = states?.global.rightSection
   const vehicle = states?.vehicle
   const [mediaUrl, setMediaUrl] = useState<string>("")
@@ -327,6 +330,9 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
                 handleFeedRequest={handleFeedRequest}
                 handleHitRequest={handleHitRequest}
                 signalRProps={signalRProps}
+                setSearch={setSearch}
+                searchAction={searchAction || false}
+                searchResults={[]}
               />
             </div>
           </div>
@@ -544,10 +550,16 @@ const LiveFeedComponent = ({
   signalRProps,
   handleHitRequest,
   handleFeedRequest,
+  setSearch,
+  searchResults,
+  searchAction,
 }: {
   handleHitRequest: (i: IHit) => void
   handleFeedRequest: (i: IFeed) => void
   signalRProps: IUS
+  setSearch: (search: boolean) => (dispatch: any) => void
+  searchResults: any[]
+  searchAction: boolean
 }) => {
   const filters = [`Hits`, `All Feeds`]
   const useFilterProps = useFilterSection(filters[0])
@@ -557,53 +569,64 @@ const LiveFeedComponent = ({
 
   return (
     <div className="live-feed-component">
-      <LiveFeedFilterSection filterProps={useFilterProps} filters={filters} />
-      <div className="live-feed-component-wrapper">
-        {isFeed ? (
-          <>
-            {signalRProps.feeds[0] ? (
-              signalRProps.feeds.map((i) => (
-                <LiveFeedItemComponent
-                  key={i.regNumber}
-                  carColor={i.colour}
-                  carMake={i.make || "..."}
-                  carType={i.model || "..."}
-                  imgSrc={getFilePath(i.filePath)}
-                  offense={i.flags?.[0] ? i.flags?.length + "" : "0"}
-                  regNumber={i.regNumber}
-                  handleOnClick={() => {
-                    handleFeedRequest(i)
-                  }}
-                />
-              ))
-            ) : (
-              <NoFeeds />
-            )}
-          </>
-        ) : null}
-        {isHit ? (
-          <>
-            {signalRProps.hits[0] ? (
-              signalRProps.hits.map((i) => (
-                <LiveHitItemComponent
-                  key={i.regNumber}
-                  carColor={i.colour}
-                  carMake={i.make || "..."}
-                  carModel={i.model || "..."}
-                  imgSrc={getFilePath(i.displayUrl)}
-                  offense={i.flag?.[0] ? i.flag?.length + "" : "0"}
-                  regNumber={i.regNumber}
-                  handleOnClick={() => {
-                    handleHitRequest(i)
-                  }}
-                />
-              ))
-            ) : (
-              <NoFeeds />
-            )}
-          </>
-        ) : null}
-      </div>
+      {searchAction ? (
+        <SearchSection setSearch={setSearch} results={searchResults.length} />
+      ) : (
+        <LiveFeedFilterSection filterProps={useFilterProps} filters={filters} />
+      )}
+
+      {searchAction ? (
+        <div className="live-feed-component-wrapper">
+          <SearchResults />
+        </div>
+      ) : (
+        <div className="live-feed-component-wrapper">
+          {isFeed ? (
+            <>
+              {signalRProps.feeds[0] ? (
+                signalRProps.feeds.map((i) => (
+                  <LiveFeedItemComponent
+                    key={i.regNumber}
+                    carColor={i.colour}
+                    carMake={i.make || "..."}
+                    carType={i.model || "..."}
+                    imgSrc={getFilePath(i.filePath)}
+                    offense={i.flags?.[0] ? i.flags?.length + "" : "0"}
+                    regNumber={i.regNumber}
+                    handleOnClick={() => {
+                      handleFeedRequest(i)
+                    }}
+                  />
+                ))
+              ) : (
+                <NoFeeds />
+              )}
+            </>
+          ) : null}
+          {isHit ? (
+            <>
+              {signalRProps.hits[0] ? (
+                signalRProps.hits.map((i) => (
+                  <LiveHitItemComponent
+                    key={i.regNumber}
+                    carColor={i.colour}
+                    carMake={i.make || "..."}
+                    carModel={i.model || "..."}
+                    imgSrc={getFilePath(i.displayUrl)}
+                    offense={i.flag?.[0] ? i.flag?.length + "" : "0"}
+                    regNumber={i.regNumber}
+                    handleOnClick={() => {
+                      handleHitRequest(i)
+                    }}
+                  />
+                ))
+              ) : (
+                <NoFeeds />
+              )}
+            </>
+          ) : null}
+        </div>
+      )}
     </div>
   )
 }
@@ -1442,6 +1465,61 @@ const LiveFeedFilterSection: FC<ILFS> = ({ filterProps, filters }) => {
           {i}
         </button>
       ))}
+    </div>
+  )
+}
+
+const SearchSection = ({
+  results,
+  setSearch,
+}: {
+  results: number
+  setSearch: (search: boolean) => (dispatch: any) => void
+}) => {
+  return (
+    <div className="live-feed-filter-section" style={{ gap: "30px" }}>
+      <p className="m-0" style={{ fontSize: "13px" }}>
+        {" "}
+        Search Results ({results})
+      </p>
+
+      <button
+        className="active"
+        onClick={() => setSearch(false)}
+        style={{ cursor: "pointer" }}
+      >
+        <i className="fas fa-arrow-left mr-2" />
+        Back to feed
+      </button>
+    </div>
+  )
+}
+
+const SearchResults = () => {
+  const tabEnums = { LOCAL: "Local", REMOTE: "Remote" }
+
+  const [tab, setTab] = useState<string>(tabEnums.LOCAL)
+
+  return (
+    <div>
+      <div style={{ paddingBottom: "20px" }} />
+      <div className="tab-section">
+        <div className="tab-header">
+          {Object.values(tabEnums).map((i, index) => (
+            <div
+              className={`tab-item ${i === tab ? "active" : ""}`}
+              key={index}
+              onClick={() => setTab(i)}
+            >
+              <p>{i}</p>
+            </div>
+          ))}
+        </div>
+        <div className="tab-body">
+          {tab === tabEnums.LOCAL ? <></> : null}
+          {tab === tabEnums.REMOTE ? <></> : null}
+        </div>
+      </div>
     </div>
   )
 }

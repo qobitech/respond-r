@@ -14,8 +14,19 @@ interface PageProps {
 }
 
 const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
-  const { setNotificationStatus, setMenuOpen, logOut, callRightSection } =
-    props as unknown as IAction
+  const {
+    setNotificationStatus,
+    setMenuOpen,
+    setSearch,
+    logOut,
+    callRightSection,
+    searchVehicleByChasisNumber,
+    searchVehicleByRegNumber,
+  } = props as unknown as IAction
+
+  const searchLoad =
+    states?.vehicle.searchVehicleByRegNumberLoading ||
+    states?.vehicle.searchVehicleByChasisNumberLoading
 
   const notifyUser = states?.global.notifyUser
   const menuOpen = states?.global.menuOpen
@@ -44,6 +55,10 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
           setMenuOpen={setMenuOpen}
           menuOpen={menuOpen || false}
           callRightSection={callRightSection}
+          searchVehicleByChasisNumber={searchVehicleByChasisNumber}
+          searchVehicleByRegNumber={searchVehicleByRegNumber}
+          searchLoad={searchLoad}
+          setSearch={setSearch}
         />
         <ScrollIntoViewController>
           <div className="contents">{children}</div>

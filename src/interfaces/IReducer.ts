@@ -15,6 +15,9 @@ export interface IGlobalReducer {
   menuOpen: boolean
   menuOpenLoading: boolean
   menuOpenError: any
+  search: boolean
+  searchLoading: boolean
+  searchError: any
   subMenuOpen: number
   subMenuOpenLoading: boolean
   subMenuOpenError: any
@@ -65,6 +68,12 @@ export interface IVehicleReducer {
   getVehicleByRegNumber: IVehicleById
   getVehicleByRegNumberLoading: boolean
   getVehicleByRegNumberError: any
+  searchVehicleByRegNumber: any
+  searchVehicleByRegNumberLoading: boolean
+  searchVehicleByRegNumberError: any
+  searchVehicleByChasisNumber: any
+  searchVehicleByChasisNumberLoading: boolean
+  searchVehicleByChasisNumberError: any
 }
 
 export interface IDemoReducer {

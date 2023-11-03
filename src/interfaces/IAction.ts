@@ -85,10 +85,13 @@ interface IGlobalActions {
     status: boolean
   ) => (dispatch: any) => void
   callRightSection: (props: ICallRightSection) => (dispatch: any) => void
+  setSearch: (search: boolean) => (dispatch: any) => void
 }
 
 interface IVehicleActions {
   getVehicleByRegNumber: (query: string) => (dispatch: any) => void
+  searchVehicleByRegNumber: (query: string) => (dispatch: any) => void
+  searchVehicleByChasisNumber: (query: string) => (dispatch: any) => void
 }
 
 interface IDemoActions {

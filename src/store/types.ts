@@ -39,6 +39,7 @@ export const globalType = generateActionTypes([
   "subMenuOpen",
   "notifyUser",
   "rightSection",
+  "search",
 ])
 
 export const apiScopeType = generateActionTypes([
@@ -79,7 +80,11 @@ export const user = generateActionTypes([
 
 export const demoActions = generateActionTypes(["getDemoEPoliceNotifications"])
 
-export const vehicles = generateActionTypes(["getVehicleByRegNumber"])
+export const vehicles = generateActionTypes([
+  "getVehicleByRegNumber",
+  "searchVehicleByRegNumber",
+  "searchVehicleByChasisNumber",
+])
 
 export const billing = generateActionTypes([
   "getAPIBundles",

@@ -15,6 +15,13 @@ export const setMenuOpen = (menuOpen: boolean) => (dispatch: any) => {
   })
 }
 
+export const setSearch = (search: boolean) => (dispatch: any) => {
+  dispatch({
+    type: globalType.search.dataAction,
+    payload: search,
+  })
+}
+
 export const setSubMenuOpen = (subMenuOpen: number) => (dispatch: any) => {
   dispatch({
     type: globalType.subMenuOpen.dataAction,
