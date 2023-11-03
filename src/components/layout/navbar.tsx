@@ -176,7 +176,6 @@ interface ICTAS {
 }
 
 const CTAS: FC<ICTAS> = ({ load, onBtn1, onBtn2 }) => {
-  const [btnClicked, setBtnClicked] = useState<number>(0)
   return (
     <div
       className="w-100 d-flex flex-wrap justify-content-center"
@@ -198,26 +197,20 @@ const CTAS: FC<ICTAS> = ({ load, onBtn1, onBtn2 }) => {
             aria-haspopup="true"
             aria-expanded="false"
           >
-            {btnClicked === 1 && load ? "loading..." : "Search"}
+            Search
           </button>
           <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <p
               className="dropdown-item cursor-pointer m-0 py-2"
               style={{ cursor: "pointer" }}
-              onClick={() => {
-                onBtn1?.()
-                setBtnClicked(1)
-              }}
+              onClick={onBtn1}
             >
               Reg number
             </p>
             <p
               className="dropdown-item cursor-pointer m-0 py-2"
               style={{ cursor: "pointer" }}
-              onClick={() => {
-                onBtn2?.()
-                setBtnClicked(1)
-              }}
+              onClick={onBtn2}
             >
               Chasis number
             </p>
