@@ -11,7 +11,7 @@
   .navbarItems {
     height: auto;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     color: #000;
     margin: 0 auto;
     position: relative;
@@ -23,6 +23,9 @@
     // border-bottom: 1px solid #e8e8e8;
 
     .hamburger {
+      height: 55px;
+      display: flex;
+      align-items: center;
       svg {
         margin-right: 1.42rem;
         cursor: pointer;
@@ -287,6 +290,7 @@
 .nav-config-component {
   display: flex;
   align-items: center;
+  height: 55px;
   gap: 10px;
   cursor: pointer;
   color: #4f4f4f;
@@ -297,7 +301,7 @@
 
 .nav-other-components {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 30px;
 }
 
@@ -335,6 +339,7 @@
 .logo-container {
   display: flex;
   align-items: center;
+  height: 55px;
   gap: 10px;
   p {
     margin: 0;

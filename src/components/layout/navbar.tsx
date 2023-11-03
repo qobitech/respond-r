@@ -56,7 +56,7 @@ const Navbar = (props: NavbarProps) => {
               load={props.searchLoad}
               setSearch={props.setSearch}
             />
-            <div className="nav-separator" />
+            {/* <div className="nav-separator" /> */}
             <ConfigurationComponent
               openSettings={() => {
                 props.callRightSection({
@@ -146,6 +146,12 @@ const SearchComponent = ({
           onChange={handleOnChange}
           value={inputValue}
           onBlur={() => setError("")}
+          onFocus={() => setError("")}
+          autoFocus={error.length > 0}
+          style={{
+            border: error ? "1px solid #f56e9d" : "",
+            marginBottom: error ? "5px" : "0",
+          }}
         />
 
         <CTAS
