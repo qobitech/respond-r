@@ -292,6 +292,7 @@
   align-items: center;
   height: 55px;
   gap: 10px;
+  margin-left: auto;
   cursor: pointer;
   color: #4f4f4f;
   p {
@@ -303,6 +304,7 @@
   display: flex;
   align-items: flex-start;
   gap: 30px;
+  width: 100%;
 }
 
 .nav-separator {
@@ -343,5 +345,23 @@
   gap: 10px;
   p {
     margin: 0;
+  }
+}
+
+.page-identifier {
+  margin: 0 30px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+  svg {
+    width: 40px;
+  }
+  p {
+    margin: 0;
+    font-size: 13px;
+    text-transform: uppercase;
+    font-weight: 500;
   }
 }

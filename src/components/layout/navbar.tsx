@@ -1,11 +1,20 @@
 import React, { FC, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { url } from "enums/Route"
 import "./navbar.scss"
 import Toast from "utils/new/toast"
 import { INotification } from "interfaces/IGlobal"
 import { USERTOKEN, isLogged } from "utils/new/constants"
-import { CogSVG, HamburgerSVG, LogoSVG, PulseSVG } from "utils/new/svgs"
+import {
+  CarsSVG,
+  CogSVG,
+  FireExtinguisherSVG,
+  HamburgerSVG,
+  LogoSVG,
+  ManagementSVG,
+  PoliceSVG,
+  PulseSVG,
+} from "utils/new/svgs"
 import { ICallRightSection } from "store/actions/global"
 import TextPrompt from "utils/new/text-prompt"
 
@@ -20,12 +29,37 @@ interface NavbarProps {
   searchLoad?: boolean
 }
 
+type pageType = "e-traffic" | "e-police" | "fire-service" | "management"
+
 const Navbar = (props: NavbarProps) => {
   // const [clicked, setClicked] = useState(false)
   const handleClick = () => {
     props.setMenuOpen(!props.menuOpen)
   }
   const navigate = useNavigate()
+
+  const location = useLocation()
+
+  function _isUrl(page: string) {
+    return location.pathname.includes(page)
+  }
+
+  const isTraffic = _isUrl(url.OVERVIEW)
+  const isFireService = _isUrl(url.FIRESERVICE)
+  const isPolice = _isUrl(url.POLICE)
+
+  const getPageIdentifier = (): pageType => {
+    switch (true) {
+      case isTraffic:
+        return "e-traffic"
+      case isFireService:
+        return "fire-service"
+      case isPolice:
+        return "e-police"
+      default:
+        return "management"
+    }
+  }
 
   return (
     <div className="nav-container">
@@ -43,20 +77,22 @@ const Navbar = (props: NavbarProps) => {
             className="logo-container"
           >
             <LogoSVG />
-            {USERTOKEN.Role === "e-police" ? (
-              <p style={{ fontSize: "13px" }}>POLICE</p>
-            ) : null}
           </div>
         )}
+        <PageIdentifier page={getPageIdentifier()} />
         {isLogged && (
           <div className="nav-other-components">
-            <SearchComponent
-              searchVehicleByChasisNumber={props.searchVehicleByChasisNumber}
-              searchVehicleByRegNumber={props.searchVehicleByRegNumber}
-              load={props.searchLoad}
-              setSearch={props.setSearch}
-            />
-            {/* <div className="nav-separator" /> */}
+            {isTraffic ? (
+              <TrafficSearchComponent
+                searchVehicleByChasisNumber={props.searchVehicleByChasisNumber}
+                searchVehicleByRegNumber={props.searchVehicleByRegNumber}
+                load={props.searchLoad}
+                setSearch={props.setSearch}
+              />
+            ) : null}
+            {isFireService ? <FireSearchComponent /> : null}
+            {isPolice ? <PoliceSearchComponent /> : null}
+
             <ConfigurationComponent
               openSettings={() => {
                 props.callRightSection({
@@ -108,7 +144,121 @@ const Navbar = (props: NavbarProps) => {
 
 export default Navbar
 
-const SearchComponent = ({
+const PageIdentifier = ({ page }: { page: pageType }) => {
+  return (
+    <div className="page-identifier">
+      {page === "fire-service" ? <FireExtinguisherSVG /> : null}
+      {page === "e-police" ? <PoliceSVG /> : null}
+      {page === "e-traffic" ? <CarsSVG /> : null}
+      {page === "management" ? <ManagementSVG /> : null}
+      <p>{page}</p>
+    </div>
+  )
+}
+
+const PoliceSearchComponent = () => {
+  const [inputValue, setInputValue] = useState<string>("")
+  const [error, setError] = useState<string>("")
+
+  const handleOnChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = target
+    setInputValue(value)
+    setError("")
+  }
+
+  const handleSearch = (searchType: "reg" | "chasis") => {
+    if (!inputValue) {
+      setError("input empty")
+      return
+    }
+    // if (searchType === "reg") searchVehicleByRegNumber(inputValue)
+    // if (searchType === "chasis") searchVehicleByChasisNumber(inputValue)
+    // setSearch(true)
+  }
+
+  return (
+    <form className="nav-search-component" onSubmit={(e) => e.preventDefault()}>
+      <div className="d-flex align-items-center" style={{ gap: "20px" }}>
+        <input
+          placeholder="Type here to search"
+          onChange={handleOnChange}
+          value={inputValue}
+          onBlur={() => setError("")}
+          onFocus={() => setError("")}
+          autoFocus={error.length > 0}
+          style={{
+            border: error ? "1px solid #f56e9d" : "",
+            marginBottom: error ? "5px" : "0",
+          }}
+        />
+
+        <CTAS
+          // load={load}
+          onBtn1={() => {
+            handleSearch("reg")
+          }}
+          onBtn2={() => {
+            handleSearch("chasis")
+          }}
+        />
+      </div>
+      {error ? <TextPrompt prompt={error} status={false} /> : null}
+    </form>
+  )
+}
+
+const FireSearchComponent = () => {
+  const [inputValue, setInputValue] = useState<string>("")
+  const [error, setError] = useState<string>("")
+
+  const handleOnChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = target
+    setInputValue(value)
+    setError("")
+  }
+
+  const handleSearch = (searchType: "reg" | "chasis") => {
+    if (!inputValue) {
+      setError("input empty")
+      return
+    }
+    // if (searchType === "reg") searchVehicleByRegNumber(inputValue)
+    // if (searchType === "chasis") searchVehicleByChasisNumber(inputValue)
+    // setSearch(true)
+  }
+
+  return (
+    <form className="nav-search-component" onSubmit={(e) => e.preventDefault()}>
+      <div className="d-flex align-items-center" style={{ gap: "20px" }}>
+        <input
+          placeholder="Type here to search"
+          onChange={handleOnChange}
+          value={inputValue}
+          onBlur={() => setError("")}
+          onFocus={() => setError("")}
+          autoFocus={error.length > 0}
+          style={{
+            border: error ? "1px solid #f56e9d" : "",
+            marginBottom: error ? "5px" : "0",
+          }}
+        />
+
+        <CTAS
+          // load={load}
+          onBtn1={() => {
+            handleSearch("reg")
+          }}
+          onBtn2={() => {
+            handleSearch("chasis")
+          }}
+        />
+      </div>
+      {error ? <TextPrompt prompt={error} status={false} /> : null}
+    </form>
+  )
+}
+
+const TrafficSearchComponent = ({
   searchVehicleByChasisNumber,
   searchVehicleByRegNumber,
   load,
