@@ -166,15 +166,15 @@ const PoliceSearchComponent = () => {
     setError("")
   }
 
-  const handleSearch = (searchType: "reg" | "chasis") => {
-    if (!inputValue) {
-      setError("input empty")
-      return
-    }
-    // if (searchType === "reg") searchVehicleByRegNumber(inputValue)
-    // if (searchType === "chasis") searchVehicleByChasisNumber(inputValue)
-    // setSearch(true)
-  }
+  // const handleSearch = (searchType: "reg" | "chasis") => {
+  //   if (!inputValue) {
+  //     setError("input empty")
+  //     return
+  //   }
+  //   // if (searchType === "reg") searchVehicleByRegNumber(inputValue)
+  //   // if (searchType === "chasis") searchVehicleByChasisNumber(inputValue)
+  //   // setSearch(true)
+  // }
 
   return (
     <form className="nav-search-component" onSubmit={(e) => e.preventDefault()}>
@@ -192,7 +192,7 @@ const PoliceSearchComponent = () => {
           }}
         />
 
-        <CTAS
+        {/* <CTAS
           // load={load}
           onBtn1={() => {
             handleSearch("reg")
@@ -200,7 +200,7 @@ const PoliceSearchComponent = () => {
           onBtn2={() => {
             handleSearch("chasis")
           }}
-        />
+        /> */}
       </div>
       {error ? <TextPrompt prompt={error} status={false} /> : null}
     </form>
@@ -217,15 +217,15 @@ const FireSearchComponent = () => {
     setError("")
   }
 
-  const handleSearch = (searchType: "reg" | "chasis") => {
-    if (!inputValue) {
-      setError("input empty")
-      return
-    }
-    // if (searchType === "reg") searchVehicleByRegNumber(inputValue)
-    // if (searchType === "chasis") searchVehicleByChasisNumber(inputValue)
-    // setSearch(true)
-  }
+  // const handleSearch = (searchType: "reg" | "chasis") => {
+  //   if (!inputValue) {
+  //     setError("input empty")
+  //     return
+  //   }
+  //   // if (searchType === "reg") searchVehicleByRegNumber(inputValue)
+  //   // if (searchType === "chasis") searchVehicleByChasisNumber(inputValue)
+  //   // setSearch(true)
+  // }
 
   return (
     <form className="nav-search-component" onSubmit={(e) => e.preventDefault()}>
@@ -243,7 +243,7 @@ const FireSearchComponent = () => {
           }}
         />
 
-        <CTAS
+        {/* <CTAS
           // load={load}
           onBtn1={() => {
             handleSearch("reg")
@@ -251,7 +251,7 @@ const FireSearchComponent = () => {
           onBtn2={() => {
             handleSearch("chasis")
           }}
-        />
+        /> */}
       </div>
       {error ? <TextPrompt prompt={error} status={false} /> : null}
     </form>
