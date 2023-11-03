@@ -63,7 +63,10 @@ const Navbar = (props: NavbarProps) => {
 
   return (
     <div className="nav-container">
-      <nav className="navbarItems">
+      <nav
+        className="navbarItems"
+        style={{ padding: isLogged ? "1rem 0px" : "0.4rem 0" }}
+      >
         {props.menuOpen && <div className="backdrop" onClick={handleClick} />}
 
         {isLogged ? (
@@ -79,7 +82,7 @@ const Navbar = (props: NavbarProps) => {
             <LogoSVG />
           </div>
         )}
-        <PageIdentifier page={getPageIdentifier()} />
+        {isLogged ? <PageIdentifier page={getPageIdentifier()} /> : null}
         {isLogged && (
           <div className="nav-other-components">
             {isTraffic ? (

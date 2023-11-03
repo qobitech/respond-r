@@ -11,7 +11,10 @@ const Toast: React.FC<IHN> = ({ notice, status }) => {
   return (
     <>
       {notice ? (
-        <div className={`toast-container ${status ? "success" : ""}`}>
+        <div
+          className={`toast-container ${status ? "success" : ""}`}
+          style={{ width: "100%" }}
+        >
           <CheckSVG color="#fff" />
           <p>{notice}</p>
         </div>
