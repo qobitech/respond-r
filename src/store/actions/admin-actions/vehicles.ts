@@ -18,7 +18,7 @@ export const searchVehicleByRegNumber = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: "",
-      customurl: `http://localhost:8116/api/v1/search/regNumber/${query || ""}`,
+      customurl: `http://incar-query/api/v1/search/regNumber/${query || ""}`,
       header: utils.header(""),
     },
     actionType: vehicles.searchVehicleByRegNumber,
@@ -29,7 +29,7 @@ export const searchVehicleByChasisNumber = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: "",
-      customurl: `http://localhost:8116/api/v1/search/chasis/${query || ""}`,
+      customurl: `http://incar-query/api/v1/search/chasis/${query || ""}`,
       header: utils.header(""),
     },
     actionType: vehicles.searchVehicleByChasisNumber,
