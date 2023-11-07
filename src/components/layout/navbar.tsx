@@ -307,8 +307,11 @@ const TrafficSearchComponent = ({
             marginBottom: error ? "5px" : "0",
           }}
         />
-
-        <TypeSmallButton title="Search" onClick={handleSearch} />
+        {load ? (
+          <PulseSVG />
+        ) : (
+          <TypeSmallButton title="Search" onClick={handleSearch} load={load} />
+        )}
 
         {/* <CTAS
           load={load}
