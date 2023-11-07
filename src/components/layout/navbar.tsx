@@ -305,6 +305,7 @@ const TrafficSearchComponent = ({
           style={{
             border: error ? "1px solid #f56e9d" : "",
             marginBottom: error ? "5px" : "0",
+            fontSize: "14px",
           }}
         />
         {load ? (
