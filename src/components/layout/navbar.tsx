@@ -17,6 +17,7 @@ import {
 } from "utils/new/svgs"
 import { ICallRightSection } from "store/actions/global"
 import TextPrompt from "utils/new/text-prompt"
+import { TypeButton, TypeSmallButton } from "utils/new/button"
 
 interface NavbarProps {
   notifyUser: INotification | undefined
@@ -281,13 +282,13 @@ const TrafficSearchComponent = ({
     setError("")
   }
 
-  const handleSearch = (searchType: "reg" | "chasis") => {
+  const handleSearch = () => {
     if (!inputValue) {
       setError("input empty")
       return
     }
-    if (searchType === "reg") searchVehicleByRegNumber(inputValue)
-    if (searchType === "chasis") searchVehicleByChasisNumber(inputValue)
+    if (inputValue.length < 11) searchVehicleByRegNumber(inputValue)
+    searchVehicleByChasisNumber(inputValue)
     setSearch(true)
   }
 
@@ -295,7 +296,7 @@ const TrafficSearchComponent = ({
     <form className="nav-search-component" onSubmit={(e) => e.preventDefault()}>
       <div className="d-flex align-items-center" style={{ gap: "20px" }}>
         <input
-          placeholder="Type here to search"
+          placeholder="Search reg number or chasis number"
           onChange={handleOnChange}
           value={inputValue}
           onBlur={() => setError("")}
@@ -307,7 +308,9 @@ const TrafficSearchComponent = ({
           }}
         />
 
-        <CTAS
+        <TypeSmallButton title="Search" onClick={handleSearch} />
+
+        {/* <CTAS
           load={load}
           onBtn1={() => {
             handleSearch("reg")
@@ -315,7 +318,7 @@ const TrafficSearchComponent = ({
           onBtn2={() => {
             handleSearch("chasis")
           }}
-        />
+        /> */}
       </div>
       {error ? <TextPrompt prompt={error} status={false} /> : null}
     </form>

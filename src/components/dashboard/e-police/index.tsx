@@ -82,6 +82,7 @@ const useSignalR = (): IPHUS => {
 
   useEffect(() => {
     connection?.on("SendPoliceEmergencyNotification", (data: any) => {
+      console.log(data, "juju")
       playHit()
       setFeeds([...handleDataStream(feeds, mapDataArray, "")(data)])
     })

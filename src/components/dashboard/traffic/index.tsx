@@ -16,7 +16,7 @@ import { TypeButton, TypeSmallButton } from "utils/new/button"
 import { IFeed, IHit } from "interfaces/IStream"
 import { handleDataStream } from "./data"
 import * as signalR from "@microsoft/signalr"
-import { useFormHook } from "utils/new/hook"
+import { CopyComponent, ICopyProps, useCopy, useFormHook } from "utils/new/hook"
 import * as yup from "yup"
 import { IAction } from "interfaces/IAction"
 import {
@@ -282,6 +282,8 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
 
   const [selectedView, setSelectedView] = useState<number>(0)
 
+  const [copyProps] = useCopy()
+
   const isImage = selectedView === 0
   const isRtsp = selectedView === 1
 
@@ -333,10 +335,12 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
                 setSearch={setSearch}
                 searchAction={searchAction || false}
                 searchResults={[]}
+                copyProps={copyProps}
               />
             </div>
           </div>
         </div>
+        <CopyComponent {...copyProps} />
         <Loader loader={false} />
       </div>
     </>
@@ -553,6 +557,7 @@ const LiveFeedComponent = ({
   setSearch,
   searchResults,
   searchAction,
+  copyProps,
 }: {
   handleHitRequest: (i: IHit) => void
   handleFeedRequest: (i: IFeed) => void
@@ -560,6 +565,7 @@ const LiveFeedComponent = ({
   setSearch: (search: boolean) => (dispatch: any) => void
   searchResults: any[]
   searchAction: boolean
+  copyProps: ICopyProps
 }) => {
   const filters = [`Hits`, `All Feeds`]
   const useFilterProps = useFilterSection(filters[0])
@@ -595,6 +601,7 @@ const LiveFeedComponent = ({
                     regNumber={i.regNumber}
                     handleOnClick={() => {
                       handleFeedRequest(i)
+                      copyProps.setAction(i.regNumber)
                     }}
                   />
                 ))
@@ -617,6 +624,7 @@ const LiveFeedComponent = ({
                     regNumber={i.regNumber}
                     handleOnClick={() => {
                       handleHitRequest(i)
+                      copyProps.setAction(i.regNumber)
                     }}
                   />
                 ))
