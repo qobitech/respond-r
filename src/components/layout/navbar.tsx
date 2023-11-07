@@ -282,7 +282,8 @@ const TrafficSearchComponent = ({
     setError("")
   }
 
-  const handleSearch = () => {
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     if (!inputValue) {
       setError("input empty")
       return
@@ -293,7 +294,7 @@ const TrafficSearchComponent = ({
   }
 
   return (
-    <form className="nav-search-component" onSubmit={(e) => e.preventDefault()}>
+    <form className="nav-search-component" onSubmit={handleSearch}>
       <div className="d-flex align-items-center" style={{ gap: "20px" }}>
         <input
           placeholder="Search reg number or chasis number"
@@ -311,7 +312,7 @@ const TrafficSearchComponent = ({
         {load ? (
           <PulseSVG />
         ) : (
-          <TypeSmallButton title="Search" onClick={handleSearch} load={load} />
+          <TypeSmallButton title="Search" type="submit" load={load} />
         )}
 
         {/* <CTAS
