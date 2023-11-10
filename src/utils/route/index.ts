@@ -10,6 +10,7 @@ import Overview from "components/dashboard/traffic"
 import IPolicePage from "components/dashboard/e-police"
 import ManagementPage from "components/dashboard/management"
 import IFireServicePage from "components/dashboard/fire-service"
+import IMedicalPage from "components/dashboard/e-medical"
 export interface IUrl {
   id: number
   PageRenders: ((props?: any) => ReactElement | null)[]
@@ -61,6 +62,12 @@ export const routes: Array<IUrl> = [
     id: 10,
     PageRenders: [IFireServicePage],
     paths: [url.FIRESERVICE],
+    routeType: "auth",
+  },
+  {
+    id: 11,
+    PageRenders: [IMedicalPage],
+    paths: [url.MEDICAL],
     routeType: "auth",
   },
 ]

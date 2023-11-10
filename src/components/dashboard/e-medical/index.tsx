@@ -16,35 +16,35 @@ import { TypeInput } from "utils/new/input"
 import { TypeButton, TypeSmallButton } from "utils/new/button"
 import { useFormHook } from "utils/new/hook"
 import * as yup from "yup"
-import { IFireData } from "interfaces/IFire"
+import { IMedicalData } from "interfaces/IMedical"
 import { Calendar2SVG, LocationSVG } from "utils/new/svgs"
 import "./index.scss"
 import { IAction } from "interfaces/IAction"
 
 interface IPHUS {
-  feeds: IFireData[]
+  feeds: IMedicalData[]
   connectionStatus: typeConnectionStatus
   startConnection: (url: string) => void
   stopConnection: () => void
-  handleFeedSelect: (feed: IFireData | null) => void
-  feed: IFireData | null
-  handleDemoFeeds: (feeds: IFireData[]) => void
+  handleFeedSelect: (feed: IMedicalData | null) => void
+  feed: IMedicalData | null
+  handleDemoFeeds: (feeds: IMedicalData[]) => void
 }
 
 const useSignalR = (): IPHUS => {
   const [connection, setConnection] = useState<signalR.HubConnection>()
-  const [feeds, setFeeds] = useState<IFireData[]>([])
-  const [feed, setFeed] = useState<IFireData | null>(null)
+  const [feeds, setFeeds] = useState<IMedicalData[]>([])
+  const [feed, setFeed] = useState<IMedicalData | null>(null)
   const [connectionStatus, setConnectionStatus] =
     useState<typeConnectionStatus>("closed")
 
-  const handleFeedSelect = (feed: IFireData | null) => {
+  const handleFeedSelect = (feed: IMedicalData | null) => {
     setFeed(feed)
   }
 
   const startConnection = (url: string) => {
     setConnectionStatus("connecting")
-    const storedUrl = getUrl("fireSignalR") || ""
+    const storedUrl = getUrl("medicalSignalR") || ""
     const connection = getConnection(url || storedUrl)
     connection
       ?.start()
@@ -72,18 +72,18 @@ const useSignalR = (): IPHUS => {
     return ""
   }
 
-  const handleDemoFeeds = (feeds: IFireData[]) => {
+  const handleDemoFeeds = (feeds: IMedicalData[]) => {
     setFeeds([
       ...handleDataStream(
         feeds,
         mapDataArray,
         "id"
-      )({ ...demoData, id: demoData.id + Date.now() } as IFireData),
+      )({ ...demoData, id: demoData.id + Date.now() } as IMedicalData),
     ])
   }
 
   useEffect(() => {
-    connection?.on("SendFireEmergencyNotification", (data: any) => {
+    connection?.on("SendMedicalEmergencyNotification", (data: any) => {
       playHit()
       setFeeds([...handleDataStream(feeds, mapDataArray, "")(data)])
     })
@@ -114,7 +114,7 @@ interface IProps {
   states: IStates
 }
 
-const IFireServicePage: React.FC<IProps> = ({ states, ...props }) => {
+const IMedicalPage: React.FC<IProps> = ({ states, ...props }) => {
   const rightSectionProps = states?.global.rightSection
   const actions = props as unknown as IAction
   const rsProps = useRightSection(rightSectionProps, actions.callRightSection)
@@ -125,7 +125,7 @@ const IFireServicePage: React.FC<IProps> = ({ states, ...props }) => {
     <>
       <RightSection rsProps={rsProps}>
         {rsProps.isView("custom", "settings") ? (
-          <Configuration fireSignalR={signalRProps} />
+          <Configuration medicalSignalR={signalRProps} />
         ) : null}
       </RightSection>
       <div className="main-page">
@@ -155,22 +155,21 @@ const IFireServicePage: React.FC<IProps> = ({ states, ...props }) => {
   )
 }
 
-export default IFireServicePage
+export default IMedicalPage
 
-const Configuration = ({
-  fireSignalR,
-  rsProps,
-}: {
-  fireSignalR: IPHUS
+const Configuration = (props: {
+  medicalSignalR: IPHUS
   rsProps?: IRightSection<{}>
 }) => {
+  const { medicalSignalR, rsProps } = props
+
   return (
     <div>
       {/* <LiveFeedStatusComponent signalRProps={signalRProps} title="Status" /> */}
       <div style={{ paddingBottom: "20px" }} />
       <div className="tab-section">
         <div className="tab-body">
-          <FeedForm fireSignalR={fireSignalR} rsProps={rsProps} />
+          <FeedForm medicalSignalR={medicalSignalR} rsProps={rsProps} />
         </div>
       </div>
     </div>
@@ -178,44 +177,44 @@ const Configuration = ({
 }
 
 const FeedForm = ({
-  fireSignalR,
+  medicalSignalR,
   rsProps,
 }: {
-  fireSignalR: IPHUS
+  medicalSignalR: IPHUS
   rsProps?: IRightSection<{}>
 }) => {
-  const [hookForm] = useFormHook<{ fireSignalR: string }>({
-    fireSignalR: yup.string().required("connection url is required"),
+  const [hookForm] = useFormHook<{ medicalSignalR: string }>({
+    medicalSignalR: yup.string().required("connection url is required"),
   })
 
   useEffect(() => {
-    const rtspUrl = getUrl("fireSignalR")
+    const rtspUrl = getUrl("medicalSignalR")
     if (!!rtspUrl) {
-      hookForm.setValue("fireSignalR", rtspUrl)
+      hookForm.setValue("medicalSignalR", rtspUrl)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
-    if (fireSignalR.connectionStatus === "connected") {
+    if (medicalSignalR.connectionStatus === "connected") {
       rsProps?.closeSection()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fireSignalR.connectionStatus])
+  }, [medicalSignalR.connectionStatus])
 
   const btnTitle =
-    fireSignalR.connectionStatus === "connected" &&
-    !!hookForm.watch("fireSignalR")
+    medicalSignalR.connectionStatus === "connected" &&
+    !!hookForm.watch("medicalSignalR")
       ? "Refresh Feed"
       : "Request Feed"
 
-  const handleRTSPFeed = (data: { fireSignalR: string }) => {
-    fireSignalR.startConnection(data.fireSignalR)
-    setUrl("fireSignalR", data.fireSignalR)
+  const handleRTSPFeed = (data: { medicalSignalR: string }) => {
+    medicalSignalR.startConnection(data.medicalSignalR)
+    setUrl("medicalSignalR", data.medicalSignalR)
   }
 
   const resetRTSPFeed = () => {
-    fireSignalR.stopConnection()
+    medicalSignalR.stopConnection()
   }
 
   return (
@@ -223,20 +222,20 @@ const FeedForm = ({
       <TypeInput
         placeholder="Enter url"
         label="Connection URL"
-        {...hookForm.register("fireSignalR")}
-        error={hookForm.formState.errors.fireSignalR?.message}
+        {...hookForm.register("medicalSignalR")}
+        error={hookForm.formState.errors.medicalSignalR?.message}
       />
       <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
         <TypeButton
           title={btnTitle}
           onClick={hookForm.handleSubmit(handleRTSPFeed)}
-          load={fireSignalR.connectionStatus === "connecting"}
+          load={medicalSignalR.connectionStatus === "connecting"}
         />
         <TypeButton
           title="Stop Feed"
           onClick={resetRTSPFeed}
           buttonType={
-            fireSignalR.connectionStatus === null ? "disabled" : "outlined"
+            medicalSignalR.connectionStatus === null ? "disabled" : "outlined"
           }
         />
       </div>
@@ -271,7 +270,7 @@ const LiveFeedStatusComponent = ({
   )
 }
 
-const MainView = ({ feed }: { feed: IFireData | null }) => {
+const MainView = ({ feed }: { feed: IMedicalData | null }) => {
   // const [isMedia, setIsMedia] = useState<boolean>(true)
 
   return (
@@ -344,7 +343,7 @@ export const IframeComponent = ({ src }: { src: string }) => {
     <div>
       <iframe
         src={src || ""}
-        title="fire-service"
+        title="e-police"
         style={{ width: "100%", border: "1px solid #eaeaea", height: "408px" }}
         sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
       ></iframe>
@@ -356,7 +355,7 @@ const LiveFeedItemComponent = ({
   feed,
   handleOnClick,
 }: {
-  feed: IFireData | null
+  feed: IMedicalData | null
   handleOnClick: () => void
 }) => {
   return (

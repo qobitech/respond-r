@@ -8,6 +8,7 @@ import {
 } from "../traffic"
 import { handleDataStream } from "../traffic/data"
 import RightSection, {
+  IRightSection,
   useRightSection,
 } from "components/reusable/right-section"
 import { IStates } from "interfaces/IReducer"
@@ -18,6 +19,7 @@ import * as yup from "yup"
 import { IPoliceData } from "interfaces/IPolice"
 import { Calendar2SVG, LocationSVG } from "utils/new/svgs"
 import "./index.scss"
+import { IAction } from "interfaces/IAction"
 
 interface IPHUS {
   feeds: IPoliceData[]
@@ -115,24 +117,10 @@ interface IProps {
 
 const IPolicePage: React.FC<IProps> = ({ states, ...props }) => {
   const rightSectionProps = states?.global.rightSection
-  const rsProps = useRightSection()
-
-  useEffect(() => {
-    if (rightSectionProps?.action) {
-      rsProps.callSection(rightSectionProps.action, rightSectionProps.component)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rightSectionProps])
+  const actions = props as unknown as IAction
+  const rsProps = useRightSection(rightSectionProps, actions.callRightSection)
 
   const signalRProps = useSignalR()
-
-  // console.log(signalRProps.feeds.length, "juju")
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     signalRProps.handleDemoFeeds(signalRProps.feeds)
-  //   }, 5000)
-  // }, [signalRProps.feeds])
 
   return (
     <>
@@ -170,21 +158,33 @@ const IPolicePage: React.FC<IProps> = ({ states, ...props }) => {
 
 export default IPolicePage
 
-const Configuration = ({ policeSignalR }: { policeSignalR: IPHUS }) => {
+const Configuration = ({
+  policeSignalR,
+  rsProps,
+}: {
+  policeSignalR: IPHUS
+  rsProps?: IRightSection<{}>
+}) => {
   return (
     <div>
       {/* <LiveFeedStatusComponent signalRProps={signalRProps} title="Status" /> */}
       <div style={{ paddingBottom: "20px" }} />
       <div className="tab-section">
         <div className="tab-body">
-          <FeedForm policeSignalR={policeSignalR} />
+          <FeedForm policeSignalR={policeSignalR} rsProps={rsProps} />
         </div>
       </div>
     </div>
   )
 }
 
-const FeedForm = ({ policeSignalR }: { policeSignalR: IPHUS }) => {
+const FeedForm = ({
+  policeSignalR,
+  rsProps,
+}: {
+  policeSignalR: IPHUS
+  rsProps?: IRightSection<{}>
+}) => {
   const [hookForm] = useFormHook<{ policeSignalR: string }>({
     policeSignalR: yup.string().required("connection url is required"),
   })
@@ -196,6 +196,13 @@ const FeedForm = ({ policeSignalR }: { policeSignalR: IPHUS }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if (policeSignalR.connectionStatus === "connected") {
+      rsProps?.closeSection()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [policeSignalR.connectionStatus])
 
   const btnTitle =
     policeSignalR.connectionStatus === "connected" &&

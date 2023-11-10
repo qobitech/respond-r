@@ -80,6 +80,8 @@ const configFormEnums = {
   filePath: "filePath",
   rtspUrl: "rtspUrl",
   policeSignalR: "policeSignalR",
+  medicalSignalR: "medicalSignalR",
+  fireSignalR: "fireSignalR",
 } as const
 
 type chkType = (typeof configFormEnums)[keyof typeof configFormEnums]
@@ -231,7 +233,7 @@ const getFilePath = (i: string) => {
 }
 
 const Overview: React.FC<IProps> = ({ states, ...props }) => {
-  const { getVehicleByRegNumber, clearAction, setSearch } =
+  const { getVehicleByRegNumber, clearAction, setSearch, callRightSection } =
     props as unknown as IAction
   const searchAction = states?.global.search
 
@@ -260,21 +262,7 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
     setMediaUrl(getFilePath(i.displayUrl))
   }
 
-  const rsProps = useRightSection()
-
-  useEffect(() => {
-    if (rightSectionProps?.action) {
-      rsProps.callSection(rightSectionProps.action, rightSectionProps.component)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rightSectionProps])
-
-  // useEffect(() => {
-  //   if (rsProps.queryAction !== "create") {
-  //     rsProps.callSectionOnQuery()
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [])
+  const rsProps = useRightSection(rightSectionProps, callRightSection)
 
   const signalRProps = useSignalR()
 

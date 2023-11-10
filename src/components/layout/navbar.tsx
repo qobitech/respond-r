@@ -1,10 +1,10 @@
-import React, { FC, useState } from "react"
+import React, { useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { url } from "enums/Route"
 import "./navbar.scss"
 import Toast from "utils/new/toast"
 import { INotification } from "interfaces/IGlobal"
-import { USERTOKEN, isLogged } from "utils/new/constants"
+import { isLogged } from "utils/new/constants"
 import {
   CarsSVG,
   CogSVG,
@@ -12,12 +12,13 @@ import {
   HamburgerSVG,
   LogoSVG,
   ManagementSVG,
+  MedicalSVG,
   PoliceSVG,
   PulseSVG,
 } from "utils/new/svgs"
 import { ICallRightSection } from "store/actions/global"
 import TextPrompt from "utils/new/text-prompt"
-import { TypeButton, TypeSmallButton } from "utils/new/button"
+import { TypeSmallButton } from "utils/new/button"
 
 interface NavbarProps {
   notifyUser: INotification | undefined
@@ -30,7 +31,12 @@ interface NavbarProps {
   searchLoad?: boolean
 }
 
-type pageType = "e-traffic" | "e-police" | "fire-service" | "management"
+type pageType =
+  | "e-traffic"
+  | "e-police"
+  | "fire-service"
+  | "management"
+  | "e-medical"
 
 const Navbar = (props: NavbarProps) => {
   // const [clicked, setClicked] = useState(false)
@@ -48,6 +54,7 @@ const Navbar = (props: NavbarProps) => {
   const isTraffic = _isUrl(url.OVERVIEW)
   const isFireService = _isUrl(url.FIRESERVICE)
   const isPolice = _isUrl(url.POLICE)
+  const isMedical = _isUrl(url.MEDICAL)
 
   const getPageIdentifier = (): pageType => {
     switch (true) {
@@ -57,6 +64,8 @@ const Navbar = (props: NavbarProps) => {
         return "fire-service"
       case isPolice:
         return "e-police"
+      case isMedical:
+        return "e-medical"
       default:
         return "management"
     }
@@ -155,6 +164,7 @@ const PageIdentifier = ({ page }: { page: pageType }) => {
       {page === "e-police" ? <PoliceSVG /> : null}
       {page === "e-traffic" ? <CarsSVG /> : null}
       {page === "management" ? <ManagementSVG /> : null}
+      {page === "e-medical" ? <MedicalSVG /> : null}
       <p>{page}</p>
     </div>
   )
@@ -330,57 +340,57 @@ const TrafficSearchComponent = ({
   )
 }
 
-interface ICTAS {
-  load?: boolean
-  onBtn1: () => void
-  onBtn2: () => void
-}
+// interface ICTAS {
+//   load?: boolean
+//   onBtn1: () => void
+//   onBtn2: () => void
+// }
 
-const CTAS: FC<ICTAS> = ({ load, onBtn1, onBtn2 }) => {
-  return (
-    <div
-      className="w-100 d-flex flex-wrap justify-content-center"
-      style={{ gap: "20px" }}
-    >
-      {load ? (
-        <PulseSVG />
-      ) : (
-        <div
-          className="dropdown text-center d-flex align-items-center justify-content-center"
-          style={{ gap: "20px" }}
-        >
-          <button
-            className="btn btn-secondary dropdown-toggle px-2 border-0 text-dark"
-            style={{ background: "none", outline: "none", fontSize: "14px" }}
-            type="button"
-            id="dropdownMenuButton"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            Search
-          </button>
-          <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <p
-              className="dropdown-item cursor-pointer m-0 py-2"
-              style={{ cursor: "pointer" }}
-              onClick={onBtn1}
-            >
-              Reg number
-            </p>
-            <p
-              className="dropdown-item cursor-pointer m-0 py-2"
-              style={{ cursor: "pointer" }}
-              onClick={onBtn2}
-            >
-              Chasis number
-            </p>
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
+// const CTAS: FC<ICTAS> = ({ load, onBtn1, onBtn2 }) => {
+//   return (
+//     <div
+//       className="w-100 d-flex flex-wrap justify-content-center"
+//       style={{ gap: "20px" }}
+//     >
+//       {load ? (
+//         <PulseSVG />
+//       ) : (
+//         <div
+//           className="dropdown text-center d-flex align-items-center justify-content-center"
+//           style={{ gap: "20px" }}
+//         >
+//           <button
+//             className="btn btn-secondary dropdown-toggle px-2 border-0 text-dark"
+//             style={{ background: "none", outline: "none", fontSize: "14px" }}
+//             type="button"
+//             id="dropdownMenuButton"
+//             data-toggle="dropdown"
+//             aria-haspopup="true"
+//             aria-expanded="false"
+//           >
+//             Search
+//           </button>
+//           <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+//             <p
+//               className="dropdown-item cursor-pointer m-0 py-2"
+//               style={{ cursor: "pointer" }}
+//               onClick={onBtn1}
+//             >
+//               Reg number
+//             </p>
+//             <p
+//               className="dropdown-item cursor-pointer m-0 py-2"
+//               style={{ cursor: "pointer" }}
+//               onClick={onBtn2}
+//             >
+//               Chasis number
+//             </p>
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   )
+// }
 
 const ConfigurationComponent = ({
   openSettings,

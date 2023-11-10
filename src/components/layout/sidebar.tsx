@@ -8,6 +8,7 @@ import {
   HamburgerSVG,
   LogoSVG,
   ManagementSVG,
+  MedicalSVG,
   PoliceSVG,
   SwitchSVG,
 } from "utils/new/svgs"
@@ -43,6 +44,12 @@ const SideBar = ({ setMenuOpen, menuOpen, logOut }: IProps) => {
       imgsrc: <FireExtinguisherSVG />,
       isActive: _isUrl(url.FIRESERVICE),
       url: url.FIRESERVICE,
+    },
+    {
+      title: "E-Medical",
+      imgsrc: <MedicalSVG />,
+      isActive: _isUrl(url.MEDICAL),
+      url: url.MEDICAL,
     },
     {
       title: "Management",

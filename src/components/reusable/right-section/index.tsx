@@ -1,7 +1,8 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import "./index.scss"
 import { TypeSmallButton } from "utils/new/button"
 import { useNavigate, useSearchParams } from "react-router-dom"
+import { ICallRightSection } from "store/actions/global"
 
 export type actionType =
   | "create"
@@ -43,7 +44,10 @@ export interface IRightSection<K> {
   updateData(data: K | null): void
 }
 
-export const useRightSection = <K extends {}>(): IRightSection<K> => {
+export const useRightSection = <K extends {}>(
+  rightSectionProps?: ICallRightSection,
+  callRightSection?: (props: ICallRightSection) => (dispatch: any) => void
+): IRightSection<K> => {
   const [searchParams] = useSearchParams()
   const queryId = searchParams.get("id")
   const queryAction = searchParams.get("action") as actionType
@@ -130,7 +134,20 @@ export const useRightSection = <K extends {}>(): IRightSection<K> => {
   const closeSection = () => {
     setOpenSection(false)
     navigate(`?`)
+    callRightSection?.({ action: null, component: null })
+    setAction({ type: null, component: null, id: null })
   }
+
+  useEffect(() => {
+    if (
+      rightSectionProps &&
+      rightSectionProps?.action !== null &&
+      rightSectionProps?.component !== null
+    ) {
+      callSection(rightSectionProps.action, rightSectionProps.component)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rightSectionProps])
 
   return {
     closeSection,

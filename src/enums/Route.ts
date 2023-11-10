@@ -11,6 +11,7 @@ export enum url {
   POLICE = "/dashboard/e-police",
   MANAGEMENT = "/dashboard/management",
   FIRESERVICE = "/dashboard/fire-service",
+  MEDICAL = "/dashboard/e-medical",
   PAGE404 = "",
 }
 
