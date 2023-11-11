@@ -299,7 +299,7 @@ const TrafficSearchComponent = ({
       return
     }
     if (inputValue.length < 11) searchVehicleByRegNumber(inputValue)
-    searchVehicleByChasisNumber(inputValue)
+    else searchVehicleByChasisNumber(inputValue)
     setSearch(true)
   }
 
