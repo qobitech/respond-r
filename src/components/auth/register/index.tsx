@@ -1,10 +1,9 @@
 import React, { useEffect } from "react"
-import { url } from "enums/Route"
-import { useNavigate } from "react-router-dom"
+// import { useNavigate } from "react-router-dom"
 import "./index.scss"
 import { TypeButton } from "utils/new/button"
 import { IStates } from "interfaces/IReducer"
-import { useFormHook } from "utils/new/hook"
+// import { useFormHook } from "utils/new/hook"
 import * as yup from "yup"
 import { IAction } from "interfaces/IAction"
 import { authType } from "store/types"
@@ -79,19 +78,19 @@ export const RegisterForm: React.FC<IRegisterForm> = ({
 }
 
 const Register: React.FC<IProps> = ({ states, ...props }) => {
-  const { registerOrganization, clearAction } = props as unknown as IAction
+  const { clearAction } = props as unknown as IAction
 
   // const dataLoading = states?.auth.registerOrganizationLoading
   // const dataError = states?.auth.registerOrganizationError
 
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
-  const [hookForm] = useFormHook<IRegisterHookForm>(registerSchema)
+  // const [hookForm] = useFormHook<IRegisterHookForm>(registerSchema)
 
-  const handleRegister = (data: IRegisterHookForm) => {
-    clearAction(authType.registerOrganization)
-    registerOrganization({ ...data, role: "OrganizationAdmin" })
-  }
+  // const handleRegister = (data: IRegisterHookForm) => {
+  //   clearAction(authType.registerOrganization)
+  //   registerOrganization({ ...data, role: "OrganizationAdmin" })
+  // }
 
   useEffect(() => {
     return () => {

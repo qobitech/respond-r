@@ -1,7 +1,5 @@
 import React, { useEffect } from "react"
 import { TypeButton } from "utils/new/button"
-import { useNavigate } from "react-router-dom"
-import { url } from "enums/Route"
 import "./index.scss"
 import { useFormHook } from "utils/new/hook"
 import * as yup from "yup"

@@ -14,21 +14,3 @@ export enum url {
   MEDICAL = "/dashboard/e-medical",
   PAGE404 = "",
 }
-
-export enum pageName {
-  OVERVIEW = "Overview",
-  APPLICATIONS = "Applications",
-  CREATE_APP = "Create Application",
-  USERS = "User Management",
-  PROFILE = "Profile",
-  ORGANIZATION = "Organization",
-  BILLING = "Billing",
-  API_BUNDLES = "API Bundles",
-  API_CONFIGS = "API Configurations",
-  API_CONFIG_GROUPS = "API Configuration Groups",
-  SUBSCRIPTIONS = "Subscription",
-  CLIENT_SUBSCRIPTIONS = "Client Subscriptions",
-  API_DOCUMENTATION = "Documentation",
-  PERMISSIONS = "Permissions",
-  ROLES = "Roles",
-}
