@@ -5,7 +5,7 @@ import Table, { ICell, ICellAction } from "utils/new/table"
 import "../../../utils/new/pagination.scss"
 import "../../../utils/new/page.scss"
 import { Loader } from "utils/new/components"
-import { FlagSVG, NoteSVG, VideoSVG } from "utils/new/svgs"
+import { FlagSVG, NoteSVG, PulseSVG, VideoSVG } from "utils/new/svgs"
 import sample from "../../../extras/images/sample.jpg"
 import RightSection, {
   IRightSection,
@@ -318,7 +318,7 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
             ) : (
               <div className="no-video-selected-section">
                 {vehicle?.getVehicleByRegNumberLoading ? (
-                  <>Loading...</>
+                  <PulseSVG />
                 ) : (
                   <>
                     <VideoSVG />

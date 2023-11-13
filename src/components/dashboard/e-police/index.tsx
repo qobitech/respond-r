@@ -26,9 +26,11 @@ import {
   Calendar2SVG,
   LeftNavSVG,
   LocationSVG,
+  MapSVG,
   PhoneSVG,
   PulseSVG,
   RightNavSVG,
+  VideoSVG,
 } from "utils/new/svgs"
 import "./index.scss"
 import { IAction } from "interfaces/IAction"
@@ -134,6 +136,8 @@ const IPolicePage: React.FC<IProps> = ({ states, ...props }) => {
 
   const signalRProps = useSignalR()
 
+  console.log(!!signalRProps.feeds?.[0], "juju")
+
   return (
     <>
       <RightSection rsProps={rsProps}>
@@ -145,7 +149,15 @@ const IPolicePage: React.FC<IProps> = ({ states, ...props }) => {
         <div className="pg-container">
           <LiveFeedStatusComponent signalRProps={signalRProps} />
           <div className="overview-page">
-            <MainView feed={signalRProps.feed!} />
+            {signalRProps?.feeds?.[0] ? (
+              <MainView feed={signalRProps.feed!} />
+            ) : (
+              <div className="no-video-selected-section">
+                <MapSVG />
+                <p style={{ color: "#E21B1B" }}>NO MAP VIEW</p>
+                <p>Select Live feed to view</p>
+              </div>
+            )}
             <div className="police-stream-section">
               {signalRProps.feeds?.[0] ? (
                 signalRProps.feeds.map((i, index) => (
@@ -158,14 +170,7 @@ const IPolicePage: React.FC<IProps> = ({ states, ...props }) => {
                   />
                 ))
               ) : (
-                // <NoFeeds />
-                <LiveFeedItemComponent
-                  key={Date.now()}
-                  feed={demoData}
-                  handleOnClick={() => {
-                    signalRProps.handleFeedSelect(demoData)
-                  }}
-                />
+                <NoFeeds />
               )}
             </div>
           </div>
