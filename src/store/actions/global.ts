@@ -15,12 +15,18 @@ export const setMenuOpen = (menuOpen: boolean) => (dispatch: any) => {
   })
 }
 
-export const setSearch = (search: boolean) => (dispatch: any) => {
-  dispatch({
-    type: globalType.search.dataAction,
-    payload: search,
-  })
-}
+export type vehicleSearchType = "chasis" | "regnumber" | null
+
+export const setSearch =
+  (search: boolean, type: vehicleSearchType) => (dispatch: any) => {
+    dispatch({
+      type: globalType.search.dataAction,
+      payload: {
+        search,
+        type,
+      },
+    })
+  }
 
 export const setSubMenuOpen = (subMenuOpen: number) => (dispatch: any) => {
   dispatch({

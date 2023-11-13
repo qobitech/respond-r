@@ -16,7 +16,7 @@ import {
   PoliceSVG,
   PulseSVG,
 } from "utils/new/svgs"
-import { ICallRightSection } from "store/actions/global"
+import { ICallRightSection, vehicleSearchType } from "store/actions/global"
 import TextPrompt from "utils/new/text-prompt"
 import { TypeSmallButton } from "utils/new/button"
 
@@ -27,7 +27,10 @@ interface NavbarProps {
   callRightSection: (props: ICallRightSection) => (dispatch: any) => void
   searchVehicleByChasisNumber: (query: string) => (dispatch: any) => void
   searchVehicleByRegNumber: (query: string) => (dispatch: any) => void
-  setSearch: (search: boolean) => (dispatch: any) => void
+  setSearch: (
+    search: boolean,
+    type: vehicleSearchType
+  ) => (dispatch: any) => void
   searchLoad?: boolean
 }
 
@@ -281,7 +284,10 @@ const TrafficSearchComponent = ({
   searchVehicleByChasisNumber: (query: string) => (dispatch: any) => void
   searchVehicleByRegNumber: (query: string) => (dispatch: any) => void
   load?: boolean
-  setSearch: (search: boolean) => (dispatch: any) => void
+  setSearch: (
+    search: boolean,
+    type: vehicleSearchType
+  ) => (dispatch: any) => void
 }) => {
   const [inputValue, setInputValue] = useState<string>("")
   const [error, setError] = useState<string>("")
@@ -300,7 +306,7 @@ const TrafficSearchComponent = ({
     }
     if (inputValue.length < 11) searchVehicleByRegNumber(inputValue)
     else searchVehicleByChasisNumber(inputValue)
-    setSearch(true)
+    setSearch(true, inputValue.length < 11 ? "regnumber" : "chasis")
   }
 
   return (

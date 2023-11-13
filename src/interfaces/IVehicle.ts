@@ -189,7 +189,7 @@ export interface IVehicle {
   vehicleWarnings: IVehicleWarning[]
   notes: IVehicleNote[]
   tags: null
-  flags: null
+  flags: null | string[]
 }
 
 export interface IVehicleById {
@@ -197,4 +197,42 @@ export interface IVehicleById {
   status: number
   isSuccessful: boolean
   data: IVehicle
+}
+
+export interface ISearchVehicle {
+  id: string
+  regNumber: string
+  code: string
+  classification: string
+  registration: {
+    category: string
+    localGovernment: string
+    state: string
+    confidence: number
+  }
+  orientation: string
+  vehicleType: string
+  isOnBlackList: boolean
+  flags: null | string[]
+  createdAt: string
+  updatedAt: string
+  make: string
+  model: string
+  color: string
+  filePath: string
+  timeStamp: string
+  cameraName: string
+  status: string
+  isUploaded: string
+  uploadedAt: string
+}
+
+export interface IVehicleSearch {
+  message: string
+  status: number
+  isSuccessful: boolean
+  data: {
+    local: ISearchVehicle | null
+    remote: ISearchVehicle | null
+  }
 }

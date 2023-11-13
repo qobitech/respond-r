@@ -1,4 +1,4 @@
-import { ICallRightSection } from "store/actions/global"
+import { ICallRightSection, vehicleSearchType } from "store/actions/global"
 import * as utils from "../store/services/new/utils"
 interface IAuth {
   setAuthorizationHeader: (token: string) => void
@@ -85,7 +85,10 @@ interface IGlobalActions {
     status: boolean
   ) => (dispatch: any) => void
   callRightSection: (props: ICallRightSection) => (dispatch: any) => void
-  setSearch: (search: boolean) => (dispatch: any) => void
+  setSearch: (
+    search: boolean,
+    type: vehicleSearchType
+  ) => (dispatch: any) => void
 }
 
 interface IVehicleActions {

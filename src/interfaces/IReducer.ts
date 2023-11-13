@@ -1,7 +1,7 @@
 import { ICallRightSection } from "store/actions/global"
-import { INotification } from "./IGlobal"
+import { INotification, IVehicleSearchPayload } from "./IGlobal"
 import { IAllUsers } from "./IUser"
-import { IVehicleById } from "./IVehicle"
+import { IVehicleById, IVehicleSearch } from "./IVehicle"
 import { ILoginResponse } from "./IAuth"
 import { IDemoEPolice } from "./IDemo"
 
@@ -15,7 +15,7 @@ export interface IGlobalReducer {
   menuOpen: boolean
   menuOpenLoading: boolean
   menuOpenError: any
-  search: boolean
+  search: IVehicleSearchPayload
   searchLoading: boolean
   searchError: any
   subMenuOpen: number
@@ -68,10 +68,10 @@ export interface IVehicleReducer {
   getVehicleByRegNumber: IVehicleById
   getVehicleByRegNumberLoading: boolean
   getVehicleByRegNumberError: any
-  searchVehicleByRegNumber: any
+  searchVehicleByRegNumber: IVehicleSearch
   searchVehicleByRegNumberLoading: boolean
   searchVehicleByRegNumberError: any
-  searchVehicleByChasisNumber: any
+  searchVehicleByChasisNumber: IVehicleSearch
   searchVehicleByChasisNumberLoading: boolean
   searchVehicleByChasisNumberError: any
 }
