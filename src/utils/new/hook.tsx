@@ -94,3 +94,35 @@ export const CopyComponent = ({
     </div>
   )
 }
+
+export const handleFullScreen = (url: string) => {
+  const params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=1300,height=650,left=50,top=0`
+  window.open(url, "Danfo App", params)
+}
+
+export interface IUseImage {
+  isLoaded: boolean
+  isError: boolean
+  handleError: () => void
+  handleLoad: () => void
+}
+
+export const useImage = (): IUseImage => {
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [isError, setIsError] = useState(false)
+
+  const handleLoad = () => {
+    setIsLoaded(true)
+  }
+
+  const handleError = () => {
+    setIsError(true)
+  }
+
+  return {
+    isLoaded,
+    isError,
+    handleError,
+    handleLoad,
+  }
+}

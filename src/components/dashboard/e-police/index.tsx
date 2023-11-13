@@ -14,10 +14,22 @@ import RightSection, {
 import { IStates } from "interfaces/IReducer"
 import { TypeInput } from "utils/new/input"
 import { TypeButton, TypeSmallButton } from "utils/new/button"
-import { useFormHook } from "utils/new/hook"
+import {
+  IUseImage,
+  handleFullScreen,
+  useFormHook,
+  useImage,
+} from "utils/new/hook"
 import * as yup from "yup"
 import { IPoliceData } from "interfaces/IPolice"
-import { Calendar2SVG, LocationSVG } from "utils/new/svgs"
+import {
+  Calendar2SVG,
+  LeftNavSVG,
+  LocationSVG,
+  PhoneSVG,
+  PulseSVG,
+  RightNavSVG,
+} from "utils/new/svgs"
 import "./index.scss"
 import { IAction } from "interfaces/IAction"
 
@@ -146,7 +158,14 @@ const IPolicePage: React.FC<IProps> = ({ states, ...props }) => {
                   />
                 ))
               ) : (
-                <NoFeeds />
+                // <NoFeeds />
+                <LiveFeedItemComponent
+                  key={Date.now()}
+                  feed={demoData}
+                  handleOnClick={() => {
+                    signalRProps.handleFeedSelect(demoData)
+                  }}
+                />
               )}
             </div>
           </div>
@@ -275,6 +294,16 @@ const LiveFeedStatusComponent = ({
 const MainView = ({ feed }: { feed: IPoliceData | null }) => {
   // const [isMedia, setIsMedia] = useState<boolean>(true)
 
+  const [fileIndex, setFileIndex] = useState<number>(0)
+
+  const handleFileIndex = (nav: "left" | "right") => {
+    if (nav === "left") setFileIndex(Math.max(0, fileIndex - 1))
+    if (nav === "right")
+      setFileIndex(Math.min((feed?.mediaFiles?.length || 1) - 1, fileIndex + 1))
+  }
+
+  const imgProps = useImage()
+
   return (
     <div className="map-section">
       {/* <div className="video-cta-title start">
@@ -285,28 +314,41 @@ const MainView = ({ feed }: { feed: IPoliceData | null }) => {
       <div className="video-container">
         {/* <div className={`media-box ${isMedia ? "" : "hide"}`}> */}
         <div className={`media-box`}>
-          <Map src={feed?.map || ""} />
+          {/* <Map src={feed?.map || ""} /> */}
+          <Media
+            files={feed?.mediaFiles}
+            fileIndex={fileIndex}
+            handleFileIndex={handleFileIndex}
+            imgProps={imgProps}
+          />
+        </div>
+      </div>
+      <div className="media-nav-count">
+        <p>
+          {fileIndex + 1} of {feed?.mediaFiles.length || "..."}
+        </p>
+        <div className="loader-box">
+          {!imgProps.isLoaded && !imgProps.isError && <PulseSVG />}
         </div>
       </div>
       {feed !== null ? (
         <>
-          <div
-            style={{
-              textAlign: "right",
-              marginBottom: "15px",
-              display: "flex",
-              alignItems: "center",
-              borderBottom: "1px solid #eaeaea",
-              paddingBottom: "15px",
-              gap: "10px",
-            }}
-          >
-            <Calendar2SVG />
-            <p style={{ margin: 0, marginTop: "2px" }}>
-              {feed?.createdAt
-                ? new Date(feed?.createdAt).toDateString()
-                : "..."}
-            </p>
+          <div className="header-info-prop">
+            <div className="icon-txt">
+              <Calendar2SVG />
+              <p>
+                {feed?.createdAt
+                  ? new Date(feed?.createdAt).toDateString()
+                  : "..."}
+              </p>
+            </div>
+            <div className="icon-txt">
+              <PhoneSVG />
+              <p>no phone</p>
+            </div>
+            {/* <p>
+              {feed?.canBeContacted}
+            </p> */}
             <div
               style={{
                 marginLeft: "auto",
@@ -316,6 +358,11 @@ const MainView = ({ feed }: { feed: IPoliceData | null }) => {
                 gap: "15px",
               }}
             >
+              <TypeButton
+                title="View Map"
+                buttonType="outlined"
+                onClick={() => handleFullScreen(feed.map || "")}
+              />
               <TypeButton title="Accept" />
             </div>
           </div>
@@ -353,6 +400,45 @@ const Map = ({ src }: { src: string }) => {
   )
 }
 
+const Media = ({
+  files,
+  fileIndex,
+  handleFileIndex,
+  imgProps,
+}: {
+  files?: string[]
+  fileIndex: number
+  handleFileIndex: (nav: "left" | "right") => void
+  imgProps: IUseImage
+}) => {
+  const isLeft = fileIndex > 0
+  const isRight = fileIndex < (files?.length || 1) - 1
+
+  return (
+    <div className="media-container-box">
+      {!imgProps.isLoaded && !imgProps.isError && <PulseSVG />}
+      <img
+        src={files?.[fileIndex] || ""}
+        alt=""
+        onLoad={imgProps.handleLoad}
+        onError={imgProps.handleError}
+      />
+      <div
+        className={`nav-btn nav-left ${isLeft ? "" : "no-click"}`}
+        onClick={() => handleFileIndex("left")}
+      >
+        <LeftNavSVG />
+      </div>
+      <div
+        className={`nav-btn nav-right ${isRight ? "" : "no-click"}`}
+        onClick={() => handleFileIndex("right")}
+      >
+        <RightNavSVG />
+      </div>
+    </div>
+  )
+}
+
 const LiveFeedItemComponent = ({
   feed,
   handleOnClick,
@@ -386,7 +472,7 @@ const LiveFeedItemComponent = ({
   )
 }
 
-const demoData = {
+const demoData: IPoliceData = {
   id: "652a885006373b65b68179cf",
   userId: "652a7d4e2a64934395d957af",
   description: "People are running everywhere",
@@ -408,6 +494,7 @@ const demoData = {
   updatedAt: "2023-10-14T13:23:44.7745796+01:00",
   canBeContacted: true,
   referenceId: "652a7d4e2a64934395d957af",
+  status: 1,
 }
 
 const getStatus = (val?: boolean) => {
