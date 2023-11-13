@@ -233,6 +233,6 @@ export interface IVehicleSearch {
   isSuccessful: boolean
   data: {
     local: ISearchVehicle | null
-    remote: ISearchVehicle | null
+    remote: IVehicle | null
   }
 }

@@ -30,7 +30,6 @@ import {
   PhoneSVG,
   PulseSVG,
   RightNavSVG,
-  VideoSVG,
 } from "utils/new/svgs"
 import "./index.scss"
 import { IAction } from "interfaces/IAction"
@@ -349,7 +348,7 @@ const MainView = ({ feed }: { feed: IPoliceData | null }) => {
             </div>
             <div className="icon-txt">
               <PhoneSVG />
-              <p>no phone</p>
+              <p>{feed?.deviceId || "..."}</p>
             </div>
             {/* <p>
               {feed?.canBeContacted}
@@ -392,18 +391,18 @@ const MainView = ({ feed }: { feed: IPoliceData | null }) => {
   )
 }
 
-const Map = ({ src }: { src: string }) => {
-  return (
-    <div>
-      <iframe
-        src={src || ""}
-        title="e-police"
-        style={{ width: "100%", border: "none", height: "408px" }}
-        sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-      ></iframe>
-    </div>
-  )
-}
+// const Map = ({ src }: { src: string }) => {
+//   return (
+//     <div>
+//       <iframe
+//         src={src || ""}
+//         title="e-police"
+//         style={{ width: "100%", border: "none", height: "408px" }}
+//         sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+//       ></iframe>
+//     </div>
+//   )
+// }
 
 const Media = ({
   files,

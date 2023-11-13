@@ -14,7 +14,7 @@ import RightSection, {
 import { TypeInput } from "utils/new/input"
 import { TypeButton, TypeSmallButton } from "utils/new/button"
 import { IFeed, IHit } from "interfaces/IStream"
-import { handleDataStream, vehicleSearchDemoData } from "./data"
+import { handleDataStream } from "./data"
 import * as signalR from "@microsoft/signalr"
 import { CopyComponent, ICopyProps, useCopy, useFormHook } from "utils/new/hook"
 import * as yup from "yup"
@@ -1594,12 +1594,12 @@ const SearchResults = ({
                 <LiveFeedItemComponent
                   carColor={remote.color || "..."}
                   carMake={remote.make || "..."}
-                  imgSrc={remote.filePath || "..."}
+                  imgSrc={remote.mainImageUrl || "..."}
                   carType={remote.model || "..."}
                   offense={(remote?.flags?.length || 0) + ""}
                   regNumber={remote.regNumber || "..."}
                   handleOnClick={() => {
-                    handleFeedRequest(convertSearchDataToFeed(remote))
+                    handleFeedRequest(convertRemoteSearchDataToFeed(remote))
                   }}
                 />
               )}
@@ -1627,6 +1627,25 @@ const convertSearchDataToFeed = (
   orientation: i?.orientation || "",
   regNumber: i?.regNumber || "",
   timeStamp: i?.timeStamp || "",
+  vehicleType: i?.model || "",
+})
+
+const convertRemoteSearchDataToFeed = (
+  i: IVehicle | undefined | null
+): IFeed => ({
+  cameraName: "",
+  classification: i?.classification || "",
+  code: i?.code || "",
+  colour: i?.color || "",
+  filePath: i?.mainImageUrl || "",
+  flags: i?.flags || [],
+  isOnBlackList: i?.hasFlag || false,
+  isUploaded: false,
+  make: i?.make || "",
+  model: i?.model || "",
+  orientation: "",
+  regNumber: i?.regNumber || "",
+  timeStamp: "",
   vehicleType: i?.model || "",
 })
 
