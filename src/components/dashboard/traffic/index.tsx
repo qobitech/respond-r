@@ -229,7 +229,7 @@ const useSignalR = (): IUS => {
   }
 }
 
-const getFilePath = (i: string) => {
+export const getFilePath = (i: string) => {
   if (!i) return ""
   if (!getUrl("filePath")) return ""
   return getUrl("filePath") + `/` + i.replaceAll("\\", "/")

@@ -135,8 +135,6 @@ const IPolicePage: React.FC<IProps> = ({ states, ...props }) => {
 
   const signalRProps = useSignalR()
 
-  console.log(!!signalRProps.feeds?.[0], "juju")
-
   return (
     <>
       <RightSection rsProps={rsProps}>
@@ -148,7 +146,7 @@ const IPolicePage: React.FC<IProps> = ({ states, ...props }) => {
         <div className="pg-container">
           <LiveFeedStatusComponent signalRProps={signalRProps} />
           <div className="overview-page">
-            {signalRProps?.feeds?.[0] ? (
+            {signalRProps?.feed ? (
               <MainView feed={signalRProps.feed!} />
             ) : (
               <div className="no-video-selected-section">
@@ -391,7 +389,7 @@ const MainView = ({ feed }: { feed: IPoliceData | null }) => {
   )
 }
 
-// const Map = ({ src }: { src: string }) => {
+// <const Map = ({ src }: { src: string }) => {
 //   return (
 //     <div>
 //       <iframe
@@ -402,7 +400,7 @@ const MainView = ({ feed }: { feed: IPoliceData | null }) => {
 //       ></iframe>
 //     </div>
 //   )
-// }
+// }>
 
 const Media = ({
   files,
