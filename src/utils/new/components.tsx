@@ -2,7 +2,7 @@ import React from "react"
 import traffic from "../../extras/images/animation/animation_llang3ye.json"
 import { PRIMARY_COLOR } from "./constants"
 import Lottie from "react-lottie"
-import loaderGIF from "../../extras/images/loader.gif"
+import { PulseSVG } from "./svgs"
 
 export const Loader = ({ loader }: { loader: boolean }) => {
   const defaultOptions = {
@@ -60,7 +60,7 @@ export const Loader2 = ({ loader }: { loader: boolean }) => {
     <>
       {loader ? (
         <div>
-          <img src={loaderGIF} alt="loader" />
+          <PulseSVG />
         </div>
       ) : null}
     </>

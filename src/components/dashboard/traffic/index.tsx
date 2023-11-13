@@ -6,7 +6,6 @@ import "../../../utils/new/pagination.scss"
 import "../../../utils/new/page.scss"
 import { Loader } from "utils/new/components"
 import { FlagSVG, NoteSVG, PulseSVG, VideoSVG } from "utils/new/svgs"
-import sample from "../../../extras/images/sample.jpg"
 import RightSection, {
   IRightSection,
   useRightSection,
@@ -231,8 +230,8 @@ const useSignalR = (): IUS => {
 }
 
 const getFilePath = (i: string) => {
-  if (!i) return sample
-  if (!getUrl("filePath")) return sample
+  if (!i) return ""
+  if (!getUrl("filePath")) return ""
   return getUrl("filePath") + `/` + i.replaceAll("\\", "/")
 }
 
@@ -1575,7 +1574,7 @@ const SearchResults = ({
                 <LiveFeedItemComponent
                   carColor={local.color || "..."}
                   carMake={local.make || "..."}
-                  imgSrc={local.filePath || "..."}
+                  imgSrc={getFilePath(local.filePath || "...")}
                   carType={local.model || "..."}
                   offense={(local?.flags?.length || 0) + ""}
                   regNumber={local.regNumber || "..."}
@@ -1594,7 +1593,7 @@ const SearchResults = ({
                 <LiveFeedItemComponent
                   carColor={remote.color || "..."}
                   carMake={remote.make || "..."}
-                  imgSrc={remote.mainImageUrl || "..."}
+                  imgSrc={getFilePath(remote.mainImageUrl || "...")}
                   carType={remote.model || "..."}
                   offense={(remote?.flags?.length || 0) + ""}
                   regNumber={remote.regNumber || "..."}
