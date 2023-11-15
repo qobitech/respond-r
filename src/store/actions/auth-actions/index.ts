@@ -126,6 +126,6 @@ export const getRefreshToken = (data: object) => {
 }
 
 export const logOut = () => (dispatch: Function) => {
-  localStorage.clear()
+  localStorage.removeItem("respondr-token")
   window.location.href = url.LOGIN
 }
