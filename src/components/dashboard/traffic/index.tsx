@@ -1,11 +1,12 @@
 import React, { FC, useEffect, useState } from "react"
+import "../global.scss"
 import "./index.scss"
 import { IStates, IVehicleReducer } from "interfaces/IReducer"
 import Table, { ICell, ICellAction } from "utils/new/table"
 import "../../../utils/new/pagination.scss"
 import "../../../utils/new/page.scss"
 import { Loader } from "utils/new/components"
-import { FlagSVG, NoteSVG, PulseSVG, VideoSVG } from "utils/new/svgs"
+import { FlagSVG, MediaSVG, NoteSVG, PulseSVG, VideoSVG } from "utils/new/svgs"
 import RightSection, {
   IRightSection,
   useRightSection,
@@ -315,17 +316,12 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
                 rtspProps={rtspProps}
               />
             ) : (
-              <div className="no-video-selected-section">
-                {vehicle?.getVehicleByRegNumberLoading ? (
-                  <PulseSVG />
-                ) : (
-                  <>
-                    <VideoSVG />
-                    <p style={{ color: "#E21B1B" }}>NO VIDEO STREAM</p>
-                    <p>Select Live feed to watch</p>
-                  </>
-                )}
-              </div>
+              <NoMediaComponent
+                load={vehicle?.getVehicleByRegNumberLoading!}
+                text="NO VIDEO STREAM"
+                icon={<VideoSVG />}
+                instruction="Select Live feed to watch"
+              />
             )}
             <div className="stream-section">
               <LiveFeedComponent
@@ -360,12 +356,18 @@ const MediaRTSPToggle = ({
 }) => {
   return (
     <div className="video-section-header-tab">
-      <p className={isImage ? "active" : ""} onClick={() => setSelectedView(0)}>
+      <button
+        className={isImage ? "active" : ""}
+        onClick={() => setSelectedView(0)}
+      >
         SIGNAL R
-      </p>
-      <p className={isRtsp ? "active" : ""} onClick={() => setSelectedView(1)}>
+      </button>
+      <button
+        className={isRtsp ? "active" : ""}
+        onClick={() => setSelectedView(1)}
+      >
         RTSP FEED
-      </p>
+      </button>
     </div>
   )
 }
@@ -391,7 +393,7 @@ const MainView = ({
 
   const vehicleData = vehicle?.getVehicleByRegNumber?.data
 
-  const [isMedia, setIsMedia] = useState<boolean>(false)
+  const [isMedia, setIsMedia] = useState<boolean>(true)
 
   const carTags = [
     {
@@ -438,13 +440,12 @@ const MainView = ({
             </p>
           ))}
         </div>
-        {isImage ? (
-          <p onClick={() => setIsMedia(!isMedia)} className="p-btn-status">
-            {!isMedia ? "Show" : "Hide"} Media
-          </p>
-        ) : null}
+        <button onClick={() => setIsMedia(!isMedia)}>
+          {!isMedia ? "Show" : "Hide"} Media
+          <MediaSVG height="40" width="40" />
+        </button>
       </div>
-      <div className="video-container">
+      <div className={`media-container ${isMedia ? "" : "hide"}`}>
         <div className={`media-box ${isRtsp ? "" : "hide"}`}>
           {/* <Stream /> */}
           <IframeComponent src={rtspProps.rtspurl || ""} />
@@ -579,17 +580,26 @@ const LiveFeedComponent = ({
   return (
     <div className="live-feed-component">
       {searchAction?.search ? (
-        <SearchSectionHeader setSearch={setSearch} />
+        <div style={{ width: "90%" }}>
+          <SearchSectionHeader setSearch={setSearch} />
+        </div>
       ) : (
-        <LiveFeedFilterHeader filterProps={useFilterProps} filters={filters} />
+        <div style={{ width: "90%" }}>
+          <LiveFeedFilterHeader
+            filterProps={useFilterProps}
+            filters={filters}
+          />
+        </div>
       )}
 
       {searchAction?.search ? (
-        <div className="live-feed-component-wrapper">
-          <SearchResults
-            vehicleSearchResult={vehicleSearchResult}
-            handleFeedRequest={handleFeedRequest}
-          />
+        <div style={{ width: "90%" }}>
+          <div className="live-feed-component-wrapper">
+            <SearchResults
+              vehicleSearchResult={vehicleSearchResult}
+              handleFeedRequest={handleFeedRequest}
+            />
+          </div>
         </div>
       ) : (
         <LiveFeedResults
@@ -742,7 +752,7 @@ const LiveFeedItemComponent: FC<ILFIC> = (props) => {
   return (
     <div className="live-feed-item-component" onClick={props.handleOnClick}>
       <div className="lf-media-section">
-        <img src={props.imgSrc} alt="" />
+        {props.imgSrc ? <img src={props.imgSrc} alt="" /> : ""}
       </div>
       <div className="lf-info-section">
         <p className="lf-info-section-label">Reg Number</p>
@@ -1496,7 +1506,7 @@ interface ILFS {
 
 const LiveFeedFilterHeader: FC<ILFS> = ({ filterProps, filters }) => {
   return (
-    <div className="live-feed-filter-section">
+    <div className="live-feed-filter-section" style={{ gap: "15px" }}>
       {filters.map((i, index) => (
         <button
           className={filterProps.selectedFilter === i ? "active" : ""}
@@ -1519,10 +1529,8 @@ const SearchSectionHeader = ({
   ) => (dispatch: any) => void
 }) => {
   return (
-    <div className="live-feed-filter-section" style={{ gap: "30px" }}>
-      <p className="m-0" style={{ fontSize: "13px" }}>
-        Search Results
-      </p>
+    <div className="live-feed-filter-section">
+      <p>Search Results</p>
 
       <button
         className="active"
@@ -1681,6 +1689,32 @@ const TableSection = ({
             forcePage={1}
           />
         </div>
+      )}
+    </div>
+  )
+}
+
+export const NoMediaComponent = ({
+  load,
+  text,
+  icon,
+  instruction,
+}: {
+  load: boolean
+  text: string
+  icon: JSX.Element
+  instruction: string
+}) => {
+  return (
+    <div className="no-video-selected-section">
+      {load ? (
+        <PulseSVG />
+      ) : (
+        <>
+          {icon}
+          <p className="empty-message">{text}</p>
+          <p>{instruction}</p>
+        </>
       )}
     </div>
   )

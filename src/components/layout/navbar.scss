@@ -1,18 +1,23 @@
 @import "../../styles/variables.scss";
 @import "../../styles/mixins.scss";
+@import "../../styles/theme-variables.scss";
 
 .nav-container {
+  @include themify($themes) {
+    background: themed("colorBackground");
+  }
   position: fixed;
   width: 100%;
   top: 0;
   left: 0;
   z-index: 5;
-  background: #fff;
   .navbarItems {
     height: auto;
     display: flex;
     align-items: flex-start;
-    color: #000;
+    @include themify($themes) {
+      color: themed("colorText");
+    }
     margin: 0 auto;
     position: relative;
     width: 100%;
@@ -39,7 +44,9 @@
       margin: 0 auto;
       p {
         margin: 0;
-        color: #000;
+        @include themify($themes) {
+          color: themed("colorText");
+        }
         font-family: Nunito;
         font-size: 0.8125rem;
         font-style: normal;
@@ -280,10 +287,28 @@
     height: 3.125rem;
     flex-shrink: 0;
     border-radius: 1.5625rem;
-    background: #f3f3f3;
+    background: none;
     border: none;
+    font-size: 0.8625rem;
+    @include themify($themes) {
+      border: 1px solid themed("typeborder");
+      color: themed("colorText");
+    }
+    &:focus {
+      @include themify($themes) {
+        border: 1px solid themed("focus");
+      }
+      &.error {
+        border: 1px solid #f56e9d;
+      }
+    }
     padding: 0 1.44rem;
     outline: none;
+    margin-bottom: 0;
+    &.error {
+      border: 1px solid #f56e9d;
+      margin-bottom: 5px;
+    }
   }
 }
 
@@ -294,9 +319,12 @@
   gap: 10px;
   margin-left: auto;
   cursor: pointer;
-  color: #4f4f4f;
+  @include themify($themes) {
+    color: themed("colorText");
+  }
   p {
     margin: 0;
+    font-size: 0.8625rem;
   }
 }
 

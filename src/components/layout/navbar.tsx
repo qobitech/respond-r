@@ -19,6 +19,7 @@ import {
 import { ICallRightSection, vehicleSearchType } from "store/actions/global"
 import TextPrompt from "utils/new/text-prompt"
 import { TypeSmallButton } from "utils/new/button"
+import Toggle from "utils/new/toggle"
 
 interface NavbarProps {
   notifyUser: INotification | undefined
@@ -42,7 +43,6 @@ type pageType =
   | "e-medical"
 
 const Navbar = (props: NavbarProps) => {
-  // const [clicked, setClicked] = useState(false)
   const handleClick = () => {
     props.setMenuOpen(!props.menuOpen)
   }
@@ -108,6 +108,8 @@ const Navbar = (props: NavbarProps) => {
             ) : null}
             {isFireService ? <FireSearchComponent /> : null}
             {isPolice ? <PoliceSearchComponent /> : null}
+
+            <Toggle />
 
             <ConfigurationComponent
               openSettings={() => {
@@ -319,11 +321,7 @@ const TrafficSearchComponent = ({
           onBlur={() => setError("")}
           onFocus={() => setError("")}
           autoFocus={error.length > 0}
-          style={{
-            border: error ? "1px solid #f56e9d" : "",
-            marginBottom: error ? "5px" : "0",
-            fontSize: "14px",
-          }}
+          className={error ? "error" : ""}
         />
         {load ? (
           <PulseSVG />

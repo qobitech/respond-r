@@ -1,3 +1,5 @@
+@import "../../../styles/theme-variables.scss";
+
 .type-button {
   button {
     display: inline-flex;
@@ -20,8 +22,10 @@
       cursor: not-allowed;
     }
     &.outlined {
-      background: #fff;
-      color: #202a3a;
+      background: none;
+      @include themify($themes) {
+        color: themed("smallbtnboldcolor");
+      }
       border: 1px solid #235a62;
     }
     &.danger {
@@ -40,7 +44,6 @@
     height: auto;
     justify-content: center;
     align-items: center;
-    color: #485e82;
     font-family: Nunito;
     font-size: 0.875rem;
     font-style: normal;
@@ -49,20 +52,26 @@
     border: none;
     flex-shrink: 0;
     border-radius: 0.1875rem;
-    background: #edf5ff;
+    @include themify($themes) {
+      background: themed("smallbtnboldbg");
+      color: themed("smallbtnboldcolor");
+    }
     cursor: pointer;
     &.disabled {
       background: #8f9194;
       cursor: not-allowed;
     }
     &.outlined {
-      background: #fff;
+      background: none;
       color: #485e82;
       border: 1px solid #485e82;
     }
     &.danger {
-      background: #faf5f7;
       color: #f56e9d;
+      @include themify($themes) {
+        background: themed("smallbtndangerbg");
+        border: 0.5px solid themed("smallbtndangerborder");
+      }
     }
     &.active {
       color: #0f9979;

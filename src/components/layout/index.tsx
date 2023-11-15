@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect } from "react"
+import React, { ReactNode, useEffect, useState } from "react"
 import Navbar from "./navbar"
 import Footer from "./footer"
 import "./index.scss"
@@ -7,6 +7,7 @@ import { IStates } from "interfaces/IReducer"
 import { IAction } from "interfaces/IAction"
 import SideBar from "./sidebar"
 import ScrollIntoViewController from "./ScrollIntoViewController"
+import { ThemeContext } from "contexts/theme-context"
 
 interface PageProps {
   children: ReactNode
@@ -42,30 +43,44 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
       clearTimeout(timeOut)
     }
   }, [notifyUser, setNotificationStatus])
+
+  const isBrowserDefaultDark = () =>
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+
+  const getDefaultTheme = (): "dark" | "light" => {
+    const localStorageTheme = localStorage.getItem("theme")
+    const browserDefault = isBrowserDefaultDark() ? "dark" : "light"
+    return (localStorageTheme || browserDefault) as "dark" | "light"
+  }
+
+  const [theme, setTheme] = useState<"dark" | "light">(getDefaultTheme())
+
   return (
-    <>
-      <SideBar
-        setMenuOpen={setMenuOpen}
-        menuOpen={menuOpen || false}
-        logOut={logOut}
-      />
-      <div className={`page_layout fitContent`}>
-        <Navbar
-          notifyUser={notifyUser}
+    <ThemeContext.Provider value={{ theme, setTheme }}>
+      <div className={`theme-${theme}`}>
+        <SideBar
           setMenuOpen={setMenuOpen}
           menuOpen={menuOpen || false}
-          callRightSection={callRightSection}
-          searchVehicleByChasisNumber={searchVehicleByChasisNumber}
-          searchVehicleByRegNumber={searchVehicleByRegNumber}
-          searchLoad={searchLoad}
-          setSearch={setSearch}
+          logOut={logOut}
         />
-        <ScrollIntoViewController>
-          <div className="contents">{children}</div>
-        </ScrollIntoViewController>
-        {!isLogged && <Footer />}
+        <div className={`page_layout fitContent`}>
+          <Navbar
+            notifyUser={notifyUser}
+            setMenuOpen={setMenuOpen}
+            menuOpen={menuOpen || false}
+            callRightSection={callRightSection}
+            searchVehicleByChasisNumber={searchVehicleByChasisNumber}
+            searchVehicleByRegNumber={searchVehicleByRegNumber}
+            searchLoad={searchLoad}
+            setSearch={setSearch}
+          />
+          <ScrollIntoViewController>
+            <div className="contents">{children}</div>
+          </ScrollIntoViewController>
+          {!isLogged && <Footer />}
+        </div>
       </div>
-    </>
+    </ThemeContext.Provider>
   )
 }
 

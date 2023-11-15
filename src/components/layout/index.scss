@@ -1,14 +1,21 @@
 @import "../../styles/variables.scss";
+@import "../../styles/theme-variables.scss";
 
 .page_layout {
   padding-top: 0px;
   display: flex;
   flex-direction: column;
+  @include themify($themes) {
+    background: themed("colorBackground");
+  }
 
   &.fitContent {
     min-height: 100vh;
   }
   .contents {
     height: 100%;
+    @include themify($themes) {
+      background: themed("colorBackground");
+    }
   }
 }

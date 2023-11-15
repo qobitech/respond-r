@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import {
-  NoFeeds,
+  NoMediaComponent,
   getConnection,
   getUrl,
   setUrl,
@@ -31,6 +31,7 @@ import {
   PulseSVG,
   RightNavSVG,
 } from "utils/new/svgs"
+import "../global.scss"
 import "./index.scss"
 import { IAction } from "interfaces/IAction"
 
@@ -149,26 +150,43 @@ const IPolicePage: React.FC<IProps> = ({ states, ...props }) => {
             {signalRProps?.feed ? (
               <MainView feed={signalRProps.feed!} />
             ) : (
-              <div className="no-video-selected-section">
-                <MapSVG />
-                <p style={{ color: "#E21B1B" }}>NO MAP VIEW</p>
-                <p>Select Live feed to view</p>
-              </div>
+              <NoMediaComponent
+                load={false}
+                text="NO MAP VIEW"
+                icon={<MapSVG />}
+                instruction="Select Live feed to watch"
+              />
             )}
-            <div className="police-stream-section">
-              {signalRProps.feeds?.[0] ? (
-                signalRProps.feeds.map((i, index) => (
-                  <LiveFeedItemComponent
-                    key={Date.now() + index}
-                    feed={i}
-                    handleOnClick={() => {
-                      signalRProps.handleFeedSelect(i)
-                    }}
-                  />
-                ))
-              ) : (
-                <NoFeeds />
-              )}
+            <div className="stream-section">
+              <div className="live-feed-component">
+                {signalRProps.feeds?.[0] ? (
+                  signalRProps.feeds.map((i, index) => (
+                    <LiveFeedItemComponent
+                      key={Date.now() + index}
+                      feed={i}
+                      handleOnClick={() => {
+                        signalRProps.handleFeedSelect(i)
+                      }}
+                    />
+                  ))
+                ) : (
+                  <>
+                    <LiveFeedItemComponent
+                      feed={demoData}
+                      handleOnClick={() => {
+                        signalRProps.handleFeedSelect(demoData)
+                      }}
+                    />
+                    <LiveFeedItemComponent
+                      feed={demoData}
+                      handleOnClick={() => {
+                        signalRProps.handleFeedSelect(demoData)
+                      }}
+                    />
+                  </>
+                  // <NoFeeds />
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -307,16 +325,9 @@ const MainView = ({ feed }: { feed: IPoliceData | null }) => {
   const imgProps = useImage()
 
   return (
-    <div className="map-section">
-      {/* <div className="video-cta-title start">
-        <p onClick={() => setIsMedia(!isMedia)} className="p-btn-status">
-          {!isMedia ? "Show" : "Hide"} Map
-        </p>
-      </div> */}
-      <div className="video-container">
-        {/* <div className={`media-box ${isMedia ? "" : "hide"}`}> */}
+    <div className="video-section">
+      <div className="media-container">
         <div className={`media-box`}>
-          {/* <Map src={feed?.map || ""} /> */}
           <Media
             files={feed?.mediaFiles}
             fileIndex={fileIndex}
@@ -348,18 +359,7 @@ const MainView = ({ feed }: { feed: IPoliceData | null }) => {
               <PhoneSVG />
               <p>{feed?.deviceId || "..."}</p>
             </div>
-            {/* <p>
-              {feed?.canBeContacted}
-            </p> */}
-            <div
-              style={{
-                marginLeft: "auto",
-                width: "max-content",
-                display: "flex",
-                alignItems: "center",
-                gap: "15px",
-              }}
-            >
+            <div className="cta-section">
               <TypeButton
                 title="View Map"
                 buttonType="outlined"

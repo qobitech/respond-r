@@ -162,7 +162,7 @@ const Table: React.FC<IResultTable> = ({
         </tbody>
       </table>
       {!isRecord && (
-        <p className="margin-auto text-center py-4 color-light font-small">
+        <p className="margin-auto text-center py-4 font-small no-data">
           No Data
         </p>
       )}

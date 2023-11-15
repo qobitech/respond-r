@@ -345,7 +345,7 @@ export const IframeComponent = ({ src }: { src: string }) => {
       <iframe
         src={src || ""}
         title="fire-service"
-        style={{ width: "100%", border: "1px solid #eaeaea", height: "408px" }}
+        style={{ width: "100%", height: "408px" }}
         sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
       ></iframe>
     </div>

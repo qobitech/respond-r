@@ -1,23 +1,11 @@
 @import "../../../styles/variables.scss";
 @import "../../../styles/mixins.scss";
+@import "../../../styles/theme-variables.scss";
 
 .overview-page {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  .video-section,
-  .no-video-selected-section {
-    // flex-basis: 67%;
-
-    // @media (min-width: $lg-max-breakpoint) {
-    //   flex-basis: 70%;
-    // }
-    // @media (min-width: $lg-major-breakpoint) {
-    //   flex-basis: 75%;
-    // }
-    flex: 1;
-    width: 100%;
-  }
   .video-section {
     width: 0;
     overflow: auto;
@@ -25,18 +13,27 @@
     .video-cta-title {
       display: flex;
       align-items: center;
-      margin-bottom: 1.4625rem;
+      margin-bottom: 1.0625rem;
       &.start {
         align-items: flex-start;
+      }
+      button {
+        margin: 0;
+        margin-left: auto;
+        font-size: 0.7625rem;
+        border: 0px solid #252323;
+        padding: 0.2rem 0.4625rem;
+        border-radius: 0.12625rem;
+        @include themify($themes) {
+          background: themed("colorBackground");
+          color: themed("colorText");
+        }
       }
     }
     .vehicle-init-props {
       display: flex;
       align-items: center;
       gap: 20px;
-      // p {
-      //   border: 1px solid #d6d6d6;
-      // }
     }
     .camera-title {
       color: #2e1919;
@@ -46,28 +43,6 @@
       font-weight: 400;
       line-height: normal;
       margin: 0;
-    }
-    .video-container {
-      border-radius: 1.5625rem;
-      background: #252323;
-      overflow: hidden;
-      margin: 0 0 1.3rem;
-      display: flex;
-      justify-content: center;
-      .media-box {
-        width: 100%;
-        height: 25.5rem;
-        &.hide {
-          display: none;
-        }
-        .stream-canva-box,
-        video,
-        img {
-          height: 25.5rem;
-          width: 100%;
-          object-fit: contain;
-        }
-      }
     }
     .table-container-section {
       overflow: auto;
@@ -80,61 +55,6 @@
         outline: none;
       }
     }
-    .vehicle-info-section {
-      display: grid;
-      grid-row: auto;
-      grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
-      justify-content: space-between;
-      gap: 40px;
-      margin-bottom: 3rem;
-      .vehicle-info-section-item {
-        .vehicle-info-label {
-          color: #4f4f4f;
-          font-family: Nunito;
-          font-size: 0.8125rem;
-          font-style: normal;
-          font-weight: 400;
-          line-height: normal;
-          margin: 0 0 1rem;
-        }
-        .vehicle-info-value {
-          color: #2e1919;
-          font-family: Nunito;
-          font-size: 1rem;
-          font-style: normal;
-          font-weight: 600;
-          line-height: normal;
-          margin: 0;
-          width: 100%;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          &.reg-number {
-            letter-spacing: 0.55rem;
-            color: #8d1d1d;
-          }
-          &.status-text {
-            width: max-content;
-          }
-          &.overflow {
-            text-overflow: unset;
-            white-space: unset;
-            overflow-wrap: break-word;
-            overflow: visible;
-          }
-        }
-        .vehicle-info-color {
-          width: 20px;
-          height: 20px;
-          min-width: 20px;
-          min-height: 20px;
-          border-radius: 50%;
-          &.border {
-            border: 1px solid #e8e8e8;
-          }
-        }
-      }
-    }
     .vehicle-row-item {
       display: flex;
       align-items: center;
@@ -145,63 +65,26 @@
       }
     }
   }
-  .no-video-selected-section {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    align-items: center;
-    justify-content: center;
-    padding: 10rem 0;
-    border-radius: 1.5625rem;
-    border: 1px solid #d8d8d8;
-    p {
-      color: #909090;
-      font-family: Nunito;
-      font-size: 0.8125rem;
-      font-style: normal;
-      font-weight: 500;
-      line-height: normal;
-      margin: 0;
-    }
-  }
-  .stream-section {
-    // flex-basis: 33%;
-    // @media (min-width: $lg-max-breakpoint) {
-    //   flex-basis: 30%;
-    // }
-    // @media (min-width: $lg-major-breakpoint) {
-    //   flex-basis: 25%;
-    // }
-    min-width: 451.44px;
-    width: 451.44px;
-    // border: 1px solid;
-    .live-feed-component {
-      padding-left: 2rem;
-
-      .live-feed-component-wrapper {
-        overflow: auto;
-        max-height: 69vh;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-      }
-    }
-  }
 }
 
 .live-feed-item-component {
-  width: 385.53px;
+  width: 415.53px;
   cursor: pointer;
   flex-shrink: 0;
   display: flex;
   align-items: center;
+  padding-bottom: 1.25rem;
+  @include themify($themes) {
+    border-bottom: 1px solid themed("border");
+  }
   .lf-media-section {
-    width: 14.375rem;
+    width: 14.475rem;
     height: 11.8125rem;
     flex-shrink: 0;
     border-radius: 1.25rem;
     overflow: hidden;
     background: #000;
+    border: none;
     img {
       width: 100%;
       height: 100%;
@@ -219,7 +102,9 @@
     height: 11.8125rem;
     flex-shrink: 0;
     .lf-info-section-label {
-      color: #4f4f4f;
+      @include themify($themes) {
+        color: themed("themeColor");
+      }
       font-family: Nunito;
       font-size: 0.6875rem;
       font-style: normal;
@@ -227,13 +112,15 @@
       line-height: normal;
       margin: 0;
       &.flag {
-        color: #c21f1f;
+        color: #f56e9d;
       }
     }
     .lf-info-section-value {
-      color: #000;
+      @include themify($themes) {
+        color: themed("infovalue");
+      }
       font-family: Nunito;
-      font-size: 0.875rem;
+      font-size: 0.815rem;
       font-style: normal;
       font-weight: 600;
       line-height: normal;
@@ -243,7 +130,9 @@
       text-overflow: ellipsis;
       margin: 0 0 0.88rem;
       &.lf-reg-number {
-        letter-spacing: 0.30625rem;
+        letter-spacing: 0.40625rem;
+        text-transform: uppercase;
+        font-size: 1.1rem;
       }
     }
     .lf-info-bottom-value {
@@ -317,25 +206,10 @@
       }
     }
   }
-  .lf-status {
-    transition: 0.2s ease all;
-    text-transform: capitalize;
-    cursor: pointer;
-    &.connecting {
-      color: #e3a11e;
-    }
-    &.connected {
-      color: #298e4c;
-    }
-    &.re-connecting {
-      color: #e3a11e;
-    }
-    &.closed {
-      color: #c21f1f;
-    }
-  }
   .lf-header {
-    color: #444;
+    @include themify($themes) {
+      color: themed("colorText");
+    }
   }
 }
 
@@ -343,22 +217,36 @@
   margin-bottom: 0.925rem;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 30px;
+  p {
+    @include themify($themes) {
+      color: themed("colorText");
+    }
+    margin: 0;
+    font-size: small;
+  }
   button {
-    border: none;
+    color: #909090;
+    border: 1px solid #909090;
+    background: none;
     width: max-content;
     height: max-content;
     border-radius: 25px;
     padding: 0.44rem 1.1325rem;
     font-size: 0.6625rem;
     font-family: Nunito;
+    font-weight: bolder;
     cursor: pointer;
     transition: 0.2s ease all;
     outline: none;
     &.active {
-      background: #2e1919;
-      color: #fff;
+      @include themify($themes) {
+        background: themed("themeColor");
+        border: 1px solid themed("themeColor");
+        color: themed("border");
+      }
       cursor: default;
+      border: none;
     }
   }
 }
@@ -371,6 +259,7 @@
   p {
     margin: 0;
     color: #898989;
+    font-size: small;
   }
 }
 
@@ -407,6 +296,7 @@
     display: none;
   }
 }
+
 .vehicle-car-flags-container {
   margin-bottom: 1rem;
 }
@@ -475,9 +365,11 @@
   align-items: center;
   gap: 15px;
   padding-bottom: 0.9625rem;
-  p {
+  button {
     margin: 0;
-    border: 1px solid #949494;
+    border: 1px solid #909090;
+    color: #909090;
+    background: none;
     width: max-content;
     padding: 0.3625rem 0.6325rem;
     border-radius: 3px;
@@ -493,27 +385,6 @@
   }
 }
 
-// .playerWrapper {
-//   height: 100%;
-//   width: 100%;
-// }
-
-// .customVideoPlayer {
-//   padding-top: 100px;
-//   color: black;
-//   display: flex;
-//   align-items: center;
-//   flex-direction: column;
-// }
-
-// .video-controller-prime {
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   gap: 20px;
-//   padding: 0.3625rem 0;
-// }
-
 .stream-canva-box {
   height: 25.5rem;
   width: 100%;
@@ -526,15 +397,16 @@
 
 .tab-section {
   .tab-header {
-    // border-top: 1px solid #dedede;
-    border-bottom: 1px solid #dedede;
+    @include themify($themes) {
+      border-bottom: 1px solid themed("tabBorder");
+    }
     margin: 0 0 1.7rem;
     display: flex;
     align-items: center;
     gap: 20px;
     overflow: auto;
     .tab-item {
-      border-bottom: 3px solid #fff;
+      border-bottom: 3px solid transparent;
       padding: 0.8625rem 0.3625rem;
       cursor: pointer;
       transition: 0.2s ease all;
@@ -550,10 +422,14 @@
         text-transform: uppercase;
       }
       &.active {
-        border-bottom: 3px solid #494949;
+        @include themify($themes) {
+          border-bottom: 3px solid themed("tabBorder");
+        }
         cursor: default;
         p {
-          color: #000;
+          @include themify($themes) {
+            color: themed("themeColor");
+          }
         }
       }
     }

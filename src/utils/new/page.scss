@@ -1,11 +1,26 @@
+@import "../../styles/theme-variables.scss";
+
 .main-page {
   min-height: 100vh;
-  background: #fff;
+  @include themify($themes) {
+    background: themed("colorBackground");
+  }
   padding: 7.12rem 0 0;
 
   .pg-container {
     width: 100%;
     max-width: 95%;
     margin: 0 auto;
+  }
+}
+
+.svg-default {
+  @include themify($themes) {
+    fill: themed("themeColor");
+  }
+}
+.svg-nav {
+  @include themify($themes) {
+    fill: themed("svgnav");
   }
 }

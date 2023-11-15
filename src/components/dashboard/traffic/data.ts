@@ -1,3 +1,4 @@
+import { IFeed } from "interfaces/IStream"
 import { ISearchVehicle } from "interfaces/IVehicle"
 
 export const MAX_DATA_COUNTER = 20
@@ -47,7 +48,7 @@ export const handleDataStream = <T extends IT>(
   }
 }
 
-export const vehicleSearchDemoData = {
+export const vehicleSearchDemoData: ISearchVehicle = {
   cameraName: "ere",
   classification: "rer",
   code: "34565",
@@ -76,3 +77,22 @@ export const vehicleSearchDemoData = {
 }
 
 export const vsdd: ISearchVehicle[] = new Array(5).fill(vehicleSearchDemoData)
+
+export const feedDemoData: IFeed = {
+  cameraName: "ere",
+  classification: "rer",
+  code: "34565",
+  filePath: "eerefefe",
+  flags: ["refrfr"],
+  isOnBlackList: false,
+  isUploaded: false,
+  make: "CAMRY",
+  model: "CAM",
+  orientation: "erfefwe",
+  regNumber: "dtgerfre",
+  timeStamp: "erferfwr",
+  vehicleType: "erferfefew",
+  colour: "RED",
+}
+
+export const feedDemoDatas = new Array(5).fill(feedDemoData)

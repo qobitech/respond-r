@@ -80,7 +80,10 @@ export const CopyComponent = ({
   shareURLRef: React.RefObject<HTMLTextAreaElement>
 }) => {
   return (
-    <div className="m-0 p-0 d-flex flex-column bg-white align-items-center position-relative">
+    <div
+      className="m-0 p-0 d-flex flex-column bg-white align-items-center position-relative"
+      style={{ height: 0 }}
+    >
       <textarea
         value={url}
         style={{
