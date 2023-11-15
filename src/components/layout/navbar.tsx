@@ -96,21 +96,25 @@ const Navbar = (props: NavbarProps) => {
           </div>
         )}
         {isLogged ? <PageIdentifier page={getPageIdentifier()} /> : null}
-        {isLogged && (
-          <div className="nav-other-components">
-            {isTraffic ? (
-              <TrafficSearchComponent
-                searchVehicleByChasisNumber={props.searchVehicleByChasisNumber}
-                searchVehicleByRegNumber={props.searchVehicleByRegNumber}
-                load={props.searchLoad}
-                setSearch={props.setSearch}
-              />
-            ) : null}
-            {isFireService ? <FireSearchComponent /> : null}
-            {isPolice ? <PoliceSearchComponent /> : null}
-
-            <Toggle />
-
+        <div className="nav-other-components">
+          {isLogged && (
+            <>
+              {isTraffic ? (
+                <TrafficSearchComponent
+                  searchVehicleByChasisNumber={
+                    props.searchVehicleByChasisNumber
+                  }
+                  searchVehicleByRegNumber={props.searchVehicleByRegNumber}
+                  load={props.searchLoad}
+                  setSearch={props.setSearch}
+                />
+              ) : null}
+              {isFireService ? <FireSearchComponent /> : null}
+              {isPolice ? <PoliceSearchComponent /> : null}
+            </>
+          )}
+          <Toggle />
+          {isLogged && (
             <ConfigurationComponent
               openSettings={() => {
                 props.callRightSection({
@@ -119,8 +123,17 @@ const Navbar = (props: NavbarProps) => {
                 })
               }}
             />
-          </div>
-        )}
+          )}
+          {!isLogged && (
+            <div className="auth-actions">
+              <TypeSmallButton
+                title="LOGIN"
+                onClick={() => navigate(url.LOGIN)}
+              />
+            </div>
+          )}
+        </div>
+
         {/* {!isLogged ? (
           <ul className={clicked ? "nav-menu active" : "nav-menu"}>
             {MenuItems.map((item, index) => (

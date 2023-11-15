@@ -1,12 +1,16 @@
 @import "../../styles/variables.scss";
 @import "../../styles/mixins.scss";
+@import "../../styles/theme-variables.scss";
 
 .footer_main {
   width: 100%;
   margin: 0;
   padding: 20px 0;
   box-sizing: border-box;
-  background-color: #fff;
+  @include themify($themes) {
+    background: themed("colorBackground");
+    color: themed("colorText");
+  }
   text-align: center;
   margin-top: auto;
 }

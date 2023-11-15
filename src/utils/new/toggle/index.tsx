@@ -14,7 +14,7 @@ const Toggle = () => {
   }
 
   return (
-    <div className="toggle">
+    <div className="toggle" style={{ marginLeft: "auto" }}>
       <label className="switch">
         <input
           type="checkbox"
