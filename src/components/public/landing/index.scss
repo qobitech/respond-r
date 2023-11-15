@@ -1,5 +1,6 @@
 @import "../../../styles/variables.scss";
 @import "../../../styles/mixins.scss";
+@import "../../../styles/theme-variables.scss";
 
 .landing-page {
   margin: 3.5rem auto 0;
@@ -28,6 +29,9 @@
         font-size: 1.3525rem;
         line-height: 2rem;
         margin: 0 0 2.35rem;
+        @include themify($themes) {
+          color: themed("infovalue");
+        }
       }
 
       .events {
@@ -42,6 +46,9 @@
           p {
             margin: 0;
             font-size: 0.9325rem;
+            @include themify($themes) {
+              color: themed("colorText");
+            }
           }
           .separator {
             width: 1px;
@@ -53,7 +60,9 @@
     }
 
     h1 {
-      color: #04356e;
+      @include themify($themes) {
+        color: themed("themeColor");
+      }
       font-family: Nunito;
       font-size: 3.375rem;
       font-style: normal;
@@ -90,7 +99,9 @@
       justify-content: space-between;
       position: relative;
       h2 {
-        color: #04356e;
+        @include themify($themes) {
+          color: themed("colorText");
+        }
         font-family: Nunito;
         font-size: 2.5rem;
         font-style: normal;

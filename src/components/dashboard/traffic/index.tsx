@@ -33,7 +33,7 @@ import Switch, { Case } from "components/reusable/switch"
 import ReactPaginate from "react-paginate"
 // import Stream from "./stream-player"
 // import axios from "axios"
-import { IframeComponent } from "../fire-service"
+import { IframeComponent } from "../components"
 import { vehicleSearchType } from "store/actions/global"
 import { IVehicleSearchPayload } from "interfaces/IGlobal"
 
@@ -88,7 +88,7 @@ const configFormEnums = {
   fireSignalR: "fireSignalR",
 } as const
 
-type chkType = (typeof configFormEnums)[keyof typeof configFormEnums]
+export type chkType = (typeof configFormEnums)[keyof typeof configFormEnums]
 
 export const getUrl = (urlKey: chkType) => {
   const url = localStorage.getItem(urlKey)

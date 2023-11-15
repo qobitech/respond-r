@@ -23,8 +23,8 @@ const Toggle = () => {
           checked={theme === "dark"}
         />
         <div className="slider">
-          <MoonSVG />
           <SunSVG />
+          <MoonSVG />
         </div>
       </label>
     </div>

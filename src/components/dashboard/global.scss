@@ -312,3 +312,140 @@
     color: #c21f1f;
   }
 }
+
+.live-feed-header-section {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin: 0 0 1.62rem;
+  .lf-header,
+  .lf-status,
+  .lf-data-refresh {
+    font-family: Nunito;
+    font-size: 0.6875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    .lf-status-bop {
+      width: 10px;
+      min-width: 10px;
+      height: 10px;
+      min-height: 10px;
+      display: inline-block;
+      border-radius: 50%;
+      &.connecting {
+        background: #e3a11e;
+      }
+      &.connected {
+        background: #298e4c;
+      }
+      &.re-connecting {
+        background: #e3a11e;
+      }
+      &.closed {
+        background: #c21f1f;
+      }
+    }
+  }
+  .lf-header {
+    color: #444;
+  }
+}
+
+.lf-text-separator {
+  background: #a6a6a6;
+  width: 1px;
+  height: 10px;
+}
+
+.stream-canva-box {
+  height: 25.5rem;
+  width: 100%;
+  object-fit: contain;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.media-container-box {
+  width: 100%;
+  height: 408px;
+  img {
+    object-fit: contain;
+    min-width: 100%;
+  }
+  position: relative;
+  .nav-btn {
+    position: absolute;
+    top: 50%;
+    cursor: pointer;
+    padding: 0 0.5rem;
+    &.no-click {
+      cursor: not-allowed;
+    }
+  }
+  .nav-left {
+    left: 0;
+  }
+  .nav-right {
+    right: 0;
+  }
+}
+
+.header-info-prop {
+  text-align: right;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  @include themify($themes) {
+    border-bottom: 1px solid themed("border");
+  }
+  padding-bottom: 15px;
+  gap: 80px;
+  p {
+    margin: 0;
+    margin-top: 2px;
+    font-size: 14px;
+  }
+  .icon-txt {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    p {
+      @include themify($themes) {
+        color: themed("colorText");
+      }
+    }
+  }
+  .cta-section {
+    margin-left: auto;
+    width: max-content;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+}
+
+.media-nav-count {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  p {
+    margin: 0;
+    font-size: 0.8rem;
+    @include themify($themes) {
+      color: themed("colorText");
+    }
+  }
+  .loader-box {
+    width: 25px;
+    height: 25.56px;
+  }
+}
