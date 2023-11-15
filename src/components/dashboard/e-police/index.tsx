@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import {
+  NoFeeds,
   NoMediaComponent,
   getConnection,
   getUrl,
@@ -170,21 +171,7 @@ const IPolicePage: React.FC<IProps> = ({ states, ...props }) => {
                     />
                   ))
                 ) : (
-                  <>
-                    <LiveFeedItemComponent
-                      feed={demoData}
-                      handleOnClick={() => {
-                        signalRProps.handleFeedSelect(demoData)
-                      }}
-                    />
-                    <LiveFeedItemComponent
-                      feed={demoData}
-                      handleOnClick={() => {
-                        signalRProps.handleFeedSelect(demoData)
-                      }}
-                    />
-                  </>
-                  // <NoFeeds />
+                  <NoFeeds />
                 )}
               </div>
             </div>
