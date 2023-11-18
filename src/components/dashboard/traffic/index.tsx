@@ -1649,7 +1649,7 @@ const convertRemoteSearchDataToFeed = (
   classification: i?.classification || "",
   code: i?.code || "",
   colour: i?.color || "",
-  filePath: i?.mainImageUrl || "",
+  filePath: i?.mainImageUrl ? i?.mainImageUrl.replace("?dl=0", "?raw=1") : "",
   flags: i?.flags || [],
   isOnBlackList: i?.hasFlag || false,
   isUploaded: false,
