@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react"
+import React, { FC, useContext, useEffect, useState } from "react"
 import "../global.scss"
 import "./index.scss"
 import { IStates, IVehicleReducer } from "interfaces/IReducer"
@@ -6,7 +6,14 @@ import Table, { ICell, ICellAction } from "utils/new/table"
 import "../../../utils/new/pagination.scss"
 import "../../../utils/new/page.scss"
 import { Loader } from "utils/new/components"
-import { FlagSVG, MediaSVG, NoteSVG, PulseSVG, VideoSVG } from "utils/new/svgs"
+import {
+  FlagSVG,
+  MediaSVG,
+  NoteSVG,
+  PulseSVG,
+  VideoSVG,
+  PasteSVG,
+} from "utils/new/svgs"
 import RightSection, {
   IRightSection,
   useRightSection,
@@ -14,7 +21,7 @@ import RightSection, {
 import { TypeInput } from "utils/new/input"
 import { TypeButton, TypeSmallButton } from "utils/new/button"
 import { IFeed, IHit } from "interfaces/IStream"
-import { handleDataStream } from "./data"
+import { feedDemoDatas, handleDataStream } from "./data"
 import * as signalR from "@microsoft/signalr"
 import { CopyComponent, ICopyProps, useCopy, useFormHook } from "utils/new/hook"
 import * as yup from "yup"
@@ -31,11 +38,10 @@ import { vehicles } from "store/types"
 import { Accordion, useAccordion } from "components/reusable/accordion"
 import Switch, { Case } from "components/reusable/switch"
 import ReactPaginate from "react-paginate"
-// import Stream from "./stream-player"
-// import axios from "axios"
 import { IframeComponent } from "../components"
 import { vehicleSearchType } from "store/actions/global"
 import { IVehicleSearchPayload } from "interfaces/IGlobal"
+import { SearchContext } from "contexts/search-context"
 
 interface IProps {
   states?: IStates
@@ -179,16 +185,18 @@ const useSignalR = (): IUS => {
   const startConnection = (url: string) => {
     setConnectionStatus("connecting")
     const storedUrl = getUrl("connectionUrl") || ""
-    const connection = getConnection(url || storedUrl)
-    connection
-      ?.start()
-      .then(() => {
-        setConnectionStatus("connected")
-      })
-      .catch(() => {
-        setConnectionStatus("closed")
-      })
-    setConnection(connection)
+    if (url || storedUrl) {
+      const connection = getConnection(url || storedUrl)
+      connection
+        ?.start()
+        .then(() => {
+          setConnectionStatus("connected")
+        })
+        .catch(() => {
+          setConnectionStatus("closed")
+        })
+      setConnection(connection)
+    }
   }
 
   const hit = new Audio(require("../../../extras/audio/hit.mp3"))
@@ -254,7 +262,7 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
   const vehicle = states?.vehicle
   const [mediaUrl, setMediaUrl] = useState<string>("")
   const [flags, setFlags] = useState<string[]>([])
-  const [camera, setCamera] = useState<string>()
+  // const [camera, setCamera] = useState<string>()
 
   const handleFeedRequest = (i: IFeed) => {
     // get vehicle by reg number
@@ -262,7 +270,7 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
     getVehicleByRegNumber(i.regNumber)
     console.log("feed")
     setFlags(i.flags as string[])
-    setCamera(i.cameraName)
+    // setCamera(i.cameraName)
     setMediaUrl(getFilePath(i.filePath))
   }
 
@@ -297,32 +305,17 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
       </RightSection>
       <div className="main-page">
         <div className="pg-container">
-          <LiveFeedStatusComponent
-            signalRProps={signalRProps}
-            setSelectedView={setSelectedView}
-            isImage={isImage}
-            isRtsp={isRtsp}
-            showToggle
-          />
+          <LiveFeedStatusComponent signalRProps={signalRProps} />
           <div className="overview-page">
-            {vehicle?.getVehicleByRegNumber?.isSuccessful || isRtsp ? (
-              <MainView
-                vehicle={vehicle}
-                mediaUrl={mediaUrl}
-                camera={camera!}
-                flags={flags!}
-                isImage={isImage}
-                isRtsp={isRtsp}
-                rtspProps={rtspProps}
-              />
-            ) : (
-              <NoMediaComponent
-                load={vehicle?.getVehicleByRegNumberLoading!}
-                text="NO VIDEO STREAM"
-                icon={<VideoSVG />}
-                instruction="Select Live feed to watch"
-              />
-            )}
+            <MainView
+              mediaUrl={mediaUrl}
+              flags={flags!}
+              isImage={isImage}
+              isRtsp={isRtsp}
+              rtspProps={rtspProps}
+              setSelectedView={setSelectedView}
+              vehicle={vehicle}
+            />
             <div className="stream-section">
               <LiveFeedComponent
                 handleFeedRequest={handleFeedRequest}
@@ -349,45 +342,54 @@ const MediaRTSPToggle = ({
   isImage,
   isRtsp,
   setSelectedView,
+  setIsMedia,
+  isMedia,
 }: {
   isImage: boolean
   isRtsp: boolean
-  setSelectedView: (value: React.SetStateAction<number>) => void
+  setSelectedView?: (value: React.SetStateAction<number>) => void
+  setIsMedia: React.Dispatch<React.SetStateAction<boolean>>
+  isMedia: boolean
 }) => {
   return (
     <div className="video-section-header-tab">
       <button
         className={isImage ? "active" : ""}
-        onClick={() => setSelectedView(0)}
+        onClick={() => setSelectedView?.(0)}
       >
         SIGNAL R
       </button>
       <button
         className={isRtsp ? "active" : ""}
-        onClick={() => setSelectedView(1)}
+        onClick={() => setSelectedView?.(1)}
       >
         RTSP FEED
+      </button>
+      <button className="show-hide-media" onClick={() => setIsMedia(!isMedia)}>
+        {!isMedia ? "SHOW" : "HIDE"}
+        &nbsp;MEDIA&nbsp;&nbsp;
+        <MediaSVG height="40" width="40" />
       </button>
     </div>
   )
 }
 
 const MainView = ({
-  vehicle,
   mediaUrl,
-  camera,
   flags,
   isImage,
   isRtsp,
   rtspProps,
+  setSelectedView,
+  vehicle,
 }: {
-  vehicle: IVehicleReducer | undefined
   mediaUrl: string
-  camera: string
   flags: string[]
   isImage: boolean
   isRtsp: boolean
   rtspProps: IUSIO
+  setSelectedView?: (value: React.SetStateAction<number>) => void
+  vehicle: IVehicleReducer | undefined
 }) => {
   const [tab, setTab] = useState<string>(tabEnum.VEHICLEINFO)
 
@@ -426,103 +428,116 @@ const MainView = ({
   const vehicleNotes = vehicle?.getVehicleByRegNumber?.data?.notes
 
   return (
-    <div className="video-section">
-      <div className="video-cta-title start">
-        <div className="vehicle-init-props">
-          {carTags.map((i, index) => (
-            <p
-              className={`p-btn-status ${i.class} ${
-                i.status ? "" : "hide-btn"
-              } no-btn`}
-              key={index}
-            >
-              {i.title}
-            </p>
-          ))}
-        </div>
-        <button onClick={() => setIsMedia(!isMedia)}>
-          {!isMedia ? "Show" : "Hide"} Media
-          <MediaSVG height="40" width="40" />
-        </button>
-      </div>
-      <div className={`media-container ${isMedia ? "" : "hide"}`}>
-        <div className={`media-box ${isRtsp ? "" : "hide"}`}>
-          {/* <Stream /> */}
-          <IframeComponent src={rtspProps.rtspurl || ""} />
-        </div>
-        {isMedia ? (
-          <div className={`media-box ${isImage ? "" : "hide"}`}>
-            <img src={mediaUrl} alt="media" />
-          </div>
-        ) : null}
-      </div>
-      {isImage ? (
-        <div className="tab-section">
-          <div className="tab-header">
-            {Object.values(tabEnum).map((i, index) => (
-              <div
-                className={`tab-item ${i === tab ? "active" : ""}`}
-                key={index}
-                onClick={() => setTab(i)}
-              >
-                <p>{i}</p>
+    <>
+      <div className="video-section">
+        <MediaRTSPToggle
+          isImage={isImage!}
+          isRtsp={isRtsp!}
+          setSelectedView={setSelectedView!}
+          isMedia={isMedia}
+          setIsMedia={setIsMedia}
+        />
+        {vehicle?.getVehicleByRegNumber?.isSuccessful || isRtsp ? (
+          <>
+            <div className="separator-mainview" />
+            <div className="main-view-body">
+              <div className="video-cta-title start">
+                {isImage ? (
+                  <div className="vehicle-init-props">
+                    {carTags.map((i, index) => (
+                      <p
+                        className={`p-btn-status ${i.class} ${
+                          i.status ? "" : "hide-btn"
+                        } no-btn`}
+                        key={index}
+                      >
+                        {i.title}
+                      </p>
+                    ))}
+                  </div>
+                ) : null}
               </div>
-            ))}
-          </div>
-          <div className="tab-body">
-            {tab === tabEnum.VEHICLEINFO ? (
-              <div>
-                <CarFlags flags={flags} />
-                <CarNotes
-                  notes={vehicleNotes}
-                  setTab={setTab}
-                  isViewAll
-                  title="Note"
-                />
-                <VehicleInfoSection vehicleData={vehicleData} />
+              <div className={`media-container ${isMedia ? "" : "hide"}`}>
+                <div className={`media-box ${isRtsp ? "" : "hide"}`}>
+                  {/* <Stream /> */}
+                  <IframeComponent src={rtspProps.rtspurl || ""} />
+                </div>
+                {isMedia ? (
+                  <div className={`media-box ${isImage ? "" : "hide"}`}>
+                    <img src={mediaUrl} alt="media" />
+                  </div>
+                ) : null}
               </div>
-            ) : null}
-            {tab === tabEnum.OFFENSES ? (
-              <VehicleOffensesSection vehicleData={vehicleData} />
-            ) : null}
-            {tab === tabEnum.OWNERINFO ? (
-              <VehicleOwnerInfoSection vehicleData={vehicleData} />
-            ) : null}
-            {tab === tabEnum.SOT ? (
-              <VehicleSOTSection vehicleData={vehicleData} />
-            ) : null}
-            {tab === tabEnum.INSTANCE ? (
-              <VehicleInstanceSection vehicleData={vehicleData} />
-            ) : null}
-            {tab === tabEnum.NOTES ? (
-              <CarNotes
-                notes={vehicleNotes}
-                title="All Notes"
-                setTab={setTab}
-                isViewAll={false}
-              />
-            ) : null}
-          </div>
-        </div>
-      ) : null}
-    </div>
+              {isImage ? (
+                <div className="tab-section">
+                  <div className="tab-header">
+                    {Object.values(tabEnum).map((i, index) => (
+                      <div
+                        className={`tab-item ${i === tab ? "active" : ""}`}
+                        key={index}
+                        onClick={() => setTab(i)}
+                      >
+                        <p>{i}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="tab-body">
+                    {tab === tabEnum.VEHICLEINFO ? (
+                      <div>
+                        <CarFlags flags={flags} />
+                        <CarNotes
+                          notes={vehicleNotes}
+                          setTab={setTab}
+                          isViewAll
+                          title="Note"
+                        />
+                        <VehicleInfoSection vehicleData={vehicleData} />
+                      </div>
+                    ) : null}
+                    {tab === tabEnum.OFFENSES ? (
+                      <VehicleOffensesSection vehicleData={vehicleData} />
+                    ) : null}
+                    {tab === tabEnum.OWNERINFO ? (
+                      <VehicleOwnerInfoSection vehicleData={vehicleData} />
+                    ) : null}
+                    {tab === tabEnum.SOT ? (
+                      <VehicleSOTSection vehicleData={vehicleData} />
+                    ) : null}
+                    {tab === tabEnum.INSTANCE ? (
+                      <VehicleInstanceSection vehicleData={vehicleData} />
+                    ) : null}
+                    {tab === tabEnum.NOTES ? (
+                      <CarNotes
+                        notes={vehicleNotes}
+                        title="All Notes"
+                        setTab={setTab}
+                        isViewAll={false}
+                      />
+                    ) : null}
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          </>
+        ) : (
+          <NoMediaComponent
+            load={vehicle?.getVehicleByRegNumberLoading!}
+            text="NO VIDEO STREAM"
+            icon={<VideoSVG />}
+            instruction="Select Live feed to watch"
+          />
+        )}
+      </div>
+    </>
   )
 }
 
 const LiveFeedStatusComponent = ({
   signalRProps,
   title,
-  setSelectedView,
-  isImage,
-  isRtsp,
-  showToggle,
 }: {
   signalRProps: IUS
   title?: string
-  setSelectedView?: (value: React.SetStateAction<number>) => void
-  isImage?: boolean
-  isRtsp?: boolean
-  showToggle?: boolean
 }) => {
   const isConnect = signalRProps.connectionStatus === "closed"
 
@@ -540,13 +555,6 @@ const LiveFeedStatusComponent = ({
           {signalRProps.connectionStatus}
         </p>
       </div>
-      {showToggle ? (
-        <MediaRTSPToggle
-          isImage={isImage!}
-          isRtsp={isRtsp!}
-          setSelectedView={setSelectedView!}
-        />
-      ) : null}
     </div>
   )
 }
@@ -630,12 +638,15 @@ const LiveFeedResults = ({
   isFeed: boolean
   isHit: boolean
 }) => {
+  const { setSearch: setSearchValue } = useContext(SearchContext)
   return (
     <div className="live-feed-component-wrapper">
       {isFeed ? (
         <>
-          {signalRProps.feeds[0] ? (
-            signalRProps.feeds.map((i) => (
+          {/* {signalRProps.feeds[0] ? (
+            signalRProps.feeds.map((i) => ( */}
+          {feedDemoDatas[0] ? (
+            feedDemoDatas.map((i) => (
               <LiveFeedItemComponent
                 key={i.regNumber}
                 carColor={i.colour}
@@ -646,7 +657,7 @@ const LiveFeedResults = ({
                 regNumber={i.regNumber}
                 handleOnClick={() => {
                   handleFeedRequest(i)
-                  copyProps.setAction(i.regNumber)
+                  setSearchValue(i.regNumber as string)
                 }}
               />
             ))
@@ -755,7 +766,10 @@ const LiveFeedItemComponent: FC<ILFIC> = (props) => {
         {props.imgSrc ? <img src={props.imgSrc} alt="" /> : ""}
       </div>
       <div className="lf-info-section">
-        <p className="lf-info-section-label">Reg Number</p>
+        <div className="vehicle-reg-number-info">
+          <p className="lf-info-section-label">Reg Number</p>
+          <PasteSVG width="15" height="15" />
+        </div>
         <p className="lf-info-section-value lf-reg-number">{props.regNumber}</p>
         <p className="lf-info-section-label">Make & Type</p>
         <div className="lf-make-type">
@@ -822,23 +836,11 @@ const VehicleInfoSection: FC<IVIS> = ({ vehicleData }) => {
         value={vehicleData?.regNumber}
       />
       <VehicleInfoSectionItem label="Code" value={vehicleData?.code} />
-      {/* <VehicleInfoSectionItem
-        label="Classification"
-        value={vehicleData?.classification}
-      /> */}
-      {/* <VehicleInfoSectionItem
-        label="Chasis Number"
-        value={vehicleData?.chassisNumber}
-      /> */}
       <VehicleInfoSectionItem label="Vehicle Type" value={vehicleData?.code} />
       <VehicleInfoSectionColorItem
         label="Vehicle Color"
         value={vehicleData?.color}
       />
-      {/* <VehicleInfoSectionItem
-        label="Engine Number"
-        value={vehicleData?.engineNumber}
-      /> */}
       <VehicleInfoSectionItem label="Vehicle Make" value={vehicleData?.make} />
       <VehicleInfoSectionItem
         label="Vehicle Model"
@@ -1083,14 +1085,7 @@ const CarNotes = ({
 }
 
 const CarFlags = ({ flags }: { flags: string[] }) => {
-  if (!flags?.[0])
-    return (
-      // <div className="no-flags mb-4 pb-1">
-      //   <FlagSVG color="#f56e9d" />
-      //   <p>No Flags</p>
-      // </div>
-      <></>
-    )
+  if (!flags?.[0]) return <></>
 
   return (
     <div className="vehicle-car-flags-container">
@@ -1274,23 +1269,35 @@ export const VehicleInfoSectionItem = ({
   label,
   value,
   status,
-}: {
+}: // onClick,
+{
   label: string
   value: string | undefined
   status?: boolean
+  // onClick?: () => void
 }) => {
+  const { setSearch: setSearchValue } = useContext(SearchContext)
   const isStatus = typeof status !== "undefined"
+  const isReg = label.includes("Reg") && label.includes("Number")
   return (
-    <div className="vehicle-info-section-item">
+    <div
+      className="vehicle-info-section-item"
+      onClick={() => {
+        if (isReg) setSearchValue(value || "")
+      }}
+    >
       <p className="vehicle-info-label">{label}</p>
       <div className="vehicle-row-item">
-        <p
-          className={`vehicle-info-value overflow ${
-            label.includes("Reg") ? "reg-number" : ""
-          } ${isStatus ? "status-text" : ""}`}
-        >
-          {value || "..."}
-        </p>
+        <div className="vehicle-reg-number-info">
+          <p
+            className={`vehicle-info-value overflow ${
+              isReg ? "reg-number" : ""
+            } ${isStatus ? "status-text" : ""}`}
+          >
+            {value || "..."}
+          </p>
+          {isReg ? <PasteSVG /> : null}
+        </div>
         {isStatus ? (
           <p className={`p-btn-status no-btn ${status ? "success" : "danger"}`}>
             {getStatus(status || false)}
@@ -1601,7 +1608,7 @@ const SearchResults = ({
                 <LiveFeedItemComponent
                   carColor={remote.color || "..."}
                   carMake={remote.make || "..."}
-                  imgSrc={getFilePath(remote.mainImageUrl || "...")}
+                  imgSrc={remote.mainImageUrl || "..."}
                   carType={remote.model || "..."}
                   offense={(remote?.flags?.length || 0) + ""}
                   regNumber={remote.regNumber || "..."}

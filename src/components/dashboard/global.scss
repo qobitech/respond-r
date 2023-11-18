@@ -139,7 +139,9 @@
       text-overflow: ellipsis;
       &.reg-number {
         letter-spacing: 0.55rem;
-        color: #8d1d1d;
+        @include themify($themes) {
+          color: themed("regnumber");
+        }
       }
       &.status-text {
         width: max-content;

@@ -8,11 +8,16 @@
   justify-content: space-between;
   .video-section {
     width: 0;
-    overflow: auto;
-    max-height: 76vh;
+    overflow: hidden;
+    .main-view-body {
+      overflow: auto;
+      max-height: 76vh;
+      padding-bottom: 60px;
+    }
     .video-cta-title {
       display: flex;
       align-items: center;
+      margin-top: 20px;
       margin-bottom: 1.0625rem;
       &.start {
         align-items: flex-start;
@@ -267,26 +272,35 @@
   margin: 0;
   margin-left: auto;
   font-size: 0.7625rem;
-  border: 1px solid #252323;
+  @include themify($themes) {
+    color: themed("tag");
+    border: 1px solid themed("tag");
+  }
   padding: 0.2rem 0.4625rem;
   cursor: pointer;
   &.success {
-    background: #f5fbf7;
-    color: #16612d;
-    border: 1px solid #16612d;
     margin-left: 0;
+    @include themify($themes) {
+      color: themed("tagsuccess");
+      border: 1px solid themed("tagsuccess");
+      background: themed("tagbgsuccess");
+    }
   }
   &.danger {
-    background: #faf5f7;
-    color: #f56e9d;
-    border: 1px solid #f56e9d;
     margin-left: 0;
+    @include themify($themes) {
+      color: themed("tagdanger");
+      border: 1px solid themed("tagdanger");
+      background: themed("tagbgdanger");
+    }
   }
   &.warning {
-    border: 1px solid #e3a11e;
-    color: #e3a11e;
-    background: #faf9f6;
     margin-left: 0;
+    @include themify($themes) {
+      color: themed("tagwarning");
+      border: 1px solid themed("tagwarning");
+      background: themed("tagbgwarning");
+    }
   }
   &.no-btn {
     cursor: default;
@@ -308,9 +322,13 @@
   flex-wrap: wrap;
   margin-bottom: 1.6525rem;
   .vehicle-car-flag-item {
-    border: 1px solid #d6d6d6;
     border-radius: 25px;
     padding: 0.2625rem 0.5625rem;
+    @include themify($themes) {
+      color: themed("tagwarning");
+      border: 1px solid themed("tagwarning");
+      background: themed("tagbgwarning");
+    }
     p {
       margin: 0;
       font-size: 0.7625rem;
@@ -326,12 +344,17 @@
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 0.8525rem;
+  @include themify($themes) {
+    color: themed("colorText");
+  }
   p {
     margin: 0;
   }
   .author {
     font-size: 0.7625rem;
-    color: #636363;
+    @include themify($themes) {
+      color: themed("author");
+    }
   }
   .date-authored {
     color: #9a9a9a;
@@ -382,6 +405,10 @@
       color: #fff;
       cursor: default;
     }
+    &.show-hide-media {
+      border: 0;
+      margin-left: auto;
+    }
   }
 }
 
@@ -396,6 +423,12 @@
 }
 
 .tab-section {
+  border-radius: 0.5625rem;
+  padding: 10px 0 25px;
+  @include themify($themes) {
+    background: themed("feedbg");
+    border: 1px solid themed("border");
+  }
   .tab-header {
     @include themify($themes) {
       border-bottom: 1px solid themed("tabBorder");
@@ -466,4 +499,19 @@
   font-size: 15px;
   margin: 0;
   color: #636363;
+}
+
+.separator-mainview {
+  width: 100%;
+  height: 1px;
+  // margin-bottom: 20px;
+  @include themify($themes) {
+    background: themed("border");
+  }
+}
+
+.vehicle-reg-number-info {
+  display: flex;
+  align-items: center;
+  gap: 1px;
 }

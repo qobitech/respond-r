@@ -1,3 +1,6 @@
+import { IFeed } from "interfaces/IStream"
+import { IVehicle } from "interfaces/IVehicle"
+
 export interface IVS {
   _id: {
     $oid: string
@@ -13239,3 +13242,171 @@ export const videostreamData: IVS[] = [
     status: "New",
   },
 ]
+
+export const feedDemoData: IFeed = {
+  cameraName: "",
+  classification: "",
+  code: "",
+  colour: "",
+  filePath: "",
+  flags: [""],
+  isOnBlackList: false,
+  isUploaded: false,
+  make: "TOYOTA",
+  model: "CAMRY",
+  orientation: "sdfwfwe",
+  regNumber: "3452343434",
+  timeStamp: "2023-09-01",
+  vehicleType: "BUS",
+}
+
+export const feedDemoDatas = new Array(5).fill(feedDemoData)
+
+export const vehicleDataDemo: IVehicle = {
+  carMakerUrl: "",
+  chassisNumber: "wedwedewdewd",
+  classification: "32342",
+  code: "wdefweew",
+  color: "red",
+  createdAt: "",
+  createDevise: {
+    name: "ecdwfwf",
+  },
+  createLocation: {
+    address: "wewdw",
+    latitude: "fwrfrewferfe",
+    longitude: "dwewedwdf",
+  },
+  creationRequest: 342,
+  currentLocation: "lagos",
+  currentOwner: {
+    address: "efwefw",
+    email: "efewferfer",
+    fullName: "dfwferf",
+    phone: "edwdwedwe",
+  },
+  engineNumber: "234324234324324",
+  flags: [""],
+  hasBroadcast: true,
+  hasExtraInstances: true,
+  hasExtraMedia: true,
+  hasFlag: true,
+  hasInsurance: true,
+  hasLicense: true,
+  hasMisMatch: true,
+  hasMoreInstances: true,
+  hasNote: true,
+  hasRoadWorthiness: true,
+  hasViolation: true,
+  hasWarning: true,
+  id: "efewfewfdew",
+  instanceCount: 0,
+  instances: [
+    { camera: "234e23ded", createdAt: "3223424", imageUrl: "23rrwedwedew" },
+  ],
+  isAnonymous: true,
+  isStolen: true,
+  isTaxi: true,
+  isTruck: true,
+  mainImageUrl: "34r3dewcwefde2",
+  make: "camry",
+  media: [{ createdAt: "23d3d3d", publicId: "2er3d3", uri: "wefwdewd" }],
+  mediaCount: 5,
+  model: "weweerer",
+  notes: [
+    {
+      createdAt: "eewfwe",
+      createdBy: { id: 23, userName: "erfweew" },
+      message: "wefewdewd",
+    },
+  ],
+  organisation: {
+    id: "rgwefewf",
+    name: "ervrefewfe",
+  },
+  regNumber: "evergfr3ger",
+  sotDetails: [
+    {
+      chassisNumber: "ervewfvew",
+      colour: "red",
+      createdAt: "erfrwefe2f423",
+      engineNumber: "dfvdvewv",
+      make: "buggati",
+      model: "peugeot",
+      owner: {
+        address: "wvweew",
+        email: "evdvwe",
+        fullName: "fvevwe",
+        phone: "wdvwewf",
+      },
+      registrationDate: "evwecewc",
+      regNumber: "evefer",
+      service: {
+        inspection: null,
+        license: { expiryDate: "evewfvew", isActive: true },
+        roadWorthiness: { expiryDate: "wfefwefew", isActive: true },
+      },
+      state: "dververw",
+      transactionId: "ervewvew",
+      year: "2004",
+    },
+  ],
+  tags: null,
+  updatedAt: "efvefvwdc",
+  vehicleInsurance: { expiryDate: "evvervew", isValid: true },
+  vehicleLicense: { expiryDate: "efvwcew", isValid: true },
+  vehicleOffenses: [
+    {
+      address: "ervewv",
+      createdAt: "dfefvewd",
+      devise: { name: "dfvfv" },
+      id: "wevewcew",
+      latitude: "wefewfew",
+      longitude: "erververwv",
+      offense: {
+        code: "erewrwer",
+        additional: null,
+        description: "sdvdvds",
+        fineAmount: 4560,
+        finePoint: 23,
+        id: "fvwdvewc",
+        name: "efvevweve",
+      },
+      status: { id: "ervwdvdw", name: "evfwvwv" },
+      transactionId: "svwecewcewc",
+      updatedAt: "evdcwd",
+      user: {
+        id: 23,
+        userName: "efv dfvedvedv",
+      },
+    },
+  ],
+  vehicleRoadWorthiness: { expiryDate: "er42refewf", isValid: true },
+  vehicleWarnings: [
+    {
+      createdAt: "ewdvdwv",
+      devise: { name: "ervwrv" },
+      id: "dvd",
+      location: {
+        address: "ecdwc",
+        latitude: "wecdwcw",
+        longitude: "wecwecew",
+      },
+      offense: {
+        additional: "ervwec",
+        code: "wervewc",
+        description: "evwv",
+        fineAmount: 4433,
+        finePoint: 20,
+        id: "erverve",
+        name: "fvweewfcewcew",
+      },
+      status: { id: "edvwdc", name: "efvefvefv" },
+      transactionId: "wweewcewc",
+      updatedAt: "evwdvcdw",
+      user: { id: 20, userName: "ervwvew" },
+    },
+  ],
+  violationCount: 3,
+  warningCount: 2,
+}

@@ -1,9 +1,14 @@
+@import "../../../styles/theme-variables.scss";
+
 .accordion {
-  border-bottom: 1px solid #dbeaff;
+  @include themify($themes) {
+    border-bottom: 1px solid themed("border");
+  }
   .accordionitem {
     height: auto;
-    // border-top: 1px solid #dbeaff;
-    border-bottom: 1px solid #dbeaff;
+    @include themify($themes) {
+      border-bottom: 1px solid themed("border");
+    }
     &.islast {
       border-bottom: none;
     }
@@ -18,6 +23,9 @@
         align-items: center;
         gap: 10px;
         p {
+          @include themify($themes) {
+            color: themed("colorText");
+          }
           font-size: clamp(0.625rem, -0.875rem + 8.333vw, 0.8625rem);
           margin: 0;
           text-transform: capitalize;
@@ -27,7 +35,9 @@
         }
       }
       &.active {
-        border-bottom: 1px solid #dbeaff;
+        @include themify($themes) {
+          border-bottom: 1px solid themed("border");
+        }
         margin-bottom: 2.1425rem;
       }
       cursor: pointer;

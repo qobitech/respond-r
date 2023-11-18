@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { url } from "enums/Route"
 import "./navbar.scss"
@@ -20,6 +20,7 @@ import { ICallRightSection, vehicleSearchType } from "store/actions/global"
 import TextPrompt from "utils/new/text-prompt"
 import { TypeSmallButton } from "utils/new/button"
 import Toggle from "utils/new/toggle"
+import { SearchContext } from "contexts/search-context"
 
 interface NavbarProps {
   notifyUser: INotification | undefined
@@ -304,6 +305,8 @@ const TrafficSearchComponent = ({
     type: vehicleSearchType
   ) => (dispatch: any) => void
 }) => {
+  const { search } = useContext(SearchContext)
+
   const [inputValue, setInputValue] = useState<string>("")
   const [error, setError] = useState<string>("")
 
@@ -324,13 +327,17 @@ const TrafficSearchComponent = ({
     setSearch(true, inputValue.length < 11 ? "regnumber" : "chasis")
   }
 
+  useEffect(() => {
+    setInputValue(search)
+  }, [search])
+
   return (
     <form className="nav-search-component" onSubmit={handleSearch}>
       <div className="d-flex align-items-center" style={{ gap: "20px" }}>
         <input
           placeholder="Search reg number or chasis number"
           onChange={handleOnChange}
-          value={inputValue}
+          value={inputValue.toUpperCase()}
           onBlur={() => setError("")}
           onFocus={() => setError("")}
           autoFocus={error.length > 0}

@@ -26,7 +26,9 @@
       display: table-cell;
       vertical-align: middle;
       padding: 10px 15px 10px 0;
-      border-bottom: 1px solid #dedede;
+      @include themify($themes) {
+        border-bottom: 1px solid themed("border");
+      }
     }
     th {
       @include themify($themes) {
@@ -39,12 +41,14 @@
       line-height: normal;
       text-transform: capitalize !important;
       white-space: nowrap;
-      text-transform: uppercase;
-      border-top: 1px solid #f7faff;
+      text-transform: uppercase !important;
+      // border-top: 1px solid #f7faff;
       padding: 1.5rem 15px 1.5rem 0;
     }
     td {
-      color: #5b5b5b;
+      @include themify($themes) {
+        color: themed("tdcolor");
+      }
       font-family: Nunito;
       font-size: 0.875rem;
       font-style: normal;

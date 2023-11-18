@@ -8,6 +8,7 @@ import { IAction } from "interfaces/IAction"
 import SideBar from "./sidebar"
 import ScrollIntoViewController from "./ScrollIntoViewController"
 import { ThemeContext } from "contexts/theme-context"
+import { SearchContext } from "contexts/search-context"
 
 interface PageProps {
   children: ReactNode
@@ -54,32 +55,35 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
   }
 
   const [theme, setTheme] = useState<"dark" | "light">(getDefaultTheme())
+  const [search, setSearchValue] = useState<string>("")
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
-      <div className={`theme-${theme}`}>
-        <SideBar
-          setMenuOpen={setMenuOpen}
-          menuOpen={menuOpen || false}
-          logOut={logOut}
-        />
-        <div className={`page_layout fitContent`}>
-          <Navbar
-            notifyUser={notifyUser}
+      <SearchContext.Provider value={{ search, setSearch: setSearchValue }}>
+        <div className={`theme-${theme}`}>
+          <SideBar
             setMenuOpen={setMenuOpen}
             menuOpen={menuOpen || false}
-            callRightSection={callRightSection}
-            searchVehicleByChasisNumber={searchVehicleByChasisNumber}
-            searchVehicleByRegNumber={searchVehicleByRegNumber}
-            searchLoad={searchLoad}
-            setSearch={setSearch}
+            logOut={logOut}
           />
-          <ScrollIntoViewController>
-            <div className="contents">{children}</div>
-          </ScrollIntoViewController>
-          {!isLogged && <Footer />}
+          <div className={`page_layout fitContent`}>
+            <Navbar
+              notifyUser={notifyUser}
+              setMenuOpen={setMenuOpen}
+              menuOpen={menuOpen || false}
+              callRightSection={callRightSection}
+              searchVehicleByChasisNumber={searchVehicleByChasisNumber}
+              searchVehicleByRegNumber={searchVehicleByRegNumber}
+              searchLoad={searchLoad}
+              setSearch={setSearch}
+            />
+            <ScrollIntoViewController>
+              <div className="contents">{children}</div>
+            </ScrollIntoViewController>
+            {!isLogged && <Footer />}
+          </div>
         </div>
-      </div>
+      </SearchContext.Provider>
     </ThemeContext.Provider>
   )
 }

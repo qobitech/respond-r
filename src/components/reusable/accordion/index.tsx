@@ -1,19 +1,6 @@
 import React, { ReactNode, useState } from "react"
-import stylemodule from "./style.module.scss"
+import "./style.scss"
 import { MinusSVG, PlusSVG } from "utils/new/svgs"
-
-interface IClass {
-  accordion: any
-  accordionitem: any
-  islast: any
-  accordionheader: any
-  accordionheadertext: any
-  accordionbody: any
-  active: any
-  nodata: any
-}
-
-const styleh = stylemodule as unknown as IClass
 
 export interface IUA {
   accordion: string | null
@@ -48,19 +35,19 @@ export const Accordion = ({
   return (
     <div>
       {isProject ? (
-        <div className={styleh.accordion}>
+        <div className="accordion">
           {data
             .filter((i) => i)
             .map((i, index) => (
               <div
-                className={`${styleh.accordionitem} ${
-                  index + 1 === data.length ? styleh.islast : ""
+                className={`accordionitem ${
+                  index + 1 === data.length ? "islast" : ""
                 } `}
                 key={index + i}
               >
                 <div
-                  className={`${styleh.accordionheader} ${
-                    accordionProps.accordion === i + "" ? styleh.active : ""
+                  className={`accordionheader ${
+                    accordionProps.accordion === i + "" ? "active" : ""
                   }`}
                   onClick={() =>
                     accordionProps.setAccordion(
@@ -68,7 +55,7 @@ export const Accordion = ({
                     )
                   }
                 >
-                  <div className={styleh.accordionheadertext}>
+                  <div className={"accordionheadertext"}>
                     {icon}
                     <p>{i}</p>
                   </div>
@@ -79,8 +66,8 @@ export const Accordion = ({
                   )}
                 </div>
                 <div
-                  className={`${styleh.accordionbody} ${
-                    accordionProps.accordion === i + "" ? styleh.active : ""
+                  className={`accordionbody ${
+                    accordionProps.accordion === i + "" ? "active" : ""
                   }`}
                 >
                   {children}
@@ -89,7 +76,7 @@ export const Accordion = ({
             ))}
         </div>
       ) : (
-        <p className={styleh.nodata}>No data</p>
+        <p className={"nodata"}>No data</p>
       )}
     </div>
   )
