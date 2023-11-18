@@ -21,7 +21,7 @@ import RightSection, {
 import { TypeInput } from "utils/new/input"
 import { TypeButton, TypeSmallButton } from "utils/new/button"
 import { IFeed, IHit } from "interfaces/IStream"
-import { feedDemoDatas, handleDataStream } from "./data"
+import { handleDataStream } from "./data"
 import * as signalR from "@microsoft/signalr"
 import { CopyComponent, ICopyProps, useCopy, useFormHook } from "utils/new/hook"
 import * as yup from "yup"
@@ -643,10 +643,8 @@ const LiveFeedResults = ({
     <div className="live-feed-component-wrapper">
       {isFeed ? (
         <>
-          {/* {signalRProps.feeds[0] ? (
-            signalRProps.feeds.map((i) => ( */}
-          {feedDemoDatas[0] ? (
-            feedDemoDatas.map((i) => (
+          {signalRProps.feeds[0] ? (
+            signalRProps.feeds.map((i) => (
               <LiveFeedItemComponent
                 key={i.regNumber}
                 carColor={i.colour}
