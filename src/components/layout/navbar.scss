@@ -4,7 +4,7 @@
 
 .nav-container {
   @include themify($themes) {
-    background: themed("colorBackground");
+    background: themed("feedbg");
     border: 1px solid themed("border");
   }
   position: fixed;

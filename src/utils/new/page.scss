@@ -24,3 +24,12 @@
     fill: themed("svgnav");
   }
 }
+
+.card-section {
+  border-radius: 0.5625rem;
+  padding: 10px 0 25px;
+  @include themify($themes) {
+    background: themed("feedbg");
+    border: 1px solid themed("border");
+  }
+}

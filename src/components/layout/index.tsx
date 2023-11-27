@@ -7,7 +7,7 @@ import { IStates } from "interfaces/IReducer"
 import { IAction } from "interfaces/IAction"
 import SideBar from "./sidebar"
 import ScrollIntoViewController from "./ScrollIntoViewController"
-import { ThemeContext } from "contexts/theme-context"
+import { ThemeContext, themeType } from "contexts/theme-context"
 import { SearchContext } from "contexts/search-context"
 
 interface PageProps {
@@ -48,13 +48,13 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
   const isBrowserDefaultDark = () =>
     window.matchMedia("(prefers-color-scheme: dark)").matches
 
-  const getDefaultTheme = (): "dark" | "light" => {
+  const getDefaultTheme = (): themeType => {
     const localStorageTheme = localStorage.getItem("theme")
     const browserDefault = isBrowserDefaultDark() ? "dark" : "light"
-    return (localStorageTheme || browserDefault) as "dark" | "light"
+    return (localStorageTheme || browserDefault) as themeType
   }
 
-  const [theme, setTheme] = useState<"dark" | "light">(getDefaultTheme())
+  const [theme, setTheme] = useState<themeType>(getDefaultTheme())
   const [search, setSearchValue] = useState<string>("")
 
   return (

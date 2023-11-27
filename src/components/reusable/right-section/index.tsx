@@ -11,7 +11,12 @@ export type actionType =
   | "delete"
   | "custom"
   | null
-export type actionComponent = "settings" | null
+export type actionComponent =
+  | "settings"
+  | "create-admin"
+  | "view-admin"
+  | "update-admin-role"
+  | null
 export type actionId = string | null
 
 interface IRSAction {

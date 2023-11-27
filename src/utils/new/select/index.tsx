@@ -38,7 +38,7 @@ export const TypeSelect = React.forwardRef(
     ref
   ) => {
     return (
-      <div className="type-select">
+      <div className="type-select" style={{ width: props.customwidth || "" }}>
         <div className="form-container">
           {label && <label htmlFor={props.id || props.name}>{label}</label>}
           <select

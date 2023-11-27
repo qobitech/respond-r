@@ -1,3 +1,5 @@
+@import "../../../styles/theme-variables.scss";
+
 .type-select {
   .form-container {
     display: flex;
@@ -6,9 +8,12 @@
     align-items: flex-start;
     flex: 1;
     margin-bottom: 2.06rem;
+    flex-shrink: 0;
   }
   label {
-    color: #235a62;
+    @include themify($themes) {
+      color: themed("themeColor");
+    }
     font-family: Nunito;
     font-size: 0.875rem;
     font-style: normal;
@@ -20,7 +25,12 @@
     width: 100% !important;
     height: 3.125rem !important;
     border-radius: 0.1875rem !important;
-    border: 1px solid #dbeaff !important;
+    flex-shrink: 0;
+    background: none;
+    @include themify($themes) {
+      border: 1px solid themed("typeborder") !important;
+      color: themed("colorText");
+    }
     padding: 0 1.24rem;
     font-family: Nunito !important;
     box-shadow: none !important;
