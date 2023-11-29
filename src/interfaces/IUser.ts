@@ -31,3 +31,10 @@ export interface IAllUsers {
   totalCount: number
   totalPages: number
 }
+
+export interface ICreateUserResponse {
+  errorMessage: string
+  message: string
+  statusCode: number
+  isSuccessful: boolean
+}

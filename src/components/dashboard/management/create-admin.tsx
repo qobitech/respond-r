@@ -1,7 +1,11 @@
-import React from "react"
+import { IAction } from "interfaces/IAction"
+import { IStates } from "interfaces/IReducer"
+import React, { useState } from "react"
+import { user } from "store/types"
 import { TypeButton } from "utils/new/button"
 import FormBuilder, { IFormComponent } from "utils/new/form-builder"
 import { useFormHook } from "utils/new/hook"
+import TextPrompt from "utils/new/text-prompt"
 import * as yup from "yup"
 
 interface ICreateAdmin {
@@ -9,19 +13,22 @@ interface ICreateAdmin {
   organisationName: string
   userName: string
   phoneNumber: string
-  role: [string]
+  // role: [string]
   password: string
   confirmPassword: string
 }
 
 const createAdminSchema = {
-  email: yup.string(),
-  organisationName: yup.string(),
-  userName: yup.string(),
-  phoneNumber: yup.string(),
-  role: yup.string(),
-  password: yup.string(),
-  confirmPassword: yup.string(),
+  email: yup.string().required("input required"),
+  organisationName: yup.string().required("input required"),
+  userName: yup.string().required("input required"),
+  phoneNumber: yup.string().required("input required"),
+  // role: yup.string(),
+  password: yup.string().required("input required"),
+  confirmPassword: yup
+    .string()
+    .required("input required")
+    .oneOf([yup.ref("password"), null], "Passwords must match"),
 }
 
 const formComponent: IFormComponent[] = [
@@ -40,10 +47,10 @@ const formComponent: IFormComponent[] = [
     component: "select",
     initOptions: { id: 2, label: "Select Organziation", value: "" },
     optionData: [
-      { id: 1, label: "Traffic", value: "Traffic" },
-      { id: 2, label: "E-Police", value: "E-Police" },
-      { id: 3, label: "Fire Service", value: "Fire Service" },
-      { id: 4, label: "E-Medical", value: "E-Medical" },
+      { id: 1, label: "Traffic", value: "traffic" },
+      { id: 2, label: "E-Police", value: "e-Police" },
+      { id: 3, label: "Fire Service", value: "fire-service" },
+      { id: 4, label: "E-Medical", value: "e-medical" },
     ],
   },
   {
@@ -58,20 +65,20 @@ const formComponent: IFormComponent[] = [
     label: "Phone Number",
     placeHolder: "Enter your phone number",
     type: "phone",
-    component: "input",
+    component: "phone",
   },
-  {
-    id: "role",
-    label: "Role",
-    placeHolder: "",
-    type: "text",
-    component: "select",
-    initOptions: { id: 2, label: "Select Role", value: "" },
-    optionData: [
-      { id: 1, label: "Super Admin", value: "Super Admin" },
-      { id: 2, label: "Moderator", value: "Moderator" },
-    ],
-  },
+  // {
+  //   id: "role",
+  //   label: "Role",
+  //   placeHolder: "",
+  //   type: "text",
+  //   component: "select",
+  //   initOptions: { id: 2, label: "Select Role", value: "" },
+  //   optionData: [
+  //     { id: 1, label: "Super Admin", value: "Super Admin" },
+  //     { id: 2, label: "Moderator", value: "Moderator" },
+  //   ],
+  // },
   {
     id: "password",
     label: "Password",
@@ -88,13 +95,54 @@ const formComponent: IFormComponent[] = [
   },
 ]
 
-const CreateAdmin = () => {
+const CreateAdmin = ({
+  states,
+  actions,
+}: {
+  states: IStates
+  actions: IAction
+}) => {
   const [hookForm] = useFormHook<ICreateAdmin>(createAdminSchema)
+  const [response, setResponse] = useState<{
+    message: string
+    isSuccessful: boolean
+  } | null>(null)
 
+  const handleCreateUser = (data: ICreateAdmin) => {
+    setResponse(null)
+    actions.clearAction(user.createUser)
+    actions.createUser(
+      {
+        ...data,
+        organisationName: data.organisationName,
+        role: [data.organisationName],
+      },
+      (res) => {
+        setResponse({
+          message: states?.user?.createUser?.message || "",
+          isSuccessful: states?.user?.createUser?.isSuccessful!,
+        })
+      },
+      (err) => {
+        setResponse({ message: "Something went wrong", isSuccessful: false })
+      }
+    )
+  }
   return (
     <div>
       <FormBuilder formComponent={formComponent} hookForm={hookForm} />
-      <TypeButton title="Create" />
+      <TypeButton
+        title="Create"
+        onClick={hookForm.handleSubmit(handleCreateUser)}
+        load={states.user.createUserLoading}
+      />
+      <div className="my-3" />
+      {response !== null ? (
+        <TextPrompt
+          prompt={response?.message || ""}
+          status={response?.isSuccessful}
+        />
+      ) : null}
     </div>
   )
 }

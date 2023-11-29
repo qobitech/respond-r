@@ -17,7 +17,8 @@ interface IProps {
 }
 
 const ManagementPage: React.FC<IProps> = ({ states, ...props }) => {
-  const { callRightSection } = props as unknown as IAction
+  const actions = props as unknown as IAction
+  const { callRightSection } = actions
 
   const rightSectionProps = states?.global.rightSection
 
@@ -106,7 +107,9 @@ const ManagementPage: React.FC<IProps> = ({ states, ...props }) => {
   return (
     <>
       <RightSection rsProps={rsProps}>
-        {rsProps.isView("custom", "create-admin") ? <CreateAdmin /> : null}
+        {rsProps.isView("custom", "create-admin") ? (
+          <CreateAdmin states={states!} actions={actions} />
+        ) : null}
         {rsProps.isView("custom", "view-admin") ? <></> : null}
         {rsProps.isView("custom", "update-admin-role") ? <></> : null}
       </RightSection>

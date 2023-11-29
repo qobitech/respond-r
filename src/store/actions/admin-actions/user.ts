@@ -2,17 +2,25 @@ import { baseurl } from "utils/constants"
 import * as utils from "../../services/new/utils"
 import { user } from "store/types"
 
-export const createUser = (data: object, update?: boolean) => {
+export const createUser = (
+  data: object,
+  onSuccess?: (res: any) => void,
+  onFailure?: (err: any) => void
+) => {
   return utils.httpPostMethod({
     apiData: {
       url: "",
-      customurl: update
-        ? `${baseurl}/Admin/UserManagement/UpdateUserDetails`
-        : `${baseurl}/Admin/UserManagement/CreateUser`,
+      customurl: `${baseurl}/Auth/register`,
       header: utils.header(""),
       data,
     },
-    actionType: update ? user.updateUser : user.createUser,
+    actionType: user.createUser,
+    onSuccess: (res) => {
+      onSuccess?.(res)
+    },
+    onFailure: (err) => {
+      onFailure?.(err)
+    },
   })
 }
 

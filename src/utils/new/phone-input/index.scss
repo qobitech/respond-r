@@ -1,3 +1,5 @@
+@import "../../../styles/theme-variables.scss";
+
 .type-phone-input {
   .form-container {
     display: flex;
@@ -8,7 +10,9 @@
     margin-bottom: 2.06rem;
   }
   label {
-    color: #235a62;
+    @include themify($themes) {
+      color: themed("themeColor");
+    }
     font-family: Nunito;
     font-size: 0.875rem;
     font-style: normal;
@@ -19,8 +23,12 @@
   input {
     width: 100% !important;
     height: 3.125rem !important;
-    border: 1px solid #dbeaff !important;
     border-radius: 0 !important;
+    background: none !important;
+    @include themify($themes) {
+      border: 1px solid themed("typeborder") !important;
+      color: themed("colorText");
+    }
     padding: 0 1.24rem;
     font-family: Nunito !important;
     box-shadow: none !important;
@@ -35,7 +43,9 @@
       line-height: normal !important;
     }
     &:focus {
-      border: 1px solid #6a8dc3 !important;
+      @include themify($themes) {
+        border: 1px solid themed("focus") !important;
+      }
       &.is-error {
         border: 1px solid #f56e9d !important;
       }

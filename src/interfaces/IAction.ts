@@ -22,7 +22,11 @@ interface IAuth {
 }
 
 interface IUser {
-  createUser: (data: object, update?: boolean) => (dispatch: any) => void
+  createUser: (
+    data: object,
+    onSuccess?: (res: any) => void,
+    onFailure?: ((err: any) => void) | undefined
+  ) => (dispatch: any) => void
   getAllUsers: (query: string) => (dispatch: any) => void
   deleteUser: (id: string) => (dispatch: any) => void
   getUserById: (id: string) => (dispatch: any) => void
