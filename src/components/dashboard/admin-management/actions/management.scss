@@ -1,0 +1,109 @@
+@import "../../../../styles/theme-variables.scss";
+
+.table-section {
+  margin: 2rem 0;
+  padding: 0.8525rem;
+}
+
+.cta-header-section {
+  margin: 2rem 0;
+  padding: 0.8525rem 0;
+}
+
+.filter-management-section {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 0.8625rem 0;
+  gap: 20px;
+  @include themify($themes) {
+    border-bottom: 1px solid themed("border");
+  }
+}
+
+.header-management {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  h1 {
+    @include themify($themes) {
+      color: themed("colorText");
+    }
+  }
+}
+
+.select-item-wrapper {
+  padding: 0.3625rem 0.3625rem 0;
+  width: 100%;
+  .select-item-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    p {
+      margin: 0 0 10px;
+      font-size: 0.9625rem;
+      font-weight: 600;
+      @include themify($themes) {
+        color: themed("colorText");
+      }
+    }
+    .type-checkbox {
+      margin-top: 4px;
+    }
+    .type-checkbox .form-container {
+      margin: 0;
+    }
+  }
+}
+
+.role-select-item-wrapper {
+  padding: 0.3625rem;
+  width: 100%;
+  .select-item-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    p {
+      margin: 0;
+      font-size: 0.7625rem;
+      @include themify($themes) {
+        color: themed("colorText");
+      }
+    }
+    .type-checkbox .form-container {
+      margin: 0;
+    }
+    .type-checkbox .form-container .checkbox-content input {
+      width: 12px;
+      height: 12px;
+    }
+  }
+}
+
+.form-select-section-container {
+  h5 {
+    @include themify($themes) {
+      color: themed("colorText");
+    }
+    font-size: 0.9rem;
+    margin: 10px 7px 30px;
+    font-weight: 300;
+  }
+  @include themify($themes) {
+    border: 1px solid themed("border");
+  }
+  margin: 0 0 3rem;
+  padding: 0.4625rem;
+  .form-select-section-content {
+    display: grid;
+    grid-row: auto;
+    grid-template-columns: repeat(auto-fill, minmax(45%, 1fr));
+    justify-content: space-between;
+    gap: 40px;
+  }
+  .form-select-role-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}

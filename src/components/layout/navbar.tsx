@@ -55,7 +55,7 @@ const Navbar = (props: NavbarProps) => {
     return location.pathname.includes(page)
   }
 
-  const isTraffic = _isUrl(url.OVERVIEW)
+  const isTraffic = _isUrl(url.TRAFFIC)
   const isFireService = _isUrl(url.FIRESERVICE)
   const isPolice = _isUrl(url.POLICE)
   const isMedical = _isUrl(url.MEDICAL)

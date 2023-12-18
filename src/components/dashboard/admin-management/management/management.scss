@@ -1,4 +1,4 @@
-@import "../../../styles/theme-variables.scss";
+@import "../../../../styles/theme-variables.scss";
 
 .table-section {
   margin: 2rem 0;
@@ -22,6 +22,9 @@
 }
 
 .header-management {
+  display: flex;
+  align-items: center;
+  gap: 20px;
   h1 {
     @include themify($themes) {
       color: themed("colorText");

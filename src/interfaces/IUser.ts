@@ -1,35 +1,19 @@
 export interface IUser {
-  deleted: string
-  deletedAt: null
-  disableAt: null
   email: string
-  emailConfirmed: boolean
-  employeeId: string
-  firstName: string
-  id: string
-  isEnabled: boolean
-  isFirstLogin: boolean
-  lastName: string
-  middleName: null
-  organizationId: number
-  organizationName: string
+  userName: string
+  organisationName: string
   phoneNumber: string
-  roles: string[]
-  state: string
-  userType: string
-  username: string
-  status: string
 }
 
 export interface IAllUsers {
-  users: IUser[]
   currentPage: number
-  isSuccessful: boolean
   pageSize: number
-  responseCode: string
-  responseMessage: string
   totalCount: number
   totalPages: number
+  message: string
+  statusCode: number
+  isSuccessful: boolean
+  data: IUser[]
 }
 
 export interface ICreateUserResponse {
@@ -37,4 +21,14 @@ export interface ICreateUserResponse {
   message: string
   statusCode: number
   isSuccessful: boolean
+}
+
+export interface ICreateUserError {
+  type: string
+  title: string
+  status: number
+  traceId: string
+  errors: {
+    [key: string]: any
+  }
 }

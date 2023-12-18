@@ -1,3 +1,5 @@
+@import "../../../styles/theme-variables.scss";
+
 .type-input {
   .form-container {
     display: flex;
@@ -8,7 +10,9 @@
     margin-bottom: 2.06rem;
   }
   label {
-    color: #235a62;
+    @include themify($themes) {
+      color: themed("themeColor");
+    }
     font-family: Nunito;
     font-size: 0.875rem;
     font-style: normal;
@@ -19,7 +23,11 @@
   textarea {
     width: 100% !important;
     height: 8rem !important;
-    border: 1px solid #dbeaff !important;
+    background: none;
+    @include themify($themes) {
+      border: 1px solid themed("typeborder") !important;
+      color: themed("colorText");
+    }
     padding: 1.24rem 1.24rem 0;
     font-family: Nunito !important;
     box-shadow: none !important;
@@ -34,7 +42,9 @@
       line-height: normal !important;
     }
     &:focus {
-      border: 1px solid #6a8dc3 !important;
+      @include themify($themes) {
+        border: 1px solid themed("focus") !important;
+      }
       &.is-error {
         border: 1px solid #f56e9d !important;
       }
@@ -42,6 +52,15 @@
     &.is-error {
       border: 1px solid #f56e9d !important;
       margin-bottom: 0.81rem !important;
+    }
+  }
+  /* Override autofill styles for webkit browsers */
+  textarea:-webkit-autofill {
+    @include themify($themes) {
+      -webkit-box-shadow: 0 0 0 1000px themed("feedbg") inset !important; /* Override white background */
+      -webkit-text-fill-color: themed(
+        "colorText"
+      ) !important; /* Set text color to override autofill styling */
     }
   }
 }

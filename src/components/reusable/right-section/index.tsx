@@ -15,7 +15,7 @@ export type actionComponent =
   | "settings"
   | "create-admin"
   | "view-admin"
-  | "update-admin-role"
+  | "update-admin"
   | null
 export type actionId = string | null
 

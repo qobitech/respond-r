@@ -37,3 +37,14 @@ export const TEXT_COLOR = "#202A3A"
 export const TEXT_COLOR_LIGHT = "#485E82"
 export const TEXT_COLOR_INVALID = "#F56E9D"
 export const TEXT_COLOR_SUCCESS = "#0F9979"
+
+export type roleType = "super-admin" | "admin" | "moderator" | "field-officer"
+export type orgType =
+  | "all"
+  | "e-traffic"
+  | "e-police"
+  | "fire-service"
+  | "e-medical"
+
+export const ROLE: roleType = "super-admin"
+export const ORGANIZATION: orgType = "e-medical"

@@ -8,9 +8,9 @@ import Register from "components/auth/register"
 import VerifyEmail from "components/auth/register/verify-email"
 import Overview from "components/dashboard/traffic"
 import IPolicePage from "components/dashboard/e-police"
-import ManagementPage from "components/dashboard/management"
 import IFireServicePage from "components/dashboard/fire-service"
 import IMedicalPage from "components/dashboard/e-medical"
+import AdminManagement from "components/dashboard/admin-management"
 export interface IUrl {
   id: number
   PageRenders: ((props?: any) => ReactElement | null)[]
@@ -50,11 +50,11 @@ export const routes: Array<IUrl> = [
     paths: [url.VERIFY_EMAIL, `${url.VERIFY_EMAIL}/:email/:token`],
     routeType: "public",
   },
-  { id: 7, PageRenders: [Overview], paths: [url.OVERVIEW], routeType: "auth" },
+  { id: 7, PageRenders: [Overview], paths: [url.TRAFFIC], routeType: "auth" },
   { id: 8, PageRenders: [IPolicePage], paths: [url.POLICE], routeType: "auth" },
   {
     id: 9,
-    PageRenders: [ManagementPage],
+    PageRenders: [AdminManagement],
     paths: [url.MANAGEMENT],
     routeType: "auth",
   },

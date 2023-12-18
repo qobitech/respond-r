@@ -75,6 +75,7 @@ const FormBuilder = <T extends FieldValues>({
               error={
                 hookForm.formState.errors?.[i.id as Path<T>]?.message as string
               }
+              value={hookForm.watch(i.id as Path<T>)}
             />
           )}
           {i.component === "select" && (

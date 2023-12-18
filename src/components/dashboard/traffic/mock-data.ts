@@ -1,5 +1,6 @@
 import { IFeed } from "interfaces/IStream"
 import { IVehicle } from "interfaces/IVehicle"
+import reportimg from "../../../extras/images/report.jpg"
 
 export interface IVS {
   _id: {
@@ -13410,3 +13411,54 @@ export const vehicleDataDemo: IVehicle = {
   violationCount: 3,
   warningCount: 2,
 }
+
+export const trafficReportData = [
+  {
+    imgsrc: reportimg,
+  },
+  {
+    imgsrc: reportimg,
+  },
+  {
+    imgsrc: reportimg,
+  },
+  {
+    imgsrc: reportimg,
+  },
+  {
+    imgsrc: reportimg,
+  },
+  {
+    imgsrc: reportimg,
+  },
+  {
+    imgsrc: reportimg,
+  },
+  {
+    imgsrc: reportimg,
+  },
+  {
+    imgsrc: reportimg,
+  },
+  {
+    imgsrc: reportimg,
+  },
+  {
+    imgsrc: reportimg,
+  },
+  {
+    imgsrc: reportimg,
+  },
+  {
+    imgsrc: reportimg,
+  },
+  {
+    imgsrc: reportimg,
+  },
+  {
+    imgsrc: reportimg,
+  },
+  {
+    imgsrc: reportimg,
+  },
+]

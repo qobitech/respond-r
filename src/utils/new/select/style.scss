@@ -33,6 +33,7 @@
     }
     padding: 0 1.24rem;
     font-family: Nunito !important;
+    font-size: 0.875rem;
     box-shadow: none !important;
     box-sizing: border-box !important;
     outline: none;
@@ -53,6 +54,15 @@
     &.is-error {
       border: 1px solid #f56e9d !important;
       margin-bottom: 0.81rem !important;
+    }
+  }
+  /* Override autofill styles for webkit browsers */
+  select:-webkit-autofill {
+    @include themify($themes) {
+      -webkit-box-shadow: 0 0 0 1000px themed("feedbg") inset !important; /* Override white background */
+      -webkit-text-fill-color: themed(
+        "colorText"
+      ) !important; /* Set text color to override autofill styling */
     }
   }
 }

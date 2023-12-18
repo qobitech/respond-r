@@ -451,3 +451,53 @@
     height: 25.56px;
   }
 }
+
+.tab-section {
+  border-radius: 0.5625rem;
+  padding: 10px 0 25px;
+  @include themify($themes) {
+    background: themed("feedbg");
+    border: 1px solid themed("border");
+  }
+  .tab-header {
+    @include themify($themes) {
+      border-bottom: 1px solid themed("tabBorder");
+    }
+    margin: 0 0 1.7rem;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    overflow: auto;
+    .tab-item {
+      border-bottom: 3px solid transparent;
+      padding: 0.8625rem 0.3625rem;
+      cursor: pointer;
+      transition: 0.2s ease all;
+      flex-shrink: 0;
+      p {
+        color: #909090;
+        font-family: Nunito;
+        font-size: 0.7125rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        margin: 0;
+        text-transform: uppercase;
+      }
+      &.active {
+        @include themify($themes) {
+          border-bottom: 3px solid themed("tabBorder");
+        }
+        cursor: default;
+        p {
+          @include themify($themes) {
+            color: themed("themeColor");
+          }
+        }
+      }
+    }
+  }
+  .tab-body {
+    padding: 0 1.06rem;
+  }
+}

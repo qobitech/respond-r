@@ -23,6 +23,8 @@ import {
   useSignalR,
 } from "../components"
 import { IMedicalData } from "interfaces/IMedical"
+import AdminWrapper from "../admin-wrapper"
+import { trafficReportData } from "../traffic/mock-data"
 
 interface IProps {
   states: IStates
@@ -44,36 +46,38 @@ const IMedicalPage: React.FC<IProps> = ({ states, ...props }) => {
       </RightSection>
       <div className="main-page">
         <div className="pg-container">
-          <LiveFeedStatusComponent signalRProps={signalRProps} />
-          <div className="overview-page">
-            {signalRProps?.feed ? (
-              <MainView feed={signalRProps.feed!} />
-            ) : (
-              <NoMediaComponent
-                load={false}
-                text="NO VIEW"
-                icon={<MapSVG />}
-                instruction="Select Live feed to watch"
-              />
-            )}
-            <div className="stream-section">
-              <div className="live-feed-component">
-                {signalRProps.feeds?.[0] ? (
-                  signalRProps.feeds.map((i, index) => (
-                    <LiveFeedItemComponent
-                      key={Date.now() + index}
-                      feed={i}
-                      handleOnClick={() => {
-                        signalRProps.handleFeedSelect(i)
-                      }}
-                    />
-                  ))
-                ) : (
-                  <NoFeeds />
-                )}
+          <AdminWrapper section="E-healthcare" data={trafficReportData}>
+            <LiveFeedStatusComponent signalRProps={signalRProps} />
+            <div className="overview-page">
+              {signalRProps?.feed ? (
+                <MainView feed={signalRProps.feed!} />
+              ) : (
+                <NoMediaComponent
+                  load={false}
+                  text="NO VIEW"
+                  icon={<MapSVG />}
+                  instruction="Select Live feed to watch"
+                />
+              )}
+              <div className="stream-section">
+                <div className="live-feed-component">
+                  {signalRProps.feeds?.[0] ? (
+                    signalRProps.feeds.map((i, index) => (
+                      <LiveFeedItemComponent
+                        key={Date.now() + index}
+                        feed={i}
+                        handleOnClick={() => {
+                          signalRProps.handleFeedSelect(i)
+                        }}
+                      />
+                    ))
+                  ) : (
+                    <NoFeeds />
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+          </AdminWrapper>
         </div>
       </div>
     </>

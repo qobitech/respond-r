@@ -60,6 +60,15 @@
   //   top: 50% !important;
   //   margin-top: -12px;
   // }
+  /* Override autofill styles for webkit browsers */
+  input:-webkit-autofill {
+    @include themify($themes) {
+      -webkit-box-shadow: 0 0 0 1000px themed("feedbg") inset !important; /* Override white background */
+      -webkit-text-fill-color: themed(
+        "colorText"
+      ) !important; /* Set text color to override autofill styling */
+    }
+  }
   .div-error {
     margin-top: 0.81rem !important;
   }

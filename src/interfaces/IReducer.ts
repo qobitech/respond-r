@@ -1,6 +1,6 @@
 import { ICallRightSection } from "store/actions/global"
 import { INotification, IVehicleSearchPayload } from "./IGlobal"
-import { IAllUsers, ICreateUserResponse } from "./IUser"
+import { IAllUsers, ICreateUserError, ICreateUserResponse } from "./IUser"
 import { IVehicleById, IVehicleSearch } from "./IVehicle"
 import { ILoginResponse } from "./IAuth"
 import { IDemoEPolice } from "./IDemo"
@@ -49,7 +49,7 @@ export interface IRoleReducer {
 export interface IUserReducer {
   createUser: ICreateUserResponse
   createUserLoading: boolean
-  createUserError: string
+  createUserError: ICreateUserError
   updateUser: any
   updateUserLoading: boolean
   updateUserError: string

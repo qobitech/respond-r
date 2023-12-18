@@ -34,7 +34,7 @@ const RouteList = () => {
             </Route>
           )
         })}
-        <Route path={url.PAGE404} Component={Page404} />
+        <Route path="*" Component={Page404} />
       </Routes>
     </>
   )

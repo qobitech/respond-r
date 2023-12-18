@@ -1,0 +1,104 @@
+@import "../../../styles/theme-variables.scss";
+
+.admin-report-section {
+  .admin-report-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    h1 {
+      @include themify($themes) {
+        color: themed("colorText");
+      }
+    }
+  }
+  .admin-report-body {
+    //
+    @include themify($themes) {
+      border-top: 1px solid themed("border");
+    }
+    .admin-report-items {
+      padding-top: 1.3rem;
+      display: grid;
+      grid-row: auto;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      justify-content: space-between;
+      gap: 15px;
+      max-height: 60vh;
+      height: 100%;
+      overflow: auto;
+    }
+  }
+}
+
+.admin-report-item {
+  width: 100%;
+  height: 225px;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  @include themify($themes) {
+    border: 1px solid themed("border");
+    background: themed("cardbg");
+  }
+  .admin-report-item-media {
+    height: 130px;
+    overflow: hidden;
+    img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+    @include themify($themes) {
+      border-bottom: 1px solid themed("border");
+    }
+  }
+  .admin-report-item-title {
+    padding: 0.7rem;
+    text-align: center;
+    p {
+      margin: 0;
+      @include themify($themes) {
+        color: themed("colorText");
+      }
+    }
+  }
+  .admin-report-item-location {
+    padding: 0.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    p {
+      margin: 0;
+      font-style: italic;
+      font-size: 0.7rem;
+      font-weight: 300;
+      @include themify($themes) {
+        color: themed("colorText");
+      }
+    }
+    svg {
+      width: 10px;
+    }
+  }
+  .admin-report-item-info {
+    padding: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.admin-filter-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  .type-input .form-container {
+    margin-bottom: 0 !important;
+  }
+  .type-select .form-container {
+    margin-bottom: 0 !important;
+    margin-right: 20px;
+  }
+}

@@ -169,6 +169,7 @@ export const httpPostMethod = ({
     dispatch({ type: dataLoading, payload: true })
     apiRequest(`${requesturl}`, header, JSON.stringify(data), "post", TIMEOUT)
       .then((resp) => {
+        console.log(resp, "juju")
         handleResponse(
           resp,
           dispatch,
