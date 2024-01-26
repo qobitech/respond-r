@@ -6,30 +6,41 @@ export const getAllRoles = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: "",
-      customurl: `${baseurl}/Roles/GetAll${query || ""}`,
+      customurl: `${baseurl}/Role/${query || ""}`,
       header: utils.header(""),
     },
     actionType: role.getAllRoles,
   })
 }
 
-export const createRole = (data: object, update?: boolean) => {
+export const createRole = (
+  data: object,
+  update?: boolean,
+  onSuccess?: (res: any) => void,
+  onFailure?: (err: any) => void
+) => {
   return utils.httpPostMethod({
     apiData: {
       url: "",
-      customurl: update ? `${baseurl}/roles/Update` : `${baseurl}/Roles/Create`,
+      customurl: update ? `${baseurl}/Role/update` : `${baseurl}/Role/addRole`,
       header: utils.header(""),
       data,
     },
     actionType: update ? role.updateRole : role.createRole,
+    onSuccess: (res) => {
+      onSuccess?.(res)
+    },
+    onFailure: (err) => {
+      onFailure?.(err)
+    },
   })
 }
 
-export const deleteRole = (id: string) => {
+export const deleteRole = (name: string) => {
   return utils.httpDeleteMethod({
     apiData: {
       url: "",
-      customurl: `${baseurl}/Roles/Delete`,
+      customurl: `${baseurl}/Role/delete?roleName=${name}`,
       header: utils.header(""),
     },
     actionType: role.deleteRole,

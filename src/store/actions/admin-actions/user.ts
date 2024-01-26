@@ -28,7 +28,7 @@ export const getAllUsers = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: "",
-      customurl: `${baseurl}/User/${query}`,
+      customurl: `${baseurl}/User/paged${query}`,
       header: utils.header(""),
     },
     actionType: user.getAllUsers,

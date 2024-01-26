@@ -56,18 +56,28 @@ export const applications = generateActionTypes([
   "updateApplication",
 ])
 
-export const organization = generateActionTypes([
-  "getOrganizationInfo",
-  "getAllOrganizations",
-  "deleteOrganization",
-])
-
 export const role = generateActionTypes([
   "getAllRoles",
   "createRole",
   "updateRole",
   "deleteRole",
   "getPermissions",
+])
+
+export const organization = generateActionTypes([
+  "getAllOrganization",
+  "createOrganization",
+  "updateOrganization",
+  "deleteOrganization",
+])
+
+export const action = generateActionTypes([
+  "getAllAction",
+  "createAction",
+  "updateAction",
+  "deleteAction",
+  "addActionToRole",
+  "getActionsForRole",
 ])
 
 export const user = generateActionTypes([

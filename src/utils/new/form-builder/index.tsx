@@ -34,6 +34,7 @@ export interface IFormComponent {
     link: string
     type: "external" | "internal"
   }
+  isonlyview?: boolean
 }
 
 interface IFormBuilder<T extends FieldValues> {
@@ -58,6 +59,7 @@ const FormBuilder = <T extends FieldValues>({
               error={
                 hookForm.formState.errors?.[i.id as Path<T>]?.message as string
               }
+              isonlyview={i.isonlyview}
             />
           )}
           {i.component === "phone" && (

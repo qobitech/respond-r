@@ -1,8 +1,10 @@
 import { combineReducers } from "redux"
 import {
+  IActionReducer,
   IAuthReducer,
   IDemoReducer,
   IGlobalReducer,
+  IOrganizationReducer,
   IRoleReducer,
   IStates,
   IUserReducer,
@@ -16,6 +18,8 @@ const rootReducer = combineReducers<IStates>({
   user: reducer<IUserReducer>,
   vehicle: reducer<IVehicleReducer>,
   demo: reducer<IDemoReducer>,
+  organization: reducer<IOrganizationReducer>,
+  actions: reducer<IActionReducer>,
 })
 
 function reducer<T>(state = {} as T, action: { type: string; payload: any }) {

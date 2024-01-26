@@ -1,0 +1,45 @@
+@import "../../../../styles/theme-variables.scss";
+
+.table-section {
+  margin: 2rem 0;
+  padding: 0.8525rem;
+}
+
+.cta-header-section {
+  margin: 2rem 0;
+  padding: 0.8525rem 0;
+}
+
+.filter-management-section {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 0.8625rem 0;
+  gap: 20px;
+  @include themify($themes) {
+    border-bottom: 1px solid themed("border");
+  }
+}
+
+.header-management {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  h1 {
+    @include themify($themes) {
+      color: themed("colorText");
+    }
+  }
+}
+
+.selected-role {
+  margin-bottom: 1.5rem;
+  @include themify($themes) {
+    border-bottom: 1px solid themed("border");
+  }
+  p {
+    @include themify($themes) {
+      color: themed("colorText");
+    }
+  }
+}

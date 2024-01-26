@@ -38,13 +38,96 @@ export const TEXT_COLOR_LIGHT = "#485E82"
 export const TEXT_COLOR_INVALID = "#F56E9D"
 export const TEXT_COLOR_SUCCESS = "#0F9979"
 
-export type roleType = "super-admin" | "admin" | "moderator" | "field-officer"
-export type orgType =
-  | "all"
-  | "e-traffic"
-  | "e-police"
-  | "fire-service"
-  | "e-medical"
+export const organizationEnums = {
+  RESPONDR: "respondR",
+  FIREFIGHTER: "firefighter",
+  EPOLICE: "e-police",
+  AMBULANCE: "ambulance",
+  ETRAFFIC: "e-traffic",
+} as const
 
-export const ROLE: roleType = "super-admin"
-export const ORGANIZATION: orgType = "e-medical"
+export type organizationEnumsType =
+  (typeof organizationEnums)[keyof typeof organizationEnums]
+
+export const organizationIdEnums = {
+  RESPONDR: 1,
+  FIREFIGHTER: 2,
+  EPOLICE: 3,
+  AMBULANCE: 4,
+  ETRAFFIC: 5,
+} as const
+
+export const getOrgName = (data: organizationIdEnumsType) => {
+  switch (data) {
+    case 1:
+      return organizationEnums.RESPONDR
+    case 2:
+      return organizationEnums.FIREFIGHTER
+    case 3:
+      return organizationEnums.EPOLICE
+    case 4:
+      return organizationEnums.AMBULANCE
+    case 5:
+      return organizationEnums.ETRAFFIC
+    default:
+      return "not found"
+  }
+}
+
+export const getOrgId = (data: organizationEnumsType) => {
+  switch (data) {
+    case "ambulance":
+      return organizationIdEnums.AMBULANCE
+    case "e-police":
+      return organizationIdEnums.EPOLICE
+    case "e-traffic":
+      return organizationIdEnums.ETRAFFIC
+    case "firefighter":
+      return organizationIdEnums.FIREFIGHTER
+    case "respondR":
+      return organizationIdEnums.RESPONDR
+    default:
+      return ""
+  }
+}
+
+export type organizationIdEnumsType =
+  (typeof organizationIdEnums)[keyof typeof organizationIdEnums]
+
+export const roleEnums = {
+  RESPONDR: "respondR-admin",
+  SUPERADMIN: "super-admin",
+  ADMIN: "admin",
+  MODERATOR: "moderator",
+  FIELDOFFICER: "field-officer",
+} as const
+
+export const roleIdEnums = {
+  RESPONDR: 1,
+  SUPERADMIN: 2,
+  ADMIN: 3,
+  MODERATOR: 4,
+  FIELDOFFICER: 5,
+} as const
+
+export type roleType = (typeof roleEnums)[keyof typeof roleEnums]
+
+export const getRoleId = (data: roleType) => {
+  switch (data) {
+    case "respondR-admin":
+      return roleIdEnums.RESPONDR
+    case "super-admin":
+      return roleIdEnums.SUPERADMIN
+    case "admin":
+      return roleIdEnums.ADMIN
+    case "moderator":
+      return roleIdEnums.MODERATOR
+    case "field-officer":
+      return roleIdEnums.FIELDOFFICER
+    default:
+      return ""
+  }
+}
+
+export const ROLE: roleType = "respondR-admin"
+export const ORGANIZATION: organizationEnumsType = "respondR"

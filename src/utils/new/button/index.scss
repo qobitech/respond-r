@@ -58,8 +58,11 @@
     }
     cursor: pointer;
     &.disabled {
-      background: #8f9194;
+      @include themify($themes) {
+        background: themed("disabled");
+      }
       cursor: not-allowed;
+      opacity: 0.2;
     }
     &.outlined {
       background: none;

@@ -13,6 +13,8 @@ import {
   SwitchSVG,
 } from "utils/new/svgs"
 import { ORGANIZATION, ROLE } from "utils/new/constants"
+import { GODUSER } from "utils/new/constants/roles"
+import { managementTabEnums } from "components/dashboard/admin-management"
 
 interface IProps {
   setMenuOpen: (menuOpen: boolean) => (dispatch: any) => void
@@ -26,8 +28,6 @@ const SideBar = ({ setMenuOpen, menuOpen, logOut }: IProps) => {
   function _isUrl(page: string) {
     return location.pathname.includes(page)
   }
-
-  const GODUSER = ROLE === "super-admin" && ORGANIZATION === "all"
 
   const menuItems = [
     {
@@ -62,7 +62,7 @@ const SideBar = ({ setMenuOpen, menuOpen, logOut }: IProps) => {
       title: "Management",
       imgsrc: <ManagementSVG />,
       isActive: _isUrl(url.MANAGEMENT),
-      url: url.MANAGEMENT,
+      url: `${url.MANAGEMENT}/${managementTabEnums.USERS}`,
       id: "management",
     },
   ].filter((i) =>

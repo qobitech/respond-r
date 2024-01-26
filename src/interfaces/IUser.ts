@@ -1,8 +1,16 @@
 export interface IUser {
   email: string
   userName: string
-  organisationName: string
+  organisation: {
+    id: number
+    name: string
+    role: null
+  }
+  roleForReturn: Array<{
+    name: string
+  }>
   phoneNumber: string
+  id: number
 }
 
 export interface IAllUsers {

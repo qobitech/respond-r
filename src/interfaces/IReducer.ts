@@ -4,6 +4,9 @@ import { IAllUsers, ICreateUserError, ICreateUserResponse } from "./IUser"
 import { IVehicleById, IVehicleSearch } from "./IVehicle"
 import { ILoginResponse } from "./IAuth"
 import { IDemoEPolice } from "./IDemo"
+import { IRoles } from "./IRole"
+import { IOrganizations } from "./IOrganization"
+import { IActionsForRole, ICreateAction, IRoleActions } from "./IRoleActions"
 
 export interface IAuthReducer {
   userLogin: ILoginResponse
@@ -30,21 +33,44 @@ export interface IGlobalReducer {
 }
 
 export interface IRoleReducer {
-  getAllRoles: any
+  getAllRoles: IRoles
   getAllRolesLoading: boolean
   getAllRolesError: string
   createRole: any
   createRoleLoading: boolean
   createRoleError: string
-  updateRole: any
-  updateRoleLoading: boolean
-  updateRoleError: string
   deleteRole: any
   deleteRoleLoading: boolean
   deleteRoleError: string
-  getPermissions: any
-  getPermissionsLoading: boolean
-  getPermissionsError: string
+}
+export interface IOrganizationReducer {
+  getAllOrganization: IOrganizations
+  getAllOrganizationLoading: boolean
+  getAllOrganizationError: string
+  createOrganization: any
+  createOrganizationLoading: boolean
+  createOrganizationError: string
+  deleteOrganization: any
+  deleteOrganizationLoading: boolean
+  deleteOrganizationError: string
+}
+
+export interface IActionReducer {
+  getAllAction: IRoleActions
+  getAllActionLoading: boolean
+  getAllActionError: string
+  createAction: ICreateAction
+  createActionLoading: boolean
+  createActionError: string
+  deleteAction: any
+  deleteActionLoading: boolean
+  deleteActionError: string
+  addActionToRole: any
+  addActionToRoleLoading: boolean
+  addActionToRoleError: string
+  getActionsForRole: IActionsForRole
+  getActionsForRoleLoading: boolean
+  getActionsForRoleError: string
 }
 export interface IUserReducer {
   createUser: ICreateUserResponse
@@ -89,4 +115,6 @@ export interface IStates {
   user: IUserReducer
   vehicle: IVehicleReducer
   demo: IDemoReducer
+  organization: IOrganizationReducer
+  actions: IActionReducer
 }

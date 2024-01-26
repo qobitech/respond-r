@@ -10,6 +10,7 @@ import "../../../../utils/new/page.scss"
 import { IRightSection } from "components/reusable/right-section"
 import { IUser } from "interfaces/IUser"
 import { TypeCheckbox } from "utils/new/checkbox"
+import { CloseSVG } from "utils/new/svgs"
 
 interface ICreateAdmin {
   action: string
@@ -70,7 +71,7 @@ const CreateAction = ({
       hookForm.setValue("action", rsProps?.data?.email || "")
       hookForm.setValue(
         "description",
-        rsProps?.data?.organisationName?.toLowerCase() || ""
+        rsProps?.data?.organisation.name?.toLowerCase() || ""
       )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -192,30 +193,64 @@ const Roles = () => {
   )
 }
 
-const RoleSelectItem = ({
+export const SelectedItems = ({
+  id,
+  title,
+  onRemove,
+  index,
+}: {
+  title: string
+  id: string
+  onRemove?: (id: string) => void
+  index: number
+}) => {
+  const isRemove = typeof onRemove === "function"
+  return (
+    <div className="role-select-item-wrapper">
+      <div className="select-item-content">
+        <div className="index-style">
+          <p>{index + ". "}</p>
+        </div>
+        <p>{title || "no title"}</p>
+        {isRemove ? (
+          <div className="close-container" onClick={() => onRemove(id)}>
+            <CloseSVG />
+          </div>
+        ) : null}
+      </div>
+    </div>
+  )
+}
+
+export const RoleSelectItem = ({
   id,
   title,
   setValue,
+  onRemove,
 }: {
   title: string
   id: string
   setValue: (id: string, checked: boolean) => void
+  onRemove?: (id: string) => void
 }) => {
   const [isChecked, setIsChecked] = useState<boolean>(false)
-  const handleCheck = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    const { checked } = target
-    setIsChecked(checked)
-    setValue(id, checked)
-  }
+
   const handleOnClick = () => {
     setIsChecked((e) => !isChecked)
     setValue(id, !isChecked)
   }
+
+  const isRemove = typeof onRemove === "function"
   return (
     <div className="role-select-item-wrapper">
       <div onClick={handleOnClick} className="select-item-content">
-        <TypeCheckbox onChange={handleCheck} id={id} checked={isChecked} />
+        <TypeCheckbox id={id} checked={isChecked} />
         <p>{title}</p>
+        {isRemove ? (
+          <div className="close-container">
+            <CloseSVG />
+          </div>
+        ) : null}
       </div>
     </div>
   )

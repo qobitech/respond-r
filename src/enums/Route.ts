@@ -1,10 +1,10 @@
-import { ORGANIZATION, ROLE, orgType } from "utils/new/constants"
-
-const GODUSER = ROLE === "super-admin" && ORGANIZATION === "all"
+import { managementTabEnums } from "components/dashboard/admin-management"
+import { ORGANIZATION, ROLE, organizationEnumsType } from "utils/new/constants"
+import { GODUSER } from "utils/new/constants/roles"
 
 const errorPage = "/login"
 
-const isView = (org: orgType, url: string) =>
+const isView = (org: organizationEnumsType, url: string) =>
   GODUSER || ORGANIZATION === org ? url : errorPage
 
 export const url = {
@@ -18,8 +18,8 @@ export const url = {
   OVERVIEW: "/dashboard/overview",
   TRAFFIC: isView("e-traffic", "/dashboard/e-traffic"),
   POLICE: isView("e-police", "/dashboard/e-police"),
-  FIRESERVICE: isView("fire-service", "/dashboard/fire-service"),
-  MEDICAL: isView("e-medical", "/dashboard/e-medical"),
+  FIRESERVICE: isView("firefighter", "/dashboard/fire-service"),
+  MEDICAL: isView("ambulance", "/dashboard/e-medical"),
   MANAGEMENT:
     GODUSER || ROLE === "super-admin" ? "/dashboard/management" : errorPage,
   PAGE404: "",
@@ -27,16 +27,16 @@ export const url = {
 
 export const getOverview = () => {
   switch (ORGANIZATION) {
-    case "e-medical":
+    case "ambulance":
       return url.MEDICAL
     case "e-police":
       return url.POLICE
     case "e-traffic":
       return url.TRAFFIC
-    case "fire-service":
+    case "firefighter":
       return url.FIRESERVICE
-    case "all":
-      return url.MANAGEMENT
+    case "respondR":
+      return `${url.MANAGEMENT}/${managementTabEnums.USERS}`
     default:
       return "/"
   }

@@ -1678,7 +1678,7 @@ const TableSection = ({
   return (
     <div>
       <div className="table-section">
-        <Table header={header} record={record} hideCheck hideNumbering />
+        <Table header={header} record={record} hideNumbering />
       </div>
       {isPagination && (
         <div className="pagination-container">

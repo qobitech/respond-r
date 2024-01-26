@@ -7,6 +7,15 @@ import { url } from "enums/Route"
 import Page404 from "utils/404"
 
 const RouteList = () => {
+  const getPath = (path: string) => {
+    switch (path) {
+      case url.MANAGEMENT:
+        return `${url.MANAGEMENT}/:pageTab`
+      default:
+        return path
+    }
+  }
+
   return (
     <>
       <Routes>
@@ -18,7 +27,7 @@ const RouteList = () => {
               {PageRenders.map((PageRender, index) =>
                 PageRender ? (
                   <Route
-                    path={paths[index]}
+                    path={getPath(paths[index])}
                     index={index === 0}
                     element={
                       item.routeType !== "public" ? (

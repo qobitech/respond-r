@@ -16,6 +16,17 @@ export type actionComponent =
   | "create-admin"
   | "view-admin"
   | "update-admin"
+  | "create-role"
+  | "update-role"
+  | "view-role"
+  | "assign-role"
+  | "create-org"
+  | "update-org"
+  | "view-org"
+  | "create-action"
+  | "update-action"
+  | "view-action"
+  | "delete-action"
   | null
 export type actionId = string | null
 
@@ -128,7 +139,8 @@ export const useRightSection = <K extends {}>(
     setCtas(getCTA(action, component, id))
     setOpenSection(true)
     navigate(`?action=${action}&component=${component}${id ? "&id=" + id : ""}`)
-    if (data) setData(data as unknown as K)
+    // if (data)
+    setData(data as unknown as K)
   }
 
   function callSectionOnQuery(i?: K) {

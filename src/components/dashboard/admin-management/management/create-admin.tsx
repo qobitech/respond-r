@@ -10,21 +10,21 @@ import * as yup from "yup"
 import "../../../../utils/new/page.scss"
 import { IRightSection } from "components/reusable/right-section"
 import { IUser } from "interfaces/IUser"
-import { ORGANIZATION, ROLE } from "utils/new/constants"
+import { GODUSER } from "utils/new/constants/roles"
 
 interface ICreateAdmin {
   email: string
-  organisationName: string
+  organisationId: string
   userName: string
   phoneNumber: string
-  // role: [string]
   password: string
   confirmPassword: string
+  role: string
 }
 
 const createAdminSchema = (update: boolean) => ({
   email: yup.string().required("input required"),
-  organisationName: yup.string().required("input required"),
+  organisationId: yup.string().required("input required"),
   userName: yup.string().required("input required"),
   phoneNumber: yup.string().required("input required"),
   password: update ? yup.string() : yup.string().required("input required"),
@@ -36,75 +36,73 @@ const createAdminSchema = (update: boolean) => ({
         .oneOf([yup.ref("password"), null], "Passwords must match"),
 })
 
-const formComponent: IFormComponent[] = [
-  {
-    id: "email",
-    label: "Email",
-    placeHolder: "Enter your email address",
-    type: "text",
-    component: "input",
-  },
-  {
-    id: "organisationName",
-    label: "Organization",
-    placeHolder: "",
-    type: "text",
-    component: "select",
-    initOptions: { id: 2, label: "Select Organziation", value: "" },
-    optionData: [
-      { id: 1, label: "Traffic", value: "traffic" },
-      { id: 2, label: "E-Police", value: "e-police" },
-      { id: 3, label: "Fire Service", value: "fire-service" },
-      { id: 4, label: "E-Medical", value: "e-medical" },
-    ],
-  },
-  {
-    id: "userName",
-    label: "User Name",
-    placeHolder: "Enter your user name",
-    type: "text",
-    component: "input",
-  },
-  {
-    id: "phoneNumber",
-    label: "Phone Number",
-    placeHolder: "Enter your phone number",
-    type: "phone",
-    component: "phone",
-  },
-  {
-    id: "role",
-    label: "Role",
-    placeHolder: "",
-    type: "text",
-    component: "select",
-    initOptions: { id: 2, label: "Select Role", value: "" },
-    optionData: [
-      { id: 1, label: "Super Admin", value: "Super Admin" },
-      { id: 2, label: "Admin", value: "Admin" },
-      { id: 3, label: "Moderator", value: "Moderator" },
-      { id: 4, label: "Field Officer", value: "Field Officer" },
-    ],
-  },
-  {
-    id: "password",
-    label: "Password",
-    placeHolder: "Enter your password",
-    type: "password",
-    component: "input",
-  },
-  {
-    id: "confirmPassword",
-    label: "Confirm Password",
-    placeHolder: "Re-enter your password",
-    type: "password",
-    component: "input",
-  },
-].filter((i) =>
-  ORGANIZATION === "all" && ROLE === "super-admin"
-    ? i
-    : i.id !== "organisationName"
-) as IFormComponent[]
+const getFormComponent = (states?: IStates): IFormComponent[] => {
+  const allOrganizations = states?.organization?.getAllOrganization?.data
+  const allRoles = states?.role?.getAllRoles?.data
+  return [
+    {
+      id: "email",
+      label: "Email",
+      placeHolder: "Enter your email address",
+      type: "text",
+      component: "input",
+    },
+    {
+      id: "organisationId",
+      label: "Organization",
+      placeHolder: "",
+      type: "text",
+      component: "select",
+      initOptions: { id: 2, label: "Select Organziation", value: "" },
+      optionData: allOrganizations?.map((i, index) => ({
+        id: index + 1,
+        label: i.name,
+        value: i.id,
+      })),
+    },
+    {
+      id: "userName",
+      label: "User Name",
+      placeHolder: "Enter your user name",
+      type: "text",
+      component: "input",
+    },
+    {
+      id: "phoneNumber",
+      label: "Phone Number",
+      placeHolder: "Enter your phone number",
+      type: "phone",
+      component: "phone",
+    },
+    {
+      id: "role",
+      label: "Role",
+      placeHolder: "",
+      type: "text",
+      component: "select",
+      initOptions: { id: 2, label: "Select Role", value: "" },
+      optionData: allRoles?.map((i, index) => ({
+        id: index + 1,
+        label: i.name,
+        value: i.name,
+      })),
+    },
+    {
+      id: "password",
+      label: "Password",
+      placeHolder: "Enter your password",
+      type: "password",
+      component: "input",
+    },
+    {
+      id: "confirmPassword",
+      label: "Confirm Password",
+      placeHolder: "Re-enter your password",
+      type: "password",
+      component: "input",
+    },
+  ].filter((i) => (GODUSER ? i : i.id !== "organisationId")) as IFormComponent[]
+}
 
 const CreateAdmin = ({
   states,
@@ -123,32 +121,41 @@ const CreateAdmin = ({
   } | null>(null)
 
   useEffect(() => {
+    actions.getAllOrganization("")
+    actions.getAllRoles("")
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
     if (isUpdate) {
       hookForm.setValue("email", rsProps?.data?.email || "")
       hookForm.setValue(
-        "organisationName",
-        rsProps?.data?.organisationName?.toLowerCase() || ""
+        "organisationId",
+        rsProps?.data?.organisation.id + "" || ""
       )
       hookForm.setValue("phoneNumber", "+" + rsProps?.data?.phoneNumber || "")
       hookForm.setValue("userName", rsProps?.data?.userName || "")
+      hookForm.setValue("role", rsProps?.data?.roleForReturn?.[0]?.name || "")
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUpdate])
+
+  const getNormalizedName = (roleName: string) => {
+    const allRoles = states?.role?.getAllRoles?.data
+    return allRoles.filter((role) => role.name === roleName)?.[0]
+      ?.normalizedName
+  }
 
   const handleUser = (data: ICreateAdmin) => {
     setResponse(null)
     if (!isUpdate) {
       actions.clearAction(user.createUser)
       actions.createUser(
-        {
-          ...data,
-          organisationName: data.organisationName,
-          role: [data.organisationName],
-        },
+        { ...data, role: [getNormalizedName(data.role)] },
         (res) => {
           setResponse({
-            message: states?.user?.createUser?.message || "",
-            isSuccessful: states?.user?.createUser?.isSuccessful!,
+            message: "User created successfully",
+            isSuccessful: true,
           })
           actions.getAllUsers("")
         },
@@ -160,6 +167,9 @@ const CreateAdmin = ({
       actions.clearAction(user.updateUser)
     }
   }
+
+  const formComponent = getFormComponent(states)
+
   return (
     <div className="card-section px-4 py-4">
       <FormBuilder formComponent={formComponent} hookForm={hookForm} />

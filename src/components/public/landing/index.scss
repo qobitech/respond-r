@@ -45,15 +45,16 @@
           gap: 30px;
           p {
             margin: 0;
-            font-size: 0.9325rem;
+            font-size: 0.8325rem;
             @include themify($themes) {
               color: themed("colorText");
             }
+            line-height: normal;
           }
           .separator {
             width: 1px;
             height: 25px;
-            background: #aec5df;
+            background: #2c4d72;
           }
         }
       }

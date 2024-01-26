@@ -5,11 +5,12 @@ import "./index.scss"
 interface IInput extends React.ComponentPropsWithoutRef<"input"> {
   label?: string
   error?: string | undefined
+  isonlyview?: boolean
 }
 
 // eslint-disable-next-line react/display-name
 export const TypeInput = React.forwardRef(
-  ({ label, error, ...props }: IInput, ref) => {
+  ({ label, error, isonlyview, ...props }: IInput, ref) => {
     return (
       <div className="type-input">
         <div className="form-container">
@@ -17,7 +18,10 @@ export const TypeInput = React.forwardRef(
           <input
             {...props}
             ref={ref as React.LegacyRef<HTMLInputElement> | undefined}
-            className={error ? "is-error" : ""}
+            className={`${error ? "is-error" : ""} ${
+              isonlyview ? "isonlyview" : ""
+            }`}
+            disabled={props.disabled || isonlyview}
           />
           {!!error && (
             <>

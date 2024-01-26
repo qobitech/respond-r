@@ -53,6 +53,10 @@
       border: 1px solid #f56e9d !important;
       margin-bottom: 0.81rem !important;
     }
+    &.isonlyview {
+      padding-left: 0;
+      border: none;
+    }
   }
   /* Override autofill styles for webkit browsers */
   input:-webkit-autofill {

@@ -57,9 +57,59 @@ interface IDemoActions {
   getDemoEPoliceNotifications: () => (dispatch: any) => void
 }
 
+interface IRoleActions {
+  getAllRoles: (query: string) => (dispatch: any) => void
+  createRole: (
+    data: object,
+    update?: boolean,
+    onSuccess?: ((res: any) => void) | undefined,
+    onFailure?: ((err: any) => void) | undefined
+  ) => (dispatch: any) => void
+  deleteRole: (name: string) => (dispatch: any) => void
+}
+
+interface IOrganizationAction {
+  getAllOrganization: (query: string) => (dispatch: any) => void
+  createOrganization: (
+    data: object,
+    update?: boolean,
+    onSuccess?: ((res: any) => void) | undefined,
+    onFailure?: ((err: any) => void) | undefined
+  ) => (dispatch: any) => void
+  deleteOrganization: (id: string) => (dispatch: any) => void
+}
+
+interface IActionActions {
+  getAllAction: (query: string) => (dispatch: any) => void
+  createAction: (
+    data: object,
+    update?: boolean,
+    onSuccess?: ((res: any) => void) | undefined,
+    onFailure?: ((err: any) => void) | undefined
+  ) => (dispatch: any) => void
+  deleteAction: (
+    data: { actionIds: number[] },
+    onSuccess?: ((res: any) => void) | undefined,
+    onFailure?: ((err: any) => void) | undefined
+  ) => (dispatch: any) => void
+  addActionToRole: (
+    data: object,
+    onSuccess?: ((res: any) => void) | undefined,
+    onFailure?: ((err: any) => void) | undefined
+  ) => (dispatch: any) => void
+  getActionsForRole: (
+    name: string,
+    onSuccess?: ((res: any) => void) | undefined,
+    onFailure?: ((err: any) => void) | undefined
+  ) => (dispatch: any) => void
+}
+
 export interface IAction
   extends IAuth,
     IGlobalActions,
     IUser,
     IDemoActions,
-    IVehicleActions {}
+    IVehicleActions,
+    IRoleActions,
+    IOrganizationAction,
+    IActionActions {}

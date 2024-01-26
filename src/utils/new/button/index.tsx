@@ -57,9 +57,9 @@ export const TypeSmallButton = React.forwardRef(
       <div className="type-small-button">
         <button
           {...props}
-          className={`${buttonType} ${buttonSize} ${props.className} ${
-            status ? "status" : ""
-          }`}
+          className={`${buttonType} ${buttonSize || ""} ${
+            props.className || ""
+          } ${status ? "status" : ""}`}
           ref={ref as React.LegacyRef<HTMLButtonElement> | undefined}
           onClick={load || status ? undefined : onClick}
           disabled={status || props.disabled}

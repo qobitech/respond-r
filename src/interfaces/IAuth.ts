@@ -1,6 +1,8 @@
+import { organizationEnumsType } from "utils/new/constants"
+
 export interface IToken {
   UserId: string
-  Organisation: string
+  Organisation: organizationEnumsType
   Username: string
   Email: string
   PhoneNumber: string

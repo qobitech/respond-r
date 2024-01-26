@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import Table, { ICell, ICellAction } from "utils/new/table"
+import Table, { ICell, ICellAction, useTableAction } from "utils/new/table"
 import "../../../../utils/new/pagination.scss"
 import "../../../../utils/new/page.scss"
 import "./management.scss"
@@ -11,9 +11,10 @@ import RightSection, {
 import { IStates } from "interfaces/IReducer"
 import { IAction } from "interfaces/IAction"
 import CreateAdmin from "./create-admin"
-import { PulseSVG } from "utils/new/svgs"
 import { IUser } from "interfaces/IUser"
-import { ORGANIZATION, ROLE } from "utils/new/constants"
+import { ROLE } from "utils/new/constants"
+import { GODUSER } from "utils/new/constants/roles"
+import { PageHeader } from "components/dashboard/components"
 
 interface IProps {
   states?: IStates
@@ -21,8 +22,8 @@ interface IProps {
 }
 
 const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
-  const GODUSER = ROLE === "super-admin" && ORGANIZATION === "all"
-  const { callRightSection, getAllUsers } = actions as IAction
+  const { callRightSection, getAllUsers, getAllOrganization, getAllRoles } =
+    actions as IAction
 
   const rightSectionProps = states?.global.rightSection
 
@@ -31,6 +32,8 @@ const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
   const rsProps = useRightSection<IUser>(rightSectionProps, callRightSection)
 
   useEffect(() => {
+    getAllOrganization("")
+    getAllRoles("")
     getAllUsers("")
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -53,7 +56,11 @@ const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
         isLink: false,
       },
       {
-        value: i.organisationName,
+        value: i.organisation.name,
+        isLink: false,
+      },
+      {
+        value: i.roleForReturn?.[0]?.name,
         isLink: false,
       },
       {
@@ -62,19 +69,20 @@ const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
       },
     ],
     rowActions: [
-      // {
-      //   value: "View User",
-      //   isLink: true,
-      //   action: () => {
-      //     rsProps.callSection("custom", "view-admin")
-      //   },
-      // },
       {
         value: "Edit Details",
         isLink: true,
         action: () => {
           rsProps.callSection("custom", "update-admin", i.email, i)
         },
+      },
+      {
+        value: "Delete User",
+        isLink: true,
+        action: () => {
+          rsProps.callSection("custom", "update-admin", i.email, i)
+        },
+        buttonType: "danger",
       },
     ],
   })) as ITable[]
@@ -125,6 +133,34 @@ const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
     },
   ]
 
+  const tableActionEnums = {
+    REASSIGNROLE: "Re-assign Role",
+    DELETE: "Delete",
+  }
+
+  const getTableActionEnums = (): { [key: string]: string } | null => {
+    return tableActionEnums
+  }
+
+  const tableAction = useTableAction({ actionEnums: getTableActionEnums() })
+
+  const reAssignRole = (data: string[]) => {}
+  const deleteRole = (data: string[]) => {}
+
+  const handleTableAction = () => {
+    if (tableAction.selectedItems)
+      switch (tableAction.action) {
+        case tableActionEnums.REASSIGNROLE:
+          reAssignRole(tableAction.selectedItems)
+          break
+        case tableActionEnums.DELETE:
+          deleteRole(tableAction.selectedItems)
+          break
+        default:
+          break
+      }
+  }
+
   return (
     <>
       <RightSection rsProps={rsProps}>
@@ -136,10 +172,10 @@ const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
         {rsProps.isView("custom", "update-admin") ? <></> : null}
       </RightSection>
       <div>
-        <div className="header-management">
-          <h1>User Management {!GODUSER ? "(" + ORGANIZATION + ")" : ""}</h1>
-          {userState?.getAllUsersLoading ? <PulseSVG /> : null}
-        </div>
+        <PageHeader
+          title="User Management"
+          load={userState?.getAllUsersLoading!}
+        />
         <div className="cta-header-section">
           <TypeSmallButton
             title="Create User"
@@ -150,14 +186,15 @@ const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
         </div>
         <div className="table-section card-section">
           <div className="filter-management-section">
-            {ROLE === "super-admin" && (
-              <TypeSelect
-                initoption={{ label: "All", value: "" }}
-                label="Filter by Role"
-                optionsdata={roleOptionData}
-                customwidth={"300px"}
-              />
-            )}
+            {ROLE === "super-admin" ||
+              (ROLE === "respondR-admin" && (
+                <TypeSelect
+                  initoption={{ label: "All", value: "" }}
+                  label="Filter by Role"
+                  optionsdata={roleOptionData}
+                  customwidth={"300px"}
+                />
+              ))}
             {GODUSER && (
               <TypeSelect
                 initoption={{ label: "All", value: "" }}
@@ -168,10 +205,18 @@ const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
             )}
           </div>
           <Table
-            header={["Name", "Email", "Organization", "Phone", "Action"]}
+            header={[
+              "Name",
+              "Email",
+              "Organization",
+              "Role",
+              "Phone",
+              "Action",
+            ]}
             record={record}
-            hideCheck
             hideNumbering
+            handleTableAction={handleTableAction}
+            tableAction={tableAction}
           />
         </div>
       </div>

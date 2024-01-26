@@ -9,9 +9,9 @@ import RightSection, { useRightSection } from "../../../reusable/right-section"
 import { IStates } from "interfaces/IReducer"
 import { IAction } from "interfaces/IAction"
 import CreateAction from "./create"
-import { PulseSVG } from "utils/new/svgs"
 import { IUser } from "interfaces/IUser"
-import { ORGANIZATION, ROLE } from "utils/new/constants"
+import { GODUSER } from "utils/new/constants/roles"
+import { PageHeader } from "components/dashboard/components"
 
 interface IProps {
   states?: IStates
@@ -141,8 +141,6 @@ const ActionPage: React.FC<IProps> = ({ states, actions }) => {
     },
   ]
 
-  const GODUSER = ROLE === "super-admin" && ORGANIZATION === "all"
-
   return (
     <>
       <RightSection rsProps={rsProps}>
@@ -154,10 +152,11 @@ const ActionPage: React.FC<IProps> = ({ states, actions }) => {
         {rsProps.isView("custom", "update-admin") ? <></> : null}
       </RightSection>
       <div>
-        <div className="header-management">
-          <h1>Action Management {!GODUSER ? "(" + ORGANIZATION + ")" : ""}</h1>
-          {userState?.getAllUsersLoading ? <PulseSVG /> : null}
-        </div>
+        <PageHeader
+          title="Action Management"
+          load={userState?.getAllUsersLoading!}
+        />
+
         <div className="cta-header-section">
           <TypeSmallButton
             title="Add Action"
@@ -186,7 +185,6 @@ const ActionPage: React.FC<IProps> = ({ states, actions }) => {
           <Table
             header={["Title", "Description", "Actions"]}
             record={record}
-            hideCheck
             hideNumbering
           />
         </div>

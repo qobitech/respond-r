@@ -13,6 +13,8 @@ import * as yup from "yup"
 import { TypeInput } from "utils/new/input"
 import { TypeButton } from "utils/new/button"
 import { LeftNavSVG, PulseSVG, RightNavSVG } from "utils/new/svgs"
+import { GODUSER } from "utils/new/constants/roles"
+import { ORGANIZATION } from "utils/new/constants"
 
 export interface IPHUS<T> {
   feeds: T[]
@@ -328,6 +330,23 @@ export const IframeComponent = ({ src }: { src: string }) => {
         style={{ width: "100%", height: "408px" }}
         sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
       ></iframe>
+    </div>
+  )
+}
+
+export const PageHeader = ({
+  load,
+  title,
+}: {
+  load: boolean
+  title: string
+}) => {
+  return (
+    <div className="header-management">
+      <h1>
+        {title} {!GODUSER ? "(" + ORGANIZATION + ")" : ""}
+      </h1>
+      {load ? <PulseSVG /> : null}
     </div>
   )
 }

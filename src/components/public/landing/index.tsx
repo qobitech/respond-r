@@ -18,7 +18,12 @@ const LandingPage = () => {
     },
   }
 
-  const events = ["Traffic Report", "Police Emergency", "Fire Outbreak"]
+  const events = [
+    "Traffic Report",
+    "Police Emergency",
+    "Fire Outbreak",
+    "Medical Emergency",
+  ]
 
   return (
     <>
@@ -27,7 +32,10 @@ const LandingPage = () => {
           <div className="hero-section">
             <div className="left-section">
               <h1>RESPOND-R</h1>
-              <p>Seamlessly retrieve live streams of real-time events</p>
+              <p>
+                Engage in immediate communication responses and handle events in
+                real-time as they unfold.
+              </p>
               <div className="events">
                 {events.map((i, index) => (
                   <div key={i} className="event-item">
