@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import "../global.scss"
 import "./index.scss"
 import { IStates, IVehicleReducer } from "interfaces/IReducer"
@@ -19,7 +19,7 @@ import RightSection, {
   useRightSection,
 } from "components/reusable/right-section"
 import { TypeInput } from "utils/new/input"
-import { TypeButton, TypeSmallButton } from "utils/new/button"
+import { TypeButton } from "utils/new/button"
 import { IFeed, IHit } from "interfaces/IStream"
 import { handleDataStream } from "./data"
 import * as signalR from "@microsoft/signalr"
@@ -41,7 +41,7 @@ import ReactPaginate from "react-paginate"
 import { IframeComponent } from "../components"
 import { vehicleSearchType } from "store/actions/global"
 import { IVehicleSearchPayload } from "interfaces/IGlobal"
-import { SearchContext } from "contexts/search-context"
+import { useGlobalContext } from "components/layout"
 
 interface IProps {
   states?: IStates
@@ -638,7 +638,7 @@ const LiveFeedResults = ({
   isFeed: boolean
   isHit: boolean
 }) => {
-  const { setSearch: setSearchValue } = useContext(SearchContext)
+  const { setSearch: setSearchValue } = useGlobalContext()
   return (
     <div className="live-feed-component-wrapper">
       {isFeed ? (
@@ -655,7 +655,7 @@ const LiveFeedResults = ({
                 regNumber={i.regNumber}
                 handleOnClick={() => {
                   handleFeedRequest(i)
-                  setSearchValue(i.regNumber as string)
+                  setSearchValue?.(i.regNumber as string)
                 }}
               />
             ))
@@ -1115,7 +1115,7 @@ const VehicleSOTItem = ({
   return (
     <div>
       <div className="vehicle-cta-back">
-        <TypeSmallButton title="Go back" onClick={handlePrev} />
+        <TypeButton buttonSize="small" title="Go back" onClick={handlePrev} />
       </div>
       <Accordion data={accordionData} accordionProps={accordionProps}>
         <Switch>
@@ -1207,7 +1207,7 @@ const VehicleOffenseItem = ({
   return (
     <div>
       <div className="vehicle-cta-back">
-        <TypeSmallButton title="Go back" onClick={handlePrev} />
+        <TypeButton buttonSize="small" title="Go back" onClick={handlePrev} />
       </div>
       <div className="vehicle-info-section">
         <VehicleInfoSectionItem
@@ -1274,14 +1274,14 @@ export const VehicleInfoSectionItem = ({
   status?: boolean
   // onClick?: () => void
 }) => {
-  const { setSearch: setSearchValue } = useContext(SearchContext)
+  const { setSearch: setSearchValue } = useGlobalContext()
   const isStatus = typeof status !== "undefined"
   const isReg = label.includes("Reg") && label.includes("Number")
   return (
     <div
       className="vehicle-info-section-item"
       onClick={() => {
-        if (isReg) setSearchValue(value || "")
+        if (isReg) setSearchValue?.(value || "")
       }}
     >
       <p className="vehicle-info-label">{label}</p>

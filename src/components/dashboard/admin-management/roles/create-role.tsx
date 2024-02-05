@@ -8,9 +8,12 @@ import TextPrompt from "utils/new/text-prompt"
 import * as yup from "yup"
 import "../../../../utils/new/page.scss"
 import { IRightSection } from "components/reusable/right-section"
-import { getOrgId, organizationEnums } from "utils/new/constants"
 import { IRole } from "interfaces/IRole"
 import { role } from "store/types"
+import { useGlobalContext } from "components/layout"
+import { IOrganization } from "interfaces/IOrganization"
+import { GODUSER } from "utils/new/constants/roles"
+import { ISSUPERADMIN } from "utils/new/constants"
 
 interface ICreateRole {
   name: string
@@ -19,31 +22,36 @@ interface ICreateRole {
 
 const createRoleSchema = {
   name: yup.string().required("input required"),
-  organisationId: yup.number().required("input required"),
+  organisationId: GODUSER
+    ? yup.number().required("input required")
+    : yup.number(),
 }
 
-const formComponent: IFormComponent[] = [
-  {
-    id: "name",
-    label: "Title",
-    placeHolder: "Enter role title",
-    type: "text",
-    component: "input",
-  },
-  {
-    id: "organisationId",
-    label: "Organization",
-    placeHolder: "",
-    type: "text",
-    component: "select",
-    initOptions: { id: 2, label: "Select Organziation", value: "" },
-    optionData: Object.values(organizationEnums).map((i, index) => ({
-      id: index + 1,
-      label: i,
-      value: getOrgId(i),
-    })),
-  },
-] as IFormComponent[]
+const getFormComponent = (organizations: IOrganization[]) =>
+  [
+    {
+      id: "name",
+      label: "Title",
+      placeHolder: "Enter role title",
+      type: "text",
+      component: "input",
+    },
+    {
+      id: "organisationId",
+      label: "Organization",
+      placeHolder: "",
+      type: "text",
+      component: "select",
+      initOptions: { id: 2, label: "Select Organziation", value: "" },
+      optionData: organizations.map((i, index) => ({
+        id: index + 1,
+        label: i.name,
+        value: i.id,
+      })),
+    },
+  ].filter((i) =>
+    GODUSER ? i : ISSUPERADMIN ? i.id === "name" : false
+  ) as IFormComponent[]
 
 const CreateRole = ({
   states,
@@ -54,6 +62,8 @@ const CreateRole = ({
   actions: IAction
   rsProps?: IRightSection<IRole>
 }) => {
+  const { organizations, userOrganization } = useGlobalContext()
+  const formComponent = getFormComponent(organizations || [])
   const isUpdate = rsProps?.isView("custom", "update-role")
   const [hookForm] = useFormHook<ICreateRole>(createRoleSchema)
   const [response, setResponse] = useState<{
@@ -73,14 +83,16 @@ const CreateRole = ({
     actions.clearAction(role.createRole)
     setResponse(null)
     actions.createRole(
-      data,
+      !isUpdate
+        ? { ...data, organizationId: userOrganization?.id }
+        : { oldName: rsProps?.data?.name || "", newName: data.name },
       isUpdate,
-      (res) => {
+      () => {
         setResponse({
-          message: states?.role?.createRole?.message || "",
-          isSuccessful: states?.role?.createRole?.isSuccessful!,
+          message: "role updated successfully",
+          isSuccessful: true,
         })
-        console.log(res)
+        actions.getAllRoles("")
       },
       (err) => {
         console.log(err)
@@ -92,7 +104,7 @@ const CreateRole = ({
     <div className="card-section px-4 py-4">
       <FormBuilder formComponent={formComponent} hookForm={hookForm} />
       <TypeButton
-        title={isUpdate ? "Update" : "Create"}
+        title={isUpdate ? "Update Role" : "Add Role"}
         onClick={hookForm.handleSubmit(handleUser)}
         load={states.role.createRoleLoading}
       />

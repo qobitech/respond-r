@@ -6,7 +6,7 @@ export const getAllRoles = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: "",
-      customurl: `${baseurl}/Role/${query || ""}`,
+      customurl: `${baseurl}/Role${query || ""}`,
       header: utils.header(""),
     },
     actionType: role.getAllRoles,
@@ -26,7 +26,7 @@ export const createRole = (
       header: utils.header(""),
       data,
     },
-    actionType: update ? role.updateRole : role.createRole,
+    actionType: role.createRole,
     onSuccess: (res) => {
       onSuccess?.(res)
     },
@@ -55,5 +55,41 @@ export const getPermissions = (query: string) => {
       header: utils.header(""),
     },
     actionType: role.getPermissions,
+  })
+}
+
+export const getRolesForOrganisation = (id: string) => {
+  return utils.httpGetMethod({
+    apiData: {
+      url: "",
+      customurl: `${baseurl}/Role/getRolesForOrganisation?orgId=${id}`,
+      header: utils.header(""),
+    },
+    actionType: role.getRolesForOrganisation,
+  })
+}
+
+export const unassignMultipleActionsForRole = (
+  data: {
+    roleId: number
+    actionIds: number[]
+  },
+  onSuccess?: (res: any) => void,
+  onFailure?: (err: any) => void
+) => {
+  return utils.httpPostMethod({
+    apiData: {
+      url: "",
+      customurl: `${baseurl}/Action/UnassignMultiplectionsForRole`,
+      header: utils.header(""),
+      data,
+    },
+    actionType: role.unassignMultipleActionsForRole,
+    onSuccess: (res) => {
+      onSuccess?.(res)
+    },
+    onFailure: (err) => {
+      onFailure?.(err)
+    },
   })
 }

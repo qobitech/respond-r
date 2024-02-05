@@ -3,7 +3,7 @@ import Table, { ICell, ICellAction, useTableAction } from "utils/new/table"
 import "../../../../utils/new/pagination.scss"
 import "../../../../utils/new/page.scss"
 import "./management.scss"
-import { TypeSmallButton } from "../../../../utils/new/button"
+import { TypeButton } from "../../../../utils/new/button"
 import { TypeSelect } from "../../../../utils/new/select"
 import RightSection, {
   useRightSection,
@@ -12,9 +12,11 @@ import { IStates } from "interfaces/IReducer"
 import { IAction } from "interfaces/IAction"
 import CreateAdmin from "./create-admin"
 import { IUser } from "interfaces/IUser"
-import { ROLE } from "utils/new/constants"
+import { ISSUPERADMIN, ROLE, USERTOKEN } from "utils/new/constants"
 import { GODUSER } from "utils/new/constants/roles"
 import { PageHeader } from "components/dashboard/components"
+import { ActionWrapper, useGlobalContext } from "components/layout"
+import { PAGENUMBER, PAGESIZE, getQuery } from "../action"
 
 interface IProps {
   states?: IStates
@@ -22,8 +24,8 @@ interface IProps {
 }
 
 const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
-  const { callRightSection, getAllUsers, getAllOrganization, getAllRoles } =
-    actions as IAction
+  const { isAction, getOrganization, organizations } = useGlobalContext()
+  const { callRightSection, getAllUsers } = actions as IAction
 
   const rightSectionProps = states?.global.rightSection
 
@@ -31,12 +33,22 @@ const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
 
   const rsProps = useRightSection<IUser>(rightSectionProps, callRightSection)
 
+  const query = (sign: string) =>
+    GODUSER
+      ? ""
+      : `${sign}OrganisationId=${
+          getOrganization?.("name", USERTOKEN.Organisation)?.id || ""
+        }`
+
+  const getAllUsersFn = (query: string) => {
+    if (GODUSER) getAllUsers(query)
+    if (organizations?.length) getAllUsers(query)
+  }
+
   useEffect(() => {
-    getAllOrganization("")
-    getAllRoles("")
-    getAllUsers("")
+    getAllUsersFn(query("?"))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [organizations])
 
   interface ITable {
     id: string
@@ -75,14 +87,16 @@ const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
         action: () => {
           rsProps.callSection("custom", "update-admin", i.email, i)
         },
+        hide: !isAction?.("update user"),
       },
       {
         value: "Delete User",
         isLink: true,
         action: () => {
-          rsProps.callSection("custom", "update-admin", i.email, i)
+          rsProps.callSection("custom", "delete-admin", i.email, i)
         },
         buttonType: "danger",
+        hide: !isAction?.("delete user"),
       },
     ],
   })) as ITable[]
@@ -142,7 +156,27 @@ const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
     return tableActionEnums
   }
 
-  const tableAction = useTableAction({ actionEnums: getTableActionEnums() })
+  const tableAction = useTableAction({
+    actionEnums: getTableActionEnums(),
+    paginationParams: {
+      current: userState?.getAllUsers?.currentPage || 1,
+      isPagination: true,
+      load: userState?.getAllUsersLoading!,
+      total: userState?.getAllUsers?.totalPages || 1,
+      onPageChange: (selectedItem: { selected: number }) => {
+        getAllUsersFn(
+          getQuery(`${PAGESIZE}&pageNumber=${selectedItem.selected + 1}`)
+        )
+      },
+    },
+    searchAction: (name: string) => {
+      const nameQuery = name ? `&name=${name}` : ""
+      getAllUsersFn(
+        getQuery(`${PAGESIZE}&${PAGENUMBER}${nameQuery}`) + `${query("&")}`
+      )
+    },
+    searchPlaceHolder: "Search Users",
+  })
 
   const reAssignRole = (data: string[]) => {}
   const deleteRole = (data: string[]) => {}
@@ -176,49 +210,55 @@ const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
           title="User Management"
           load={userState?.getAllUsersLoading!}
         />
-        <div className="cta-header-section">
-          <TypeSmallButton
-            title="Create User"
-            onClick={() => {
-              rsProps.callSection("custom", "create-admin")
-            }}
-          />
-        </div>
-        <div className="table-section card-section">
-          <div className="filter-management-section">
-            {ROLE === "super-admin" ||
-              (ROLE === "respondR-admin" && (
+        <ActionWrapper action="create user">
+          <div className="cta-header-section">
+            <TypeButton
+              buttonSize="small"
+              title="Create User"
+              onClick={() => {
+                rsProps.callSection("custom", "create-admin")
+              }}
+            />
+          </div>
+        </ActionWrapper>
+        <ActionWrapper action="read user">
+          <div className="table-section card-section">
+            <div className="filter-management-section">
+              {ROLE === "super-admin" && (
                 <TypeSelect
                   initoption={{ label: "All", value: "" }}
                   label="Filter by Role"
                   optionsdata={roleOptionData}
                   customwidth={"300px"}
                 />
-              ))}
-            {GODUSER && (
-              <TypeSelect
-                initoption={{ label: "All", value: "" }}
-                label="Filter by Organization"
-                optionsdata={orgOptionData}
-                customwidth={"300px"}
-              />
-            )}
+              )}
+              {GODUSER && (
+                <TypeSelect
+                  initoption={{ label: "All", value: "" }}
+                  label="Filter by Organization"
+                  optionsdata={orgOptionData}
+                  customwidth={"300px"}
+                />
+              )}
+            </div>
+            <Table
+              header={[
+                "Name",
+                "Email",
+                "Organization",
+                "Role",
+                "Phone",
+                "Action",
+              ].filter((_, index) =>
+                GODUSER ? true : ISSUPERADMIN ? index !== 2 : false
+              )}
+              record={record}
+              hideNumbering
+              handleTableAction={handleTableAction}
+              tableAction={tableAction}
+            />
           </div>
-          <Table
-            header={[
-              "Name",
-              "Email",
-              "Organization",
-              "Role",
-              "Phone",
-              "Action",
-            ]}
-            record={record}
-            hideNumbering
-            handleTableAction={handleTableAction}
-            tableAction={tableAction}
-          />
-        </div>
+        </ActionWrapper>
       </div>
     </>
   )

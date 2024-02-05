@@ -2,7 +2,7 @@ import React, { FC, useState } from "react"
 import "./table.scss"
 import { TypeCheckbox } from "../checkbox"
 import { PAGE_SIZE } from "../constants"
-import { TypeSmallButton } from "../button"
+import { TypeButton } from "../button"
 import { useNavigate } from "react-router-dom"
 import { TypeSelect } from "../select"
 import { TypeInput } from "../input"
@@ -37,6 +37,7 @@ interface IPaginationParams {
   total: number
   onPageChange?(selectedItem: { selected: number }): void
   isPagination: boolean
+  load: boolean
 }
 
 interface ITableArgs {
@@ -60,6 +61,7 @@ export const useTableAction = (tableArg?: ITableArgs): ITableAction => {
       if (checked) {
         return [...record.map((i) => i.id)]
       }
+      setAction("")
       return []
     })
   }
@@ -112,6 +114,7 @@ export interface ICellAction extends ICell {
   view?: "text" | "icon" | "both"
   background?: string
   buttonType?: "bold" | "outlined" | "disabled" | "danger" | undefined
+  hide?: boolean
 }
 
 export interface ITableRecord {
@@ -311,17 +314,23 @@ const CellValueActionComponent: React.FC<ICVAC> = ({
   color,
   buttonType,
   view,
+  hide,
 }) => {
   const navigate = useNavigate()
   return (
-    <TypeSmallButton
-      color={color}
-      title={view !== "icon" ? value + "" : ""}
-      buttonType={buttonType}
-      style={{ height: "35px", fontSize: "12px" }}
-      onClick={() => (isLink ? action?.() : navigate(url || ""))}
-      className="mr-2"
-    />
+    <>
+      {!hide ? (
+        <TypeButton
+          buttonSize="small"
+          color={color}
+          title={view !== "icon" ? value + "" : ""}
+          buttonType={buttonType}
+          style={{ height: "35px", fontSize: "12px" }}
+          onClick={() => (isLink ? action?.() : navigate(url || ""))}
+          className="mr-2"
+        />
+      ) : null}
+    </>
   )
 }
 
@@ -373,7 +382,8 @@ const TableActionComponent: FC<ITableActionComponent> = ({
             tableAction?.setAction?.(value)
           }}
         />
-        <TypeSmallButton
+        <TypeButton
+          buttonSize="small"
           title="Proceed"
           buttonType={isTableAction && isCTA ? "outlined" : "disabled"}
           onClick={handleTableAction}
@@ -413,7 +423,8 @@ const TableActionComponent: FC<ITableActionComponent> = ({
             </div>
           ) : null}
         </div>
-        <TypeSmallButton
+        <TypeButton
+          buttonSize="small"
           title="Search"
           buttonType={
             tableAction?.searchValue && isCTA ? "outlined" : "disabled"
@@ -422,6 +433,7 @@ const TableActionComponent: FC<ITableActionComponent> = ({
             tableAction?.searchAction?.(tableAction.searchValue)
           }}
           disabled={!tableAction?.searchValue || !isCTA}
+          load={tableAction?.paginationParams?.load}
         />
       </div>
     </div>

@@ -77,6 +77,7 @@ const AssignToRole = ({
   const isBulk = rsProps?.data === undefined
   const id = rsProps?.data?.id || ""
   const name = rsProps?.data?.name || ""
+  const selectedRoleActions = rsProps?.data?.actions
   const selected = isBulk
     ? selectedItems.length
       ? "(" + selectedItems.length + ")"
@@ -87,8 +88,8 @@ const AssignToRole = ({
     <div className="d-flex flex-column" style={{ gap: "30px" }}>
       <div className="card-section px-4 py-4">
         <div className="pb-4">
-          <div className="text-center">
-            <p className="role-title">Selected Roles {selected}</p>
+          <div className="role-title">
+            <p>Selected Roles {selected}</p>
           </div>
           <div className="grid-items">
             {isBulk ? (
@@ -115,30 +116,34 @@ const AssignToRole = ({
       </div>
       <div className="card-section px-4 py-4">
         <div className="pb-4">
-          <div className="text-center">
-            <p className="role-title">
+          <div className="role-title">
+            <p>
               Selected Actions{" "}
               {selectedActions.length ? "(" + selectedActions.length + ")" : ""}
             </p>
           </div>
           <div className="grid-items">
-            {actionState?.data?.map((i) => (
-              <div key={i.id} className="">
-                <RoleSelectItem
-                  id={i.id + ""}
-                  title={i.name}
-                  setValue={setValue}
-                />
-              </div>
-            ))}
+            {actionState?.data
+              ?.filter((action) => !selectedRoleActions?.includes(action.name))
+              ?.map((i) => (
+                <div key={i.id} className="">
+                  <RoleSelectItem
+                    id={i.id + ""}
+                    title={i.name}
+                    setValue={setValue}
+                  />
+                </div>
+              ))}
           </div>
         </div>
       </div>
       <div className="d-flex justify-content-center mt-4">
         <TypeButton
+          buttonSize="small"
           title="Assign Selected Action(s) to Selected Role(s)"
           onClick={assignRoleToActions}
           load={states.actions.addActionToRoleLoading}
+          buttonType="outlined"
         />
       </div>
       <div className="my-1" />

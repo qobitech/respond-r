@@ -1,5 +1,5 @@
 import React from "react"
-import { TypeButton, TypeSmallButton } from "utils/new/button"
+import { TypeButton } from "utils/new/button"
 import { TypeInput } from "utils/new/input"
 import "./index.scss"
 
@@ -27,8 +27,9 @@ const FilterComponent: React.FC<IFilter> = ({
   return (
     <div className="filter-container">
       <div className="filter-header">
-        <TypeSmallButton title="Filter" onClick={closeFilter} />
-        <TypeSmallButton
+        <TypeButton buttonSize="small" title="Filter" onClick={closeFilter} />
+        <TypeButton
+          buttonSize="small"
           title=""
           buttonType="danger"
           close
@@ -45,7 +46,8 @@ const FilterComponent: React.FC<IFilter> = ({
       </div>
       <div className="cta-filter">
         <TypeButton title="FILTER" onClick={handleFilter} />
-        <TypeSmallButton
+        <TypeButton
+          buttonSize="small"
           title="Clear"
           buttonType="danger"
           onClick={handleFilterClear}

@@ -1,3 +1,5 @@
+@import "../../../styles/theme-variables.scss";
+
 .type-checkbox {
   .form-container {
     display: flex;
@@ -24,7 +26,26 @@
       border-radius: 3px;
       height: 14px;
       width: 14px;
-      border: 1px solid #dbeaff !important;
+      background: none;
+      @include themify($themes) {
+        border: 1px solid themed("border");
+      }
     }
+    // input[type="checkbox"]:checked:after {
+    //   content: "\f14a";
+    //   color: #445867;
+    // }
+    // input[type="checkbox"],
+    // input[type="radio"] {
+    //   cursor: pointer;
+    //   -webkit-appearance: none;
+    //   -moz-appearance: none;
+    //   appearance: none;
+    //   // outline: 0;
+    //   // font-family: "Font Awesome 5 Free";
+    //   // font-weight: 700;
+    //   // font-size: 16px;
+    //   // line-height: 14px;
+    // }
   }
 }

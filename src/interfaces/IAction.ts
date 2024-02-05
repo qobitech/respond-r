@@ -66,6 +66,15 @@ interface IRoleActions {
     onFailure?: ((err: any) => void) | undefined
   ) => (dispatch: any) => void
   deleteRole: (name: string) => (dispatch: any) => void
+  getRolesForOrganisation: (id: string) => (dispatch: any) => void
+  unassignMultipleActionsForRole: (
+    data: {
+      roleId: number
+      actionIds: number[]
+    },
+    onSuccess?: ((res: any) => void) | undefined,
+    onFailure?: ((err: any) => void) | undefined
+  ) => (dispatch: any) => void
 }
 
 interface IOrganizationAction {
@@ -104,6 +113,16 @@ interface IActionActions {
   ) => (dispatch: any) => void
 }
 
+interface ILoggedActions {
+  getLoggedActionsForRole: (
+    name: string,
+    onSuccess?: ((res: any) => void) | undefined,
+    onFailure?: ((err: any) => void) | undefined
+  ) => (dispatch: any) => void
+  getLoggedOrganization: (query: string) => (dispatch: any) => void
+  getLoggedRoles: (query: string) => (dispatch: any) => void
+}
+
 export interface IAction
   extends IAuth,
     IGlobalActions,
@@ -112,4 +131,5 @@ export interface IAction
     IVehicleActions,
     IRoleActions,
     IOrganizationAction,
+    ILoggedActions,
     IActionActions {}

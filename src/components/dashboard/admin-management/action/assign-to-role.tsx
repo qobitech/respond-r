@@ -43,13 +43,41 @@ const AssignToRole = ({
     })
   }
 
-  const isSingle = selectedItems.length === 1
+  const isPlural = (value: any[]) => (value.length > 1 ? "s" : "")
+
+  const selectedRoleActions = roleState.data
+    .filter((role) => selectedRoles?.includes(role.id.toString()))
+    .map((role) => role.actions)
+
+  const merge = (a: any, b: any, predicate = (a: any, b: any) => a === b) => {
+    const c = [...a] // copy to avoid side effects
+    // add all items from B to copy C if they're not already present
+    b.forEach((bItem: any) =>
+      c.some((cItem) => predicate(bItem, cItem)) ? null : c.push(bItem)
+    )
+    return c
+  }
+
+  const getMergeArrays = () => {
+    let mergedArray = []
+    for (let i = 0; i < selectedRoleActions.length; i++) {
+      mergedArray = merge(selectedRoleActions[i], mergedArray)
+    }
+    return mergedArray
+  }
+  const mergedArrays = getMergeArrays()
+
+  const filteredSelectedItems = selectedItems.filter(
+    (i) => !mergedArrays.includes(i.name)
+  )
+
+  const isSingle = filteredSelectedItems.length === 1
   const isBulk = rsProps?.data === undefined
   const id = rsProps?.data?.id || ""
   const name = rsProps?.data?.name || ""
   const selectedActions = isBulk
-    ? selectedItems.length
-      ? "(" + selectedItems.length + ")"
+    ? filteredSelectedItems.length
+      ? "(" + filteredSelectedItems.length + ")"
       : ""
     : "(1)"
 
@@ -64,7 +92,7 @@ const AssignToRole = ({
         {
           roleId: selectedRoles,
           actionId: isBulk
-            ? selectedItems.map((item) => item.id.toString())
+            ? filteredSelectedItems.map((item) => item.id.toString())
             : [id],
         },
         () => {
@@ -87,12 +115,12 @@ const AssignToRole = ({
     <div className="d-flex flex-column" style={{ gap: "30px" }}>
       <div className="card-section px-4 py-4">
         <div className="pb-4">
-          <div className="text-center">
-            <p className="role-title">Selected Actions {selectedActions}</p>
+          <div className="role-title">
+            <p>Selected Actions {selectedActions}</p>
           </div>
           <div className="grid-items">
             {isBulk ? (
-              selectedItems.map((i, index) => (
+              filteredSelectedItems.map((i, index) => (
                 <div key={i.id} className="pt-3">
                   <SelectedItems
                     id={i.id + ""}
@@ -115,8 +143,8 @@ const AssignToRole = ({
       </div>
       <div className="card-section px-4 py-4">
         <div className="pb-4">
-          <div className="text-center">
-            <p className="role-title">
+          <div className="role-title">
+            <p>
               Selected Roles{" "}
               {selectedRoles.length ? "(" + selectedRoles.length + ")" : ""}
             </p>
@@ -136,12 +164,14 @@ const AssignToRole = ({
       </div>
       <div className="d-flex justify-content-center mt-4">
         <TypeButton
-          title="Assign Selected Action(s) to Selected Role(s)"
+          title={`Assign action${isPlural(
+            filteredSelectedItems
+          )} to role${isPlural(selectedRoles)}`}
           onClick={assignRoleToActions}
           load={states.actions.addActionToRoleLoading}
+          buttonSize="small"
         />
       </div>
-      <div className="my-1" />
       {response !== null ? (
         <TextPrompt
           prompt={response?.message || ""}

@@ -3,7 +3,7 @@ import Table, { ITableRecord, useTableAction } from "utils/new/table"
 import "../../../../utils/new/pagination.scss"
 import "../../../../utils/new/page.scss"
 import "./management.scss"
-import { TypeSmallButton } from "../../../../utils/new/button"
+import { TypeButton } from "../../../../utils/new/button"
 import RightSection, { useRightSection } from "../../../reusable/right-section"
 import { IStates } from "interfaces/IReducer"
 import { IAction } from "interfaces/IAction"
@@ -61,6 +61,7 @@ const ActionPage: React.FC<IProps> = ({ states, actions }) => {
       isPagination: true,
       total: actionState?.getAllAction?.totalPages || 1,
       onPageChange,
+      load: actionState?.getAllActionLoading!,
     },
     searchAction: (name: string) => {
       const nameQuery = name ? `&name=${name}` : ""
@@ -169,7 +170,8 @@ const ActionPage: React.FC<IProps> = ({ states, actions }) => {
           load={actionState?.getAllActionLoading!}
         />
         <div className="cta-header-section">
-          <TypeSmallButton
+          <TypeButton
+            buttonSize="small"
             title="Add Action"
             onClick={() => {
               rsProps.callSection("custom", "create-action")

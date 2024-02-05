@@ -1,26 +1,22 @@
-import React, { useEffect, useState } from "react"
-import Table, {
-  ICell,
-  ICellAction,
-  ITableRecord,
-  useTableAction,
-} from "utils/new/table"
+import React, { useEffect } from "react"
+import Table, { ITableRecord, useTableAction } from "utils/new/table"
 import "../../../../utils/new/pagination.scss"
 import "../../../../utils/new/page.scss"
 import "./management.scss"
-import { TypeSmallButton } from "../../../../utils/new/button"
+import { TypeButton } from "../../../../utils/new/button"
 import { TypeSelect } from "../../../../utils/new/select"
 import RightSection, { useRightSection } from "../../../reusable/right-section"
 import { IStates } from "interfaces/IReducer"
 import { IAction } from "interfaces/IAction"
-import { IUser } from "interfaces/IUser"
-import { ROLE, getOrgName, organizationIdEnumsType } from "utils/new/constants"
 import { GODUSER } from "utils/new/constants/roles"
 import { PageHeader } from "components/dashboard/components"
 import CreateRole from "./create-role"
 import { IRole } from "interfaces/IRole"
 import AssignToRole from "./assign-to-role"
+import ViewActions from "./view-actions"
+import { ActionWrapper, useGlobalContext } from "components/layout"
 import { PAGENUMBER, PAGESIZE, getQuery } from "../action"
+import { ISSUPERADMIN, USERTOKEN } from "utils/new/constants"
 
 interface IProps {
   states?: IStates
@@ -28,23 +24,33 @@ interface IProps {
 }
 
 const RolePage: React.FC<IProps> = ({ states, actions }) => {
+  const { getOrganization, organizations } = useGlobalContext()
+  const query = (sign: string) =>
+    GODUSER
+      ? ""
+      : `${sign}OrganisationId=${
+          getOrganization?.("name", USERTOKEN.Organisation)?.id || ""
+        }`
   const { callRightSection, getAllRoles } = actions as IAction
 
   const rightSectionProps = states?.global.rightSection
 
-  const roleState = states?.role
+  const roleState = states?.role.getAllRoles
+  const resLoading = states?.role.getAllRolesLoading
 
   const rsProps = useRightSection<IRole>(rightSectionProps, callRightSection)
 
+  const getAllUserRoles = (query: string) => {
+    if (GODUSER) getAllRoles(query)
+    if (organizations?.length) getAllRoles(query)
+  }
+
   useEffect(() => {
-    getAllRoles("")
-    // getAllRoles(getQuery(`${PAGESIZE}&${PAGENUMBER}`))
+    getAllUserRoles(query("?"))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [organizations])
 
-  console.log(roleState?.getAllRoles?.data, "juju")
-
-  const record = roleState?.getAllRoles?.data?.map((i) => ({
+  const record = roleState?.data?.map((i) => ({
     id: "1",
     row: [
       {
@@ -52,10 +58,12 @@ const RolePage: React.FC<IProps> = ({ states, actions }) => {
         isLink: false,
       },
       {
-        value: getOrgName(i.organisationId as organizationIdEnumsType),
+        value: getOrganization?.("id", i.organisationId)?.name,
         isLink: false,
       },
-    ],
+    ].filter((_, index) =>
+      GODUSER ? true : ISSUPERADMIN ? index === 0 : false
+    ),
     rowActions: [
       {
         value: "Assign Actions",
@@ -68,7 +76,7 @@ const RolePage: React.FC<IProps> = ({ states, actions }) => {
         value: "View Actions",
         isLink: true,
         action: () => {
-          rsProps.callSection("custom", "view-admin", i.id.toString(), i)
+          rsProps.callSection("custom", "view-role-actions", i.id.toString(), i)
         },
       },
       {
@@ -76,7 +84,7 @@ const RolePage: React.FC<IProps> = ({ states, actions }) => {
         buttonType: "outlined",
         isLink: true,
         action: () => {
-          rsProps.callSection("custom", "update-action", i.id.toString(), i)
+          rsProps.callSection("custom", "update-role", i.id.toString(), i)
         },
       },
 
@@ -88,31 +96,14 @@ const RolePage: React.FC<IProps> = ({ states, actions }) => {
           rsProps.callSection("custom", "update-role", i.id.toString(), i)
         },
       },
-    ],
+    ].filter((action) =>
+      GODUSER
+        ? action
+        : ISSUPERADMIN
+        ? action.value === "View Actions" || action.value === "Delete"
+        : false
+    ),
   })) as ITableRecord[]
-
-  // const roleOptionData = [
-  //   {
-  //     id: 1,
-  //     label: "Super-Admin",
-  //     value: "Super-Admin",
-  //   },
-  //   {
-  //     id: 2,
-  //     label: "Admin",
-  //     value: "Admin",
-  //   },
-  //   {
-  //     id: 3,
-  //     label: "Moderator",
-  //     value: "Moderator",
-  //   },
-  //   {
-  //     id: 4,
-  //     label: "Field Officer",
-  //     value: "Field Officer",
-  //   },
-  // ]
 
   const orgOptionData = [
     {
@@ -137,18 +128,6 @@ const RolePage: React.FC<IProps> = ({ states, actions }) => {
     },
   ]
 
-  const [selectedRoles, setSelectedRoles] = useState<
-    Array<{ id: string; label: string }>
-  >([])
-
-  const handleSelectedRoles = (id: string) => {
-    setSelectedRoles((prev) => {
-      if (prev.map((i) => i.id).includes(id))
-        return prev.filter((i) => i.id !== id)
-      return prev
-    })
-  }
-
   const tableActionEnums = {
     REASSIGNROLE: "Assign action(s) to selected roles",
     DELETE: "Delete",
@@ -158,9 +137,28 @@ const RolePage: React.FC<IProps> = ({ states, actions }) => {
     return tableActionEnums
   }
 
-  const tableAction = useTableAction({ actionEnums: getTableActionEnums() })
-
-  const deleteRole = (data: string[]) => {}
+  const tableAction = useTableAction({
+    actionEnums: getTableActionEnums(),
+    paginationParams: {
+      current: roleState?.currentPage || 1,
+      isPagination: true,
+      load: resLoading!,
+      total: roleState?.totalPages || 1,
+      onPageChange: (selectedItem: { selected: number }) => {
+        getAllUserRoles(
+          getQuery(`${PAGESIZE}&pageNumber=${selectedItem.selected + 1}`) +
+            query("&")
+        )
+      },
+    },
+    searchAction: (name: string) => {
+      const nameQuery = name ? `&name=${name}` : ""
+      getAllUserRoles(
+        getQuery(`${PAGESIZE}&${PAGENUMBER}${nameQuery}`) + query("&")
+      )
+    },
+    searchPlaceHolder: "Search Roles",
+  })
 
   const handleTableAction = () => {
     if (tableAction.selectedItems)
@@ -169,7 +167,6 @@ const RolePage: React.FC<IProps> = ({ states, actions }) => {
           rsProps.callSection("custom", "assign-role")
           break
         case tableActionEnums.DELETE:
-          deleteRole(tableAction.selectedItems)
           break
         default:
           break
@@ -177,7 +174,7 @@ const RolePage: React.FC<IProps> = ({ states, actions }) => {
   }
 
   const getSelectedItems = () => {
-    const allActions = roleState?.getAllRoles?.data
+    const allActions = roleState?.data
     const allSelectedItems = !allActions
       ? []
       : allActions.filter((action) =>
@@ -208,49 +205,46 @@ const RolePage: React.FC<IProps> = ({ states, actions }) => {
             onRemoveSelectedItems={removeSelectedItems}
           />
         ) : null}
-        {rsProps.isView("custom", "update-role") ? <></> : null}
+        {rsProps.isView("custom", "view-role-actions") ? (
+          <ViewActions states={states!} actions={actions!} />
+        ) : null}
       </RightSection>
       <div>
-        <PageHeader
-          title="Roles Management"
-          load={roleState?.getAllRolesLoading!}
-        />
-        <div className="cta-header-section">
-          <TypeSmallButton
-            title="Add Role"
-            onClick={() => {
-              rsProps.callSection("custom", "create-role")
-            }}
-          />
-        </div>
-        <div className="table-section card-section">
-          <div className="filter-management-section">
-            {/* {ROLE === "super-admin" ||
-              (ROLE === "respondR-admin" && (
+        <PageHeader title="Roles Management" load={resLoading!} />
+        <ActionWrapper action="create role">
+          <div className="cta-header-section">
+            <TypeButton
+              buttonSize="small"
+              title="Add Role"
+              onClick={() => {
+                rsProps.callSection("custom", "create-role")
+              }}
+            />
+          </div>
+        </ActionWrapper>
+        <ActionWrapper action="read role">
+          <div className="table-section card-section">
+            <div className="filter-management-section">
+              {GODUSER && (
                 <TypeSelect
                   initoption={{ label: "All", value: "" }}
-                  label="Filter by Role"
-                  optionsdata={roleOptionData}
+                  label="Filter by Organization"
+                  optionsdata={orgOptionData}
                   customwidth={"300px"}
                 />
-              ))} */}
-            {GODUSER && (
-              <TypeSelect
-                initoption={{ label: "All", value: "" }}
-                label="Filter by Organization"
-                optionsdata={orgOptionData}
-                customwidth={"300px"}
-              />
-            )}
+              )}
+            </div>
+            <Table
+              header={["Role", "Organization", "Action"].filter((_, index) =>
+                GODUSER ? true : ISSUPERADMIN ? index !== 1 : false
+              )}
+              record={record}
+              hideNumbering
+              handleTableAction={handleTableAction}
+              tableAction={tableAction}
+            />
           </div>
-          <Table
-            header={["Role", "Organization", "Action"]}
-            record={record}
-            hideNumbering
-            handleTableAction={handleTableAction}
-            tableAction={tableAction}
-          />
-        </div>
+        </ActionWrapper>
       </div>
     </>
   )

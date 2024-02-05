@@ -4,7 +4,7 @@ import RightSection, {
   useRightSection,
 } from "components/reusable/right-section"
 import { IStates } from "interfaces/IReducer"
-import { TypeButton, TypeSmallButton } from "utils/new/button"
+import { TypeButton } from "utils/new/button"
 import { handleFullScreen, useImage } from "utils/new/hook"
 import {
   Calendar2SVG,
@@ -186,7 +186,7 @@ const LiveFeedItemComponent = ({
             </p>
           </div>
         </div>
-        <TypeSmallButton title="Accept" buttonType="outlined" />
+        <TypeButton buttonSize="small" title="Accept" buttonType="outlined" />
       </div>
     </div>
   )

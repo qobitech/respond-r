@@ -16,10 +16,18 @@
     font-weight: 700;
     line-height: normal;
     border: none;
+    // min-height: 3.125rem;
     cursor: pointer;
+    // &.disabled {
+    //   background: #8f9194;
+    //   cursor: not-allowed;
+    // }
     &.disabled {
-      background: #8f9194;
+      @include themify($themes) {
+        background: themed("disabled");
+      }
       cursor: not-allowed;
+      opacity: 0.3;
     }
     &.outlined {
       background: none;
@@ -29,9 +37,29 @@
       border: 1px solid #235a62;
     }
     &.danger {
-      background: #faf5f7;
+      // background: #faf5f7;
       color: #f56e9d;
-      border: 1px solid #f56e9d;
+      @include themify($themes) {
+        background: themed("smallbtndangerbg");
+        border: 0.5px solid themed("smallbtndangerborder");
+      }
+    }
+    &.small {
+      font-size: 0.875rem;
+      font-weight: 700;
+      line-height: normal;
+      display: inline-flex;
+      padding: 0.5rem 1.19rem;
+      width: max-content;
+    }
+    &.medium {
+      font-size: 0.9rem;
+      font-weight: 700;
+      line-height: normal;
+      display: inline-flex;
+      padding: 0.5rem 1.19rem;
+      width: max-content;
+      height: auto;
     }
   }
 }

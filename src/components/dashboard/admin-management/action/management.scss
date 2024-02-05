@@ -57,8 +57,17 @@
 }
 
 .role-title {
+  padding: 0px 0 15px;
+  margin-bottom: 25px;
+  text-align: center;
   @include themify($themes) {
-    color: themed("colorText");
+    border-bottom: 1px solid themed("border");
+  }
+  p {
+    @include themify($themes) {
+      color: themed("colorText");
+    }
+    margin: 0;
   }
 }
 

@@ -57,7 +57,7 @@ export const getActionsForRole = (
   onSuccess?: (res: any) => void,
   onFailure?: (err: any) => void
 ) => {
-  return utils.httpPostMethod({
+  return utils.httpGetMethod({
     apiData: {
       url: "",
       customurl: `${baseurl}/Action/getactionsforrole?roleName=${name}`,

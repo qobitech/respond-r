@@ -1,7 +1,7 @@
 import React from "react"
 import "./index.scss"
 import { TypeInput } from "utils/new/input"
-import { TypeSmallButton } from "utils/new/button"
+import { TypeButton } from "utils/new/button"
 import { TypeSelect } from "utils/new/select"
 import { LocationSVG } from "utils/new/svgs"
 
@@ -70,7 +70,7 @@ const FilterSection = () => {
         ]}
       />
       <TypeInput placeholder="Search report or location" />
-      <TypeSmallButton title="Search" />
+      <TypeButton buttonSize="small" title="Search" />
     </div>
   )
 }

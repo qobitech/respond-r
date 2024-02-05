@@ -12,9 +12,11 @@ import {
   PoliceSVG,
   SwitchSVG,
 } from "utils/new/svgs"
-import { ORGANIZATION, ROLE } from "utils/new/constants"
+import { ISSUPERADMIN, ORGANIZATION, USERTOKEN } from "utils/new/constants"
 import { GODUSER } from "utils/new/constants/roles"
 import { managementTabEnums } from "components/dashboard/admin-management"
+
+console.log(USERTOKEN, "juju")
 
 interface IProps {
   setMenuOpen: (menuOpen: boolean) => (dispatch: any) => void
@@ -49,7 +51,7 @@ const SideBar = ({ setMenuOpen, menuOpen, logOut }: IProps) => {
       imgsrc: <FireExtinguisherSVG />,
       isActive: _isUrl(url.FIRESERVICE),
       url: url.FIRESERVICE,
-      id: "fire-service",
+      id: "firefighter",
     },
     {
       title: "E-Medical",
@@ -68,7 +70,7 @@ const SideBar = ({ setMenuOpen, menuOpen, logOut }: IProps) => {
   ].filter((i) =>
     GODUSER
       ? i
-      : ROLE === "super-admin"
+      : ISSUPERADMIN
       ? i.id === "management" || i.id === ORGANIZATION
       : i.id === ORGANIZATION
   )

@@ -9,6 +9,7 @@ import {
   IStates,
   IUserReducer,
   IVehicleReducer,
+  ILoggedReducer,
 } from "interfaces/IReducer"
 
 const rootReducer = combineReducers<IStates>({
@@ -20,6 +21,7 @@ const rootReducer = combineReducers<IStates>({
   demo: reducer<IDemoReducer>,
   organization: reducer<IOrganizationReducer>,
   actions: reducer<IActionReducer>,
+  logged: reducer<ILoggedReducer>,
 })
 
 function reducer<T>(state = {} as T, action: { type: string; payload: any }) {

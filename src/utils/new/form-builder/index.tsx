@@ -35,6 +35,7 @@ export interface IFormComponent {
     type: "external" | "internal"
   }
   isonlyview?: boolean
+  onChange?: (value: string) => void
 }
 
 interface IFormBuilder<T extends FieldValues> {
@@ -90,6 +91,10 @@ const FormBuilder = <T extends FieldValues>({
               error={
                 hookForm.formState.errors?.[i.id as Path<T>]?.message as string
               }
+              onInput={({ currentTarget }) => {
+                const { value } = currentTarget
+                i.onChange?.(value)
+              }}
             />
           )}
           {i.component === "text-area" && (

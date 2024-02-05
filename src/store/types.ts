@@ -62,6 +62,8 @@ export const role = generateActionTypes([
   "updateRole",
   "deleteRole",
   "getPermissions",
+  "getRolesForOrganisation",
+  "unassignMultipleActionsForRole",
 ])
 
 export const organization = generateActionTypes([
@@ -78,6 +80,12 @@ export const action = generateActionTypes([
   "deleteAction",
   "addActionToRole",
   "getActionsForRole",
+])
+
+export const logged = generateActionTypes([
+  "getLoggedActionsForRole",
+  "getLoggedOrganization",
+  "getLoggedRoles",
 ])
 
 export const user = generateActionTypes([

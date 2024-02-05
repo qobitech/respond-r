@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import "./index.scss"
 import "../global.scss"
 import AdminReport from "../admin-reports"
-import { ROLE } from "utils/new/constants"
+import { ISSUPERADMIN } from "utils/new/constants"
 
 export const adminSections = {
   TRAFFIC: "E-traffic",
@@ -26,10 +26,10 @@ const AdminWrapper = ({
   const tabEnums = { REPORTS: "All Reports", FEED: "Feed" }
 
   const [tab, setTab] = useState<string>(tabEnums.REPORTS)
-  const isAdmin = ROLE === "super-admin"
+
   return (
     <>
-      {isAdmin ? (
+      {ISSUPERADMIN ? (
         <div className="mb-5">
           <div className="tab-section">
             <div className="tab-header">

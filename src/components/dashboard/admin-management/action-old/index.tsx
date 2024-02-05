@@ -3,7 +3,7 @@ import Table, { ICell, ICellAction } from "utils/new/table"
 import "../../../../utils/new/pagination.scss"
 import "../../../../utils/new/page.scss"
 import "./management.scss"
-import { TypeSmallButton } from "../../../../utils/new/button"
+import { TypeButton } from "../../../../utils/new/button"
 import { TypeSelect } from "../../../../utils/new/select"
 import RightSection, { useRightSection } from "../../../reusable/right-section"
 import { IStates } from "interfaces/IReducer"
@@ -158,7 +158,8 @@ const ActionPage: React.FC<IProps> = ({ states, actions }) => {
         />
 
         <div className="cta-header-section">
-          <TypeSmallButton
+          <TypeButton
+            buttonSize="small"
             title="Add Action"
             onClick={() => {
               rsProps.callSection("custom", "create-admin")

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import "./index.scss"
-import { TypeSmallButton } from "utils/new/button"
+import { TypeButton } from "utils/new/button"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { ICallRightSection } from "store/actions/global"
 
@@ -16,9 +16,11 @@ export type actionComponent =
   | "create-admin"
   | "view-admin"
   | "update-admin"
+  | "delete-admin"
   | "create-role"
   | "update-role"
   | "view-role"
+  | "view-role-actions"
   | "assign-role"
   | "create-org"
   | "update-org"
@@ -223,14 +225,16 @@ const RightSection = <T extends {}>({ children, rsProps }: IRSection<T>) => {
           <h3>{rsProps.title}</h3>
           <div className="ctas">
             {rsProps.ctas?.map((i, index) => (
-              <TypeSmallButton
+              <TypeButton
+                buttonSize="small"
                 title={i.title}
                 buttonType={i.type}
                 onClick={i.action}
                 key={index}
               />
             ))}
-            <TypeSmallButton
+            <TypeButton
+              buttonSize="small"
               title=""
               close
               buttonType="danger"

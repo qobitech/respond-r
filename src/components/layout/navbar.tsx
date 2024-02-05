@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { url } from "enums/Route"
 import "./navbar.scss"
@@ -18,9 +18,9 @@ import {
 } from "utils/new/svgs"
 import { ICallRightSection, vehicleSearchType } from "store/actions/global"
 import TextPrompt from "utils/new/text-prompt"
-import { TypeSmallButton } from "utils/new/button"
+import { TypeButton } from "utils/new/button"
 import Toggle from "utils/new/toggle"
-import { SearchContext } from "contexts/search-context"
+import { useGlobalContext } from "."
 
 interface NavbarProps {
   notifyUser: INotification | undefined
@@ -39,7 +39,7 @@ interface NavbarProps {
 type pageType =
   | "e-traffic"
   | "e-police"
-  | "fire-service"
+  | "firefighter"
   | "management"
   | "e-medical"
 
@@ -52,6 +52,7 @@ const Navbar = (props: NavbarProps) => {
   const location = useLocation()
 
   function _isUrl(page: string) {
+    if (!page) return false
     return location.pathname.includes(page)
   }
 
@@ -65,7 +66,7 @@ const Navbar = (props: NavbarProps) => {
       case isTraffic:
         return "e-traffic"
       case isFireService:
-        return "fire-service"
+        return "firefighter"
       case isPolice:
         return "e-police"
       case isMedical:
@@ -127,7 +128,8 @@ const Navbar = (props: NavbarProps) => {
           )}
           {!isLogged && (
             <div className="auth-actions">
-              <TypeSmallButton
+              <TypeButton
+                buttonSize="small"
                 title="LOGIN"
                 onClick={() => navigate(url.LOGIN)}
               />
@@ -179,7 +181,7 @@ export default Navbar
 const PageIdentifier = ({ page }: { page: pageType }) => {
   return (
     <div className="page-identifier">
-      {page === "fire-service" ? <FireExtinguisherSVG /> : null}
+      {page === "firefighter" ? <FireExtinguisherSVG /> : null}
       {page === "e-police" ? <PoliceSVG /> : null}
       {page === "e-traffic" ? <CarsSVG /> : null}
       {page === "management" ? <ManagementSVG /> : null}
@@ -305,7 +307,7 @@ const TrafficSearchComponent = ({
     type: vehicleSearchType
   ) => (dispatch: any) => void
 }) => {
-  const { search } = useContext(SearchContext)
+  const { search } = useGlobalContext()
 
   const [inputValue, setInputValue] = useState<string>("")
   const [error, setError] = useState<string>("")
@@ -328,7 +330,7 @@ const TrafficSearchComponent = ({
   }
 
   useEffect(() => {
-    setInputValue(search)
+    setInputValue(search!)
   }, [search])
 
   return (
@@ -346,7 +348,12 @@ const TrafficSearchComponent = ({
         {load ? (
           <PulseSVG />
         ) : (
-          <TypeSmallButton title="Search" type="submit" load={load} />
+          <TypeButton
+            buttonSize="small"
+            title="Search"
+            type="submit"
+            load={load}
+          />
         )}
 
         {/* <CTAS

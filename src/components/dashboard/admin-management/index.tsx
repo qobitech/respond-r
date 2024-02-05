@@ -10,6 +10,7 @@ import RolePage from "./roles"
 import OrganizationPage from "./organization"
 import { useNavigate, useParams } from "react-router-dom"
 import { url } from "enums/Route"
+import { ISSUPERADMIN } from "utils/new/constants"
 
 export const adminSections = {
   TRAFFIC: "E-traffic",
@@ -76,7 +77,12 @@ const AdminManagement: React.FC<IProps> = ({ states, ...props }) => {
 
   const [tab, setTab] = useState<string>(getTab(pageTab))
 
-  const filterTab = (i: string) => (GODUSER ? i : i === tabEnums.USERS)
+  const filterTab = (i: string) =>
+    GODUSER
+      ? i
+      : ISSUPERADMIN
+      ? i !== tabEnums.ORGANIZATIONS && i !== tabEnums.ACTIONS
+      : false
   return (
     <div className="main-page">
       <div className="pg-container">

@@ -100,6 +100,7 @@ const DeleteAction = ({
           load={states.actions.deleteActionLoading}
           style={{ background: "none" }}
           buttonType="danger"
+          buttonSize="small"
         />
       </div>
       <div className="" />

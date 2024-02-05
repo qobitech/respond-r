@@ -128,7 +128,7 @@ const Organizations = () => {
   const data = [
     { id: "traffic", label: "Traffic", value: "traffic" },
     { id: "e-police", label: "E-Police", value: "e-police" },
-    { id: "fire-service", label: "Fire Service", value: "fire-service" },
+    { id: "firefighter", label: "Fire Service", value: "firefighter" },
     { id: "e-medical", label: "E-Medical", value: "e-medical" },
   ]
 
@@ -163,7 +163,7 @@ const Roles = () => {
   const data = [
     { id: "super-admin", label: "Super Admin", value: "traffic" },
     { id: "admin", label: "Admin", value: "e-police" },
-    { id: "moderator", label: "Moderator", value: "fire-service" },
+    { id: "moderator", label: "Moderator", value: "firefighter" },
     { id: "field-officer", label: "Field Officer", value: "e-medical" },
   ]
 

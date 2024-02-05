@@ -42,6 +42,12 @@ export interface IRoleReducer {
   deleteRole: any
   deleteRoleLoading: boolean
   deleteRoleError: string
+  getRolesForOrganisation: IRoles
+  getRolesForOrganisationLoading: boolean
+  getRolesForOrganisationError: string
+  unassignMultipleActionsForRole: any
+  unassignMultipleActionsForRoleLoading: boolean
+  unassignMultipleActionsForRoleError: string
 }
 export interface IOrganizationReducer {
   getAllOrganization: IOrganizations
@@ -72,6 +78,19 @@ export interface IActionReducer {
   getActionsForRoleLoading: boolean
   getActionsForRoleError: string
 }
+
+export interface ILoggedReducer {
+  getLoggedActionsForRole: IActionsForRole
+  getLoggedActionsForRoleLoading: boolean
+  getLoggedActionsForRoleError: string
+  getLoggedOrganization: IOrganizations
+  getLoggedOrganizationLoading: boolean
+  getLoggedOrganizationError: string
+  getLoggedRoles: IRoles
+  getLoggedRolesLoading: boolean
+  getLoggedRolesError: string
+}
+
 export interface IUserReducer {
   createUser: ICreateUserResponse
   createUserLoading: boolean
@@ -117,4 +136,5 @@ export interface IStates {
   demo: IDemoReducer
   organization: IOrganizationReducer
   actions: IActionReducer
+  logged: ILoggedReducer
 }

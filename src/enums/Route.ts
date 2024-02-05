@@ -1,8 +1,12 @@
 import { managementTabEnums } from "components/dashboard/admin-management"
-import { ORGANIZATION, ROLE, organizationEnumsType } from "utils/new/constants"
+import {
+  ISSUPERADMIN,
+  ORGANIZATION,
+  organizationEnumsType,
+} from "utils/new/constants"
 import { GODUSER } from "utils/new/constants/roles"
 
-const errorPage = "/login"
+const errorPage = ""
 
 const isView = (org: organizationEnumsType, url: string) =>
   GODUSER || ORGANIZATION === org ? url : errorPage
@@ -18,10 +22,9 @@ export const url = {
   OVERVIEW: "/dashboard/overview",
   TRAFFIC: isView("e-traffic", "/dashboard/e-traffic"),
   POLICE: isView("e-police", "/dashboard/e-police"),
-  FIRESERVICE: isView("firefighter", "/dashboard/fire-service"),
+  FIRESERVICE: isView("firefighter", "/dashboard/firefighter"),
   MEDICAL: isView("ambulance", "/dashboard/e-medical"),
-  MANAGEMENT:
-    GODUSER || ROLE === "super-admin" ? "/dashboard/management" : errorPage,
+  MANAGEMENT: GODUSER || ISSUPERADMIN ? "/dashboard/management" : errorPage,
   PAGE404: "",
 }
 

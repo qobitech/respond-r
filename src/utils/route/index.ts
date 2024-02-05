@@ -18,7 +18,7 @@ export interface IUrl {
   routeType: "public" | "auth"
 }
 
-export const routes: Array<IUrl> = [
+export const routes: IUrl[] = [
   {
     id: 1,
     PageRenders: [LandingPage],

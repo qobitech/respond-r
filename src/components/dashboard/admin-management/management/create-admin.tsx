@@ -11,6 +11,8 @@ import "../../../../utils/new/page.scss"
 import { IRightSection } from "components/reusable/right-section"
 import { IUser } from "interfaces/IUser"
 import { GODUSER } from "utils/new/constants/roles"
+import { useGlobalContext } from "components/layout"
+import { USERTOKEN } from "utils/new/constants"
 
 interface ICreateAdmin {
   email: string
@@ -36,9 +38,13 @@ const createAdminSchema = (update: boolean) => ({
         .oneOf([yup.ref("password"), null], "Passwords must match"),
 })
 
-const getFormComponent = (states?: IStates): IFormComponent[] => {
-  const allOrganizations = states?.organization?.getAllOrganization?.data
-  const allRoles = states?.role?.getAllRoles?.data
+const getFormComponent = (
+  states?: IStates,
+  actions?: IAction
+): IFormComponent[] => {
+  const allRoles = states?.logged.getLoggedRoles?.data
+  const organizations = states?.organization.getAllOrganization?.data
+
   return [
     {
       id: "email",
@@ -54,7 +60,23 @@ const getFormComponent = (states?: IStates): IFormComponent[] => {
       type: "text",
       component: "select",
       initOptions: { id: 2, label: "Select Organziation", value: "" },
-      optionData: allOrganizations?.map((i, index) => ({
+      optionData: organizations?.map((i, index) => ({
+        id: index + 1,
+        label: i.name,
+        value: i.id,
+      })),
+      onChange: (value: string) => {
+        actions?.getRolesForOrganisation?.(value)
+      },
+    },
+    {
+      id: "role",
+      label: "Role",
+      placeHolder: "",
+      type: "text",
+      component: "select",
+      initOptions: { id: 2, label: "Select Role", value: "" },
+      optionData: allRoles?.map((i, index) => ({
         id: index + 1,
         label: i.name,
         value: i.id,
@@ -73,19 +95,6 @@ const getFormComponent = (states?: IStates): IFormComponent[] => {
       placeHolder: "Enter your phone number",
       type: "phone",
       component: "phone",
-    },
-    {
-      id: "role",
-      label: "Role",
-      placeHolder: "",
-      type: "text",
-      component: "select",
-      initOptions: { id: 2, label: "Select Role", value: "" },
-      optionData: allRoles?.map((i, index) => ({
-        id: index + 1,
-        label: i.name,
-        value: i.name,
-      })),
     },
     {
       id: "password",
@@ -113,18 +122,13 @@ const CreateAdmin = ({
   actions: IAction
   rsProps?: IRightSection<IUser>
 }) => {
+  const { getRole, getOrganization } = useGlobalContext()
   const isUpdate = rsProps?.isView("custom", "update-admin")
   const [hookForm] = useFormHook<ICreateAdmin>(createAdminSchema(isUpdate!))
   const [response, setResponse] = useState<{
     message: string
     isSuccessful: boolean
   } | null>(null)
-
-  useEffect(() => {
-    actions.getAllOrganization("")
-    actions.getAllRoles("")
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   useEffect(() => {
     if (isUpdate) {
@@ -135,31 +139,34 @@ const CreateAdmin = ({
       )
       hookForm.setValue("phoneNumber", "+" + rsProps?.data?.phoneNumber || "")
       hookForm.setValue("userName", rsProps?.data?.userName || "")
-      hookForm.setValue("role", rsProps?.data?.roleForReturn?.[0]?.name || "")
+      hookForm.setValue(
+        "role",
+        rsProps?.data?.roleForReturn?.[0]?.id.toString() || ""
+      )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUpdate])
-
-  const getNormalizedName = (roleName: string) => {
-    const allRoles = states?.role?.getAllRoles?.data
-    return allRoles.filter((role) => role.name === roleName)?.[0]
-      ?.normalizedName
-  }
 
   const handleUser = (data: ICreateAdmin) => {
     setResponse(null)
     if (!isUpdate) {
       actions.clearAction(user.createUser)
       actions.createUser(
-        { ...data, role: [getNormalizedName(data.role)] },
-        (res) => {
+        {
+          ...data,
+          role: [getRole?.(parseInt(data.role))?.name],
+          organizationId: GODUSER
+            ? data.organisationId
+            : getOrganization?.("name", USERTOKEN.Organisation)?.id,
+        },
+        () => {
           setResponse({
             message: "User created successfully",
             isSuccessful: true,
           })
           actions.getAllUsers("")
         },
-        (err) => {
+        () => {
           setResponse({ message: "Something went wrong", isSuccessful: false })
         }
       )
@@ -168,7 +175,7 @@ const CreateAdmin = ({
     }
   }
 
-  const formComponent = getFormComponent(states)
+  const formComponent = getFormComponent(states, actions)
 
   return (
     <div className="card-section px-4 py-4">

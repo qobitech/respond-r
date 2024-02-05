@@ -8,6 +8,7 @@ export interface IUser {
   }
   roleForReturn: Array<{
     name: string
+    id: number
   }>
   phoneNumber: string
   id: number

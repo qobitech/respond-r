@@ -3,7 +3,7 @@ import Table, { ICell, ICellAction, useTableAction } from "utils/new/table"
 import "../../../../utils/new/pagination.scss"
 import "../../../../utils/new/page.scss"
 import "./management.scss"
-import { TypeSmallButton } from "../../../../utils/new/button"
+import { TypeButton } from "../../../../utils/new/button"
 import RightSection, { useRightSection } from "../../../reusable/right-section"
 import { IStates } from "interfaces/IReducer"
 import { IAction } from "interfaces/IAction"
@@ -141,7 +141,8 @@ const OrganizationPage: React.FC<IProps> = ({ states, actions }) => {
           load={organizationState?.getAllOrganizationLoading!}
         />
         <div className="cta-header-section">
-          <TypeSmallButton
+          <TypeButton
+            buttonSize="small"
             title="Add Organization"
             onClick={() => {
               rsProps.callSection("custom", "create-org")
@@ -151,7 +152,7 @@ const OrganizationPage: React.FC<IProps> = ({ states, actions }) => {
         <div className="table-section card-section">
           <div className="filter-management-section">
             {/* {ROLE === "super-admin" ||
-              (ROLE === "respondR-admin" && (
+              (ROLE === "super-admin" && (
                 <TypeSelect
                   initoption={{ label: "All", value: "" }}
                   label="Filter by Role"

@@ -1,15 +1,15 @@
-import React, { useContext } from "react"
+import React from "react"
 import "./index.scss"
 import { MoonSVG, SunSVG } from "../svgs"
-import { ThemeContext } from "contexts/theme-context"
+import { useGlobalContext } from "components/layout"
 
 const Toggle = () => {
-  const { theme, setTheme } = useContext(ThemeContext)
+  const { theme, setTheme } = useGlobalContext()
 
   const handleChecked = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     const { checked } = target
     const themeColor = checked ? "dark" : "light"
-    setTheme(themeColor)
+    setTheme?.(themeColor)
     localStorage.setItem("theme", themeColor)
   }
 
