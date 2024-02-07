@@ -6,13 +6,7 @@ import RightSection, {
 import { IStates } from "interfaces/IReducer"
 import { TypeButton } from "utils/new/button"
 import { handleFullScreen, useImage } from "utils/new/hook"
-import {
-  Calendar2SVG,
-  LocationSVG,
-  MapSVG,
-  PhoneSVG,
-  PulseSVG,
-} from "utils/new/svgs"
+import { Calendar2SVG, LocationSVG, PhoneSVG, PulseSVG } from "utils/new/svgs"
 import "../global.scss"
 import { IAction } from "interfaces/IAction"
 import {
@@ -35,13 +29,15 @@ const IMedicalPage: React.FC<IProps> = ({ states, ...props }) => {
   const actions = props as unknown as IAction
   const rsProps = useRightSection(rightSectionProps, actions.callRightSection)
 
-  const signalRProps = useSignalR<IMedicalData>()
+  const signalRProps = useSignalR<IMedicalData>(
+    "SendMedicalEmergencyNotification"
+  )
 
   return (
     <>
       <RightSection rsProps={rsProps}>
         {rsProps.isView("custom", "settings") ? (
-          <Configuration signalR={signalRProps} urlKey="medicalSignalR" />
+          <Configuration signalR={signalRProps} urlKey="globalSignalR" />
         ) : null}
       </RightSection>
       <div className="main-page">
@@ -54,9 +50,8 @@ const IMedicalPage: React.FC<IProps> = ({ states, ...props }) => {
               ) : (
                 <NoMediaComponent
                   load={false}
-                  text="NO VIEW"
-                  icon={<MapSVG />}
-                  instruction="Select Live feed to watch"
+                  lat={8.955007553100586}
+                  lng={7.371120452880859}
                 />
               )}
               <div className="stream-section">
@@ -191,28 +186,3 @@ const LiveFeedItemComponent = ({
     </div>
   )
 }
-
-// const demoData: IPoliceData = {
-//   id: "652a885006373b65b68179cf",
-//   userId: "652a7d4e2a64934395d957af",
-//   description: "People are running everywhere",
-//   latitude: "8.955007553100586",
-//   longitude: "7.371120452880859",
-//   nearestPlace: "Abuja, FCT",
-//   city: "Abuja",
-//   state: " FCT",
-//   country: "NG",
-//   map: "https://w3w.co/imaging.retitled.offhandedly",
-//   words: "imaging.retitled.offhandedly",
-//   deviceId: "2347035995152",
-//   mediaFiles: [
-//     "https://api.twilio.com/2010-04-01/Accounts/AC0747ce633f37d79aa27772c224b198ea/Messages/MM353d8e96d2f0f780d4e3f637caf4f9ab/Media/MEf5435d322dc699871c00e9a0c24890e2",
-//     "https://api.twilio.com/2010-04-01/Accounts/AC0747ce633f37d79aa27772c224b198ea/Messages/MM1cbabd3f5c4d4ab912f941612cdd8387/Media/ME48898dc3b4f50511683300396faabdd2",
-//     "https://api.twilio.com/2010-04-01/Accounts/AC0747ce633f37d79aa27772c224b198ea/Messages/MM7e800ccaae92b7d24dc22d4f07dba767/Media/ME4ec7e56c1d099ade42c677d6814ffd94",
-//   ],
-//   createdAt: "2023-10-14T13:23:44.7745796+01:00",
-//   updatedAt: "2023-10-14T13:23:44.7745796+01:00",
-//   canBeContacted: true,
-//   referenceId: "652a7d4e2a64934395d957af",
-//   status: 1,
-// }

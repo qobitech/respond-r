@@ -5,10 +5,10 @@
   flex-direction: column;
   gap: 30px;
   align-items: center;
-  justify-content: center;
-  padding: 10rem 0;
+  justify-content: flex-start;
+  // padding: 10rem 0;
+  overflow: hidden;
   border-radius: 1.5625rem;
-  border: 1px solid #d8d8d8;
   @include themify($themes) {
     border: 1px solid themed("border");
   }

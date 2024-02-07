@@ -26,7 +26,7 @@ export interface IPHUS<T> {
   // handleDemoFeeds: (feeds: T[]) => void
 }
 
-export const useSignalR = <T extends {}>(): IPHUS<T> => {
+export const useSignalR = <T extends {}>(signalKey: string): IPHUS<T> => {
   const [connection, setConnection] = useState<signalR.HubConnection>()
   const [feeds, setFeeds] = useState<T[]>([])
   const [feed, setFeed] = useState<T | null>(null)
@@ -78,7 +78,8 @@ export const useSignalR = <T extends {}>(): IPHUS<T> => {
   // }
 
   useEffect(() => {
-    connection?.on("SendPoliceEmergencyNotification", (data: any) => {
+    // connection?.on("SendPoliceEmergencyNotification", (data: any) => {
+    connection?.on(signalKey, (data: any) => {
       console.log(data, "juju")
       playHit()
       setFeeds([...handleDataStream(feeds, mapDataArray, "")(data)])
@@ -141,7 +142,7 @@ export const FeedForm = <T extends {}>({
 
   const handleRTSPFeed = (data: { signalR: string }) => {
     signalR.startConnection(data.signalR)
-    setUrl("policeSignalR", data.signalR)
+    setUrl(urlKey, data.signalR)
   }
 
   const resetRTSPFeed = () => {

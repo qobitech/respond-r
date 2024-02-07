@@ -42,6 +42,7 @@ import { IframeComponent } from "../components"
 import { vehicleSearchType } from "store/actions/global"
 import { IVehicleSearchPayload } from "interfaces/IGlobal"
 import { useGlobalContext } from "components/layout"
+import GoogleMaps from "components/map"
 
 interface IProps {
   states?: IStates
@@ -92,6 +93,7 @@ const configFormEnums = {
   policeSignalR: "policeSignalR",
   medicalSignalR: "medicalSignalR",
   fireSignalR: "fireSignalR",
+  globalSignalR: "globalSignalR",
 } as const
 
 export type chkType = (typeof configFormEnums)[keyof typeof configFormEnums]
@@ -137,17 +139,6 @@ const useRTSP = (): IUSIO => {
     // setStreamStatus
   ] = useState<streamTypes | null>(null)
   const [rtspurl, setRtspURL] = useState<string | null>(getUrl("rtspUrl"))
-
-  // const httpRequest = (url: string) => {
-  //   axios
-  //     .get(`http://localhost:3002/stream?rtsp=${url}`)
-  //     .then(() => {
-  //       setStreamStatus(url === "stop" ? null : "started")
-  //     })
-  //     .catch(() => {
-  //       setStreamStatus("error")
-  //     })
-  // }
 
   const sendRTSPURL = (url?: string) => {
     // setStreamStatus("loading")
@@ -522,9 +513,8 @@ const MainView = ({
         ) : (
           <NoMediaComponent
             load={vehicle?.getVehicleByRegNumberLoading!}
-            text="NO VIDEO STREAM"
-            icon={<VideoSVG />}
-            instruction="Select Live feed to watch"
+            lat={8.955007553100586}
+            lng={7.371120452880859}
           />
         )}
       </div>
@@ -1701,25 +1691,21 @@ const TableSection = ({
 
 export const NoMediaComponent = ({
   load,
-  text,
-  icon,
-  instruction,
+  lat,
+  lng,
 }: {
   load: boolean
-  text: string
-  icon: JSX.Element
-  instruction: string
+  lng: number
+  lat: number
 }) => {
   return (
     <div className="no-video-selected-section">
       {load ? (
         <PulseSVG />
       ) : (
-        <>
-          {icon}
-          <p className="empty-message">{text}</p>
-          <p>{instruction}</p>
-        </>
+        // <div className="border w-100" style={{ height: "500px" }}>
+        <GoogleMaps lat={lat} lng={lng} />
+        // </div>
       )}
     </div>
   )

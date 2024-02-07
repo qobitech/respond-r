@@ -3,6 +3,7 @@ import "./index.scss"
 import "../global.scss"
 import AdminReport from "../admin-reports"
 import { ISSUPERADMIN } from "utils/new/constants"
+import { GODUSER } from "utils/new/constants/roles"
 
 export const adminSections = {
   TRAFFIC: "E-traffic",
@@ -29,7 +30,7 @@ const AdminWrapper = ({
 
   return (
     <>
-      {ISSUPERADMIN ? (
+      {GODUSER || ISSUPERADMIN ? (
         <div className="mb-5">
           <div className="tab-section">
             <div className="tab-header">

@@ -6,13 +6,7 @@ import RightSection, {
 import { IStates } from "interfaces/IReducer"
 import { TypeButton } from "utils/new/button"
 import { handleFullScreen, useImage } from "utils/new/hook"
-import {
-  Calendar2SVG,
-  LocationSVG,
-  MapSVG,
-  PhoneSVG,
-  PulseSVG,
-} from "utils/new/svgs"
+import { Calendar2SVG, LocationSVG, PhoneSVG, PulseSVG } from "utils/new/svgs"
 import "../global.scss"
 import { IAction } from "interfaces/IAction"
 import {
@@ -35,13 +29,13 @@ const IFireServicePage: React.FC<IProps> = ({ states, ...props }) => {
   const actions = props as unknown as IAction
   const rsProps = useRightSection(rightSectionProps, actions.callRightSection)
 
-  const signalRProps = useSignalR<IFireData>()
+  const signalRProps = useSignalR<IFireData>("SendFireEmergencyNotification")
 
   return (
     <>
       <RightSection rsProps={rsProps}>
         {rsProps.isView("custom", "settings") ? (
-          <Configuration signalR={signalRProps} urlKey="fireSignalR" />
+          <Configuration signalR={signalRProps} urlKey="globalSignalR" />
         ) : null}
       </RightSection>
       <div className="main-page">
@@ -54,9 +48,8 @@ const IFireServicePage: React.FC<IProps> = ({ states, ...props }) => {
               ) : (
                 <NoMediaComponent
                   load={false}
-                  text="NO VIEW"
-                  icon={<MapSVG />}
-                  instruction="Select Live feed to watch"
+                  lat={8.955007553100586}
+                  lng={7.371120452880859}
                 />
               )}
               <div className="stream-section">

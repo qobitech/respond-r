@@ -46,9 +46,10 @@ const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
   }
 
   useEffect(() => {
+    // if (!organizations?.length)
     getAllUsersFn(query("?"))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [organizations])
+  }, [])
 
   interface ITable {
     id: string
