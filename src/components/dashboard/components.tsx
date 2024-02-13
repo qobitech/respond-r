@@ -38,10 +38,9 @@ export const useSignalR = <T extends {}>(signalKey: string): IPHUS<T> => {
   }
 
   const startConnection = (url: string) => {
-    const baseurl = process.env.BASE_URL || ""
     setConnectionStatus("connecting")
     const storedUrl = getUrl("globalSignalR") || ""
-    const connection = getConnection(baseurl + (url || storedUrl))
+    const connection = getConnection(url || storedUrl)
     connection
       ?.start()
       .then(() => {
