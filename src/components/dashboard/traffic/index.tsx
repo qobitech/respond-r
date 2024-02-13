@@ -43,6 +43,7 @@ import { vehicleSearchType } from "store/actions/global"
 import { IVehicleSearchPayload } from "interfaces/IGlobal"
 import { useGlobalContext } from "components/layout"
 import GoogleMaps from "components/map"
+import { MapChart } from "components/map/new-map"
 
 interface IProps {
   states?: IStates
@@ -1703,9 +1704,22 @@ export const NoMediaComponent = ({
       {load ? (
         <PulseSVG />
       ) : (
-        // <div className="border w-100" style={{ height: "500px" }}>
-        <GoogleMaps lat={lat} lng={lng} />
-        // </div>
+        <MapChart
+          locationContents={[
+            {
+              location: { latitude: lat, longitude: lng },
+              markerContent: <></>,
+            },
+            {
+              location: { latitude: lat, longitude: lng + 0.14 },
+              markerContent: <></>,
+            },
+            {
+              location: { latitude: lat + 0.321, longitude: lng - 0.65 },
+              markerContent: <></>,
+            },
+          ]}
+        />
       )}
     </div>
   )

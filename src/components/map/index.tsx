@@ -9,7 +9,7 @@ import {
 import "./index.scss"
 
 export default function GoogleMaps({ lat, lng }: Coordinates) {
-  const googleMapsApiKey = "AIzaSyDl8obvfTtHNsiJWD39sfymYBQz_dI4SDA"
+  const googleMapsApiKey = process.env.REACT_APP_GOOGLE_API_KEY
   if (!googleMapsApiKey) {
     return <div>Error</div>
   }

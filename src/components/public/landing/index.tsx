@@ -2,9 +2,15 @@ import React from "react"
 import { useNavigate } from "react-router-dom"
 import { url } from "enums/Route"
 import "./index.scss"
-import cars from "../../../extras/images/animation/animation_lmophnr9.json"
+import cars from "../../../extras/images/animation/Animation - 1707465062653.json"
 import Lottie from "react-lottie"
 import { TypeButton } from "utils/new/button"
+import {
+  FireExtinguisherSVG,
+  MedicalSVG,
+  PoliceSVG,
+  TrafficSVG,
+} from "utils/new/svgs"
 
 const LandingPage = () => {
   const navigate = useNavigate()
@@ -19,10 +25,10 @@ const LandingPage = () => {
   }
 
   const events = [
-    "Traffic Report",
-    "Police Emergency",
-    "Fire Outbreak",
-    "Medical Emergency",
+    { title: "TrafficWardens", logo: <TrafficSVG /> },
+    { title: "Police", logo: <PoliceSVG /> },
+    { title: "FireFighters", logo: <FireExtinguisherSVG /> },
+    { title: "Medics", logo: <MedicalSVG /> },
   ]
 
   return (
@@ -38,8 +44,11 @@ const LandingPage = () => {
               </p>
               <div className="events">
                 {events.map((i, index) => (
-                  <div key={i} className="event-item">
-                    <p>{i}</p>
+                  <div key={i.title} className="event-item">
+                    <div className="event-item-wrapper">
+                      {i.logo}
+                      <p>{i.title}</p>
+                    </div>
                     {events.length - 1 !== index ? (
                       <div className="separator" />
                     ) : null}

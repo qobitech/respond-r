@@ -46,7 +46,7 @@ const RolePage: React.FC<IProps> = ({ states, actions }) => {
   }
 
   useEffect(() => {
-    getAllUserRoles(query("?"))
+    if (organizations?.length) getAllUserRoles(query("?"))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [organizations])
 
