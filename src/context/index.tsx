@@ -19,6 +19,9 @@ export interface IGlobalContext {
   roles?: IRole[]
   getRole?: (roleId: number) => IRole | undefined
   isAction?: (action: string) => boolean
+  activateGlobalStartConnection?: (url: string) => void
+  disableGlobalStartConnection?: () => void
+  globalStartConnection?: { action: boolean; url: string }
 }
 
 export const GlobalContext = createContext<IGlobalContext>({
@@ -27,4 +30,5 @@ export const GlobalContext = createContext<IGlobalContext>({
   theme: "dark",
   organizations: [],
   roles: [],
+  globalStartConnection: { action: false, url: "" },
 })

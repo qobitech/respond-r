@@ -82,6 +82,8 @@ export const action = generateActionTypes([
   "getActionsForRole",
 ])
 
+export const report = generateActionTypes(["getAllReports"])
+
 export const logged = generateActionTypes([
   "getLoggedActionsForRole",
   "getLoggedOrganization",

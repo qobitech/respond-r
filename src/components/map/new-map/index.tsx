@@ -11,7 +11,7 @@ const ResizeMap = () => {
   return null
 }
 
-interface ILocation {
+export interface ILocation {
   latitude: number
   longitude: number
 }

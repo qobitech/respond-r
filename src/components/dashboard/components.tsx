@@ -40,6 +40,10 @@ export const useSignalR = <T extends {}>(signalKey: string): IPHUS<T> => {
   const startConnection = (url: string) => {
     setConnectionStatus("connecting")
     const storedUrl = getUrl("globalSignalR") || ""
+    if (!url && !storedUrl) {
+      setConnectionStatus("closed")
+      return
+    }
     const connection = getConnection(url || storedUrl)
     connection
       ?.start()
@@ -52,10 +56,15 @@ export const useSignalR = <T extends {}>(signalKey: string): IPHUS<T> => {
     setConnection(connection)
   }
 
+  useEffect(() => {
+    startConnection("")
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const stopConnection = () => {
-    connection?.stop().then(() => {
-      setConnectionStatus("closed")
-    })
+    setConnectionStatus("closed")
+    connection?.off(signalKey)
+    connection?.stop()
   }
 
   const hit = new Audio(require("../../extras/audio/hit.mp3"))

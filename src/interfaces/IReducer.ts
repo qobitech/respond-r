@@ -7,6 +7,7 @@ import { IDemoEPolice } from "./IDemo"
 import { IRoles } from "./IRole"
 import { IOrganizations } from "./IOrganization"
 import { IActionsForRole, ICreateAction, IRoleActions } from "./IRoleActions"
+import { IReports } from "./IReport"
 
 export interface IAuthReducer {
   userLogin: ILoginResponse
@@ -127,6 +128,12 @@ export interface IDemoReducer {
   getDemoEPoliceNotificationsError: any
 }
 
+export interface IReportReducer {
+  getAllReports: IReports
+  getAllReportsLoading: boolean
+  getAllReportsError: any
+}
+
 export interface IStates {
   auth: IAuthReducer
   global: IGlobalReducer
@@ -137,4 +144,5 @@ export interface IStates {
   organization: IOrganizationReducer
   actions: IActionReducer
   logged: ILoggedReducer
+  report: IReportReducer
 }

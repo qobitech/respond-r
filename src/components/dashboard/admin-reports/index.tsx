@@ -5,6 +5,7 @@ import { TypeButton } from "utils/new/button"
 import { TypeSelect } from "utils/new/select"
 import ReportTable, { ITableRecord } from "utils/new/report-table"
 import { NoMediaComponent } from "../traffic"
+import { IReports } from "interfaces/IReport"
 
 interface IReportData<T> {
   title: string
@@ -13,22 +14,48 @@ interface IReportData<T> {
 
 const AdminReport = <T extends { [key: string]: any }>({
   data,
+  reports,
 }: {
   data: IReportData<T>
+  reports: IReports
 }) => {
-  const tableReport: ITableRecord[] = new Array(20).fill({
+  // const tableReport: ITableRecord[] = new Array(20).fill({
+  //   id: "1",
+  //   row: [
+  //     {
+  //       value: "17:59",
+  //       isLink: false,
+  //     },
+  //     {
+  //       value: "Bandit attack!",
+  //       isLink: false,
+  //     },
+  //     {
+  //       value: "Lagos - Surulere",
+  //       isLink: false,
+  //     },
+  //   ],
+  //   rowActions: [
+  //     {
+  //       value: "Assign",
+  //       isLink: true,
+  //     },
+  //   ],
+  // })
+
+  const tableReport: ITableRecord[] = reports?.data?.map((report) => ({
     id: "1",
     row: [
       {
-        value: "17:59",
+        value: new Date(report.updatedAt).toDateString(),
         isLink: false,
       },
       {
-        value: "Bandit attack!",
+        value: report.description,
         isLink: false,
       },
       {
-        value: "Lagos - Surulere",
+        value: report.state + " - " + report.nearestPlace,
         isLink: false,
       },
     ],
@@ -38,7 +65,7 @@ const AdminReport = <T extends { [key: string]: any }>({
         isLink: true,
       },
     ],
-  })
+  }))
 
   return (
     <div className="admin-report-section">
@@ -50,9 +77,14 @@ const AdminReport = <T extends { [key: string]: any }>({
         <div className="admin-report">
           <div className="admin-report-left">
             <NoMediaComponent
-              lat={8.955007553100586}
-              lng={7.371120452880859}
+              location={
+                reports?.data.map((report) => ({
+                  latitude: parseFloat(report.latitude || "0"),
+                  longitude: parseFloat(report.longitude || "0"),
+                })) || [{ latitude: 1, longitude: 1 }]
+              }
               load={false}
+              key={reports?.data?.length}
             />
           </div>
           <div className="admin-report-right">
@@ -72,30 +104,6 @@ const AdminReport = <T extends { [key: string]: any }>({
 
 export default AdminReport
 
-// const AdminReportItem = <T extends { [key: string]: any }>({
-//   data,
-// }: {
-//   data: T
-// }) => {
-//   return (
-//     <div className="admin-report-item">
-//       <div className="admin-report-item-media">
-//         <img src={data.imgsrc || ""} alt="" />
-//       </div>
-//       <div className="admin-report-item-title">
-//         <p>Title</p>
-//       </div>
-//       <div className="admin-report-item-location">
-//         <LocationSVG />
-//         <p>Location</p>
-//       </div>
-//       {/* <div className="admin-report-item-info">
-//         <TypeSmallButton title="Assign" />
-//       </div> */}
-//     </div>
-//   )
-// }
-
 const FilterSection = () => {
   return (
     <div className="admin-filter-section">
@@ -104,7 +112,7 @@ const FilterSection = () => {
         optionsdata={[
           { id: 1, label: "Un-assigned reports", value: "unassigned" },
           { id: 2, label: "Assigned reports", value: "assigned" },
-          { id: 2, label: "Rejected reports", value: "rejected" },
+          { id: 3, label: "Rejected reports", value: "rejected" },
         ]}
       />
       <TypeInput placeholder="Search report or location" />

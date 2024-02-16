@@ -42,8 +42,7 @@ import { IframeComponent } from "../components"
 import { vehicleSearchType } from "store/actions/global"
 import { IVehicleSearchPayload } from "interfaces/IGlobal"
 import { useGlobalContext } from "components/layout"
-import GoogleMaps from "components/map"
-import { MapChart } from "components/map/new-map"
+import { ILocation, MapChart } from "components/map/new-map"
 
 interface IProps {
   states?: IStates
@@ -514,8 +513,16 @@ const MainView = ({
         ) : (
           <NoMediaComponent
             load={vehicle?.getVehicleByRegNumberLoading!}
-            lat={8.955007553100586}
-            lng={7.371120452880859}
+            location={[
+              {
+                latitude: parseFloat(
+                  vehicleData?.createLocation.latitude || "0"
+                ),
+                longitude: parseFloat(
+                  vehicleData?.createLocation.longitude || "0"
+                ),
+              },
+            ]}
           />
         )}
       </div>
@@ -1692,12 +1699,10 @@ const TableSection = ({
 
 export const NoMediaComponent = ({
   load,
-  lat,
-  lng,
+  location,
 }: {
   load: boolean
-  lng: number
-  lat: number
+  location: ILocation[]
 }) => {
   return (
     <div className="no-video-selected-section">
@@ -1705,20 +1710,10 @@ export const NoMediaComponent = ({
         <PulseSVG />
       ) : (
         <MapChart
-          locationContents={[
-            {
-              location: { latitude: lat, longitude: lng },
-              markerContent: <></>,
-            },
-            {
-              location: { latitude: lat, longitude: lng + 0.14 },
-              markerContent: <></>,
-            },
-            {
-              location: { latitude: lat + 0.321, longitude: lng - 0.65 },
-              markerContent: <></>,
-            },
-          ]}
+          locationContents={location?.map((i) => ({
+            location: i,
+            markerContent: <></>,
+          }))}
         />
       )}
     </div>

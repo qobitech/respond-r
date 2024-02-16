@@ -22,13 +22,13 @@ const defaulttoken = {
   iat: 24234324324324,
 }
 
-export const USERTOKEN = getUserToken()
-// export const USERTOKEN = defaulttoken
+// export const USERTOKEN = getUserToken()
+export const USERTOKEN = defaulttoken
 
-// export const isLogged = true
-export const isLogged = USERTOKEN?.exp
-  ? !(USERTOKEN?.exp * 1000 < Date.now())
-  : false
+export const isLogged = true
+// export const isLogged = USERTOKEN?.exp
+//   ? !(USERTOKEN?.exp * 1000 < Date.now())
+//   : false
 
 export const PAGE_SIZE = 20
 

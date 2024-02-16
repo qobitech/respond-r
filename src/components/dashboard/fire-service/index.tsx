@@ -16,9 +16,9 @@ import {
   Media,
   useSignalR,
 } from "../components"
-import { IFireData } from "interfaces/IFire"
 import AdminWrapper from "../admin-wrapper"
 import { trafficReportData } from "../traffic/mock-data"
+import { IReport } from "interfaces/IReport"
 
 interface IProps {
   states: IStates
@@ -29,7 +29,7 @@ const IFireServicePage: React.FC<IProps> = ({ states, ...props }) => {
   const actions = props as unknown as IAction
   const rsProps = useRightSection(rightSectionProps, actions.callRightSection)
 
-  const signalRProps = useSignalR<IFireData>("SendFireEmergencyNotification")
+  const signalRProps = useSignalR<IReport>("SendFireEmergencyNotification")
 
   return (
     <>
@@ -40,16 +40,26 @@ const IFireServicePage: React.FC<IProps> = ({ states, ...props }) => {
       </RightSection>
       <div className="main-page">
         <div className="pg-container">
-          <AdminWrapper section="E-fire department" data={trafficReportData}>
-            <LiveFeedStatusComponent signalRProps={signalRProps} />
+          <LiveFeedStatusComponent signalRProps={signalRProps} />
+          <AdminWrapper
+            section="E-fire department"
+            data={trafficReportData}
+            actions={actions}
+            states={states}
+            organization="Fire"
+          >
             <div className="overview-page">
               {signalRProps?.feed ? (
                 <MainView feed={signalRProps.feed!} />
               ) : (
                 <NoMediaComponent
                   load={false}
-                  lat={8.955007553100586}
-                  lng={7.371120452880859}
+                  location={[
+                    {
+                      latitude: parseFloat(signalRProps.feed?.latitude || "0"),
+                      longitude: parseFloat(signalRProps.feed?.latitude || "0"),
+                    },
+                  ]}
                 />
               )}
               <div className="stream-section">
@@ -79,7 +89,7 @@ const IFireServicePage: React.FC<IProps> = ({ states, ...props }) => {
 
 export default IFireServicePage
 
-const MainView = ({ feed }: { feed: IFireData | null }) => {
+const MainView = ({ feed }: { feed: IReport | null }) => {
   const [fileIndex, setFileIndex] = useState<number>(0)
 
   const handleFileIndex = (nav: "left" | "right") => {
@@ -156,7 +166,7 @@ const LiveFeedItemComponent = ({
   feed,
   handleOnClick,
 }: {
-  feed: IFireData | null
+  feed: IReport | null
   handleOnClick: () => void
 }) => {
   return (

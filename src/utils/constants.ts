@@ -12,6 +12,7 @@ export const pageurl = {
 export const baseurl =
   process.env.REACT_APP_BASEURL ||
   "https://respondradmin.azurewebsites.net/api/v1"
+export const baseurlReport = process.env.REACT_APP_BASEURL_REPORT
 export const baseurlEPoliceTest =
   "https://respondr-command-2b9239ad3a3a.herokuapp.com/api/v1"
 export const identity_server = "https://identityserver.myapiservices.net/api/v1"

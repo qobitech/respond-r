@@ -118,6 +118,24 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
 
   const [theme, setTheme] = useState<themeType>(getDefaultTheme())
   const [search, setSearchValue] = useState<string>("")
+  const [globalStartConnection, setGlobalStartConnection] = useState<{
+    action: boolean
+    url: string
+  }>({ action: false, url: "" })
+
+  const activateGlobalStartConnection = (url: string) => {
+    setGlobalStartConnection(() => ({
+      action: true,
+      url,
+    }))
+  }
+
+  const disableGlobalStartConnection = () => {
+    setGlobalStartConnection((prev) => ({
+      action: false,
+      url: "",
+    }))
+  }
 
   const getOrganization = (type: "id" | "name", key: string | number) => {
     if (type === "id") return organizations?.find((org) => org.id === key)
@@ -146,6 +164,9 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
         getRole,
         isAction,
         userOrganization: getOrganization?.("name", USERTOKEN.Organisation),
+        activateGlobalStartConnection,
+        disableGlobalStartConnection,
+        globalStartConnection,
       }}
     >
       <div className={`theme-${theme}`}>

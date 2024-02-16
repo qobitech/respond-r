@@ -123,6 +123,13 @@ interface ILoggedActions {
   getLoggedRoles: (query: string) => (dispatch: any) => void
 }
 
+interface IReports {
+  getAllReports: (
+    organization: string,
+    query?: string
+  ) => (dispatch: any) => void
+}
+
 export interface IAction
   extends IAuth,
     IGlobalActions,
@@ -132,4 +139,5 @@ export interface IAction
     IRoleActions,
     IOrganizationAction,
     ILoggedActions,
+    IReports,
     IActionActions {}

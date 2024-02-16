@@ -16,9 +16,9 @@ import {
   Media,
   useSignalR,
 } from "../components"
-import { IMedicalData } from "interfaces/IMedical"
 import AdminWrapper from "../admin-wrapper"
 import { trafficReportData } from "../traffic/mock-data"
+import { IReport } from "interfaces/IReport"
 
 interface IProps {
   states: IStates
@@ -29,9 +29,7 @@ const IMedicalPage: React.FC<IProps> = ({ states, ...props }) => {
   const actions = props as unknown as IAction
   const rsProps = useRightSection(rightSectionProps, actions.callRightSection)
 
-  const signalRProps = useSignalR<IMedicalData>(
-    "SendMedicalEmergencyNotification"
-  )
+  const signalRProps = useSignalR<IReport>("SendMedicalEmergencyNotification")
 
   return (
     <>
@@ -42,16 +40,28 @@ const IMedicalPage: React.FC<IProps> = ({ states, ...props }) => {
       </RightSection>
       <div className="main-page">
         <div className="pg-container">
-          <AdminWrapper section="E-healthcare" data={trafficReportData}>
-            <LiveFeedStatusComponent signalRProps={signalRProps} />
+          <LiveFeedStatusComponent signalRProps={signalRProps} />
+          <AdminWrapper
+            section="E-healthcare"
+            data={trafficReportData}
+            actions={actions}
+            states={states}
+            organization="Medical"
+          >
             <div className="overview-page">
               {signalRProps?.feed ? (
                 <MainView feed={signalRProps.feed!} />
               ) : (
                 <NoMediaComponent
                   load={false}
-                  lat={8.955007553100586}
-                  lng={7.371120452880859}
+                  location={[
+                    {
+                      latitude: parseFloat(signalRProps.feed?.latitude || "0"),
+                      longitude: parseFloat(
+                        signalRProps.feed?.longitude || "0"
+                      ),
+                    },
+                  ]}
                 />
               )}
               <div className="stream-section">
@@ -81,7 +91,7 @@ const IMedicalPage: React.FC<IProps> = ({ states, ...props }) => {
 
 export default IMedicalPage
 
-const MainView = ({ feed }: { feed: IMedicalData | null }) => {
+const MainView = ({ feed }: { feed: IReport | null }) => {
   const [fileIndex, setFileIndex] = useState<number>(0)
 
   const handleFileIndex = (nav: "left" | "right") => {
@@ -158,7 +168,7 @@ const LiveFeedItemComponent = ({
   feed,
   handleOnClick,
 }: {
-  feed: IMedicalData | null
+  feed: IReport | null
   handleOnClick: () => void
 }) => {
   return (
