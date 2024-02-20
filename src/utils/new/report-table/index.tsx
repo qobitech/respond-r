@@ -1,13 +1,9 @@
-import React, { FC, useState } from "react"
+import React, { useState } from "react"
 import "./table.scss"
 import { TypeCheckbox } from "../checkbox"
 import { PAGE_SIZE } from "../constants"
-import { TypeButton } from "../button"
-import { useNavigate } from "react-router-dom"
-import { TypeSelect } from "../select"
-import { TypeInput } from "../input"
 import ReactPaginate from "react-paginate"
-import { AssignSVG, CloseSVG, ReviewSVG } from "../svgs"
+import { AssignSVG, ReviewSVG } from "../svgs"
 
 export interface ITableAction {
   action: string
@@ -329,7 +325,6 @@ const CellValueActionComponent: React.FC<ICVAC> = ({
   view,
   hide,
 }) => {
-  const navigate = useNavigate()
   return (
     <>
       {/* {!hide ? (
@@ -371,107 +366,3 @@ const CellValueActionComponent: React.FC<ICVAC> = ({
 }
 
 export default ReportTable
-
-interface ITableActionComponent {
-  tableAction: ITableAction | undefined
-  handleTableAction: (() => void) | undefined
-  isCTA: boolean
-}
-
-const TableActionComponent: FC<ITableActionComponent> = ({
-  tableAction,
-  handleTableAction,
-  isCTA,
-}) => {
-  const isTableAction = !!tableAction?.selectedItems?.[0]
-  return (
-    <div
-      style={{
-        position: "sticky",
-        left: 0,
-      }}
-      className={`pb-3 d-flex align-items-center justify-content-between table-action`}
-    >
-      <div
-        className="d-flex align-items-center bulk-action"
-        style={{ gap: "20px" }}
-      >
-        <TypeSelect
-          initoption={{ label: "Select action", value: "" }}
-          optionsdata={Object.values(tableAction?.actionEnums || {}).map(
-            (i, index) => ({
-              id: index,
-              label: i,
-              value: i,
-            })
-          )}
-          disabled={!isTableAction}
-          value={tableAction?.action || ""}
-          style={{
-            width: "150px",
-            height: "40px",
-            fontSize: "13px",
-            outline: "0",
-          }}
-          onChange={({ target }) => {
-            const { value } = target
-            tableAction?.setAction?.(value)
-          }}
-        />
-        <TypeButton
-          buttonSize="small"
-          title="Proceed"
-          buttonType={isTableAction && isCTA ? "outlined" : "disabled"}
-          onClick={handleTableAction}
-          disabled={!isTableAction || !isCTA}
-        />
-      </div>
-      <div
-        className="d-flex align-items-center bulk-action"
-        style={{ gap: "20px" }}
-      >
-        <div className="position-relative w-100">
-          <TypeInput
-            value={tableAction?.searchValue}
-            style={{
-              minWidth: "250px",
-              height: "40px",
-              fontSize: "13px",
-              outline: "0",
-              paddingRight: tableAction?.searchValue ? "40px" : "",
-            }}
-            placeholder={tableAction?.searchPlaceHolder || "Search here"}
-            onChange={({ target }) => {
-              const { value } = target
-              tableAction?.setSearchValue(value)
-            }}
-          />
-          {tableAction?.searchValue ? (
-            <div
-              className="position-absolute d-flex align-items-center h-100 px-3"
-              style={{ right: 0, top: 0, cursor: "pointer" }}
-              onClick={() => {
-                tableAction?.setSearchValue("")
-                tableAction?.searchAction?.("")
-              }}
-            >
-              <CloseSVG />
-            </div>
-          ) : null}
-        </div>
-        <TypeButton
-          buttonSize="small"
-          title="Search"
-          buttonType={
-            tableAction?.searchValue && isCTA ? "outlined" : "disabled"
-          }
-          onClick={() => {
-            tableAction?.searchAction?.(tableAction.searchValue)
-          }}
-          disabled={!tableAction?.searchValue || !isCTA}
-          load={tableAction?.paginationParams?.load}
-        />
-      </div>
-    </div>
-  )
-}

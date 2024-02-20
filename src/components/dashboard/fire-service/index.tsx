@@ -54,10 +54,18 @@ const IFireServicePage: React.FC<IProps> = ({ states, ...props }) => {
               ) : (
                 <NoMediaComponent
                   load={false}
-                  location={[
+                  locationDetails={[
                     {
-                      latitude: parseFloat(signalRProps.feed?.latitude || "0"),
-                      longitude: parseFloat(signalRProps.feed?.latitude || "0"),
+                      location: {
+                        latitude: parseFloat(
+                          signalRProps.feed?.latitude || "0"
+                        ),
+                        longitude: parseFloat(
+                          signalRProps.feed?.longitude || "0"
+                        ),
+                      },
+                      map: signalRProps.feed?.map || "",
+                      nearestPlace: signalRProps.feed?.nearestPlace || "",
                     },
                   ]}
                 />

@@ -1,4 +1,3 @@
-import { ReactNode } from "react"
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet"
 import L, { LatLngTuple } from "leaflet"
 import "./index.scss"
@@ -18,7 +17,7 @@ export interface ILocation {
 
 export type LocationContent = {
   location: ILocation | undefined
-  markerContent: ReactNode
+  markerContent: JSX.Element
   markerColor?: string
 }
 

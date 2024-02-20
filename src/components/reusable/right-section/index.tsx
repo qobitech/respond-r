@@ -29,6 +29,7 @@ export type actionComponent =
   | "update-action"
   | "view-action"
   | "delete-action"
+  | "report"
   | null
 export type actionId = string | null
 

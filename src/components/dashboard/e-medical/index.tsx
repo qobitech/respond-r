@@ -54,12 +54,18 @@ const IMedicalPage: React.FC<IProps> = ({ states, ...props }) => {
               ) : (
                 <NoMediaComponent
                   load={false}
-                  location={[
+                  locationDetails={[
                     {
-                      latitude: parseFloat(signalRProps.feed?.latitude || "0"),
-                      longitude: parseFloat(
-                        signalRProps.feed?.longitude || "0"
-                      ),
+                      location: {
+                        latitude: parseFloat(
+                          signalRProps.feed?.latitude || "0"
+                        ),
+                        longitude: parseFloat(
+                          signalRProps.feed?.longitude || "0"
+                        ),
+                      },
+                      map: signalRProps.feed?.map || "",
+                      nearestPlace: signalRProps.feed?.nearestPlace || "",
                     },
                   ]}
                 />
@@ -91,7 +97,7 @@ const IMedicalPage: React.FC<IProps> = ({ states, ...props }) => {
 
 export default IMedicalPage
 
-const MainView = ({ feed }: { feed: IReport | null }) => {
+export const MainView = ({ feed }: { feed: IReport | null }) => {
   const [fileIndex, setFileIndex] = useState<number>(0)
 
   const handleFileIndex = (nav: "left" | "right") => {
@@ -141,9 +147,10 @@ const MainView = ({ feed }: { feed: IReport | null }) => {
               <TypeButton
                 title="View Map"
                 buttonType="outlined"
+                buttonSize="small"
                 onClick={() => handleFullScreen(feed.map || "")}
               />
-              <TypeButton title="Accept" />
+              <TypeButton title="Accept" buttonSize="small" />
             </div>
           </div>
           <div className="vehicle-info-section">

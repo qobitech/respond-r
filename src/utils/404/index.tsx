@@ -1,6 +1,6 @@
 import React, { FC } from "react"
 import { useNavigate } from "react-router-dom"
-import { getOverview, url } from "enums/Route"
+import { getOverview } from "enums/Route"
 // import trafficlightimg from '../../extras/images/payment4.jpg'
 
 const Page404: FC = () => {

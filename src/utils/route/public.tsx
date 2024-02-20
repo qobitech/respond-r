@@ -1,6 +1,6 @@
 import React, { FC } from "react"
 import { Navigate } from "react-router-dom"
-import { getOverview, url } from "enums/Route"
+import { getOverview } from "enums/Route"
 import { isLogged } from "utils/new/constants"
 import DataWrapper from "utils/new/wrapper/data-wrapper"
 

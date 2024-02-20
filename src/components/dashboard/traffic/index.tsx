@@ -513,14 +513,18 @@ const MainView = ({
         ) : (
           <NoMediaComponent
             load={vehicle?.getVehicleByRegNumberLoading!}
-            location={[
+            locationDetails={[
               {
-                latitude: parseFloat(
-                  vehicleData?.createLocation.latitude || "0"
-                ),
-                longitude: parseFloat(
-                  vehicleData?.createLocation.longitude || "0"
-                ),
+                location: {
+                  latitude: parseFloat(
+                    vehicleData?.createLocation.latitude || "0"
+                  ),
+                  longitude: parseFloat(
+                    vehicleData?.createLocation.longitude || "0"
+                  ),
+                },
+                map: "",
+                nearestPlace: "",
               },
             ]}
           />
@@ -1699,23 +1703,36 @@ const TableSection = ({
 
 export const NoMediaComponent = ({
   load,
-  location,
+  locationDetails,
 }: {
   load: boolean
-  location: ILocation[]
+  locationDetails: Array<{
+    location: ILocation
+    nearestPlace: string
+    map: string
+  }>
 }) => {
+  const locationContent = locationDetails?.map((i) => ({
+    location: i.location,
+    markerContent: (
+      <a href={i.map} target="_blank" rel="noreferrer">
+        <p className="d-flex">
+          {i.nearestPlace}
+          <span>
+            <i
+              className="fa fa-external-link ml-2"
+              style={{ fontSize: "9px" }}
+            />
+          </span>
+        </p>
+      </a>
+    ),
+    markerColor: "red",
+  }))
+
   return (
     <div className="no-video-selected-section">
-      {load ? (
-        <PulseSVG />
-      ) : (
-        <MapChart
-          locationContents={location?.map((i) => ({
-            location: i,
-            markerContent: <></>,
-          }))}
-        />
-      )}
+      {load ? <PulseSVG /> : <MapChart locationContents={locationContent} />}
     </div>
   )
 }

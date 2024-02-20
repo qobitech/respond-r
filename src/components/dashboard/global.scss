@@ -402,14 +402,15 @@
 
 .header-info-prop {
   text-align: right;
-  margin-bottom: 15px;
+  margin: 30px 0 15px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   @include themify($themes) {
     border-bottom: 1px solid themed("border");
   }
   padding-bottom: 15px;
-  gap: 80px;
+  gap: 20px;
   p {
     margin: 0;
     margin-top: 2px;
@@ -426,7 +427,7 @@
     }
   }
   .cta-section {
-    margin-left: auto;
+    // margin-left: auto;
     width: max-content;
     display: flex;
     align-items: center;
