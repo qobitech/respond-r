@@ -38,13 +38,14 @@ export const useSignalR = <T extends {}>(signalKey: string): IPHUS<T> => {
   }
 
   const startConnection = (url: string) => {
+    const defaultURL = process.env.REACT_APP_SIGNALR
     setConnectionStatus("connecting")
     const storedUrl = getUrl("globalSignalR") || ""
-    if (!url && !storedUrl) {
+    if (!defaultURL && !url && !storedUrl) {
       setConnectionStatus("closed")
       return
     }
-    const connection = getConnection(url || storedUrl)
+    const connection = getConnection(defaultURL || url || storedUrl)
     connection
       ?.start()
       .then(() => {
