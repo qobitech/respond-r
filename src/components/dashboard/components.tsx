@@ -524,6 +524,7 @@ export interface IPageComponent {
   states: IStates
   section: typeAdminSections
   signalRURL: typeSignalRURL
+  organization: "Fire" | "Police" | "Medical"
 }
 
 export const PageComponent: React.FC<IPageComponent> = ({
@@ -531,6 +532,7 @@ export const PageComponent: React.FC<IPageComponent> = ({
   states,
   section,
   signalRURL,
+  organization,
 }) => {
   const rightSectionProps = states?.global.rightSection
   const rsProps = useRightSection(rightSectionProps, actions.callRightSection)
@@ -551,7 +553,7 @@ export const PageComponent: React.FC<IPageComponent> = ({
             data={trafficReportData}
             actions={actions}
             states={states}
-            organization="Police"
+            organization={organization}
           >
             <div className="overview-page">
               {signalRProps?.feed ? (

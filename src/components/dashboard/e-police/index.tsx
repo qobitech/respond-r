@@ -17,6 +17,7 @@ const IPolicePage: React.FC<IProps> = ({ states, ...props }) => {
       section="E-police"
       signalRURL="SendPoliceEmergencyNotification"
       states={states}
+      organization="Police"
     />
   )
 }

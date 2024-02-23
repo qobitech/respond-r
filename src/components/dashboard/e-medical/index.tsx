@@ -17,6 +17,7 @@ const IMedicalPage: React.FC<IProps> = ({ states, ...props }) => {
       states={states}
       section="E-healthcare"
       signalRURL="SendMedicalEmergencyNotification"
+      organization="Medical"
     />
   )
 }

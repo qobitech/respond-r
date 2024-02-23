@@ -17,6 +17,7 @@ const IFireServicePage: React.FC<IProps> = ({ states, ...props }) => {
       states={states}
       section="E-fire department"
       signalRURL="SendFireEmergencyNotification"
+      organization="Fire"
     />
   )
 }
