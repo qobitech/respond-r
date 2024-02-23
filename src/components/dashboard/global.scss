@@ -400,6 +400,12 @@
   }
 }
 
+.separator {
+  @include themify($themes) {
+    border-bottom: 1px solid themed("border");
+  }
+}
+
 .header-info-prop {
   text-align: right;
   margin: 30px 0 15px;

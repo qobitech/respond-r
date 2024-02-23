@@ -6,7 +6,7 @@ import { TypeSelect } from "utils/new/select"
 import ReportTable, { ITableRecord } from "utils/new/report-table"
 import { NoMediaComponent } from "../traffic"
 import { IReport, IReports } from "interfaces/IReport"
-import { MainView } from "../e-medical"
+import { MainView } from "../components"
 import RightSection, {
   IRightSection,
   useRightSection,

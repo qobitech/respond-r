@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react"
 import {
+  NoFeeds,
+  NoMediaComponent,
   chkType,
   getConnection,
   getUrl,
@@ -7,14 +9,35 @@ import {
   typeConnectionStatus,
 } from "./traffic"
 import { handleDataStream } from "./traffic/data"
-import { IRightSection } from "components/reusable/right-section"
-import { IUseImage, useFormHook } from "utils/new/hook"
+import RightSection, {
+  IRightSection,
+  useRightSection,
+} from "components/reusable/right-section"
+import {
+  IUseImage,
+  handleFullScreen,
+  useFormHook,
+  useImage,
+} from "utils/new/hook"
 import * as yup from "yup"
 import { TypeInput } from "utils/new/input"
 import { TypeButton } from "utils/new/button"
-import { LeftNavSVG, PulseSVG, RightNavSVG } from "utils/new/svgs"
+import {
+  Calendar2SVG,
+  LeftNavSVG,
+  LocationSVG,
+  PhoneSVG,
+  PulseSVG,
+  RightNavSVG,
+} from "utils/new/svgs"
 import { GODUSER } from "utils/new/constants/roles"
 import { ORGANIZATION } from "utils/new/constants"
+import AdminWrapper from "./admin-wrapper"
+import { IAction } from "interfaces/IAction"
+import { IStates } from "interfaces/IReducer"
+import { IReport } from "interfaces/IReport"
+import { typeAdminSections } from "./admin-management"
+import { trafficReportData } from "./traffic/mock-data"
 
 export interface IPHUS<T> {
   feeds: T[]
@@ -26,7 +49,14 @@ export interface IPHUS<T> {
   // handleDemoFeeds: (feeds: T[]) => void
 }
 
-export const useSignalR = <T extends {}>(signalKey: string): IPHUS<T> => {
+export type typeSignalRURL =
+  | "SendFireEmergencyNotification"
+  | "SendPoliceEmergencyNotification"
+  | "SendMedicalEmergencyNotification"
+
+export const useSignalR = <T extends {}>(
+  signalKey: typeSignalRURL
+): IPHUS<T> => {
   const [connection, setConnection] = useState<signalR.HubConnection>()
   const [feeds, setFeeds] = useState<T[]>([])
   const [feed, setFeed] = useState<T | null>(null)
@@ -117,6 +147,135 @@ export const useSignalR = <T extends {}>(signalKey: string): IPHUS<T> => {
   }
 }
 
+export const SettingsSection = <T extends {}>({
+  signalR,
+  urlKey,
+  rsProps,
+}: {
+  signalR: IPHUS<T>
+  urlKey: chkType
+  rsProps?: IRightSection<{}> | undefined
+}) => {
+  const tabEnums = {
+    PAGE: "Connection",
+    URL: "ENV Configuration",
+  }
+
+  const [tab, setTab] = useState<string>(tabEnums.PAGE)
+
+  return (
+    <div className="tab-section">
+      <div className="tab-header">
+        {Object.values(tabEnums).map((i, index) => (
+          <div
+            className={`tab-item ${i === tab ? "active" : ""}`}
+            key={index}
+            onClick={() => setTab(i)}
+          >
+            <p>{i}</p>
+          </div>
+        ))}
+      </div>
+      <div className="tab-body">
+        {tab === tabEnums.PAGE ? (
+          <FeedForm signalR={signalR} urlKey={urlKey} rsProps={rsProps} />
+        ) : null}
+        {tab === tabEnums.URL ? <ENVForm /> : null}
+      </div>
+    </div>
+  )
+}
+
+export type typeBaseUrls = "commandURL" | "queryURL"
+
+export const getBaseUrl = (type: typeBaseUrls) => {
+  const url = localStorage.getItem(type) || ""
+  return url
+}
+
+const clearBaseUrl = (type: typeBaseUrls) => {
+  localStorage.removeItem(type)
+}
+
+export const ENVForm = () => {
+  const [commandhookForm] = useFormHook<{ commandURL: string }>({
+    commandURL: yup.string().required("command url is required"),
+  })
+  const [queryhookForm] = useFormHook<{ queryURL: string }>({
+    queryURL: yup.string().required("query url is required"),
+  })
+
+  const saveCommandURL = ({ commandURL }: { commandURL: string }) => {
+    localStorage.setItem("commandURL", commandURL.trim())
+  }
+
+  const saveQueryURL = ({ queryURL }: { queryURL: string }) => {
+    localStorage.setItem("queryURL", queryURL.trim())
+  }
+
+  useEffect(() => {
+    if (getBaseUrl("commandURL"))
+      commandhookForm.setValue("commandURL", getBaseUrl("commandURL"))
+    if (getBaseUrl("queryURL"))
+      queryhookForm.setValue("queryURL", getBaseUrl("queryURL"))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  return (
+    <>
+      <form onSubmit={(e) => e.preventDefault()}>
+        <TypeInput
+          placeholder="Enter url"
+          label="Query URL"
+          {...queryhookForm.register("queryURL")}
+          error={queryhookForm.formState.errors.queryURL?.message}
+        />
+        <div className="d-flex align-items-center" style={{ gap: "20px" }}>
+          <TypeButton
+            title="Save"
+            onClick={queryhookForm.handleSubmit(saveQueryURL)}
+            buttonSize="small"
+          />
+          <TypeButton
+            title="Clear"
+            onClick={() => {
+              queryhookForm.reset()
+              clearBaseUrl("queryURL")
+            }}
+            buttonSize="small"
+            buttonType="outlined"
+          />
+        </div>
+      </form>
+      <div className="my-5 separator" />
+      <form onSubmit={(e) => e.preventDefault()}>
+        <TypeInput
+          placeholder="Enter url"
+          label="Command URL"
+          {...commandhookForm.register("commandURL")}
+          error={commandhookForm.formState.errors.commandURL?.message}
+        />
+        <div className="d-flex align-items-center" style={{ gap: "20px" }}>
+          <TypeButton
+            title="Save"
+            onClick={commandhookForm.handleSubmit(saveCommandURL)}
+            buttonSize="small"
+          />
+          <TypeButton
+            title="Clear"
+            onClick={() => {
+              commandhookForm.reset()
+              clearBaseUrl("commandURL")
+            }}
+            buttonSize="small"
+            buttonType="outlined"
+          />
+        </div>
+      </form>
+    </>
+  )
+}
+
 export const FeedForm = <T extends {}>({
   signalR,
   rsProps,
@@ -138,12 +297,12 @@ export const FeedForm = <T extends {}>({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => {
-    if (signalR.connectionStatus === "connected") {
-      rsProps?.closeSection()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [signalR.connectionStatus])
+  // useEffect(() => {
+  //   if (signalR.connectionStatus === "connected") {
+  //     rsProps?.closeSection()
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [signalR.connectionStatus])
 
   const btnTitle =
     signalR.connectionStatus === "connected" && !!hookForm.watch("signalR")
@@ -172,6 +331,7 @@ export const FeedForm = <T extends {}>({
           title={btnTitle}
           onClick={hookForm.handleSubmit(handleRTSPFeed)}
           load={signalR.connectionStatus === "connecting"}
+          buttonSize="small"
         />
         <TypeButton
           title="Stop Feed"
@@ -179,6 +339,7 @@ export const FeedForm = <T extends {}>({
           buttonType={
             signalR.connectionStatus === null ? "disabled" : "outlined"
           }
+          buttonSize="small"
         />
       </div>
     </form>
@@ -197,11 +358,7 @@ export const Configuration = <T extends {}>({
   return (
     <div>
       <div style={{ paddingBottom: "20px" }} />
-      <div className="tab-section">
-        <div className="tab-body">
-          <FeedForm signalR={signalR} rsProps={rsProps} urlKey={urlKey} />
-        </div>
-      </div>
+      <SettingsSection signalR={signalR} urlKey={urlKey} rsProps={rsProps} />
     </div>
   )
 }
@@ -358,6 +515,194 @@ export const PageHeader = ({
         {title} {!GODUSER ? "(" + ORGANIZATION + ")" : ""}
       </h1>
       {load ? <PulseSVG /> : null}
+    </div>
+  )
+}
+
+export interface IPageComponent {
+  actions: IAction
+  states: IStates
+  section: typeAdminSections
+  signalRURL: typeSignalRURL
+}
+
+export const PageComponent: React.FC<IPageComponent> = ({
+  actions,
+  states,
+  section,
+  signalRURL,
+}) => {
+  const rightSectionProps = states?.global.rightSection
+  const rsProps = useRightSection(rightSectionProps, actions.callRightSection)
+  const signalRProps = useSignalR<IReport>(signalRURL)
+
+  return (
+    <>
+      <RightSection rsProps={rsProps}>
+        {rsProps.isView("custom", "settings") ? (
+          <Configuration signalR={signalRProps} urlKey="globalSignalR" />
+        ) : null}
+      </RightSection>
+      <div className="main-page">
+        <div className="pg-container">
+          <LiveFeedStatusComponent signalRProps={signalRProps} />
+          <AdminWrapper
+            section={section}
+            data={trafficReportData}
+            actions={actions}
+            states={states}
+            organization="Police"
+          >
+            <div className="overview-page">
+              {signalRProps?.feed ? (
+                <MainView feed={signalRProps.feed!} />
+              ) : (
+                <NoMediaComponent
+                  load={false}
+                  locationDetails={[
+                    {
+                      location: {
+                        latitude: parseFloat(
+                          signalRProps.feed?.latitude || "0"
+                        ),
+                        longitude: parseFloat(
+                          signalRProps.feed?.longitude || "0"
+                        ),
+                      },
+                      map: signalRProps.feed?.map || "",
+                      nearestPlace: signalRProps.feed?.nearestPlace || "",
+                    },
+                  ]}
+                />
+              )}
+              <div className="stream-section">
+                <div className="live-feed-component">
+                  {signalRProps.feeds?.[0] ? (
+                    signalRProps.feeds.map((i, index) => (
+                      <LiveFeedItemComponent
+                        key={Date.now() + index}
+                        feed={i}
+                        handleOnClick={() => {
+                          signalRProps.handleFeedSelect(i)
+                        }}
+                      />
+                    ))
+                  ) : (
+                    <NoFeeds />
+                  )}
+                </div>
+              </div>
+            </div>
+          </AdminWrapper>
+        </div>
+      </div>
+    </>
+  )
+}
+
+const LiveFeedItemComponent = ({
+  feed,
+  handleOnClick,
+}: {
+  feed: IReport | null
+  handleOnClick: () => void
+}) => {
+  return (
+    <div className="map-feed-item-component" onClick={handleOnClick}>
+      <div className="lf-media-section">
+        <img src={feed?.mediaFiles?.[0] || ""} alt="" />
+      </div>
+      <div className="lf-info-section">
+        <p className="lf-description">{feed?.description || "..."}</p>
+
+        <div className="lf-location">
+          <LocationSVG />
+          <div className="lf-location-items">
+            <p title={feed?.state || "..."} style={{ margin: "0" }}>
+              {feed?.state || "..."}
+            </p>
+            <div className="lf-text-separator" />
+            <p style={{ margin: "0" }} title={feed?.city || "..."}>
+              {feed?.city || "..."}
+            </p>
+          </div>
+        </div>
+        <TypeButton buttonSize="small" title="Accept" buttonType="outlined" />
+      </div>
+    </div>
+  )
+}
+
+export const MainView = ({ feed }: { feed: IReport | null }) => {
+  const [fileIndex, setFileIndex] = useState<number>(0)
+
+  const handleFileIndex = (nav: "left" | "right") => {
+    if (nav === "left") setFileIndex(Math.max(0, fileIndex - 1))
+    if (nav === "right")
+      setFileIndex(Math.min((feed?.mediaFiles?.length || 1) - 1, fileIndex + 1))
+  }
+
+  const imgProps = useImage()
+
+  return (
+    <div className="video-section">
+      <div className="media-container">
+        <div className={`media-box`}>
+          <Media
+            files={feed?.mediaFiles}
+            fileIndex={fileIndex}
+            handleFileIndex={handleFileIndex}
+            imgProps={imgProps}
+          />
+        </div>
+      </div>
+      <div className="media-nav-count">
+        <p>
+          {fileIndex + 1} of {feed?.mediaFiles.length || "..."}
+        </p>
+        <div className="loader-box">
+          {!imgProps.isLoaded && !imgProps.isError && <PulseSVG />}
+        </div>
+      </div>
+      {feed !== null ? (
+        <>
+          <div className="header-info-prop">
+            <div className="icon-txt">
+              <Calendar2SVG />
+              <p>
+                {feed?.createdAt
+                  ? new Date(feed?.createdAt).toDateString()
+                  : "..."}
+              </p>
+            </div>
+            <div className="icon-txt">
+              <PhoneSVG />
+              <p>{feed?.deviceId || "..."}</p>
+            </div>
+            <div className="cta-section">
+              <TypeButton
+                title="View Map"
+                buttonType="outlined"
+                buttonSize="small"
+                onClick={() => handleFullScreen(feed.map || "")}
+              />
+              <TypeButton title="Accept" buttonSize="small" />
+            </div>
+          </div>
+          <div className="vehicle-info-section">
+            <InfoSectionItem label="Words" value={feed?.words || "..."} />
+            <InfoSectionItem
+              label="Description"
+              value={feed?.description || "..."}
+            />
+            <InfoSectionItem
+              label="Location"
+              value={feed?.city + " | " + feed?.state || "..."}
+              values={[feed?.city, feed?.state]}
+            />
+          </div>
+        </>
+      ) : null}
     </div>
   )
 }
