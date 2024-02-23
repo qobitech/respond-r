@@ -26,11 +26,20 @@ const AdminReport = <T extends { [key: string]: any }>({
 }) => {
   const rsProps = useRightSection<IReport>()
 
+  const getTime = (date: string) => {
+    const currentDate = new Date(date)
+    const hours = currentDate.getHours()
+    const minutes = currentDate.getMinutes()
+    const seconds = currentDate.getSeconds()
+
+    return `${hours}:${minutes}:${seconds}`
+  }
+
   const tableReport: ITableRecord[] = reports?.data?.map((report) => ({
     id: "1",
     row: [
       {
-        value: new Date(report.updatedAt).getTime(),
+        value: getTime(report.updatedAt),
         isLink: false,
         action: () => {
           rsProps.callSection("custom", "report", report.id, report)
