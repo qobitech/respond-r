@@ -30,11 +30,7 @@ const AdminReport = <T extends { [key: string]: any }>({
     id: "1",
     row: [
       {
-        value: new Date(report.updatedAt)
-          .toDateString()
-          .split(" ")
-          .filter((_, index) => index !== 0 && index !== 3)
-          .join(" "),
+        value: new Date(report.updatedAt).getTime(),
         isLink: false,
         action: () => {
           rsProps.callSection("custom", "report", report.id, report)
