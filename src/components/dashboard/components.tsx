@@ -69,7 +69,7 @@ export const useSignalR = <T extends {}>(
 
   const startConnection = (url: string) => {
     const commandURL = getBaseUrl("commandURL")
-      ? getBaseUrl("commandURL") + "/notificationHub"
+      ? getBaseUrl("commandURL") + "notificationHub"
       : ""
     const defaultURL = process.env.REACT_APP_SIGNALR || ""
     setConnectionStatus("connecting")
@@ -296,7 +296,7 @@ export const FeedForm = <T extends {}>({
 
   useEffect(() => {
     const commandURL = getBaseUrl("commandURL")
-      ? getBaseUrl("commandURL") + "/notificationHub"
+      ? getBaseUrl("commandURL") + "notificationHub"
       : ""
     const rtspUrl = commandURL || getUrl(urlKey)
     if (!!rtspUrl) {
