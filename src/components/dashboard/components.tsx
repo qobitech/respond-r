@@ -68,14 +68,19 @@ export const useSignalR = <T extends {}>(
   }
 
   const startConnection = (url: string) => {
-    const defaultURL = process.env.REACT_APP_SIGNALR
+    const commandURL = getBaseUrl("commandURL")
+      ? getBaseUrl("commandURL") + "/notificationHub"
+      : ""
+    const defaultURL = process.env.REACT_APP_SIGNALR || ""
     setConnectionStatus("connecting")
     const storedUrl = getUrl("globalSignalR") || ""
-    if (!defaultURL && !url && !storedUrl) {
+    if (!commandURL && !url && !storedUrl && !!defaultURL) {
       setConnectionStatus("closed")
       return
     }
-    const connection = getConnection(defaultURL || url || storedUrl)
+    const connection = getConnection(
+      commandURL || url || storedUrl || defaultURL
+    )
     connection
       ?.start()
       .then(() => {
@@ -290,7 +295,10 @@ export const FeedForm = <T extends {}>({
   })
 
   useEffect(() => {
-    const rtspUrl = getUrl(urlKey)
+    const commandURL = getBaseUrl("commandURL")
+      ? getBaseUrl("commandURL") + "/notificationHub"
+      : ""
+    const rtspUrl = commandURL || getUrl(urlKey)
     if (!!rtspUrl) {
       hookForm.setValue("signalR", rtspUrl)
     }
