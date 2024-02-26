@@ -69,7 +69,7 @@ export const useSignalR = <T extends {}>(
 
   const startConnection = (url: string) => {
     const commandURL = getBaseUrl("commandURL")
-      ? getBaseUrl("commandURL") + "notificationHub"
+      ? getBaseUrl("commandURL") + "/notificationHub"
       : ""
     const defaultURL = process.env.REACT_APP_SIGNALR || ""
     setConnectionStatus("connecting")
@@ -296,7 +296,7 @@ export const FeedForm = <T extends {}>({
 
   useEffect(() => {
     const commandURL = getBaseUrl("commandURL")
-      ? getBaseUrl("commandURL") + "notificationHub"
+      ? getBaseUrl("commandURL") + "/notificationHub"
       : ""
     const rtspUrl = commandURL || getUrl(urlKey)
     if (!!rtspUrl) {
@@ -668,7 +668,7 @@ export const MainView = ({ feed }: { feed: IReport | null }) => {
       </div>
       <div className="media-nav-count">
         <p>
-          {fileIndex + 1} of {feed?.mediaFiles.length || "..."}
+          {fileIndex + 1} of {feed?.mediaFiles?.length || "..."}
         </p>
         <div className="loader-box">
           {!imgProps.isLoaded && !imgProps.isError && <PulseSVG />}

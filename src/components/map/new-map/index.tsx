@@ -58,7 +58,7 @@ export const MapChart = ({
       <MapContainer
         className="map_container"
         center={centerLocation}
-        zoom={defaultZoom || 7}
+        zoom={defaultZoom || 2}
         scrollWheelZoom={false}
       >
         <ResizeMap />

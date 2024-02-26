@@ -102,6 +102,10 @@ export interface ICell {
   icon?: string
   url?: string
   action?: () => void
+  textLength?: number
+  cellWidth?: string
+  classProps?: string
+  dangerouselySetHtml?: string
 }
 
 export interface ICellAction extends ICell {
@@ -289,25 +293,78 @@ const ReportTable: React.FC<IResultTable> = ({
   )
 }
 
-const CellValueComponent: React.FC<ICell> = ({ value, action }) => {
-  return <TDContent action={action} value={value} />
+const CellValueComponent: React.FC<ICell> = ({
+  value,
+  action,
+  textLength,
+  cellWidth,
+  classProps,
+  dangerouselySetHtml,
+}) => {
+  return (
+    <TDContent
+      action={action}
+      value={value}
+      textLength={textLength!}
+      cellWidth={cellWidth!}
+      classProps={classProps!}
+      dangerouselySetHtml={dangerouselySetHtml!}
+    />
+  )
 }
 
 interface ITDC {
   action: (() => void) | undefined
   value: string | number | undefined
+  textLength: number
+  cellWidth: string
+  classProps: string
+  dangerouselySetHtml: string
 }
 
-const TDContent: React.FC<ITDC> = ({ action, value }) => {
+const TDContent: React.FC<ITDC> = ({
+  action,
+  value,
+  textLength,
+  cellWidth,
+  classProps,
+  dangerouselySetHtml,
+}) => {
+  const [summarizeText, setSummarizeText] = useState<boolean>(
+    () => !!textLength
+  )
+  const isSumm = value ? value?.toString().length > textLength : false
+  const cellValue = value
+    ? textLength
+      ? value?.toString().substring(0, textLength) + (isSumm ? "..." : "")
+      : value?.toString()
+    : ""
   return (
-    <p className="m-0 d-flex align-items-center text-small" onClick={action}>
-      <span
-        className="d-block"
-        // style={{ width: "120px" }}
-      >
-        {value}
-      </span>
-    </p>
+    <>
+      {dangerouselySetHtml ? (
+        <div dangerouslySetInnerHTML={{ __html: dangerouselySetHtml }} />
+      ) : (
+        <p className="m-0 d-flex align-items-center text-small">
+          <span
+            className={`d-block ${classProps}`}
+            onClick={action}
+            style={{ width: cellWidth || "" }}
+            role="button"
+          >
+            {summarizeText ? cellValue : value}
+          </span>
+          {textLength && isSumm ? (
+            <span onClick={() => setSummarizeText(!summarizeText)}>
+              <i
+                className={`ml-2 table-cell-border p-1 rounded fas fa-angle-${
+                  summarizeText ? "up" : "down"
+                }`}
+              />
+            </span>
+          ) : null}
+        </p>
+      )}
+    </>
   )
 }
 

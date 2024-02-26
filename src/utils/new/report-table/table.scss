@@ -231,3 +231,9 @@
   border-bottom-right-radius: 3px;
 }
 /* Pagination Ends */
+
+.table-cell-border {
+  @include themify($themes) {
+    border: 1px solid themed("border");
+  }
+}

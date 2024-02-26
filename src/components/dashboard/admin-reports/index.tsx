@@ -35,6 +35,25 @@ const AdminReport = <T extends { [key: string]: any }>({
     return `${hours}:${minutes}:${seconds}`
   }
 
+  const getReportStatusBg = (status: string) => {
+    //     Assigned (blue)
+    // Accepted (yellow)
+    // Closed (green)
+    // Ignored (---)
+    switch (status.toLowerCase()) {
+      case "new":
+        return "red"
+      case "assigned":
+        return "blue"
+      case "accepted":
+        return "yellow"
+      case "closed":
+        return "green"
+      default:
+        return "grey"
+    }
+  }
+
   const tableReport: ITableRecord[] = reports?.data?.map((report) => ({
     id: "1",
     row: [
@@ -46,13 +65,14 @@ const AdminReport = <T extends { [key: string]: any }>({
         },
       },
       {
-        value:
-          report.description.substring(0, 25) +
-          (report.description.length > 25 ? "..." : ""),
+        value: report.description,
         isLink: false,
         action: () => {
           rsProps.callSection("custom", "report", report.id, report)
         },
+        textLength: 25,
+        cellWidth: "164px",
+        classProps: "pl-2 lh-base",
       },
       {
         value: report.nearestPlace,
@@ -60,6 +80,13 @@ const AdminReport = <T extends { [key: string]: any }>({
         action: () => {
           rsProps.callSection("custom", "report", report.id, report)
         },
+      },
+      {
+        value: "",
+        isLink: false,
+        dangerouselySetHtml: `<div style="width: 12px; height: 12px; border-radius: 50%; background: ${getReportStatusBg(
+          report.status
+        )}" title="${report.status}"></div>`,
       },
     ],
     rowActions: [
@@ -101,7 +128,7 @@ const AdminReport = <T extends { [key: string]: any }>({
             <div className="admin-report-right">
               <div className="table-wrapper">
                 <ReportTable
-                  header={["Time", "Report", "Location"]}
+                  header={["Time", "Report", "Location", "Status"]}
                   record={tableReport}
                   hideNumbering
                 />
