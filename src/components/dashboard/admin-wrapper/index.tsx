@@ -33,9 +33,14 @@ const AdminWrapper = ({
   organization: "Fire" | "Police" | "Medical"
 }) => {
   const reports = states.report.getAllReports
+  const loadReports = states.report.getAllReportsLoading
+
+  const fetchReports = () => {
+    actions.getAllReports(organization)
+  }
 
   useEffect(() => {
-    actions.getAllReports(organization)
+    fetchReports()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -64,6 +69,8 @@ const AdminWrapper = ({
                 <AdminReport
                   data={{ title: section, data: data || [] }}
                   reports={reports}
+                  fetchReports={fetchReports}
+                  loadReports={loadReports}
                 />
               ) : null}
               {tab === tabEnums.FEED ? children : null}

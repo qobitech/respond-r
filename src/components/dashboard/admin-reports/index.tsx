@@ -11,6 +11,7 @@ import RightSection, {
   IRightSection,
   useRightSection,
 } from "components/reusable/right-section"
+import { PulseSVG, RefreshSVG } from "utils/new/svgs"
 
 interface IReportData<T> {
   title: string
@@ -20,9 +21,13 @@ interface IReportData<T> {
 const AdminReport = <T extends { [key: string]: any }>({
   data,
   reports,
+  fetchReports,
+  loadReports,
 }: {
   data: IReportData<T>
   reports: IReports
+  fetchReports: () => void
+  loadReports: boolean
 }) => {
   const rsProps = useRightSection<IReport>()
 
@@ -104,7 +109,17 @@ const AdminReport = <T extends { [key: string]: any }>({
       </RightSection>
       <div className="admin-report-section">
         <div className="admin-report-header">
-          <h1>{data.title} Reports</h1>
+          <div className="d-flex align-items-center" style={{ gap: "20px" }}>
+            <h1>{data.title} Reports</h1>
+            <div
+              style={{ width: "max-content", height: "max-content" }}
+              role="button"
+              title="Refresh Reports"
+              onClick={fetchReports}
+            >
+              {loadReports ? <PulseSVG /> : <RefreshSVG />}
+            </div>
+          </div>
           <FilterSection />
         </div>
         <div className="admin-report-body">
