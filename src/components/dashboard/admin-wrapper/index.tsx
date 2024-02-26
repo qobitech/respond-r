@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import "./index.scss"
 import "../global.scss"
 import AdminReport from "../admin-reports"
@@ -38,11 +38,6 @@ const AdminWrapper = ({
   const fetchReports = () => {
     actions.getAllReports(organization)
   }
-
-  useEffect(() => {
-    fetchReports()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const tabEnums = { REPORTS: "All Reports", FEED: "Feed" }
 

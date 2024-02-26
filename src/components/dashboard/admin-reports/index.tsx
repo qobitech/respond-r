@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import "./index.scss"
 import { TypeInput } from "utils/new/input"
 import { TypeButton } from "utils/new/button"
@@ -76,7 +76,7 @@ const AdminReport = <T extends { [key: string]: any }>({
           rsProps.callSection("custom", "report", report.id, report)
         },
         textLength: 25,
-        cellWidth: "164px",
+        cellWidth: "180px",
         classProps: "pl-2 lh-base",
       },
       {
@@ -101,6 +101,11 @@ const AdminReport = <T extends { [key: string]: any }>({
       // },
     ],
   }))
+
+  useEffect(() => {
+    fetchReports()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>
