@@ -15,6 +15,7 @@ import {
 import { ISSUPERADMIN, ORGANIZATION } from "utils/new/constants"
 import { GODUSER } from "utils/new/constants/roles"
 import { managementTabEnums } from "components/dashboard/admin-management"
+import Logo from "../../extras/images/CHITHUB_LOGO.png"
 
 interface IProps {
   setMenuOpen: (menuOpen: boolean) => (dispatch: any) => void
@@ -85,8 +86,11 @@ const SideBar = ({ setMenuOpen, menuOpen, logOut }: IProps) => {
         <div className="hamburger" onClick={handleMenu}>
           <HamburgerSVG />
         </div>
-        <div onClick={() => navigate(url.LANDING_PAGE)}>
-          <LogoSVG />
+        <div
+          onClick={() => navigate(url.LANDING_PAGE)}
+          className="logo-container"
+        >
+          <img src={Logo} alt="Chithub technologies" />
         </div>
       </div>
 

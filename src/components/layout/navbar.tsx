@@ -10,7 +10,6 @@ import {
   CogSVG,
   FireExtinguisherSVG,
   HamburgerSVG,
-  LogoSVG,
   ManagementSVG,
   MedicalSVG,
   PoliceSVG,
@@ -21,6 +20,7 @@ import TextPrompt from "utils/new/text-prompt"
 import { TypeButton } from "utils/new/button"
 import Toggle from "utils/new/toggle"
 import { useGlobalContext } from "."
+import Logo from "../../extras/images/CHITHUB_LOGO.png"
 
 interface NavbarProps {
   notifyUser: INotification | undefined
@@ -94,7 +94,7 @@ const Navbar = (props: NavbarProps) => {
             onClick={() => navigate(url.LANDING_PAGE)}
             className="logo-container"
           >
-            <LogoSVG />
+            <img src={Logo} alt="Chithub technologies" />
           </div>
         )}
         {isLogged ? <PageIdentifier page={getPageIdentifier()} /> : null}
