@@ -35,8 +35,8 @@ const AdminWrapper = ({
   const reports = states.report.getAllReports
   const loadReports = states.report.getAllReportsLoading
 
-  const fetchReports = () => {
-    actions.getAllReports(organization)
+  const fetchReports = (sort?: "asc" | "desc") => {
+    actions.getAllReports(organization, `?sort=${sort || "asc"}`)
   }
 
   const tabEnums = { REPORTS: "All Reports", FEED: "Feed" }

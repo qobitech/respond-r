@@ -26,7 +26,7 @@ const AdminReport = <T extends { [key: string]: any }>({
 }: {
   data: IReportData<T>
   reports: IReports
-  fetchReports: () => void
+  fetchReports: (sort?: "asc" | "desc") => void
   loadReports: boolean
 }) => {
   const rsProps = useRightSection<IReport>()
@@ -120,7 +120,7 @@ const AdminReport = <T extends { [key: string]: any }>({
               style={{ width: "max-content", height: "max-content" }}
               role="button"
               title="Refresh Reports"
-              onClick={fetchReports}
+              onClick={() => fetchReports()}
             >
               {loadReports ? <PulseSVG /> : <RefreshSVG />}
             </div>
