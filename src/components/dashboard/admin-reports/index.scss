@@ -48,7 +48,7 @@
   border-radius: 5px;
   padding: 0.5625rem;
   margin: 5px;
-  height: 82vh;
+  height: 600px;
   overflow: auto;
   @include themify($themes) {
     border: 1px solid themed("border");
