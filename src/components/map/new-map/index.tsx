@@ -17,7 +17,7 @@ export interface ILocation {
 
 export type LocationContent = {
   location: ILocation | undefined
-  markerContent: JSX.Element
+  markerContent?: JSX.Element
   markerColor?: string
 }
 

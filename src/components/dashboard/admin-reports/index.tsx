@@ -18,16 +18,37 @@ interface IReportData<T> {
   data: T[]
 }
 
+export const getReportStatusBg = (status: string) => {
+  //     Assigned (blue)
+  // Accepted (yellow)
+  // Closed (green)
+  // Ignored (---)
+  switch (status.toLowerCase()) {
+    case "new":
+      return "red"
+    case "assigned":
+      return "blue"
+    case "accepted":
+      return "yellow"
+    case "closed":
+      return "green"
+    default:
+      return "grey"
+  }
+}
+
 const AdminReport = <T extends { [key: string]: any }>({
   data,
   reports,
   fetchReports,
   loadReports,
+  showHeader,
 }: {
   data: IReportData<T>
   reports: IReports
   fetchReports: (sort?: "asc" | "desc") => void
   loadReports: boolean
+  showHeader: boolean
 }) => {
   const rsProps = useRightSection<IReport>()
 
@@ -38,25 +59,6 @@ const AdminReport = <T extends { [key: string]: any }>({
     const seconds = currentDate.getSeconds()
 
     return `${hours}:${minutes}:${seconds}`
-  }
-
-  const getReportStatusBg = (status: string) => {
-    //     Assigned (blue)
-    // Accepted (yellow)
-    // Closed (green)
-    // Ignored (---)
-    switch (status.toLowerCase()) {
-      case "new":
-        return "red"
-      case "assigned":
-        return "blue"
-      case "accepted":
-        return "yellow"
-      case "closed":
-        return "green"
-      default:
-        return "grey"
-    }
   }
 
   const tableReport: ITableRecord[] = reports?.data?.map((report) => ({
@@ -113,7 +115,7 @@ const AdminReport = <T extends { [key: string]: any }>({
         {rsProps.isView("custom", "report") ? <ViewReport /> : null}
       </RightSection>
       <div className="admin-report-section">
-        <div className="admin-report-header">
+        <div className={`admin-report-header ${!showHeader ? "d-none" : ""}`}>
           <div className="d-flex align-items-center" style={{ gap: "20px" }}>
             <h1>{data.title} Reports</h1>
             <div
@@ -139,6 +141,21 @@ const AdminReport = <T extends { [key: string]: any }>({
                     },
                     map: report.map,
                     nearestPlace: report.nearestPlace,
+                    markerContent: (
+                      <p
+                        className="d-flex text-decoration-underline"
+                        onClick={() => {
+                          rsProps.callSection(
+                            "custom",
+                            "report",
+                            report.id,
+                            report
+                          )
+                        }}
+                      >
+                        {report.nearestPlace}
+                      </p>
+                    ),
                   })) || [{ latitude: 1, longitude: 1 }]
                 }
                 load={false}
@@ -180,6 +197,35 @@ const FilterSection = () => {
       />
       <TypeInput placeholder="Search report or location" />
       <TypeButton buttonSize="small" title="Search" />
+    </div>
+  )
+}
+
+export const ReportStatus = ({ reportStatus }: { reportStatus: string[] }) => {
+  return (
+    <div className="d-flex align-items-center" style={{ gap: "20px" }}>
+      {reportStatus.map((i, index) => (
+        <ReportStatusItem status={i} key={index} />
+      ))}
+    </div>
+  )
+}
+
+const ReportStatusItem = ({ status }: { status: string }) => {
+  return (
+    <div className="d-flex align-items-center" style={{ gap: "5px" }}>
+      <div
+        style={{
+          width: "12px",
+          height: "12px",
+          borderRadius: "50%",
+          background: getReportStatusBg(status),
+        }}
+        title={status}
+      ></div>
+      <p className="m-0" style={{ fontSize: "0.7rem" }}>
+        {status}
+      </p>
     </div>
   )
 }

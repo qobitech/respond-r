@@ -1710,23 +1710,25 @@ export const NoMediaComponent = ({
     location: ILocation
     nearestPlace: string
     map: string
+    markerContent?: JSX.Element
   }>
 }) => {
   const locationContent = locationDetails?.map((i) => ({
     location: i.location,
-    markerContent: (
-      <a href={i.map} target="_blank" rel="noreferrer">
-        <p className="d-flex">
-          {i.nearestPlace}
-          <span>
-            <i
-              className="fa fa-external-link ml-2"
-              style={{ fontSize: "9px" }}
-            />
-          </span>
-        </p>
-      </a>
-    ),
+    markerContent: i.markerContent,
+    // markerContent: (
+    //   <a href={i.map} target="_blank" rel="noreferrer">
+    //     <p className="d-flex">
+    //       {i.nearestPlace}
+    //       <span>
+    //         <i
+    //           className="fa fa-external-link ml-2"
+    //           style={{ fontSize: "9px" }}
+    //         />
+    //       </span>
+    //     </p>
+    //   </a>
+    // ),
     markerColor: "red",
   }))
 

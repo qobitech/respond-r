@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import "./index.scss"
 import "../global.scss"
-import AdminReport from "../admin-reports"
+import AdminReport, { ReportStatus } from "../admin-reports"
 import { ISSUPERADMIN } from "utils/new/constants"
 import { GODUSER } from "utils/new/constants/roles"
 import { IAction } from "interfaces/IAction"
@@ -42,6 +42,7 @@ const AdminWrapper = ({
   const tabEnums = { REPORTS: "All Reports", FEED: "Feed" }
 
   const [tab, setTab] = useState<string>(tabEnums.REPORTS)
+  const [showHeader, setShowHeader] = useState<boolean>(false)
 
   return (
     <>
@@ -58,6 +59,33 @@ const AdminWrapper = ({
                   <p>{i}</p>
                 </div>
               ))}
+
+              <div
+                className={`ml-auto pr-4 align-items-center ${
+                  tab !== tabEnums.REPORTS ? "d-none" : "d-flex"
+                }`}
+                style={{ gap: "50px" }}
+              >
+                <div className="video-section-header-tab">
+                  <button
+                    className={showHeader ? "active" : ""}
+                    onClick={() => {
+                      setShowHeader(!showHeader)
+                    }}
+                  >
+                    {showHeader ? "HIDE" : "SHOW"} FILTER
+                  </button>
+                </div>
+                <ReportStatus
+                  reportStatus={[
+                    "New",
+                    "Assigned",
+                    "Accepted",
+                    "Closed",
+                    "Rejected",
+                  ]}
+                />
+              </div>
             </div>
             <div className="tab-body">
               {tab === tabEnums.REPORTS ? (
@@ -66,6 +94,7 @@ const AdminWrapper = ({
                   reports={reports}
                   fetchReports={fetchReports}
                   loadReports={loadReports}
+                  showHeader={showHeader}
                 />
               ) : null}
               {tab === tabEnums.FEED ? children : null}

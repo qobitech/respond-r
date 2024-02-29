@@ -511,3 +511,32 @@
     padding: 0 1.06rem;
   }
 }
+
+.video-section-header-tab {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding-bottom: 0 !important;
+  button {
+    margin: 0;
+    border: 1px solid #909090;
+    color: #909090;
+    background: none;
+    width: max-content;
+    padding: 0.3625rem 0.6325rem;
+    border-radius: 3px;
+    transition: 0.2s ease;
+    font-size: 0.5625rem;
+    cursor: pointer;
+    &.active {
+      background: #000;
+      border: 1px solid #000;
+      color: #fff;
+      cursor: default;
+    }
+    &.show-hide-media {
+      border: 0;
+      margin-left: auto;
+    }
+  }
+}

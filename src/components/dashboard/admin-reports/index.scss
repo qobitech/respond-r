@@ -6,6 +6,10 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 1rem;
+    padding-bottom: 1.3rem;
+    @include themify($themes) {
+      border-bottom: 1px solid themed("border");
+    }
     h1 {
       @include themify($themes) {
         color: themed("colorText");
@@ -14,11 +18,10 @@
   }
   .admin-report-body {
     //
-    @include themify($themes) {
-      border-top: 1px solid themed("border");
-    }
+    // @include themify($themes) {
+    //   border-top: 1px solid themed("border");
+    // }
     .admin-report {
-      padding-top: 1.3rem;
       // display: grid;
       // grid-row: auto;
       // grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
@@ -45,6 +48,8 @@
   border-radius: 5px;
   padding: 0.5625rem;
   margin: 5px;
+  height: 82vh;
+  overflow: auto;
   @include themify($themes) {
     border: 1px solid themed("border");
   }
@@ -119,34 +124,5 @@
   .type-select .form-container {
     margin-bottom: 0 !important;
     margin-right: 20px;
-  }
-}
-
-.video-section-header-tab {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding-bottom: 0.9625rem;
-  button {
-    margin: 0;
-    border: 1px solid #909090;
-    color: #909090;
-    background: none;
-    width: max-content;
-    padding: 0.3625rem 0.6325rem;
-    border-radius: 3px;
-    transition: 0.2s ease;
-    font-size: 0.5625rem;
-    cursor: pointer;
-    &.active {
-      background: #000;
-      border: 1px solid #000;
-      color: #fff;
-      cursor: default;
-    }
-    &.show-hide-media {
-      border: 0;
-      margin-left: auto;
-    }
   }
 }
