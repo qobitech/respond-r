@@ -70,7 +70,7 @@ const AdminReport = <T extends { [key: string]: any }>({
   const [selectedReport, setSelectedReport] = useState<IReport | null>(null)
 
   const rsProps = useRightSection<IReport>(undefined, undefined, () => {
-    setSelectedReport(null)
+    // setSelectedReport(null)
   })
   interface ObjectType {
     [key: string]: IReport[]
@@ -87,57 +87,85 @@ const AdminReport = <T extends { [key: string]: any }>({
 
   const getTableReport = (data: IReport[]): ITableRecord[] => {
     if (!data) return []
-    return data?.map((report) => ({
-      id: "1",
-      row: [
-        {
-          value: getTime(report.updatedAt),
-          isLink: false,
-          action: () => {
-            rsProps.callSection("custom", "report", report.id, report)
-            setSelectedReport(report)
+    return data?.map((report) => {
+      const isSelected = report.id === selectedReport?.id
+      return {
+        id: "1",
+        isSelected,
+        row: [
+          {
+            value: getTime(report.updatedAt),
+            isLink: false,
+            action: () => {
+              if (!isSelected)
+                rsProps.callSection("custom", "report", report.id, report)
+              setSelectedReport(isSelected ? null : report)
+            },
           },
-        },
-        {
-          value: report.description,
-          isLink: false,
-          action: () => {
-            rsProps.callSection("custom", "report", report.id, report)
-            setSelectedReport(report)
+          {
+            value: report.description,
+            isLink: false,
+            action: () => {
+              if (!isSelected)
+                rsProps.callSection("custom", "report", report.id, report)
+              setSelectedReport(isSelected ? null : report)
+            },
+            textLength: 25,
+            cellWidth: "180px",
+            classProps: "pl-2 lh-base",
           },
-          textLength: 25,
-          cellWidth: "180px",
-          classProps: "pl-2 lh-base",
-        },
-        {
-          value: report.nearestPlace,
-          isLink: false,
-          action: () => {
-            rsProps.callSection("custom", "report", report.id, report)
-            setSelectedReport(report)
+          {
+            value: report.nearestPlace,
+            isLink: false,
+            action: () => {
+              if (!isSelected)
+                rsProps.callSection("custom", "report", report.id, report)
+              setSelectedReport(isSelected ? null : report)
+            },
           },
-        },
-        {
-          value: "",
-          isLink: false,
-          dangerouselySetHtml: `<div style="width: 12px; height: 12px; border-radius: 50%; background: ${getReportStatusBg(
-            report.status
-          )}" title="${report.status}"></div>`,
-        },
-      ],
-      rowActions: [
-        // {
-        //   value: "Assign",
-        //   isLink: true,
-        // },
-      ],
-    }))
+          {
+            value: "",
+            isLink: false,
+            dangerouselySetHtml: `<div style="width: 12px; height: 12px; border-radius: 50%; background: ${getReportStatusBg(
+              report.status
+            )}" title="${report.status}"></div>`,
+          },
+        ],
+        rowActions: [],
+      }
+    })
   }
 
   useEffect(() => {
     fetchReports()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const getSelectedReport = (selectedReport: IReport) => ({
+    location: {
+      latitude: parseFloat(selectedReport.latitude || "0"),
+      longitude: parseFloat(selectedReport.longitude || "0"),
+    },
+    map: selectedReport.map,
+    nearestPlace: selectedReport.nearestPlace,
+    markerContent: (
+      <p
+        className="d-flex text-decoration-underline"
+        onClick={() => {
+          rsProps.callSection(
+            "custom",
+            "report",
+            selectedReport.id,
+            selectedReport
+          )
+          setSelectedReport(selectedReport)
+        }}
+      >
+        {selectedReport.nearestPlace}
+      </p>
+    ),
+    markerColor: getReportStatusBg(selectedReport.status),
+  })
 
   return (
     <>
@@ -165,63 +193,13 @@ const AdminReport = <T extends { [key: string]: any }>({
               <NoMediaComponent
                 locationDetails={
                   selectedReport
-                    ? [
-                        {
-                          location: {
-                            latitude: parseFloat(
-                              selectedReport.latitude || "0"
-                            ),
-                            longitude: parseFloat(
-                              selectedReport.longitude || "0"
-                            ),
-                          },
-                          map: selectedReport.map,
-                          nearestPlace: selectedReport.nearestPlace,
-                          markerContent: (
-                            <p
-                              className="d-flex text-decoration-underline"
-                              onClick={() => {
-                                rsProps.callSection(
-                                  "custom",
-                                  "report",
-                                  selectedReport.id,
-                                  selectedReport
-                                )
-                              }}
-                            >
-                              {selectedReport.nearestPlace}
-                            </p>
-                          ),
-                        },
+                    ? [getSelectedReport(selectedReport)]
+                    : reports?.data.map(getSelectedReport) || [
+                        { latitude: 1, longitude: 1 },
                       ]
-                    : reports?.data.map((report) => ({
-                        location: {
-                          latitude: parseFloat(report.latitude || "0"),
-                          longitude: parseFloat(report.longitude || "0"),
-                        },
-                        map: report.map,
-                        nearestPlace: report.nearestPlace,
-                        markerContent: (
-                          <p
-                            className="d-flex text-decoration-underline"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => {
-                              rsProps.callSection(
-                                "custom",
-                                "report",
-                                report.id,
-                                report
-                              )
-                              setSelectedReport(report)
-                            }}
-                          >
-                            {report.nearestPlace}
-                          </p>
-                        ),
-                      })) || [{ latitude: 1, longitude: 1 }]
                 }
                 load={false}
-                key={selectedReport ? 1 : reports?.data?.length}
+                key={selectedReport ? selectedReport.id : reports?.data?.length}
                 defaultZoom={selectedReport ? 10 : 6.5}
               />
             </div>

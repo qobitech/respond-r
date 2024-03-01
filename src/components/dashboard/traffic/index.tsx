@@ -1712,12 +1712,14 @@ export const NoMediaComponent = ({
     nearestPlace: string
     map: string
     markerContent?: JSX.Element
+    markerColor?: string
   }>
   defaultZoom?: number
 }) => {
   const locationContent = locationDetails?.map((i) => ({
     location: i.location,
     markerContent: i.markerContent,
+
     // markerContent: (
     //   <a href={i.map} target="_blank" rel="noreferrer">
     //     <p className="d-flex">
@@ -1731,7 +1733,7 @@ export const NoMediaComponent = ({
     //     </p>
     //   </a>
     // ),
-    markerColor: "red",
+    markerColor: i.markerColor,
   }))
 
   return (

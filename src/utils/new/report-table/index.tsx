@@ -120,6 +120,7 @@ export interface ICellAction extends ICell {
 export interface ITableRecord {
   id: string
   row: ICell[]
+  isSelected?: boolean
   rowActions: ICellAction[]
 }
 
@@ -154,11 +155,6 @@ const ReportTable: React.FC<IResultTable> = ({
 
   return (
     <div className="table-container">
-      {/* <TableActionComponent
-        tableAction={tableAction}
-        handleTableAction={handleTableAction}
-        isCTA={isRecord}
-      /> */}
       <table className="reportTable">
         <thead className="thead_blue d-none">
           <tr>
@@ -192,12 +188,12 @@ const ReportTable: React.FC<IResultTable> = ({
         <tbody>
           {isRecord &&
             record.map((i, jindex) => (
-              <tr key={jindex}>
+              <tr
+                key={jindex}
+                className={i.isSelected ? `selected-table-row` : ""}
+              >
                 {!hideNumbering && (
-                  <td
-                    style={{ padding: "10px 0px 10px 10px" }}
-                    // width={`${100 / header.length}%`}
-                  >
+                  <td style={{ padding: "10px 0px 10px 10px" }}>
                     <p style={{ margin: 0 }}>
                       {jindex + 1 + ((currentPage || 0) - 1) * PAGE_SIZE}
                     </p>
@@ -206,10 +202,7 @@ const ReportTable: React.FC<IResultTable> = ({
                 {i?.row?.map((j, index) => {
                   if (jindex === 0) {
                     return (
-                      <td
-                        key={index}
-                        // width={`${100 / header.length}%`}
-                      >
+                      <td key={index}>
                         <div style={{ display: "flex", alignItems: "center" }}>
                           {!hideCheck && (
                             <div style={{ marginRight: 25 }}>

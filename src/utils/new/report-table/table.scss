@@ -66,13 +66,11 @@
     }
     tbody tr {
       background-color: none;
-      // box-shadow: 0px 4px 4px rgba(240, 235, 235, 0.25);
-      // :hover {
-      //   background: rgb(12, 87, 97);
-      //   // @include themify($themes) {
-      //   //   border-bottom: 1px solid themed("border");
-      //   // }
-      // }
+      &.selected-table-row {
+        @include themify($themes) {
+          background: themed("tableRowHover");
+        }
+      }
     }
     tbody tr:hover {
       @include themify($themes) {
