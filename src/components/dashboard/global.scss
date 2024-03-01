@@ -76,6 +76,14 @@
   }
 }
 
+.location-map-icon {
+  cursor: pointer;
+  svg {
+    width: 15px;
+    height: auto;
+  }
+}
+
 .media-container {
   border-radius: 1.5625rem;
   background: none;
@@ -538,5 +546,15 @@
       border: 0;
       margin-left: auto;
     }
+    svg {
+      width: 10px;
+      height: 10px;
+    }
+  }
+}
+
+.text-color {
+  @include themify($themes) {
+    color: themed("themeColor");
   }
 }

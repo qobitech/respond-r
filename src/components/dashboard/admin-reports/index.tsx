@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import "./index.scss"
 import { TypeInput } from "utils/new/input"
 import { TypeButton } from "utils/new/button"
@@ -37,6 +37,23 @@ export const getReportStatusBg = (status: string) => {
   }
 }
 
+export const getTime = (date: string) => {
+  const currentDate = new Date(date)
+  const hours = currentDate.getHours()
+  const minutes = currentDate.getMinutes()
+  const seconds = currentDate.getSeconds()
+  const amPM = hours >= 12 ? "PM" : "AM" // Determine AM/PM
+
+  // Convert hours to 12-hour format
+  const formattedHours = hours % 12 || 12
+
+  // Ensure minutes and seconds are displayed with leading zeros if less than 10
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes
+  const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds
+
+  return `${formattedHours}:${formattedMinutes}:${formattedSeconds} ${amPM}`
+}
+
 const AdminReport = <T extends { [key: string]: any }>({
   data,
   reports,
@@ -51,58 +68,66 @@ const AdminReport = <T extends { [key: string]: any }>({
   showHeader: boolean
 }) => {
   const rsProps = useRightSection<IReport>()
-
-  const getTime = (date: string) => {
-    const currentDate = new Date(date)
-    const hours = currentDate.getHours()
-    const minutes = currentDate.getMinutes()
-    const seconds = currentDate.getSeconds()
-
-    return `${hours}:${minutes}:${seconds}`
+  interface ObjectType {
+    [key: string]: IReport[]
   }
 
-  const tableReport: ITableRecord[] = reports?.data?.map((report) => ({
-    id: "1",
-    row: [
-      {
-        value: getTime(report.updatedAt),
-        isLink: false,
-        action: () => {
-          rsProps.callSection("custom", "report", report.id, report)
+  const reportsGroupedByDate = reports?.data?.reduce((acc, obj) => {
+    const date: string = obj.createdAt.split("T")[0]
+    if (!acc[date]) {
+      acc[date] = []
+    }
+    acc[date].push(obj)
+    return acc
+  }, {} as ObjectType)
+
+  console.log(reportsGroupedByDate, "juju")
+
+  const getTableReport = (data: IReport[]): ITableRecord[] => {
+    if (!data) return []
+    return data?.map((report) => ({
+      id: "1",
+      row: [
+        {
+          value: getTime(report.updatedAt),
+          isLink: false,
+          action: () => {
+            rsProps.callSection("custom", "report", report.id, report)
+          },
         },
-      },
-      {
-        value: report.description,
-        isLink: false,
-        action: () => {
-          rsProps.callSection("custom", "report", report.id, report)
+        {
+          value: report.description,
+          isLink: false,
+          action: () => {
+            rsProps.callSection("custom", "report", report.id, report)
+          },
+          textLength: 25,
+          cellWidth: "180px",
+          classProps: "pl-2 lh-base",
         },
-        textLength: 25,
-        cellWidth: "180px",
-        classProps: "pl-2 lh-base",
-      },
-      {
-        value: report.nearestPlace,
-        isLink: false,
-        action: () => {
-          rsProps.callSection("custom", "report", report.id, report)
+        {
+          value: report.nearestPlace,
+          isLink: false,
+          action: () => {
+            rsProps.callSection("custom", "report", report.id, report)
+          },
         },
-      },
-      {
-        value: "",
-        isLink: false,
-        dangerouselySetHtml: `<div style="width: 12px; height: 12px; border-radius: 50%; background: ${getReportStatusBg(
-          report.status
-        )}" title="${report.status}"></div>`,
-      },
-    ],
-    rowActions: [
-      // {
-      //   value: "Assign",
-      //   isLink: true,
-      // },
-    ],
-  }))
+        {
+          value: "",
+          isLink: false,
+          dangerouselySetHtml: `<div style="width: 12px; height: 12px; border-radius: 50%; background: ${getReportStatusBg(
+            report.status
+          )}" title="${report.status}"></div>`,
+        },
+      ],
+      rowActions: [
+        // {
+        //   value: "Assign",
+        //   isLink: true,
+        // },
+      ],
+    }))
+  }
 
   useEffect(() => {
     fetchReports()
@@ -160,21 +185,59 @@ const AdminReport = <T extends { [key: string]: any }>({
                 }
                 load={false}
                 key={reports?.data?.length}
+                defaultZoom={6.5}
               />
             </div>
             <div className="admin-report-right">
-              <div className="table-wrapper">
-                <ReportTable
-                  header={["Time", "Report", "Location", "Status"]}
-                  record={tableReport}
-                  hideNumbering
-                />
-              </div>
+              {reportsGroupedByDate ? (
+                <div className="table-wrapper">
+                  {Object.values(reportsGroupedByDate)?.map((report, index) => (
+                    <TableWrapper
+                      title={Object.keys(reportsGroupedByDate)[index]}
+                      key={index}
+                    >
+                      <ReportTable
+                        header={["Time", "Report", "Location", "Status"]}
+                        record={getTableReport(report)}
+                        hideNumbering
+                      />
+                    </TableWrapper>
+                  ))}
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
       </div>
     </>
+  )
+}
+
+const TableWrapper = ({
+  title,
+  children,
+}: {
+  title: string
+  children?: any
+}) => {
+  const [toggle, setToggle] = useState<boolean>(true)
+  return (
+    <div className="table-wrapper-box">
+      <div
+        className="table-wrapper-box-header"
+        onClick={() => setToggle(!toggle)}
+      >
+        <p>{new Date(title).toDateString()}</p>
+        <p>
+          <span>
+            <i className={`fas fa-angle-${toggle ? "down" : "up"}`} />
+          </span>
+        </p>
+      </div>
+      {toggle ? (
+        <div className={`table-wrapper-box-body`}>{children}</div>
+      ) : null}
+    </div>
   )
 }
 
@@ -223,7 +286,7 @@ const ReportStatusItem = ({ status }: { status: string }) => {
         }}
         title={status}
       ></div>
-      <p className="m-0" style={{ fontSize: "0.7rem" }}>
+      <p className="m-0 text-color" style={{ fontSize: "0.7rem" }}>
         {status}
       </p>
     </div>

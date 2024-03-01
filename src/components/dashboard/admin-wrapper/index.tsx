@@ -6,6 +6,7 @@ import { ISSUPERADMIN } from "utils/new/constants"
 import { GODUSER } from "utils/new/constants/roles"
 import { IAction } from "interfaces/IAction"
 import { IStates } from "interfaces/IReducer"
+import { PulseSVG, RefreshSVG } from "utils/new/svgs"
 
 export const adminSections = {
   TRAFFIC: "E-traffic",
@@ -67,6 +68,10 @@ const AdminWrapper = ({
                 style={{ gap: "50px" }}
               >
                 <div className="video-section-header-tab">
+                  <button onClick={() => fetchReports()}>
+                    REFRESH&nbsp;&nbsp;&nbsp;
+                    {loadReports ? <PulseSVG /> : <RefreshSVG />}
+                  </button>
                   <button
                     className={showHeader ? "active" : ""}
                     onClick={() => {

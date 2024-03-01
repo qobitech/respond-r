@@ -26,6 +26,8 @@ import {
   Calendar2SVG,
   LeftNavSVG,
   LocationSVG,
+  MapSVG,
+  MarkerSVG,
   PhoneSVG,
   PulseSVG,
   RightNavSVG,
@@ -38,6 +40,7 @@ import { IStates } from "interfaces/IReducer"
 import { IReport } from "interfaces/IReport"
 import { typeAdminSections } from "./admin-management"
 import { trafficReportData } from "./traffic/mock-data"
+import { getTime } from "./admin-reports"
 
 export interface IPHUS<T> {
   feeds: T[]
@@ -447,11 +450,13 @@ export const InfoSectionItem = ({
   value,
   values,
   status,
+  icon,
 }: {
   label: string
   value: string | undefined
   values?: Array<string | undefined>
   status?: boolean
+  icon?: JSX.Element
 }) => {
   const isStatus = typeof status !== "undefined"
   return (
@@ -485,6 +490,7 @@ export const InfoSectionItem = ({
                 ) : null}
               </div>
             ))}
+            {icon}
           </div>
         )}
         {isStatus ? (
@@ -647,9 +653,12 @@ export const MainView = ({ feed }: { feed: IReport | null }) => {
   const [fileIndex, setFileIndex] = useState<number>(0)
 
   const handleFileIndex = (nav: "left" | "right") => {
-    if (nav === "left") setFileIndex(Math.max(0, fileIndex - 1))
-    if (nav === "right")
-      setFileIndex(Math.min((feed?.mediaFiles?.length || 1) - 1, fileIndex + 1))
+    setFileIndex((prev) => {
+      if (nav === "left") return Math.max(0, prev - 1)
+      if (nav === "right")
+        return Math.min((feed?.mediaFiles?.length || 1) - 1, prev + 1)
+      return prev
+    })
   }
 
   const imgProps = useImage()
@@ -681,8 +690,9 @@ export const MainView = ({ feed }: { feed: IReport | null }) => {
               <Calendar2SVG />
               <p>
                 {feed?.createdAt
-                  ? new Date(feed?.createdAt).toDateString()
+                  ? new Date(feed.createdAt).toDateString()
                   : "..."}
+                &nbsp;-&nbsp;<i>{getTime(feed?.createdAt)}</i>
               </p>
             </div>
             <div className="icon-txt">
@@ -690,16 +700,20 @@ export const MainView = ({ feed }: { feed: IReport | null }) => {
               <p>{feed?.deviceId || "..."}</p>
             </div>
             <div className="cta-section">
-              <TypeButton
+              {/* <TypeButton
                 title="View Map"
                 buttonType="outlined"
                 buttonSize="small"
                 onClick={() => handleFullScreen(feed.map || "")}
-              />
-              <TypeButton title="Accept" buttonSize="small" />
+              /> */}
+              <TypeButton title="Action" buttonSize="small" />
             </div>
           </div>
           <div className="vehicle-info-section">
+            <InfoSectionItem
+              label="Transaction ID"
+              value={feed?.transactionId || "..."}
+            />
             <InfoSectionItem label="Words" value={feed?.words || "..."} />
             <InfoSectionItem
               label="Description"
@@ -709,6 +723,14 @@ export const MainView = ({ feed }: { feed: IReport | null }) => {
               label="Location"
               value={feed?.city + " | " + feed?.state || "..."}
               values={[feed?.city, feed?.state]}
+              icon={
+                <div
+                  onClick={() => handleFullScreen(feed.map || "")}
+                  className="location-map-icon"
+                >
+                  <MarkerSVG />
+                </div>
+              }
             />
           </div>
         </>

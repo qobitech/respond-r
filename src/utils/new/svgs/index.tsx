@@ -1120,3 +1120,20 @@ export const ReviewSVG = () => {
     </svg>
   )
 }
+
+export const MarkerSVG = () => {
+  return (
+    <svg
+      width="66"
+      height="90"
+      viewBox="0 0 66 90"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M32.9 0C14.7 0 0 14.7 0 32.9C0 58.4 32.9 90 32.9 90C32.9 90 65.8 58.3 65.8 32.9C65.8 14.7 51.1 0 32.9 0ZM32.9 48C24.6 48 17.9 41.3 17.9 33C17.9 24.7 24.6 18 32.9 18C41.2 18 47.9 24.7 47.9 33C47.9 41.3 41.2 48 32.9 48Z"
+        fill="#BE434D"
+      />
+    </svg>
+  )
+}

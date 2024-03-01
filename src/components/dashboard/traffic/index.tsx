@@ -1704,6 +1704,7 @@ const TableSection = ({
 export const NoMediaComponent = ({
   load,
   locationDetails,
+  defaultZoom,
 }: {
   load: boolean
   locationDetails: Array<{
@@ -1712,6 +1713,7 @@ export const NoMediaComponent = ({
     map: string
     markerContent?: JSX.Element
   }>
+  defaultZoom?: number
 }) => {
   const locationContent = locationDetails?.map((i) => ({
     location: i.location,
@@ -1734,7 +1736,14 @@ export const NoMediaComponent = ({
 
   return (
     <div className="no-video-selected-section">
-      {load ? <PulseSVG /> : <MapChart locationContents={locationContent} />}
+      {load ? (
+        <PulseSVG />
+      ) : (
+        <MapChart
+          locationContents={locationContent}
+          defaultZoom={defaultZoom}
+        />
+      )}
     </div>
   )
 }

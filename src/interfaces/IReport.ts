@@ -17,6 +17,7 @@ export interface IReport {
   canBeContacted: boolean
   referenceId: string
   status: string
+  transactionId: string
 }
 
 export interface IReports {
