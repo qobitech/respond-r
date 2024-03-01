@@ -67,7 +67,11 @@ const AdminReport = <T extends { [key: string]: any }>({
   loadReports: boolean
   showHeader: boolean
 }) => {
-  const rsProps = useRightSection<IReport>()
+  const [selectedReport, setSelectedReport] = useState<IReport | null>(null)
+
+  const rsProps = useRightSection<IReport>(undefined, undefined, () => {
+    setSelectedReport(null)
+  })
   interface ObjectType {
     [key: string]: IReport[]
   }
@@ -81,8 +85,6 @@ const AdminReport = <T extends { [key: string]: any }>({
     return acc
   }, {} as ObjectType)
 
-  console.log(reportsGroupedByDate, "juju")
-
   const getTableReport = (data: IReport[]): ITableRecord[] => {
     if (!data) return []
     return data?.map((report) => ({
@@ -93,6 +95,7 @@ const AdminReport = <T extends { [key: string]: any }>({
           isLink: false,
           action: () => {
             rsProps.callSection("custom", "report", report.id, report)
+            setSelectedReport(report)
           },
         },
         {
@@ -100,6 +103,7 @@ const AdminReport = <T extends { [key: string]: any }>({
           isLink: false,
           action: () => {
             rsProps.callSection("custom", "report", report.id, report)
+            setSelectedReport(report)
           },
           textLength: 25,
           cellWidth: "180px",
@@ -110,6 +114,7 @@ const AdminReport = <T extends { [key: string]: any }>({
           isLink: false,
           action: () => {
             rsProps.callSection("custom", "report", report.id, report)
+            setSelectedReport(report)
           },
         },
         {
@@ -159,33 +164,65 @@ const AdminReport = <T extends { [key: string]: any }>({
             <div className="admin-report-left">
               <NoMediaComponent
                 locationDetails={
-                  reports?.data.map((report) => ({
-                    location: {
-                      latitude: parseFloat(report.latitude || "0"),
-                      longitude: parseFloat(report.longitude || "0"),
-                    },
-                    map: report.map,
-                    nearestPlace: report.nearestPlace,
-                    markerContent: (
-                      <p
-                        className="d-flex text-decoration-underline"
-                        onClick={() => {
-                          rsProps.callSection(
-                            "custom",
-                            "report",
-                            report.id,
-                            report
-                          )
-                        }}
-                      >
-                        {report.nearestPlace}
-                      </p>
-                    ),
-                  })) || [{ latitude: 1, longitude: 1 }]
+                  selectedReport
+                    ? [
+                        {
+                          location: {
+                            latitude: parseFloat(
+                              selectedReport.latitude || "0"
+                            ),
+                            longitude: parseFloat(
+                              selectedReport.longitude || "0"
+                            ),
+                          },
+                          map: selectedReport.map,
+                          nearestPlace: selectedReport.nearestPlace,
+                          markerContent: (
+                            <p
+                              className="d-flex text-decoration-underline"
+                              onClick={() => {
+                                rsProps.callSection(
+                                  "custom",
+                                  "report",
+                                  selectedReport.id,
+                                  selectedReport
+                                )
+                              }}
+                            >
+                              {selectedReport.nearestPlace}
+                            </p>
+                          ),
+                        },
+                      ]
+                    : reports?.data.map((report) => ({
+                        location: {
+                          latitude: parseFloat(report.latitude || "0"),
+                          longitude: parseFloat(report.longitude || "0"),
+                        },
+                        map: report.map,
+                        nearestPlace: report.nearestPlace,
+                        markerContent: (
+                          <p
+                            className="d-flex text-decoration-underline"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              rsProps.callSection(
+                                "custom",
+                                "report",
+                                report.id,
+                                report
+                              )
+                              setSelectedReport(report)
+                            }}
+                          >
+                            {report.nearestPlace}
+                          </p>
+                        ),
+                      })) || [{ latitude: 1, longitude: 1 }]
                 }
                 load={false}
-                key={reports?.data?.length}
-                defaultZoom={6.5}
+                key={selectedReport ? 1 : reports?.data?.length}
+                defaultZoom={selectedReport ? 10 : 6.5}
               />
             </div>
             <div className="admin-report-right">

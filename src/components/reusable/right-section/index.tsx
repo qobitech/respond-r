@@ -65,7 +65,8 @@ export interface IRightSection<K> {
 
 export const useRightSection = <K extends {}>(
   rightSectionProps?: ICallRightSection,
-  callRightSection?: (props: ICallRightSection) => (dispatch: any) => void
+  callRightSection?: (props: ICallRightSection) => (dispatch: any) => void,
+  onClose?: () => void
 ): IRightSection<K> => {
   const [searchParams] = useSearchParams()
   const queryId = searchParams.get("id")
@@ -156,6 +157,7 @@ export const useRightSection = <K extends {}>(
     navigate(`?`)
     callRightSection?.({ action: null, component: null })
     setAction({ type: null, component: null, id: null })
+    onClose?.()
   }
 
   useEffect(() => {

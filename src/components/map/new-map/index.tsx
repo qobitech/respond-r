@@ -39,6 +39,10 @@ export const MapChart = ({
 }: MapChartProps) => {
   if (!locationContents || !locationContents.length) return null
   const centerLocation = getLatLngFromLocation(locationContents[0].location)
+  // const bound: L.LatLngBoundsExpression = [
+  //   [-100, 500],
+  //   [240, 250],
+  // ]
 
   const icon = (color: string) =>
     L.icon({
@@ -60,6 +64,7 @@ export const MapChart = ({
         center={centerLocation}
         zoom={defaultZoom || 2}
         scrollWheelZoom={false}
+        // bounds={bound}
       >
         <ResizeMap />
         <TileLayer
