@@ -25,6 +25,7 @@ const AdminWrapper = ({
   actions,
   states,
   organization,
+  fetchReports,
 }: {
   children?: any
   section: typeAdminSections
@@ -32,13 +33,10 @@ const AdminWrapper = ({
   actions: IAction
   states: IStates
   organization: "Fire" | "Police" | "Medical"
+  fetchReports: (sort?: "asc" | "desc") => void
 }) => {
   const reports = states.report.getAllReports
   const loadReports = states.report.getAllReportsLoading
-
-  const fetchReports = (sort?: "asc" | "desc") => {
-    actions.getAllReports(organization, `?sort=${sort || "desc"}`)
-  }
 
   const tabEnums = { REPORTS: "All Reports", FEED: "Feed" }
 

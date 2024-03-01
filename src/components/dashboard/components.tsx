@@ -58,7 +58,8 @@ export type typeSignalRURL =
   | "SendMedicalEmergencyNotification"
 
 export const useSignalR = <T extends {}>(
-  signalKey: typeSignalRURL
+  signalKey: typeSignalRURL,
+  onSignal?: () => void
 ): IPHUS<T> => {
   const [connection, setConnection] = useState<signalR.HubConnection>()
   const [feeds, setFeeds] = useState<T[]>([])
@@ -130,7 +131,8 @@ export const useSignalR = <T extends {}>(
     connection?.on(signalKey, (data: any) => {
       console.log(data, "juju")
       playHit()
-      setFeeds([...handleDataStream(feeds, mapDataArray, "")(data)])
+      setFeeds(() => [...handleDataStream(feeds, mapDataArray, "")(data)])
+      onSignal?.()
     })
     connection?.onreconnecting(() => {
       setConnectionStatus("re-connecting")
@@ -548,9 +550,15 @@ export const PageComponent: React.FC<IPageComponent> = ({
   signalRURL,
   organization,
 }) => {
+  const fetchReports = (sort?: "asc" | "desc") => {
+    actions.getAllReports(organization, `?sort=${sort || "desc"}`)
+  }
+
   const rightSectionProps = states?.global.rightSection
   const rsProps = useRightSection(rightSectionProps, actions.callRightSection)
-  const signalRProps = useSignalR<IReport>(signalRURL)
+  const signalRProps = useSignalR<IReport>(signalRURL, () => {
+    fetchReports()
+  })
 
   return (
     <>
@@ -568,6 +576,7 @@ export const PageComponent: React.FC<IPageComponent> = ({
             actions={actions}
             states={states}
             organization={organization}
+            fetchReports={fetchReports}
           >
             <div className="overview-page">
               {signalRProps?.feed ? (
