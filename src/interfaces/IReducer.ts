@@ -8,6 +8,7 @@ import { IRoles } from "./IRole"
 import { IOrganizations } from "./IOrganization"
 import { IActionsForRole, ICreateAction, IRoleActions } from "./IRoleActions"
 import { IReports } from "./IReport"
+import { IAsset, IAssets } from "./IAsset"
 
 export interface IAuthReducer {
   userLogin: ILoginResponse
@@ -134,6 +135,18 @@ export interface IReportReducer {
   getAllReportsError: any
 }
 
+export interface IAssetReducer {
+  getAllAssets: IAssets
+  getAllAssetsLoading: boolean
+  getAllAssetsError: any
+  createAsset: any
+  createAssetLoading: boolean
+  createAssetError: any
+  getAssetById: IAsset
+  getAssetByIdLoading: boolean
+  getAssetByIdError: any
+}
+
 export interface IStates {
   auth: IAuthReducer
   global: IGlobalReducer
@@ -145,4 +158,5 @@ export interface IStates {
   actions: IActionReducer
   logged: ILoggedReducer
   report: IReportReducer
+  asset: IAssetReducer
 }

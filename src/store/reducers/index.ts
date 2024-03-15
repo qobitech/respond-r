@@ -11,6 +11,7 @@ import {
   IVehicleReducer,
   ILoggedReducer,
   IReportReducer,
+  IAssetReducer,
 } from "interfaces/IReducer"
 
 const rootReducer = combineReducers<IStates>({
@@ -24,6 +25,7 @@ const rootReducer = combineReducers<IStates>({
   actions: reducer<IActionReducer>,
   logged: reducer<ILoggedReducer>,
   report: reducer<IReportReducer>,
+  asset: reducer<IAssetReducer>,
 })
 
 function reducer<T>(state = {} as T, action: { type: string; payload: any }) {

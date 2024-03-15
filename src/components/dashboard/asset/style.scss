@@ -1,0 +1,8 @@
+.link-assets-information {
+  display: grid;
+  grid-row: auto;
+  grid-template-columns: repeat(auto-fill, minmax(33%, 1fr));
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 30px;
+}

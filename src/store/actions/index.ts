@@ -8,6 +8,7 @@ import * as vehicleactions from "./admin-actions/vehicles"
 import * as demoActions from "./admin-actions/get-demo-actions"
 import * as loggedActions from "./admin-actions/logged"
 import * as reportActions from "./admin-actions/report"
+import * as assetActions from "./admin-actions/assets"
 
 export const actions = {
   ...authactions,
@@ -20,4 +21,5 @@ export const actions = {
   ...actionactions,
   ...loggedActions,
   ...reportActions,
+  ...assetActions,
 }

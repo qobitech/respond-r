@@ -343,7 +343,7 @@ const MediaRTSPToggle = ({
   isMedia: boolean
 }) => {
   return (
-    <div className="video-section-header-tab">
+    <div className="video-section-header-tab pb-2">
       <button
         className={isImage ? "active" : ""}
         onClick={() => setSelectedView?.(0)}
@@ -428,7 +428,7 @@ const MainView = ({
           isMedia={isMedia}
           setIsMedia={setIsMedia}
         />
-        {vehicle?.getVehicleByRegNumber?.isSuccessful || isRtsp ? (
+        {!vehicle?.getVehicleByRegNumber?.isSuccessful || isRtsp ? (
           <>
             <div className="separator-mainview" />
             <div className="main-view-body">
@@ -1663,24 +1663,33 @@ const convertRemoteSearchDataToFeed = (
   vehicleType: i?.model || "",
 })
 
-const TableSection = ({
+export interface ITableRecord {
+  id: string
+  row: ICell[]
+  rowActions: ICellAction[]
+}
+
+export const TableSection = ({
   header,
   record,
   handlePagination,
+  hideTableAction,
 }: {
   header: string[]
-  record: Array<{
-    id: string
-    row: ICell[]
-    rowActions: ICellAction[]
-  }>
+  record: ITableRecord[]
   handlePagination?: (selectedItem: { selected: number }) => void
+  hideTableAction?: boolean
 }) => {
   const isPagination = typeof handlePagination === "function"
   return (
     <div>
       <div className="table-section">
-        <Table header={header} record={record} hideNumbering />
+        <Table
+          header={header}
+          record={record}
+          hideNumbering
+          hideTableAction={hideTableAction}
+        />
       </div>
       {isPagination && (
         <div className="pagination-container">
@@ -1701,24 +1710,30 @@ const TableSection = ({
   )
 }
 
+export interface ILocationDetails {
+  location: ILocation
+  nearestPlace: string
+  map: string
+  markerContent?: JSX.Element
+  markerColor?: string
+  iconUrl?: string
+  iconSize?: [number, number]
+}
+
 export const NoMediaComponent = ({
   load,
   locationDetails,
   defaultZoom,
 }: {
   load: boolean
-  locationDetails: Array<{
-    location: ILocation
-    nearestPlace: string
-    map: string
-    markerContent?: JSX.Element
-    markerColor?: string
-  }>
+  locationDetails: ILocationDetails[]
   defaultZoom?: number
 }) => {
   const locationContent = locationDetails?.map((i) => ({
     location: i.location,
     markerContent: i.markerContent,
+    iconUrl: i.iconUrl,
+    iconSize: i.iconSize,
 
     // markerContent: (
     //   <a href={i.map} target="_blank" rel="noreferrer">

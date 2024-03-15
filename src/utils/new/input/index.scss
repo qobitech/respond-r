@@ -55,7 +55,7 @@
     }
     &.isonlyview {
       padding-left: 0;
-      border: none;
+      border: none !important;
     }
   }
   /* Override autofill styles for webkit browsers */

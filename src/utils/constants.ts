@@ -19,6 +19,9 @@ export const baseurl = getBaseUrl("commandURL")
 export const baseurlReport = getBaseUrl("queryURL")
   ? getBaseUrl("queryURL") + "/api/v1/"
   : "" || process.env.REACT_APP_BASEURL_REPORT
+export const baseurlCommandReport = getBaseUrl("commandURL")
+  ? getBaseUrl("commandURL") + "/api/v1/"
+  : "" || process.env.REACT_APP_BASEURL_REPORT
 export const baseurlEPoliceTest =
   "https://respondr-command-2b9239ad3a3a.herokuapp.com/api/v1"
 export const identity_server = "https://identityserver.myapiservices.net/api/v1"

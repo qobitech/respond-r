@@ -19,6 +19,8 @@ export type LocationContent = {
   location: ILocation | undefined
   markerContent?: JSX.Element
   markerColor?: string
+  iconUrl?: string
+  iconSize?: [number, number]
 }
 
 interface MapChartProps {
@@ -44,15 +46,22 @@ export const MapChart = ({
   //   [240, 250],
   // ]
 
-  const icon = (color: string) =>
-    L.icon({
-      iconUrl: `https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${color}.png`,
-      iconSize: [25, 41],
+  const icon = (
+    color: string,
+    iconurl?: string,
+    iconSize?: [number, number]
+  ) => {
+    console.log(iconSize, "juju")
+    return L.icon({
+      iconUrl:
+        iconurl ||
+        `https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${color}.png`,
+      iconSize: iconSize || [25, 41],
       iconAnchor: [12, 41],
       popupAnchor: [1, -34],
       shadowSize: [41, 41],
     })
-
+  }
   return (
     <div
       data-testid="map_container"
@@ -74,7 +83,7 @@ export const MapChart = ({
         {locationContents.map((lC, index) => {
           return (
             <Marker
-              icon={icon(lC.markerColor || "black")}
+              icon={icon(lC.markerColor || "black", lC.iconUrl, lC.iconSize)}
               position={getLatLngFromLocation(lC.location)}
               key={`${lC.location?.latitude}-${index}`}
             >

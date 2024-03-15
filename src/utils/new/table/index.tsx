@@ -130,6 +130,7 @@ interface IResultTable {
   hideNumbering?: boolean
   tableAction?: ITableAction
   handleTableAction?: () => void
+  hideTableAction?: boolean
 }
 
 const Table: React.FC<IResultTable> = ({
@@ -139,6 +140,7 @@ const Table: React.FC<IResultTable> = ({
   hideNumbering,
   tableAction,
   handleTableAction,
+  hideTableAction,
 }) => {
   const isRecord = record?.length > 0
   const isCheckedRow = (id: string) => {
@@ -154,11 +156,13 @@ const Table: React.FC<IResultTable> = ({
 
   return (
     <div className="table-container">
-      <TableActionComponent
-        tableAction={tableAction}
-        handleTableAction={handleTableAction}
-        isCTA={isRecord}
-      />
+      {!hideTableAction ? (
+        <TableActionComponent
+          tableAction={tableAction}
+          handleTableAction={handleTableAction}
+          isCTA={isRecord}
+        />
+      ) : null}
       <table className="resultTable">
         <thead className="thead_blue">
           <tr>

@@ -4,9 +4,8 @@ import "../global.scss"
 import AdminReport, { ReportStatus } from "../admin-reports"
 import { ISSUPERADMIN } from "utils/new/constants"
 import { GODUSER } from "utils/new/constants/roles"
-import { IAction } from "interfaces/IAction"
 import { IStates } from "interfaces/IReducer"
-import { PulseSVG, RefreshSVG } from "utils/new/svgs"
+import { PlusSVG, PulseSVG, RefreshSVG } from "utils/new/svgs"
 
 export const adminSections = {
   TRAFFIC: "E-traffic",
@@ -22,21 +21,26 @@ const AdminWrapper = ({
   children,
   section,
   data,
-  actions,
   states,
-  organization,
   fetchReports,
+  fetchAssets,
+  addAsset,
+  linkAsset,
 }: {
   children?: any
   section: typeAdminSections
   data?: Array<{ [key: string]: any }>
-  actions: IAction
   states: IStates
-  organization: "Fire" | "Police" | "Medical"
   fetchReports: (sort?: "asc" | "desc") => void
+  fetchAssets: () => void
+  addAsset: () => void
+  linkAsset: (assetId: string) => void
 }) => {
   const reports = states.report.getAllReports
   const loadReports = states.report.getAllReportsLoading
+  const assets = states.asset.getAllAssets
+  const loadAssets = states.asset.getAllAssetsLoading
+  const createAssetLoading = false
 
   const tabEnums = { REPORTS: "All Reports", FEED: "Feed" }
 
@@ -66,7 +70,16 @@ const AdminWrapper = ({
                 style={{ gap: "50px" }}
               >
                 <div className="video-section-header-tab">
-                  <button onClick={() => fetchReports()}>
+                  <button onClick={() => addAsset()} className="border-0">
+                    ADD ASSET&nbsp;&nbsp;&nbsp;
+                    {createAssetLoading ? <PulseSVG /> : <PlusSVG />}
+                  </button>
+                  <button
+                    onClick={() => {
+                      fetchReports()
+                      fetchAssets()
+                    }}
+                  >
                     REFRESH&nbsp;&nbsp;&nbsp;
                     {loadReports ? <PulseSVG /> : <RefreshSVG />}
                   </button>
@@ -95,9 +108,13 @@ const AdminWrapper = ({
                 <AdminReport
                   data={{ title: section, data: data || [] }}
                   reports={reports}
+                  assets={assets}
                   fetchReports={fetchReports}
                   loadReports={loadReports}
+                  loadAssets={loadAssets}
                   showHeader={showHeader}
+                  fetchAssets={fetchAssets}
+                  linkAsset={linkAsset}
                 />
               ) : null}
               {tab === tabEnums.FEED ? children : null}

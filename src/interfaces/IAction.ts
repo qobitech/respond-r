@@ -130,6 +130,12 @@ interface IReports {
   ) => (dispatch: any) => void
 }
 
+interface IAssets {
+  getAllAssets: () => (dispatch: any) => void
+  createAsset: () => (dispatch: any) => void
+  getAssetById: (assetId: string) => (dispatch: any) => void
+}
+
 export interface IAction
   extends IAuth,
     IGlobalActions,
@@ -140,4 +146,5 @@ export interface IAction
     IOrganizationAction,
     ILoggedActions,
     IReports,
-    IActionActions {}
+    IActionActions,
+    IAssets {}

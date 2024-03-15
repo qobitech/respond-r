@@ -29,6 +29,8 @@ export type actionComponent =
   | "update-action"
   | "view-action"
   | "delete-action"
+  | "asset"
+  | "link-asset"
   | "report"
   | null
 export type actionId = string | null

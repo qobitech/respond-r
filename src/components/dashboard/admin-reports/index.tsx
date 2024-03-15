@@ -4,7 +4,7 @@ import { TypeInput } from "utils/new/input"
 import { TypeButton } from "utils/new/button"
 import { TypeSelect } from "utils/new/select"
 import ReportTable, { ITableRecord } from "utils/new/report-table"
-import { NoMediaComponent } from "../traffic"
+import { ILocationDetails, NoMediaComponent } from "../traffic"
 import { IReport, IReports } from "interfaces/IReport"
 import { MainView } from "../components"
 import RightSection, {
@@ -12,6 +12,10 @@ import RightSection, {
   useRightSection,
 } from "components/reusable/right-section"
 import { PulseSVG, RefreshSVG } from "utils/new/svgs"
+import { IAsset, IAssets } from "interfaces/IAsset"
+import { CopyComponent, useCopy } from "utils/new/hook"
+import moveable from "../../../extras/images/moveable.svg"
+import fixed from "../../../extras/images/fixed.svg"
 
 interface IReportData<T> {
   title: string
@@ -58,14 +62,21 @@ const AdminReport = <T extends { [key: string]: any }>({
   data,
   reports,
   fetchReports,
+  fetchAssets,
   loadReports,
   showHeader,
+  assets,
+  linkAsset,
 }: {
   data: IReportData<T>
   reports: IReports
+  assets: IAssets
   fetchReports: (sort?: "asc" | "desc") => void
+  fetchAssets: () => void
   loadReports: boolean
+  loadAssets: boolean
   showHeader: boolean
+  linkAsset: (assetId: string) => void
 }) => {
   const [selectedReport, setSelectedReport] = useState<IReport | null>(null)
 
@@ -138,8 +149,11 @@ const AdminReport = <T extends { [key: string]: any }>({
 
   useEffect(() => {
     fetchReports()
+    fetchAssets()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const [copyProps] = useCopy()
 
   const getSelectedReport = (selectedReport: IReport) => ({
     location: {
@@ -151,6 +165,7 @@ const AdminReport = <T extends { [key: string]: any }>({
     markerContent: (
       <p
         className="d-flex text-decoration-underline"
+        style={{ cursor: "pointer" }}
         onClick={() => {
           rsProps.callSection(
             "custom",
@@ -167,8 +182,54 @@ const AdminReport = <T extends { [key: string]: any }>({
     markerColor: getReportStatusBg(selectedReport.status),
   })
 
+  const getSelectedAsset = (selectedAsset: IAsset) => ({
+    location: {
+      latitude: parseFloat(selectedAsset.location.latitude || "0"),
+      longitude: parseFloat(selectedAsset.location.longitude || "0"),
+    },
+    map: selectedAsset.location.map,
+    nearestPlace: selectedAsset.location.nearestPlace,
+    markerContent: (
+      <div
+        onClick={() => {
+          copyProps.setUrl(selectedAsset.id)
+          linkAsset(selectedAsset.id)
+        }}
+      >
+        <p className="d-flex m-0" style={{ cursor: "pointer" }}>
+          <span style={{ width: "70px" }}>asset:</span> {selectedAsset.type}
+        </p>
+        <p className="d-flex m-0" style={{ cursor: "pointer" }}>
+          <span style={{ width: "70px" }}>title:</span> {selectedAsset.name}
+        </p>
+        <p className="d-flex m-0" style={{ cursor: "pointer" }}>
+          <span style={{ width: "70px" }}>contact:</span>{" "}
+          {selectedAsset.contact.name}
+        </p>
+      </div>
+    ),
+    markerColor: getReportStatusBg(selectedAsset.status),
+    iconUrl: selectedAsset.category === "fixed" ? fixed : moveable,
+    iconSize: [20, 20],
+  })
+
+  const defaultDetails = [
+    { location: { latitude: 1, longitude: 1 }, map: "", nearestPlace: "" },
+  ]
+  const allReports = !reports
+    ? defaultDetails
+    : reports?.data.map(getSelectedReport)
+  const allAssets = !assets
+    ? defaultDetails
+    : assets?.data.map(getSelectedAsset)
+
+  const getLocationDetails = (): ILocationDetails[] => {
+    return [...allReports, ...allAssets]
+  }
+
   return (
     <>
+      <CopyComponent {...copyProps} />
       <RightSection rsProps={rsProps}>
         {rsProps.isView("custom", "report") ? <ViewReport /> : null}
       </RightSection>
@@ -193,10 +254,8 @@ const AdminReport = <T extends { [key: string]: any }>({
               <NoMediaComponent
                 locationDetails={
                   selectedReport
-                    ? [getSelectedReport(selectedReport)]
-                    : reports?.data.map(getSelectedReport) || [
-                        { latitude: 1, longitude: 1 },
-                      ]
+                    ? [getSelectedReport(selectedReport), ...allAssets]
+                    : getLocationDetails() || [{ latitude: 1, longitude: 1 }]
                 }
                 load={false}
                 key={selectedReport ? selectedReport.id : reports?.data?.length}

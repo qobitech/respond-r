@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react"
 import {
+  ITableRecord,
   NoFeeds,
   NoMediaComponent,
+  TableSection,
   chkType,
   getConnection,
   getUrl,
@@ -26,7 +28,6 @@ import {
   Calendar2SVG,
   LeftNavSVG,
   LocationSVG,
-  MapSVG,
   MarkerSVG,
   PhoneSVG,
   PulseSVG,
@@ -41,6 +42,9 @@ import { IReport } from "interfaces/IReport"
 import { typeAdminSections } from "./admin-management"
 import { trafficReportData } from "./traffic/mock-data"
 import { getTime } from "./admin-reports"
+import { IVehicleNote } from "interfaces/IVehicle"
+import CreateAsset from "./asset/create-asset"
+import LinkAsset from "./asset/link-asset"
 
 export interface IPHUS<T> {
   feeds: T[]
@@ -550,8 +554,12 @@ export const PageComponent: React.FC<IPageComponent> = ({
   signalRURL,
   organization,
 }) => {
+  const [selecteAssetId, setSelectedAssetId] = useState<string | null>(null)
   const fetchReports = (sort?: "asc" | "desc") => {
     actions.getAllReports(organization, `?sort=${sort || "desc"}`)
+  }
+  const fetchAssets = () => {
+    actions.getAllAssets()
   }
 
   const rightSectionProps = states?.global.rightSection
@@ -560,11 +568,30 @@ export const PageComponent: React.FC<IPageComponent> = ({
     fetchReports()
   })
 
+  const addAsset = () => {
+    rsProps.callSection("create", "asset")
+  }
+
+  const linkAsset = (assetId: string) => {
+    setSelectedAssetId(assetId)
+    rsProps.callSection("custom", "link-asset")
+  }
+
   return (
     <>
       <RightSection rsProps={rsProps}>
         {rsProps.isView("custom", "settings") ? (
           <Configuration signalR={signalRProps} urlKey="globalSignalR" />
+        ) : null}
+        {rsProps.isView("create", "asset") ? (
+          <CreateAsset states={states} action={actions} />
+        ) : null}
+        {rsProps.isView("custom", "link-asset") ? (
+          <LinkAsset
+            assetId={selecteAssetId}
+            state={states}
+            actions={actions}
+          />
         ) : null}
       </RightSection>
       <div className="main-page">
@@ -573,10 +600,11 @@ export const PageComponent: React.FC<IPageComponent> = ({
           <AdminWrapper
             section={section}
             data={trafficReportData}
-            actions={actions}
             states={states}
-            organization={organization}
             fetchReports={fetchReports}
+            fetchAssets={fetchAssets}
+            addAsset={addAsset}
+            linkAsset={linkAsset}
           >
             <div className="overview-page">
               {signalRProps?.feed ? (
@@ -708,15 +736,16 @@ export const MainView = ({ feed }: { feed: IReport | null }) => {
               <PhoneSVG />
               <p>{feed?.deviceId || "..."}</p>
             </div>
-            <div className="cta-section">
-              {/* <TypeButton
-                title="View Map"
-                buttonType="outlined"
-                buttonSize="small"
-                onClick={() => handleFullScreen(feed.map || "")}
-              /> */}
-              <TypeButton title="Action" buttonSize="small" />
-            </div>
+            <ActionComponent
+              title="Action"
+              actions={[{ label: "Assign" }, { label: "Update status" }]}
+            />
+          </div>
+          <div className="mb-5">
+            <InfoSectionItem
+              label="Description"
+              value={feed?.description || "..."}
+            />
           </div>
           <div className="vehicle-info-section">
             <InfoSectionItem
@@ -724,10 +753,6 @@ export const MainView = ({ feed }: { feed: IReport | null }) => {
               value={feed?.transactionId || "..."}
             />
             <InfoSectionItem label="Words" value={feed?.words || "..."} />
-            <InfoSectionItem
-              label="Description"
-              value={feed?.description || "..."}
-            />
             <InfoSectionItem
               label="Location"
               value={feed?.city + " | " + feed?.state || "..."}
@@ -742,8 +767,118 @@ export const MainView = ({ feed }: { feed: IReport | null }) => {
               }
             />
           </div>
+          {/* <OtherInfo /> */}
         </>
       ) : null}
     </div>
   )
 }
+
+export const ActionComponent = ({
+  actions,
+  title,
+}: {
+  title?: string
+  actions?: Array<{ label: string; action?: () => void }>
+}) => {
+  return (
+    <div className="dropdown cta-section">
+      <button
+        title="Action"
+        className="dropdown-toggle button-action"
+        type="button"
+        id="dropdownMenuButton"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        {title || "Action"}
+      </button>
+
+      <div
+        className="dropdown-menu"
+        aria-labelledby="dropdownMenuButton"
+        style={{ cursor: "pointer" }}
+      >
+        {actions?.map((i) => (
+          <p className="dropdown-item m-0 py-2" onClick={i.action}>
+            {i.label}
+          </p>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// const OtherInfo = () => {
+//   const tabEnum = {
+//     ASSETS: "Assets",
+//     COMMENTS: "Comments",
+//   }
+
+//   const [tab, setTab] = useState<string>(tabEnum.ASSETS)
+
+//   return (
+//     <div className="py-3">
+//       <div className="tab-section">
+//         <div className="tab-header">
+//           {Object.values(tabEnum).map((i, index) => (
+//             <div
+//               className={`tab-item ${i === tab ? "active" : ""}`}
+//               key={index}
+//               onClick={() => setTab(i)}
+//             >
+//               <p>{i}</p>
+//             </div>
+//           ))}
+//         </div>
+//         <div className="tab-body">
+//           {tab === tabEnum.ASSETS ? <Assets /> : null}
+//           {tab === tabEnum.COMMENTS ? <Comments /> : null}
+//         </div>
+//       </div>
+//     </div>
+//   )
+// }
+
+// const Assets = () => {
+//   return (
+//     <>
+//       <div className="d-flex align-items-center" style={{ gap: "20px" }}>
+//         <TypeInput placeholder="Enter asset id" className="type-input-class" />
+//         <TypeButton buttonSize="small" title="Search" />
+//       </div>
+//       <div>
+//         <TableSection
+//           header={["Title", "Category", "Location", "Contact", "Action"]}
+//           record={[] as ITableRecord[]}
+//           hideTableAction
+//         />
+//       </div>
+//     </>
+//   )
+// }
+
+// const Comments = ({ notes }: { notes?: IVehicleNote[] }) => {
+//   return (
+//     <div className="py-2">
+//       {notes?.[0] ? (
+//         notes.map((i, index) => (
+//           <div className="vehicle-car-notes" key={index}>
+//             <p className="author">
+//               {i.createdBy.userName}&nbsp;&nbsp;&nbsp;
+//               <span className="date-authored">
+//                 {new Date(i.createdAt).toDateString()}
+//               </span>
+//             </p>
+//             <p>{i.message}</p>
+//           </div>
+//         ))
+//       ) : (
+//         <div className="d-flex align-items-center justify-content-center text-center">
+//           <p className="m-0">No notes</p>
+//         </div>
+//       )}
+//     </div>
+//   )
+// }

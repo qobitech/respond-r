@@ -84,6 +84,12 @@ export const action = generateActionTypes([
 
 export const report = generateActionTypes(["getAllReports"])
 
+export const assets = generateActionTypes([
+  "getAllAssets",
+  "createAsset",
+  "getAssetById",
+])
+
 export const logged = generateActionTypes([
   "getLoggedActionsForRole",
   "getLoggedOrganization",
