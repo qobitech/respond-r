@@ -12,10 +12,46 @@ import RightSection, {
   useRightSection,
 } from "components/reusable/right-section"
 import { PulseSVG, RefreshSVG } from "utils/new/svgs"
-import { IAsset, IAssets } from "interfaces/IAsset"
+import { IAsset, IAssets, assetType } from "interfaces/IAsset"
 import { CopyComponent, useCopy } from "utils/new/hook"
 import moveable from "../../../extras/images/moveable.svg"
-import fixed from "../../../extras/images/fixed.svg"
+import police_vehicle from "../../../extras/images/asset_icons/police-vehicle.svg"
+import fire_truck from "../../../extras/images/asset_icons/fire-truck.svg"
+import police from "../../../extras/images/asset_icons/police.svg"
+import street_camera from "../../../extras/images/asset_icons/street-camera.svg"
+import frsc_patrol from "../../../extras/images/asset_icons/frsc-patrol.svg"
+import hospital from "../../../extras/images/asset_icons/hospital.svg"
+import ambulance from "../../../extras/images/asset_icons/ambulance.svg"
+import police_station from "../../../extras/images/asset_icons/police-station.svg"
+import traffic_light from "../../../extras/images/asset_icons/traffic-light.svg"
+import drts_patrol from "../../../extras/images/asset_icons/drts-patrol.svg"
+
+const getIconUrl = (type: assetType) => {
+  switch (type) {
+    case "ambulance":
+      return ambulance
+    case "drts-patrol":
+      return drts_patrol
+    case "fire-truck":
+      return fire_truck
+    case "frsc-patrol":
+      return frsc_patrol
+    case "hospital":
+      return hospital
+    case "police":
+      return police
+    case "police-station":
+      return police_station
+    case "police-vehicle":
+      return police_vehicle
+    case "street-camera":
+      return street_camera
+    case "traffic-light":
+      return traffic_light
+    default:
+      return moveable
+  }
+}
 
 interface IReportData<T> {
   title: string
@@ -209,7 +245,7 @@ const AdminReport = <T extends { [key: string]: any }>({
       </div>
     ),
     markerColor: getReportStatusBg(selectedAsset.status),
-    iconUrl: selectedAsset.category === "fixed" ? fixed : moveable,
+    iconUrl: getIconUrl(selectedAsset.type as assetType),
     iconSize: [20, 20],
   })
 

@@ -53,3 +53,15 @@ export interface ICreateAsset {
     userName: string
   }
 }
+
+export type assetType =
+  | "police-vehicle"
+  | "fire-truck"
+  | "police"
+  | "street-camera"
+  | "frsc-patrol"
+  | "hospital"
+  | "ambulance"
+  | "police-station"
+  | "traffic-light"
+  | "drts-patrol"
