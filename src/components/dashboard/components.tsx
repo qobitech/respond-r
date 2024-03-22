@@ -45,6 +45,9 @@ import { getTime } from "./admin-reports"
 import { IVehicleNote } from "interfaces/IVehicle"
 import CreateAsset from "./asset/create-asset"
 import LinkAsset from "./asset/link-asset"
+import LocationAssets from "./asset/location-assets"
+import { ILocation } from "components/map/new-map"
+import { IAsset } from "interfaces/IAsset"
 
 export interface IPHUS<T> {
   feeds: T[]
@@ -564,6 +567,7 @@ export const PageComponent: React.FC<IPageComponent> = ({
 
   const rightSectionProps = states?.global.rightSection
   const rsProps = useRightSection(rightSectionProps, actions.callRightSection)
+  const allAssets = states?.asset?.getAllAssets?.data || []
   const signalRProps = useSignalR<IReport>(signalRURL, () => {
     fetchReports()
   })
@@ -608,7 +612,7 @@ export const PageComponent: React.FC<IPageComponent> = ({
           >
             <div className="overview-page">
               {signalRProps?.feed ? (
-                <MainView feed={signalRProps.feed!} />
+                <MainView feed={signalRProps.feed!} assets={allAssets} />
               ) : (
                 <NoMediaComponent
                   load={false}
@@ -686,7 +690,13 @@ const LiveFeedItemComponent = ({
   )
 }
 
-export const MainView = ({ feed }: { feed: IReport | null }) => {
+export const MainView = ({
+  feed,
+  assets,
+}: {
+  feed: IReport | null
+  assets: IAsset[]
+}) => {
   const [fileIndex, setFileIndex] = useState<number>(0)
 
   const handleFileIndex = (nav: "left" | "right") => {
@@ -699,6 +709,13 @@ export const MainView = ({ feed }: { feed: IReport | null }) => {
   }
 
   const imgProps = useImage()
+
+  const tabEnum = {
+    INFO: "Info",
+    ASSETS: "Assets",
+  }
+
+  const [tab, setTab] = useState(tabEnum.INFO)
 
   return (
     <div className="video-section">
@@ -741,35 +758,95 @@ export const MainView = ({ feed }: { feed: IReport | null }) => {
               actions={[{ label: "Assign" }, { label: "Update status" }]}
             />
           </div>
-          <div className="mb-5">
-            <InfoSectionItem
-              label="Description"
-              value={feed?.description || "..."}
-            />
-          </div>
-          <div className="vehicle-info-section">
-            <InfoSectionItem
-              label="Transaction ID"
-              value={feed?.transactionId || "..."}
-            />
-            <InfoSectionItem label="Words" value={feed?.words || "..."} />
-            <InfoSectionItem
-              label="Location"
-              value={feed?.city + " | " + feed?.state || "..."}
-              values={[feed?.city, feed?.state]}
-              icon={
+          <div className="tab-section">
+            <div className="tab-header">
+              {Object.values(tabEnum).map((i, index) => (
                 <div
-                  onClick={() => handleFullScreen(feed.map || "")}
-                  className="location-map-icon"
+                  className={`tab-item ${i === tab ? "active" : ""}`}
+                  key={index}
+                  onClick={() => setTab(i)}
                 >
-                  <MarkerSVG />
+                  <p>{i}</p>
                 </div>
-              }
-            />
+              ))}
+            </div>
+            <div className="tab-content">
+              <div className="tab-body">
+                <div className={tab === tabEnum.INFO ? "" : "d-none"}>
+                  <div className="mb-5">
+                    <InfoSectionItem
+                      label="Description"
+                      value={feed?.description || "..."}
+                    />
+                  </div>
+                  <div className="vehicle-info-section">
+                    <InfoSectionItem
+                      label="Transaction ID"
+                      value={feed?.transactionId || "..."}
+                    />
+                    <InfoSectionItem
+                      label="Words"
+                      value={feed?.words || "..."}
+                    />
+                    <InfoSectionItem
+                      label="Location"
+                      value={feed?.city + " | " + feed?.state || "..."}
+                      values={[feed?.city, feed?.state]}
+                      icon={
+                        <div
+                          onClick={() => handleFullScreen(feed.map || "")}
+                          className="location-map-icon"
+                        >
+                          <MarkerSVG />
+                        </div>
+                      }
+                    />
+                  </div>
+                </div>
+                <div className={tab === tabEnum.ASSETS ? "" : "d-none"}>
+                  <Assets
+                    allAssets={assets}
+                    location={{
+                      latitude: parseFloat(feed.latitude),
+                      longitude: parseFloat(feed.longitude),
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
-          {/* <OtherInfo /> */}
         </>
       ) : null}
+    </div>
+  )
+}
+
+const Assets = ({
+  location,
+  allAssets,
+}: {
+  location: ILocation
+  allAssets: IAsset[]
+}) => {
+  const [radius, setRadius] = useState<number>(0)
+
+  return (
+    <div>
+      <TypeInput
+        type="range"
+        onChange={({ target }) => {
+          const { value } = target
+          setRadius(parseInt(value))
+        }}
+        min={1}
+        max={2000}
+        value={radius}
+      />
+      <LocationAssets
+        allAssets={allAssets}
+        location={location}
+        radius={radius}
+      />
     </div>
   )
 }
@@ -849,11 +926,11 @@ export const ActionComponent = ({
 //         <TypeButton buttonSize="small" title="Search" />
 //       </div>
 //       <div>
-//         <TableSection
-//           header={["Title", "Category", "Location", "Contact", "Action"]}
-//           record={[] as ITableRecord[]}
-//           hideTableAction
-//         />
+;<TableSection
+  header={["Title", "Category", "Location", "Contact", "Action"]}
+  record={[] as ITableRecord[]}
+  hideTableAction
+/>
 //       </div>
 //     </>
 //   )

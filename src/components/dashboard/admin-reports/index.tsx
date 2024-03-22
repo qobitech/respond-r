@@ -259,6 +259,8 @@ const AdminReport = <T extends { [key: string]: any }>({
     ? defaultDetails
     : assets?.data.map(getSelectedAsset)
 
+  const unfilteredAssets = assets?.data || []
+
   const getLocationDetails = (): ILocationDetails[] => {
     return [...allReports, ...allAssets]
   }
@@ -267,7 +269,9 @@ const AdminReport = <T extends { [key: string]: any }>({
     <>
       <CopyComponent {...copyProps} />
       <RightSection rsProps={rsProps}>
-        {rsProps.isView("custom", "report") ? <ViewReport /> : null}
+        {rsProps.isView("custom", "report") ? (
+          <ViewReport assets={unfilteredAssets} />
+        ) : null}
       </RightSection>
       <div className="admin-report-section">
         <div className={`admin-report-header ${!showHeader ? "d-none" : ""}`}>
@@ -351,8 +355,14 @@ const TableWrapper = ({
   )
 }
 
-const ViewReport = ({ rsProps }: { rsProps?: IRightSection<IReport> }) => {
-  return <MainView feed={rsProps?.data!} />
+const ViewReport = ({
+  rsProps,
+  assets,
+}: {
+  rsProps?: IRightSection<IReport>
+  assets: IAsset[]
+}) => {
+  return <MainView feed={rsProps?.data!} assets={assets} />
 }
 
 export default AdminReport
