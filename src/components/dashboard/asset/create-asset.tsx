@@ -88,7 +88,7 @@ const CreateAsset = ({
   }
 
   return (
-    <div>
+    <div className="form-body py-5 px-4">
       <form
         className="d-flex flex-column"
         style={{ gap: "10px" }}

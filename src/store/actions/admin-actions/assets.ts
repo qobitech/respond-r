@@ -1,4 +1,4 @@
-import { baseurlReport, baseurlCommandReport } from "utils/constants"
+import { baseurlReport } from "utils/constants"
 import * as utils from "../../services/new/utils"
 import { assets } from "store/types"
 
@@ -28,7 +28,7 @@ export const getAssetById = (assetId: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: "",
-      customurl: `${baseurlCommandReport}Asset/${assetId}`,
+      customurl: `${baseurlReport}Asset/${assetId}`,
       header: utils.header(""),
     },
     actionType: assets.getAssetById,

@@ -6,6 +6,8 @@ import { TypeInput } from "utils/new/input"
 import "./style.scss"
 import { PulseSVG } from "utils/new/svgs"
 import { ActionComponent } from "../components"
+import { clearAction } from "store/actions/global"
+import { assets } from "../../../store/types"
 
 const LinkAsset = ({
   assetId,
@@ -19,7 +21,7 @@ const LinkAsset = ({
   const [formValue, setFormValue] = useState<string | null>(null)
 
   const getAssetByIdLoading = state?.asset.getAssetByIdLoading
-  const getAssetById = state?.asset.getAssetById
+  const getAssetById = state?.asset.getAssetById.data
 
   useEffect(() => {
     if (assetId !== null) {
@@ -27,6 +29,9 @@ const LinkAsset = ({
         actions?.getAssetById(assetId)
         setFormValue(assetId)
       }
+    }
+    return () => {
+      clearAction(assets.getAssetById)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assetId])
@@ -72,7 +77,7 @@ const LinkAsset = ({
         />
       </form>
       <div className="separator my-4" />
-      {getAssetById ? (
+      {!getAssetByIdLoading && getAssetById ? (
         <>
           <div className="d-flex align-items-center justify-content-between w-100">
             <p className="m-0 text-color text-medium">Asset Info</p>

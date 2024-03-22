@@ -25,6 +25,13 @@ export interface IAsset {
   updatedAt: string
 }
 
+export interface IAssetByID {
+  data: IAsset
+  isSuccessful: boolean
+  message: string
+  status: number
+}
+
 export interface IAssets {
   data: IAsset[]
   currentPage: number
