@@ -2,19 +2,23 @@ import { IAction } from "interfaces/IAction"
 import { IStates } from "interfaces/IReducer"
 import React from "react"
 import { TypeButton } from "utils/new/button"
+import { USERTOKEN } from "utils/new/constants"
+import FormBuilder, { IFormComponent } from "utils/new/form-builder"
 import { useFormHook } from "utils/new/hook"
-import { TypeInput } from "utils/new/input"
-import TypePhoneInput from "utils/new/phone-input"
-import { TypeSelect } from "utils/new/select"
 import * as yup from "yup"
 
 interface ICAF {
   assetName: string
-  icon: string
   type: string
   category: string
   latitude: number
   longitude: number
+  city: string
+  state: string
+  country: string
+  map: string
+  words: string
+  nearestPlace: string
   name: string
   phoneNumber: string
   role: string
@@ -22,11 +26,16 @@ interface ICAF {
 
 const icafSchema = {
   assetName: yup.string().required(),
-  icon: yup.string().required(),
   type: yup.string().required(),
   category: yup.string().required(),
-  latitude: yup.number().required(),
-  longitude: yup.number().required(),
+  latitude: yup.string().required(),
+  longitude: yup.string().required(),
+  city: yup.string().required(),
+  state: yup.string().required(),
+  country: yup.string().required(),
+  map: yup.string().required(),
+  words: yup.string().required(),
+  nearestPlace: yup.string().required(),
   name: yup.string().required(),
   phoneNumber: yup.string().required(),
   role: yup.string().required(),
@@ -39,6 +48,7 @@ const typeOptionsData = [
     value: "police-vehicle",
   },
 ]
+
 const categoryOptionsData = [
   {
     id: 1,
@@ -46,11 +56,113 @@ const categoryOptionsData = [
     value: "Fixed",
   },
 ]
-const roleOptionsData = [
+
+const formComponent: IFormComponent[] = [
   {
-    id: 1,
-    label: "",
-    value: "",
+    id: "assetName",
+    label: "Asset Name",
+    component: "input",
+    type: "text",
+    placeHolder: "",
+  },
+  {
+    id: "type",
+    label: "Type",
+    initOptions: { id: 1, label: "Select Label", value: "" },
+    optionData: typeOptionsData,
+    component: "select",
+    placeHolder: "",
+    type: "text",
+  },
+  {
+    id: "category",
+    label: "Category",
+    initOptions: { id: 1, label: "Select Category", value: "" },
+    optionData: categoryOptionsData,
+    component: "select",
+    placeHolder: "",
+    type: "text",
+  },
+  {
+    id: "latitude",
+    label: "Latitude",
+    component: "input",
+    type: "text",
+    placeHolder: "Enter latitude",
+  },
+  {
+    id: "longitude",
+    label: "Longitude",
+    component: "input",
+    type: "text",
+    placeHolder: "Enter longitude",
+  },
+  {
+    id: "country",
+    label: "Country",
+    initOptions: { id: 1, label: "Select Country", value: "" },
+    component: "select",
+    placeHolder: "",
+    type: "text",
+  },
+  {
+    id: "state",
+    label: "State",
+    initOptions: { id: 1, label: "Select State", value: "" },
+    component: "select",
+    placeHolder: "",
+    type: "text",
+  },
+  {
+    id: "city",
+    label: "City",
+    initOptions: { id: 1, label: "Select City", value: "" },
+    component: "select",
+    placeHolder: "",
+    type: "text",
+  },
+  {
+    id: "map",
+    label: "Map",
+    component: "input",
+    type: "text",
+    placeHolder: "Enter map",
+  },
+  {
+    id: "words",
+    label: "Words",
+    component: "input",
+    type: "text",
+    placeHolder: "Enter words",
+  },
+  {
+    id: "nearestPlace",
+    label: "Nearest Place",
+    component: "input",
+    type: "text",
+    placeHolder: "Enter nearest place",
+  },
+  {
+    id: "name",
+    label: "Contact Name",
+    component: "input",
+    type: "text",
+    placeHolder: "Enter contact name",
+  },
+  {
+    id: "phoneNumber",
+    label: "Contact Phone",
+    component: "phone",
+    type: "text",
+    placeHolder: "Enter contact phone",
+  },
+  {
+    id: "role",
+    label: "Contact Role",
+    initOptions: { id: 1, label: "Select Role", value: "" },
+    component: "select",
+    placeHolder: "",
+    type: "text",
   },
 ]
 
@@ -80,8 +192,8 @@ const CreateAsset = ({
         role: data.role,
       },
       createdBy: {
-        id: "",
-        userName: "",
+        id: USERTOKEN.UserId,
+        userName: USERTOKEN.Username,
       },
     }
     action?.createAction(req, false, () => {})
@@ -94,68 +206,7 @@ const CreateAsset = ({
         style={{ gap: "10px" }}
         onSubmit={hookForm.handleSubmit(handleSubmit)}
       >
-        <TypeInput
-          placeholder="Enter name"
-          {...hookForm.register("assetName")}
-          label="Asset Name"
-          error={hookForm.formState.errors.assetName?.message as string}
-        />
-        <TypeInput
-          placeholder="Enter name"
-          {...hookForm.register("icon")}
-          label="Icon - png* jpg*"
-          type="file"
-          error={hookForm.formState.errors.icon?.message as string}
-        />
-        <TypeSelect
-          initoption={{ label: "Select Type", value: "" }}
-          optionsdata={typeOptionsData}
-          {...hookForm.register("type")}
-          label="Type"
-          error={hookForm.formState.errors.type?.message as string}
-        />
-        <TypeSelect
-          initoption={{ label: "Select Category", value: "" }}
-          optionsdata={categoryOptionsData}
-          {...hookForm.register("category")}
-          label="Category"
-          error={hookForm.formState.errors.category?.message as string}
-        />
-        <TypeInput
-          placeholder="Latitude"
-          {...hookForm.register("latitude")}
-          label="Latitude"
-          error={hookForm.formState.errors.latitude?.message as string}
-        />
-        <TypeInput
-          placeholder="Longitude"
-          {...hookForm.register("longitude")}
-          label="Longitude"
-          error={hookForm.formState.errors.longitude?.message as string}
-        />
-        <TypeInput
-          placeholder="Enter contact name"
-          {...hookForm.register("name")}
-          label="Contact Name"
-          error={hookForm.formState.errors.name?.message as string}
-        />
-        <TypePhoneInput
-          {...hookForm.register("phoneNumber")}
-          label="Contact phone number"
-          placeholder="Enter contact phone number"
-          handleOnChange={(phone) => {
-            hookForm.setValue("phoneNumber", phone)
-          }}
-          error={hookForm.formState.errors.phoneNumber?.message as string}
-          value={hookForm.watch("phoneNumber")}
-        />
-        <TypeSelect
-          initoption={{ label: "Select Contact Role", value: "" }}
-          optionsdata={roleOptionsData}
-          {...hookForm.register("role")}
-          label="Contact role"
-          error={hookForm.formState.errors.role?.message as string}
-        />
+        <FormBuilder formComponent={formComponent} hookForm={hookForm} />
         <TypeButton
           title="Create Asset"
           type="submit"

@@ -2,6 +2,8 @@ import { ILocation } from "components/map/new-map"
 import { IAsset } from "interfaces/IAsset"
 import React, { useState, useEffect } from "react"
 import { ITableRecord, TableSection } from "../traffic"
+import "./style.scss"
+import { TypeButton } from "utils/new/button"
 
 const LocationAssets = ({
   allAssets,
@@ -13,6 +15,7 @@ const LocationAssets = ({
   radius: number
 }) => {
   const [nearbyAssets, setNearbyAssets] = useState<IAsset[]>([])
+  const [selectedAsset, setSelectedAsset] = useState<IAsset | null>(null)
 
   useEffect(() => {
     // Calculate distance and filter nearby assets
@@ -59,7 +62,10 @@ const LocationAssets = ({
     row: [
       {
         value: asset.type,
-        isLink: false,
+        isLink: true,
+        action: () => {
+          setSelectedAsset(asset)
+        },
       },
       {
         value:
@@ -88,22 +94,61 @@ const LocationAssets = ({
   return (
     <div>
       <div className="d-flex align-items-center justify-content-between mb-4">
-        <h2 className="text-little m-0" style={{ fontSize: "16px" }}>
+        <h2 className="text-little m-0 text-color" style={{ fontSize: "16px" }}>
           Assets within {radius} km from report location
         </h2>
         <p className="m-0">{nearbyAssets.length}</p>
       </div>
 
+      {selectedAsset !== null ? (
+        <div className="pb-2">
+          <TypeButton
+            buttonType="outlined"
+            buttonSize="small"
+            title="Back"
+            onClick={() => setSelectedAsset(null)}
+          />
+        </div>
+      ) : null}
+
       <div
         style={{ height: "250px", overflow: "auto" }}
-        className="border rounded blats"
+        className="border-line rounded blats"
       >
-        <TableSection
-          header={["Asset", "Distance (km)", "Contact", "Action"]}
-          record={tableRecord}
-          hideTableAction
-        />
+        {!selectedAsset ? (
+          <TableSection
+            header={["Asset", "Distance (km)", "Contact", "Action"]}
+            record={tableRecord}
+            hideTableAction
+          />
+        ) : (
+          <ViewAsset asset={selectedAsset} />
+        )}
       </div>
+    </div>
+  )
+}
+
+const ViewAsset = ({ asset }: { asset: IAsset }) => {
+  const ase: { [key: string]: any } = asset
+  return (
+    <div className="vehicle-info-section p-3">
+      {Object.keys(ase).map((i, index) => (
+        <div key={index}>
+          {typeof ase[i] === "string" || typeof ase[i] === "number" ? (
+            <AssetItem label={i} value={ase[i]} />
+          ) : null}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+const AssetItem = ({ label, value }: { label: string; value: string }) => {
+  return (
+    <div>
+      <p className="text-color-label">{label}</p>
+      <p className="text-color">{value}</p>
     </div>
   )
 }

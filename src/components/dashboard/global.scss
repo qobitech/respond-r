@@ -617,3 +617,9 @@
     color: themed("themeColor");
   }
 }
+
+.border-line {
+  @include themify($themes) {
+    border: 1px solid themed("border");
+  }
+}
