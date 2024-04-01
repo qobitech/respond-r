@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import "./index.scss"
 import "../global.scss"
 import AdminReport, { ReportStatus } from "../admin-reports"
@@ -8,7 +8,7 @@ import { IStates } from "interfaces/IReducer"
 import { PlusSVG, PulseSVG, RefreshSVG } from "utils/new/svgs"
 import { useInfiniteScroll } from "utils/new/hook"
 import { IRightSection } from "components/reusable/right-section"
-import { IReport } from "interfaces/IReport"
+import { IReport, IReports } from "interfaces/IReport"
 
 export const adminSections = {
   TRAFFIC: "E-traffic",
@@ -46,18 +46,47 @@ const AdminWrapper = ({
   const assets = states.asset.getAllAssets
   const loadAssets = states.asset.getAllAssetsLoading
   const createAssetLoading = false
-  const hasmore =
-    states?.report?.getAllReports?.currentPage <
-    states?.report?.getAllReports?.lastPage
 
   const tabEnums = { REPORTS: "All Reports", FEED: "Feed" }
 
   const [tab, setTab] = useState<string>(tabEnums.REPORTS)
   const [showHeader, setShowHeader] = useState<boolean>(false)
 
+  const [localReports, setLocalReports] = useState<IReports | null>(null)
+  const [continuePagination, setContinuePagination] = useState<boolean>(false)
+
+  const hasmore =
+    continuePagination &&
+    states?.report?.getAllReports?.currentPage *
+      states?.report?.getAllReports?.pageSize <
+      states?.report?.getAllReports?.total
+
   const [lastCardElementRef] = useInfiniteScroll(loadReports!, hasmore, () => {
     fetchReports(1)
   })
+
+  const combineReports = () => {
+    setContinuePagination(false)
+    if (!localReports) {
+      setLocalReports(() => reports)
+    } else {
+      const { data, ...rest } = reports
+      const { data: oldData } = localReports
+      const combinedData = [...oldData, ...data]
+      const newReport = { ...rest, data: combinedData }
+      if (newReport.data !== reports.data) {
+        setLocalReports(() => newReport)
+        setContinuePagination(true)
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (!loadReports) {
+      combineReports()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadReports])
 
   return (
     <>
@@ -119,7 +148,7 @@ const AdminWrapper = ({
               {tab === tabEnums.REPORTS ? (
                 <AdminReport
                   data={{ title: section, data: data || [] }}
-                  reports={reports}
+                  reports={localReports!}
                   assets={assets}
                   fetchReports={fetchReports}
                   loadReports={loadReports}

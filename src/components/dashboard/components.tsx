@@ -561,7 +561,7 @@ export const PageComponent: React.FC<IPageComponent> = ({
     const currentPage = states?.report?.getAllReports?.currentPage
     actions.getAllReports(
       organization,
-      `?sort=desc&page=${(currentPage || 1) + (page || 0)}`
+      `?sort=desc&pageNumber=${(currentPage || 1) + (page || 0)}`
     )
   }
   const fetchAssets = () => {

@@ -60,6 +60,7 @@ export const getReportStatusBg = (status: string) => {
   // Accepted (yellow)
   // Closed (green)
   // Ignored (---)
+  if (!status) return "grey"
   switch (status.toLowerCase()) {
     case "new":
       return "red"
@@ -313,6 +314,11 @@ const AdminReport = <T extends { [key: string]: any }>({
               ) : null}
             </div>
           </div>
+          {loadReports ? (
+            <div className="text-center">
+              <PulseSVG />
+            </div>
+          ) : null}
         </div>
       </div>
     </>
