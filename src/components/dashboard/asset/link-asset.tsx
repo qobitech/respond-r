@@ -8,20 +8,24 @@ import { PulseSVG } from "utils/new/svgs"
 import { ActionComponent } from "../components"
 import { clearAction } from "store/actions/global"
 import { assets } from "../../../store/types"
+import { IRightSection } from "components/reusable/right-section"
+import { IReport } from "interfaces/IReport"
 
 const LinkAsset = ({
   assetId,
   actions,
   state,
+  rsProps,
 }: {
   assetId: string | null
   actions?: IAction
   state?: IStates
+  rsProps?: IRightSection<IReport>
 }) => {
   const [formValue, setFormValue] = useState<string | null>(null)
 
-  const getAssetByIdLoading = state?.asset.getAssetByIdLoading
-  const getAssetById = state?.asset.getAssetById.data
+  const getAssetByIdLoading = state?.asset?.getAssetByIdLoading
+  const getAssetById = state?.asset?.getAssetById?.data
 
   useEffect(() => {
     if (assetId !== null) {
@@ -84,9 +88,13 @@ const LinkAsset = ({
             <ActionComponent
               title="Action"
               actions={[
-                { label: "Link asset" },
-                { label: "Action 2" },
-                { label: "Action 3" },
+                {
+                  label: "Update asset",
+                  action: () => {
+                    rsProps?.callSection("update", "asset")
+                  },
+                },
+                // { label: "Delete asset" },
               ]}
             />
           </div>

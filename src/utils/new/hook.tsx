@@ -1,7 +1,7 @@
 import { UseFormReturn, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import React from "react"
 
 export const useFormHook = <T extends {}>(objSchema: {}): [
@@ -128,4 +128,27 @@ export const useImage = (): IUseImage => {
     handleError,
     handleLoad,
   }
+}
+
+export const useInfiniteScroll = (
+  load: boolean,
+  hasmore: boolean,
+  getData?: () => void
+): [lastCardElementRef: (node: any) => void] => {
+  const observer = useRef<IntersectionObserver | null>(null)
+  const lastCardElementRef = useCallback(
+    (node: any) => {
+      if (load) return
+      if (observer?.current) observer?.current?.disconnect?.()
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasmore) {
+          getData?.()
+        }
+      })
+      if (node) observer?.current?.observe(node)
+    },
+    [load, getData, hasmore]
+  )
+
+  return [lastCardElementRef]
 }

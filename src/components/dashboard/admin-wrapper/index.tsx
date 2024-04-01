@@ -6,6 +6,9 @@ import { ISSUPERADMIN } from "utils/new/constants"
 import { GODUSER } from "utils/new/constants/roles"
 import { IStates } from "interfaces/IReducer"
 import { PlusSVG, PulseSVG, RefreshSVG } from "utils/new/svgs"
+import { useInfiniteScroll } from "utils/new/hook"
+import { IRightSection } from "components/reusable/right-section"
+import { IReport } from "interfaces/IReport"
 
 export const adminSections = {
   TRAFFIC: "E-traffic",
@@ -26,26 +29,35 @@ const AdminWrapper = ({
   fetchAssets,
   addAsset,
   linkAsset,
+  rsProps,
 }: {
   children?: any
   section: typeAdminSections
   data?: Array<{ [key: string]: any }>
   states: IStates
-  fetchReports: (sort?: "asc" | "desc") => void
+  fetchReports: (page?: number) => void
   fetchAssets: () => void
   addAsset: () => void
   linkAsset: (assetId: string) => void
+  rsProps: IRightSection<IReport>
 }) => {
   const reports = states.report.getAllReports
   const loadReports = states.report.getAllReportsLoading
   const assets = states.asset.getAllAssets
   const loadAssets = states.asset.getAllAssetsLoading
   const createAssetLoading = false
+  const hasmore =
+    states?.report?.getAllReports?.currentPage <
+    states?.report?.getAllReports?.lastPage
 
   const tabEnums = { REPORTS: "All Reports", FEED: "Feed" }
 
   const [tab, setTab] = useState<string>(tabEnums.REPORTS)
   const [showHeader, setShowHeader] = useState<boolean>(false)
+
+  const [lastCardElementRef] = useInfiniteScroll(loadReports!, hasmore, () => {
+    fetchReports(1)
+  })
 
   return (
     <>
@@ -115,6 +127,8 @@ const AdminWrapper = ({
                   showHeader={showHeader}
                   fetchAssets={fetchAssets}
                   linkAsset={linkAsset}
+                  lastCardElementRef={lastCardElementRef}
+                  rsProps={rsProps}
                 />
               ) : null}
               {tab === tabEnums.FEED ? children : null}

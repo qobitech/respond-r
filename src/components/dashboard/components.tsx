@@ -41,7 +41,7 @@ import { IStates } from "interfaces/IReducer"
 import { IReport } from "interfaces/IReport"
 import { typeAdminSections } from "./admin-management"
 import { trafficReportData } from "./traffic/mock-data"
-import { getTime } from "./admin-reports"
+import { ViewReport, getTime } from "./admin-reports"
 import CreateAsset from "./asset/create-asset"
 import LinkAsset from "./asset/link-asset"
 import LocationAssets from "./asset/location-assets"
@@ -557,15 +557,22 @@ export const PageComponent: React.FC<IPageComponent> = ({
   organization,
 }) => {
   const [selecteAssetId, setSelectedAssetId] = useState<string | null>(null)
-  const fetchReports = (sort?: "asc" | "desc") => {
-    actions.getAllReports(organization, `?sort=${sort || "desc"}`)
+  const fetchReports = (page?: number) => {
+    const currentPage = states?.report?.getAllReports?.currentPage
+    actions.getAllReports(
+      organization,
+      `?sort=desc&page=${(currentPage || 1) + (page || 0)}`
+    )
   }
   const fetchAssets = () => {
     actions.getAllAssets()
   }
 
   const rightSectionProps = states?.global.rightSection
-  const rsProps = useRightSection(rightSectionProps, actions.callRightSection)
+  const rsProps = useRightSection<IReport>(
+    rightSectionProps,
+    actions.callRightSection
+  )
   const allAssets = states?.asset?.getAllAssets?.data || []
   const signalRProps = useSignalR<IReport>(signalRURL, () => {
     fetchReports()
@@ -589,12 +596,18 @@ export const PageComponent: React.FC<IPageComponent> = ({
         {rsProps.isView("create", "asset") ? (
           <CreateAsset states={states} action={actions} />
         ) : null}
+        {rsProps.isView("update", "asset") ? (
+          <CreateAsset states={states} action={actions} />
+        ) : null}
         {rsProps.isView("custom", "link-asset") ? (
           <LinkAsset
             assetId={selecteAssetId}
             state={states}
             actions={actions}
           />
+        ) : null}
+        {rsProps.isView("custom", "report") ? (
+          <ViewReport assets={allAssets} />
         ) : null}
       </RightSection>
       <div className="main-page">
@@ -608,6 +621,7 @@ export const PageComponent: React.FC<IPageComponent> = ({
             fetchAssets={fetchAssets}
             addAsset={addAsset}
             linkAsset={linkAsset}
+            rsProps={rsProps}
           >
             <div className="overview-page">
               {signalRProps?.feed ? (

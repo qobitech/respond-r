@@ -131,6 +131,7 @@ interface IResultTable {
   hideNumbering?: boolean
   tableAction?: ITableAction
   handleTableAction?: () => void
+  lastCardElementRef: (node: any) => void
 }
 
 const ReportTable: React.FC<IResultTable> = ({
@@ -140,6 +141,7 @@ const ReportTable: React.FC<IResultTable> = ({
   hideNumbering,
   tableAction,
   handleTableAction,
+  lastCardElementRef,
 }) => {
   const isRecord = record?.length > 0
   const isCheckedRow = (id: string) => {
@@ -191,6 +193,7 @@ const ReportTable: React.FC<IResultTable> = ({
               <tr
                 key={jindex}
                 className={i.isSelected ? `selected-table-row` : ""}
+                ref={jindex + 1 === record.length ? lastCardElementRef : null}
               >
                 {!hideNumbering && (
                   <td style={{ padding: "10px 0px 10px 10px" }}>

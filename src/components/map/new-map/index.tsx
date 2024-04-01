@@ -51,7 +51,6 @@ export const MapChart = ({
     iconurl?: string,
     iconSize?: [number, number]
   ) => {
-    console.log(iconSize, "juju")
     return L.icon({
       iconUrl:
         iconurl ||

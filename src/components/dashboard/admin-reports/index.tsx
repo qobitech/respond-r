@@ -7,10 +7,7 @@ import ReportTable, { ITableRecord } from "utils/new/report-table"
 import { ILocationDetails, NoMediaComponent } from "../traffic"
 import { IReport, IReports } from "interfaces/IReport"
 import { MainView } from "../components"
-import RightSection, {
-  IRightSection,
-  useRightSection,
-} from "components/reusable/right-section"
+import { IRightSection } from "components/reusable/right-section"
 import { PulseSVG, RefreshSVG } from "utils/new/svgs"
 import { IAsset, IAssets, assetType } from "interfaces/IAsset"
 import { CopyComponent, useCopy } from "utils/new/hook"
@@ -103,22 +100,23 @@ const AdminReport = <T extends { [key: string]: any }>({
   showHeader,
   assets,
   linkAsset,
+  lastCardElementRef,
+  rsProps,
 }: {
   data: IReportData<T>
   reports: IReports
   assets: IAssets
-  fetchReports: (sort?: "asc" | "desc") => void
+  fetchReports: (page?: number) => void
   fetchAssets: () => void
   loadReports: boolean
   loadAssets: boolean
   showHeader: boolean
   linkAsset: (assetId: string) => void
+  lastCardElementRef: (node: any) => void
+  rsProps: IRightSection<IReport>
 }) => {
   const [selectedReport, setSelectedReport] = useState<IReport | null>(null)
 
-  const rsProps = useRightSection<IReport>(undefined, undefined, () => {
-    // setSelectedReport(null)
-  })
   interface ObjectType {
     [key: string]: IReport[]
   }
@@ -259,8 +257,6 @@ const AdminReport = <T extends { [key: string]: any }>({
     ? defaultDetails
     : assets?.data.map(getSelectedAsset)
 
-  const unfilteredAssets = assets?.data || []
-
   const getLocationDetails = (): ILocationDetails[] => {
     return [...allReports, ...allAssets]
   }
@@ -268,11 +264,6 @@ const AdminReport = <T extends { [key: string]: any }>({
   return (
     <>
       <CopyComponent {...copyProps} />
-      <RightSection rsProps={rsProps}>
-        {rsProps.isView("custom", "report") ? (
-          <ViewReport assets={unfilteredAssets} />
-        ) : null}
-      </RightSection>
       <div className="admin-report-section">
         <div className={`admin-report-header ${!showHeader ? "d-none" : ""}`}>
           <div className="d-flex align-items-center" style={{ gap: "20px" }}>
@@ -314,6 +305,7 @@ const AdminReport = <T extends { [key: string]: any }>({
                         header={["Time", "Report", "Location", "Status"]}
                         record={getTableReport(report)}
                         hideNumbering
+                        lastCardElementRef={lastCardElementRef}
                       />
                     </TableWrapper>
                   ))}
@@ -355,7 +347,7 @@ const TableWrapper = ({
   )
 }
 
-const ViewReport = ({
+export const ViewReport = ({
   rsProps,
   assets,
 }: {
