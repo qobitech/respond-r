@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react"
 import {
-  ITableRecord,
   NoFeeds,
   NoMediaComponent,
-  TableSection,
   chkType,
   getConnection,
   getUrl,
@@ -425,13 +423,7 @@ export const Media = ({
 
   return (
     <div className="media-container-box">
-      {!imgProps.isLoaded && !imgProps.isError && <PulseSVG />}
-      <img
-        src={files?.[fileIndex] || ""}
-        alt=""
-        onLoad={imgProps.handleLoad}
-        onError={imgProps.handleError}
-      />
+      <MediaItem url={files?.[fileIndex] || ""} imgProps={imgProps} />
       <div
         className={`nav-btn nav-left ${isLeft ? "" : "no-click"}`}
         onClick={() => handleFileIndex("left")}
@@ -444,6 +436,95 @@ export const Media = ({
       >
         <RightNavSVG />
       </div>
+    </div>
+  )
+}
+
+interface IMediaURL {
+  mediaUrl: {
+    type: "video" | "image" | null
+    url: string
+    load: boolean
+  }
+}
+
+const isImageExist = (url: string, imgProps: IUseImage): Promise<boolean> =>
+  new Promise((resolve) => {
+    const img = new Image()
+    img.onload = () => {
+      imgProps.handleLoad(true)
+      resolve(true)
+      cleanup()
+    }
+    img.onerror = () => {
+      imgProps.handleError(true)
+      resolve(false)
+      cleanup()
+    }
+    img.src = url
+
+    // Cleanup function to remove event listeners and clear the src attribute
+    const cleanup = () => {
+      img.onload = null
+      img.onerror = null
+      img.src = ""
+      imgProps.handleLoad(false)
+      imgProps.handleError(false)
+    }
+  })
+
+const useGetMediaUrl = (url: string, imgProps: IUseImage): IMediaURL => {
+  const getMediaUrl = async (): Promise<{
+    type: "video" | "image" | null
+    url: string
+    load: boolean
+  }> => {
+    if (url) {
+      const isImage = await isImageExist(url, imgProps)
+      return {
+        type: isImage ? "image" : "video",
+        url,
+        load: false,
+      }
+    } else {
+      return { type: "image", url: "", load: false }
+    }
+  }
+  const [mediaUrl, setMediaUrl] = useState<{
+    type: "video" | "image" | null
+    url: string
+    load: boolean
+  }>({ type: "image", url: "", load: false })
+
+  useEffect(() => {
+    setMediaUrl({ load: true, type: null, url: "" })
+    getMediaUrl().then((data) => {
+      setMediaUrl(data)
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [url])
+
+  return {
+    mediaUrl,
+  }
+}
+
+const MediaItem = ({ url, imgProps }: { url: string; imgProps: IUseImage }) => {
+  if (!url) return <></>
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { mediaUrl } = useGetMediaUrl(url, imgProps)
+
+  return (
+    <div className="w-100 h-100 d-flex align-items-center justify-content-center">
+      {mediaUrl.load ? (
+        <PulseSVG />
+      ) : mediaUrl.type === "image" ? (
+        <img src={mediaUrl.url} alt="" />
+      ) : mediaUrl.type === "video" ? (
+        <video>
+          <source src={`${mediaUrl.url}#t=1,3`} type="video/mp4" />
+        </video>
+      ) : null}
     </div>
   )
 }
@@ -746,9 +827,7 @@ export const MainView = ({
         <p>
           {fileIndex + 1} of {feed?.mediaFiles?.length || "..."}
         </p>
-        <div className="loader-box">
-          {!imgProps.isLoaded && !imgProps.isError && <PulseSVG />}
-        </div>
+        <div className="loader-box">{imgProps.isLoaded && <PulseSVG />}</div>
       </div>
       {feed !== null ? (
         <>
@@ -899,76 +978,3 @@ export const ActionComponent = ({
     </div>
   )
 }
-
-// const OtherInfo = () => {
-//   const tabEnum = {
-//     ASSETS: "Assets",
-//     COMMENTS: "Comments",
-//   }
-
-//   const [tab, setTab] = useState<string>(tabEnum.ASSETS)
-
-//   return (
-//     <div className="py-3">
-//       <div className="tab-section">
-//         <div className="tab-header">
-//           {Object.values(tabEnum).map((i, index) => (
-//             <div
-//               className={`tab-item ${i === tab ? "active" : ""}`}
-//               key={index}
-//               onClick={() => setTab(i)}
-//             >
-//               <p>{i}</p>
-//             </div>
-//           ))}
-//         </div>
-//         <div className="tab-body">
-//           {tab === tabEnum.ASSETS ? <Assets /> : null}
-//           {tab === tabEnum.COMMENTS ? <Comments /> : null}
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
-
-// const Assets = () => {
-//   return (
-//     <>
-//       <div className="d-flex align-items-center" style={{ gap: "20px" }}>
-//         <TypeInput placeholder="Enter asset id" className="type-input-class" />
-//         <TypeButton buttonSize="small" title="Search" />
-//       </div>
-//       <div>
-;<TableSection
-  header={["Title", "Category", "Location", "Contact", "Action"]}
-  record={[] as ITableRecord[]}
-  hideTableAction
-/>
-//       </div>
-//     </>
-//   )
-// }
-
-// const Comments = ({ notes }: { notes?: IVehicleNote[] }) => {
-//   return (
-//     <div className="py-2">
-//       {notes?.[0] ? (
-//         notes.map((i, index) => (
-//           <div className="vehicle-car-notes" key={index}>
-//             <p className="author">
-//               {i.createdBy.userName}&nbsp;&nbsp;&nbsp;
-//               <span className="date-authored">
-//                 {new Date(i.createdAt).toDateString()}
-//               </span>
-//             </p>
-//             <p>{i.message}</p>
-//           </div>
-//         ))
-//       ) : (
-//         <div className="d-flex align-items-center justify-content-center text-center">
-//           <p className="m-0">No notes</p>
-//         </div>
-//       )}
-//     </div>
-//   )
-// }

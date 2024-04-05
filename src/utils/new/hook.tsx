@@ -106,20 +106,20 @@ export const handleFullScreen = (url: string) => {
 export interface IUseImage {
   isLoaded: boolean
   isError: boolean
-  handleError: () => void
-  handleLoad: () => void
+  handleError: (error: boolean) => void
+  handleLoad: (load: boolean) => void
 }
 
 export const useImage = (): IUseImage => {
   const [isLoaded, setIsLoaded] = useState(false)
   const [isError, setIsError] = useState(false)
 
-  const handleLoad = () => {
-    setIsLoaded(true)
+  const handleLoad = (load: boolean) => {
+    setIsLoaded(load)
   }
 
-  const handleError = () => {
-    setIsError(true)
+  const handleError = (error: boolean) => {
+    setIsError(error)
   }
 
   return {
