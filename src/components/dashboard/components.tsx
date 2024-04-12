@@ -34,17 +34,16 @@ import {
 import { GODUSER } from "utils/new/constants/roles"
 import { ORGANIZATION } from "utils/new/constants"
 import AdminWrapper from "./admin-wrapper"
-import { IAction } from "interfaces/IAction"
-import { IStates } from "interfaces/IReducer"
 import { IReport } from "interfaces/IReport"
 import { typeAdminSections } from "./admin-management"
 import { trafficReportData } from "./traffic/mock-data"
 import { ViewReport, getTime } from "./admin-reports"
 import CreateAsset from "./asset/create-asset"
 import LinkAsset from "./asset/link-asset"
-import LocationAssets from "./asset/location-assets"
+import LocationAssets, { LocationLocalAssets } from "./asset/location-assets"
 import { ILocation } from "components/map/new-map"
-import { IAsset } from "interfaces/IAsset"
+import { isBaseURL } from "utils/constants"
+import { useGlobalContext } from "components/layout"
 
 export interface IPHUS<T> {
   feeds: T[]
@@ -76,8 +75,8 @@ export const useSignalR = <T extends {}>(
   }
 
   const startConnection = (url: string) => {
-    const commandURL = getBaseUrl("commandURL")
-      ? getBaseUrl("commandURL") + "/notificationHub"
+    const commandURL = isBaseURL("commandURL")
+      ? isBaseURL("commandURL") + "/notificationHub"
       : ""
     const defaultURL = process.env.REACT_APP_SIGNALR || ""
     setConnectionStatus("connecting")
@@ -200,17 +199,6 @@ export const SettingsSection = <T extends {}>({
   )
 }
 
-export type typeBaseUrls = "commandURL" | "queryURL"
-
-export const getBaseUrl = (type: typeBaseUrls) => {
-  const url = localStorage.getItem(type) || ""
-  return url
-}
-
-const clearBaseUrl = (type: typeBaseUrls) => {
-  localStorage.removeItem(type)
-}
-
 export const ENVForm = () => {
   const [commandhookForm] = useFormHook<{ commandURL: string }>({
     commandURL: yup.string().required("command url is required"),
@@ -228,12 +216,16 @@ export const ENVForm = () => {
   }
 
   useEffect(() => {
-    if (getBaseUrl("commandURL"))
-      commandhookForm.setValue("commandURL", getBaseUrl("commandURL"))
-    if (getBaseUrl("queryURL"))
-      queryhookForm.setValue("queryURL", getBaseUrl("queryURL"))
+    if (isBaseURL("commandURL"))
+      commandhookForm.setValue("commandURL", isBaseURL("commandURL"))
+    if (isBaseURL("queryURL"))
+      queryhookForm.setValue("queryURL", isBaseURL("queryURL"))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  function clearBaseUrl(arg0: string) {
+    throw new Error("Function not implemented.")
+  }
 
   return (
     <>
@@ -304,8 +296,8 @@ export const FeedForm = <T extends {}>({
   })
 
   useEffect(() => {
-    const commandURL = getBaseUrl("commandURL")
-      ? getBaseUrl("commandURL") + "/notificationHub"
+    const commandURL = isBaseURL("commandURL")
+      ? isBaseURL("commandURL") + "/notificationHub"
       : ""
     const rtspUrl = commandURL || getUrl(urlKey)
     if (!!rtspUrl) {
@@ -521,7 +513,7 @@ const MediaItem = ({ url, imgProps }: { url: string; imgProps: IUseImage }) => {
       ) : mediaUrl.type === "image" ? (
         <img src={mediaUrl.url} alt="" />
       ) : mediaUrl.type === "video" ? (
-        <video>
+        <video controls>
           <source src={`${mediaUrl.url}#t=1,3`} type="video/mp4" />
         </video>
       ) : null}
@@ -623,38 +615,32 @@ export const PageHeader = ({
 }
 
 export interface IPageComponent {
-  actions: IAction
-  states: IStates
   section: typeAdminSections
   signalRURL: typeSignalRURL
   organization: "Fire" | "Police" | "Medical"
 }
 
 export const PageComponent: React.FC<IPageComponent> = ({
-  actions,
-  states,
   section,
   signalRURL,
   organization,
 }) => {
+  const { action, state } = useGlobalContext()
   const [selecteAssetId, setSelectedAssetId] = useState<string | null>(null)
   const fetchReports = (page?: number) => {
-    const currentPage = states?.report?.getAllReports?.currentPage
-    actions.getAllReports(
+    const currentPage = state?.report?.getAllReports?.currentPage
+    action?.getAllReports(
       organization,
       `?sort=desc&pageNumber=${(currentPage || 1) + (page || 0)}`
     )
   }
-  const fetchAssets = () => {
-    actions.getAllAssets()
-  }
 
-  const rightSectionProps = states?.global.rightSection
+  const rightSectionProps = state?.global.rightSection
   const rsProps = useRightSection<IReport>(
     rightSectionProps,
-    actions.callRightSection
+    action?.callRightSection
   )
-  const allAssets = states?.asset?.getAllAssets?.data || []
+  // const allAssets = state?.asset?.getAllAssets?.Data || []
   const signalRProps = useSignalR<IReport>(signalRURL, () => {
     fetchReports()
   })
@@ -674,22 +660,12 @@ export const PageComponent: React.FC<IPageComponent> = ({
         {rsProps.isView("custom", "settings") ? (
           <Configuration signalR={signalRProps} urlKey="globalSignalR" />
         ) : null}
-        {rsProps.isView("create", "asset") ? (
-          <CreateAsset states={states} action={actions} />
-        ) : null}
-        {rsProps.isView("update", "asset") ? (
-          <CreateAsset states={states} action={actions} />
-        ) : null}
+        {rsProps.isView("create", "asset") ? <CreateAsset /> : null}
+        {rsProps.isView("update", "asset") ? <CreateAsset /> : null}
         {rsProps.isView("custom", "link-asset") ? (
-          <LinkAsset
-            assetId={selecteAssetId}
-            state={states}
-            actions={actions}
-          />
+          <LinkAsset assetId={selecteAssetId} />
         ) : null}
-        {rsProps.isView("custom", "report") ? (
-          <ViewReport assets={allAssets} />
-        ) : null}
+        {rsProps.isView("custom", "report") ? <ViewReport /> : null}
       </RightSection>
       <div className="main-page">
         <div className="pg-container">
@@ -697,16 +673,13 @@ export const PageComponent: React.FC<IPageComponent> = ({
           <AdminWrapper
             section={section}
             data={trafficReportData}
-            states={states}
             fetchReports={fetchReports}
-            fetchAssets={fetchAssets}
             addAsset={addAsset}
             linkAsset={linkAsset}
-            rsProps={rsProps}
           >
             <div className="overview-page">
               {signalRProps?.feed ? (
-                <MainView feed={signalRProps.feed!} assets={allAssets} />
+                <MainView feed={signalRProps.feed!} />
               ) : (
                 <NoMediaComponent
                   load={false}
@@ -784,13 +757,129 @@ const LiveFeedItemComponent = ({
   )
 }
 
-export const MainView = ({
-  feed,
-  assets,
-}: {
-  feed: IReport | null
-  assets: IAsset[]
-}) => {
+export const MainViewLocal = ({ feed }: { feed: IReport | null }) => {
+  const [fileIndex, setFileIndex] = useState<number>(0)
+
+  const handleFileIndex = (nav: "left" | "right") => {
+    setFileIndex((prev) => {
+      if (nav === "left") return Math.max(0, prev - 1)
+      if (nav === "right")
+        return Math.min((feed?.mediaFiles?.length || 1) - 1, prev + 1)
+      return prev
+    })
+  }
+
+  const imgProps = useImage()
+
+  const tabEnum = {
+    INFO: "Info",
+    ASSETS: "Assets",
+  }
+
+  const [tab, setTab] = useState(tabEnum.INFO)
+
+  return (
+    <div className="video-section">
+      <div className="media-container">
+        <div className={`media-box`}>
+          <Media
+            files={feed?.mediaFiles}
+            fileIndex={fileIndex}
+            handleFileIndex={handleFileIndex}
+            imgProps={imgProps}
+          />
+        </div>
+      </div>
+      <div className="media-nav-count">
+        <p>
+          {fileIndex + 1} of {feed?.mediaFiles?.length || "..."}
+        </p>
+        <div className="loader-box">{imgProps.isLoaded && <PulseSVG />}</div>
+      </div>
+      {feed !== null ? (
+        <>
+          <div className="header-info-prop">
+            <div className="icon-txt">
+              <Calendar2SVG />
+              <p>
+                {feed?.createdAt
+                  ? new Date(feed.createdAt).toDateString()
+                  : "..."}
+                &nbsp;-&nbsp;<i>{getTime(feed?.createdAt)}</i>
+              </p>
+            </div>
+            <div className="icon-txt">
+              <PhoneSVG />
+              <p>{feed?.deviceId || "..."}</p>
+            </div>
+            <ActionComponent
+              title="Action"
+              actions={[{ label: "Assign" }, { label: "Update status" }]}
+            />
+          </div>
+          <div className="tab-section">
+            <div className="tab-header">
+              {Object.values(tabEnum).map((i, index) => (
+                <div
+                  className={`tab-item ${i === tab ? "active" : ""}`}
+                  key={index}
+                  onClick={() => setTab(i)}
+                >
+                  <p>{i}</p>
+                </div>
+              ))}
+            </div>
+            <div className="tab-content">
+              <div className="tab-body">
+                <div className={tab === tabEnum.INFO ? "" : "d-none"}>
+                  <div className="mb-5">
+                    <InfoSectionItem
+                      label="Description"
+                      value={feed?.description || "..."}
+                    />
+                  </div>
+                  <div className="vehicle-info-section">
+                    <InfoSectionItem
+                      label="Transaction ID"
+                      value={feed?.transactionId || "..."}
+                    />
+                    <InfoSectionItem
+                      label="Words"
+                      value={feed?.words || "..."}
+                    />
+                    <InfoSectionItem
+                      label="Location"
+                      value={feed?.city + " | " + feed?.state || "..."}
+                      values={[feed?.city, feed?.state]}
+                      icon={
+                        <div
+                          onClick={() => handleFullScreen(feed.map || "")}
+                          className="location-map-icon"
+                        >
+                          <MarkerSVG />
+                        </div>
+                      }
+                    />
+                  </div>
+                </div>
+                <div className={tab === tabEnum.ASSETS ? "" : "d-none"}>
+                  <AssetsLocal
+                    location={{
+                      latitude: parseFloat(feed?.latitude || "0"),
+                      longitude: parseFloat(feed?.longitude || "0"),
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      ) : null}
+    </div>
+  )
+}
+
+export const MainView = ({ feed }: { feed: IReport | null }) => {
   const [fileIndex, setFileIndex] = useState<number>(0)
 
   const handleFileIndex = (nav: "left" | "right") => {
@@ -897,10 +986,10 @@ export const MainView = ({
                 </div>
                 <div className={tab === tabEnum.ASSETS ? "" : "d-none"}>
                   <Assets
-                    allAssets={assets}
+                    // allAssets={assets}
                     location={{
-                      latitude: parseFloat(feed.latitude),
-                      longitude: parseFloat(feed.longitude),
+                      latitude: parseFloat(feed?.latitude || "0"),
+                      longitude: parseFloat(feed?.longitude || "0"),
                     }}
                   />
                 </div>
@@ -913,13 +1002,10 @@ export const MainView = ({
   )
 }
 
-const Assets = ({
-  location,
-  allAssets,
-}: {
-  location: ILocation
-  allAssets: IAsset[]
-}) => {
+const Assets = ({ location }: { location: ILocation }) => {
+  const { state } = useGlobalContext()
+
+  const allAssets = state?.asset?.getAllAssets?.data || []
   const [radius, setRadius] = useState<number>(0)
 
   return (
@@ -939,6 +1025,26 @@ const Assets = ({
         location={location}
         radius={radius}
       />
+    </div>
+  )
+}
+
+const AssetsLocal = ({ location }: { location: ILocation }) => {
+  const [radius, setRadius] = useState<number>(0)
+
+  return (
+    <div>
+      <TypeInput
+        type="range"
+        onChange={({ target }) => {
+          const { value } = target
+          setRadius(parseInt(value))
+        }}
+        min={0}
+        max={2000}
+        value={radius}
+      />
+      <LocationLocalAssets location={location} radius={radius} />
     </div>
   )
 }

@@ -531,6 +531,23 @@
   border-radius: 3px;
   transition: 0.2s ease;
   font-size: 0.7625rem;
+  &.danger {
+    color: #f56e9d;
+    @include themify($themes) {
+      background: themed("smallbtndangerbg");
+      border: 0.5px solid themed("smallbtndangerborder");
+    }
+  }
+  &.disabled {
+    color: #cccccc;
+    border: 0.5px solid #cccccc;
+    cursor: not-allowed;
+  }
+  svg {
+    width: 10px;
+    height: 10px;
+    margin-left: 7px;
+  }
 }
 
 .video-section-header-tab {

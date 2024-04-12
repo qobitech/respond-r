@@ -1,5 +1,4 @@
-import { IAction } from "interfaces/IAction"
-import { IStates } from "interfaces/IReducer"
+import { useGlobalContext } from "components/layout"
 import React from "react"
 import { TypeButton } from "utils/new/button"
 import { USERTOKEN } from "utils/new/constants"
@@ -166,16 +165,11 @@ const formComponent: IFormComponent[] = [
   },
 ]
 
-const CreateAsset = ({
-  states,
-  action,
-}: {
-  states?: IStates
-  action?: IAction
-}) => {
+const CreateAsset = () => {
+  const { action, state } = useGlobalContext()
   const [hookForm] = useFormHook<ICAF>(icafSchema)
 
-  const stateLoading = states?.asset.createAssetLoading
+  const stateLoading = state?.asset.createAssetLoading
 
   const handleSubmit = (data: ICAF) => {
     const req = {

@@ -1,4 +1,6 @@
+import { IAction } from "interfaces/IAction"
 import { IOrganization } from "interfaces/IOrganization"
+import { IStates } from "interfaces/IReducer"
 import { IRole } from "interfaces/IRole"
 import { createContext } from "react"
 
@@ -22,6 +24,8 @@ export interface IGlobalContext {
   activateGlobalStartConnection?: (url: string) => void
   disableGlobalStartConnection?: () => void
   globalStartConnection?: { action: boolean; url: string }
+  state?: IStates
+  action?: IAction
 }
 
 export const GlobalContext = createContext<IGlobalContext>({

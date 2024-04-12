@@ -147,3 +147,39 @@ export const validatePassword = (
     setOtherValidations(false)
   }
 }
+
+function toCamelCase(str: string) {
+  return str.replace(/([-_][a-z])/gi, ($1) => {
+    return $1.toUpperCase().replace("-", "").replace("_", "")
+  })
+}
+
+// export function keysToCamelCase<T>(objArray: T[]) {
+//   return objArray.map((obj) => {
+//     const newObj: { [key: string]: any } = {}
+//     for (let key in obj) {
+//       if (Object.prototype.hasOwnProperty.call(obj, key)) {
+//         newObj[toCamelCase(key)] = obj[key]
+//       }
+//     }
+//     return newObj
+//   }) as T[]
+// }
+
+// export function keysObjToCamelCase<T>(obj: T) {
+//   const newObj: { [key: string]: any } = {}
+//   for (let key in obj) {
+//     if (Object.prototype.hasOwnProperty.call(obj, key)) {
+//       newObj[toCamelCase(key)] = keysObjToCamelCase(obj[key])
+//     }
+//   }
+//   return newObj as T
+// }
+
+// export function keysToCamelCase<T>(obj: T[]) {
+//   if (typeof obj !== "object" || obj === null) {
+//     return obj as T
+//   }
+
+//   return obj.map((item) => keysObjToCamelCase(item)) as T[]
+// }

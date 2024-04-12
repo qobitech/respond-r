@@ -167,6 +167,8 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
         activateGlobalStartConnection,
         disableGlobalStartConnection,
         globalStartConnection,
+        state: states,
+        action: props as unknown as IAction,
       }}
     >
       <div className={`theme-${theme}`}>

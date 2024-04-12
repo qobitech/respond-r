@@ -86,6 +86,7 @@ export const report = generateActionTypes(["getAllReports"])
 
 export const assets = generateActionTypes([
   "getAllAssets",
+  "getAssets",
   "createAsset",
   "getAssetById",
 ])

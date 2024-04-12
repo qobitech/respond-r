@@ -1,5 +1,6 @@
 import { ICallRightSection, vehicleSearchType } from "store/actions/global"
 import * as utils from "../store/services/new/utils"
+import { IAssetQuery } from "store/actions/admin-actions/assets"
 interface IAuth {
   setAuthorizationHeader: (token: string) => void
   registerOrganization: (adminDetails: object) => (dispatch: Function) => void
@@ -131,7 +132,11 @@ interface IReports {
 }
 
 interface IAssets {
-  getAllAssets: () => (dispatch: any) => void
+  getAllAssets: ({
+    overwrite,
+    getLatest,
+  }: IAssetQuery) => (dispatch: any) => void
+  getAssets: () => (dispatch: any) => void
   createAsset: () => (dispatch: any) => void
   getAssetById: (assetId: string) => (dispatch: any) => void
 }

@@ -32,6 +32,10 @@ export interface IAssetByID {
   status: number
 }
 
+export interface IAllAssets {
+  data: IAsset[]
+}
+
 export interface IAssets {
   data: IAsset[]
   currentPage: number

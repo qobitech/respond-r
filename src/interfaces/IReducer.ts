@@ -8,7 +8,7 @@ import { IRoles } from "./IRole"
 import { IOrganizations } from "./IOrganization"
 import { IActionsForRole, ICreateAction, IRoleActions } from "./IRoleActions"
 import { IReports } from "./IReport"
-import { IAssetByID, IAssets } from "./IAsset"
+import { IAllAssets, IAssetByID, IAssets } from "./IAsset"
 
 export interface IAuthReducer {
   userLogin: ILoginResponse
@@ -136,9 +136,12 @@ export interface IReportReducer {
 }
 
 export interface IAssetReducer {
-  getAllAssets: IAssets
+  getAllAssets: IAllAssets
   getAllAssetsLoading: boolean
   getAllAssetsError: any
+  getAssets: IAssets
+  getAssetsLoading: boolean
+  getAssetsError: any
   createAsset: any
   createAssetLoading: boolean
   createAssetError: any

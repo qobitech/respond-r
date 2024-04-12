@@ -1,5 +1,3 @@
-import { IAction } from "interfaces/IAction"
-import { IStates } from "interfaces/IReducer"
 import React, { useEffect, useState } from "react"
 import { TypeButton } from "utils/new/button"
 import { TypeInput } from "utils/new/input"
@@ -10,18 +8,16 @@ import { clearAction } from "store/actions/global"
 import { assets } from "../../../store/types"
 import { IRightSection } from "components/reusable/right-section"
 import { IReport } from "interfaces/IReport"
+import { useGlobalContext } from "components/layout"
 
 const LinkAsset = ({
   assetId,
-  actions,
-  state,
   rsProps,
 }: {
   assetId: string | null
-  actions?: IAction
-  state?: IStates
   rsProps?: IRightSection<IReport>
 }) => {
+  const { action, state } = useGlobalContext()
   const [formValue, setFormValue] = useState<string | null>(null)
 
   const getAssetByIdLoading = state?.asset?.getAssetByIdLoading
@@ -30,7 +26,7 @@ const LinkAsset = ({
   useEffect(() => {
     if (assetId !== null) {
       if (assetId !== formValue) {
-        actions?.getAssetById(assetId)
+        action?.getAssetById(assetId)
         setFormValue(assetId)
       }
     }
@@ -76,7 +72,7 @@ const LinkAsset = ({
         <TypeButton
           title="Search Asset"
           load={getAssetByIdLoading}
-          onClick={() => actions?.getAssetById(assetId!)}
+          onClick={() => action?.getAssetById(assetId!)}
           buttonSize="small"
         />
       </form>

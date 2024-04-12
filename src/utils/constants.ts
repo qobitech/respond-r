@@ -1,4 +1,13 @@
-import { getBaseUrl } from "components/dashboard/components"
+export type typeBaseUrls = "commandURL" | "queryURL"
+
+export const getBaseUrl = (type: typeBaseUrls) => {
+  const url = localStorage.getItem(type) || ""
+  return url
+}
+
+const clearBaseUrl = (type: typeBaseUrls) => {
+  localStorage.removeItem(type)
+}
 
 export const pageurl = {
   LANDING_PAGE: "/",
@@ -10,17 +19,24 @@ export const pageurl = {
 
 // export const baseurl = process.env.REACT_APP_ETRAFFIKA_BASEURL;
 
+export const isBaseURL = (url: typeBaseUrls) => {
+  if (!getBaseUrl) return ""
+  if (typeof getBaseUrl === "function") return getBaseUrl(url)
+  return ""
+}
+
 // export const baseurl = "https://respondradmin.azurewebsites.net/api/v1"
-export const baseurl = getBaseUrl("commandURL")
-  ? getBaseUrl("commandURL") + "/api/v1/"
+export const baseurl = isBaseURL("commandURL")
+  ? isBaseURL("commandURL") + "/api/v1/"
   : "" ||
     process.env.REACT_APP_BASEURL ||
     "https://respondradmin.azurewebsites.net/api/v1"
-export const baseurlReport = getBaseUrl("queryURL")
-  ? getBaseUrl("queryURL") + "/api/v1/"
+
+export const baseurlReport = isBaseURL("queryURL")
+  ? isBaseURL("queryURL") + "/api/v1/"
   : "" || process.env.REACT_APP_BASEURL_REPORT
-export const baseurlCommandReport = getBaseUrl("commandURL")
-  ? getBaseUrl("commandURL") + "/api/v1/"
+export const baseurlCommandReport = isBaseURL("commandURL")
+  ? isBaseURL("commandURL") + "/api/v1/"
   : "" || process.env.REACT_APP_BASEURL_REPORT
 export const baseurlEPoliceTest =
   "https://respondr-command-2b9239ad3a3a.herokuapp.com/api/v1"

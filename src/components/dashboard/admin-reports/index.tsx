@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useState } from "react"
 import "./index.scss"
 import { TypeInput } from "utils/new/input"
@@ -6,10 +7,10 @@ import { TypeSelect } from "utils/new/select"
 import ReportTable, { ITableRecord } from "utils/new/report-table"
 import { ILocationDetails, NoMediaComponent } from "../traffic"
 import { IReport, IReports } from "interfaces/IReport"
-import { MainView } from "../components"
+import { MainView, MainViewLocal } from "../components"
 import { IRightSection } from "components/reusable/right-section"
 import { PulseSVG, RefreshSVG } from "utils/new/svgs"
-import { IAsset, IAssets, assetType } from "interfaces/IAsset"
+import { IAllAssets, IAsset, IAssets, assetType } from "interfaces/IAsset"
 import { CopyComponent, useCopy } from "utils/new/hook"
 import moveable from "../../../extras/images/moveable.svg"
 import police_vehicle from "../../../extras/images/asset_icons/police-vehicle.svg"
@@ -22,6 +23,7 @@ import ambulance from "../../../extras/images/asset_icons/ambulance.svg"
 import police_station from "../../../extras/images/asset_icons/police-station.svg"
 import traffic_light from "../../../extras/images/asset_icons/traffic-light.svg"
 import drts_patrol from "../../../extras/images/asset_icons/drts-patrol.svg"
+import { useGlobalContext } from "components/layout"
 
 const getIconUrl = (type: assetType) => {
   switch (type) {
@@ -92,6 +94,10 @@ export const getTime = (date: string) => {
   return `${formattedHours}:${formattedMinutes}:${formattedSeconds} ${amPM}`
 }
 
+interface ObjectType {
+  [key: string]: IReport[]
+}
+
 const AdminReport = <T extends { [key: string]: any }>({
   data,
   reports,
@@ -99,28 +105,25 @@ const AdminReport = <T extends { [key: string]: any }>({
   fetchAssets,
   loadReports,
   showHeader,
-  assets,
   linkAsset,
   lastCardElementRef,
-  rsProps,
 }: {
   data: IReportData<T>
   reports: IReports
-  assets: IAssets
   fetchReports: (page?: number) => void
   fetchAssets: () => void
   loadReports: boolean
-  loadAssets: boolean
   showHeader: boolean
   linkAsset: (assetId: string) => void
   lastCardElementRef: (node: any) => void
-  rsProps: IRightSection<IReport>
 }) => {
-  const [selectedReport, setSelectedReport] = useState<IReport | null>(null)
+  const { state } = useGlobalContext()
+  if (!state) return <></>
 
-  interface ObjectType {
-    [key: string]: IReport[]
-  }
+  const allAssets = state?.asset.getAllAssets
+  const assets = state?.asset.getAssets
+
+  const [selectedReport, setSelectedReport] = useState<IReport | null>(null)
 
   const reportsGroupedByDate = reports?.data?.reduce((acc, obj) => {
     const date: string = obj.createdAt.split("T")[0]
@@ -144,8 +147,9 @@ const AdminReport = <T extends { [key: string]: any }>({
             isLink: false,
             action: () => {
               if (!isSelected)
-                rsProps.callSection("custom", "report", report.id, report)
-              setSelectedReport(isSelected ? null : report)
+                // rsProps.callSection("custom", "report", report.id, report)
+                // setViewReportItem(report)
+                setSelectedReport(isSelected ? null : report)
             },
           },
           {
@@ -153,8 +157,9 @@ const AdminReport = <T extends { [key: string]: any }>({
             isLink: false,
             action: () => {
               if (!isSelected)
-                rsProps.callSection("custom", "report", report.id, report)
-              setSelectedReport(isSelected ? null : report)
+                // setViewReportItem(report)
+                // rsProps.callSection("custom", "report", report.id, report)
+                setSelectedReport(isSelected ? null : report)
             },
             textLength: 25,
             cellWidth: "180px",
@@ -165,8 +170,9 @@ const AdminReport = <T extends { [key: string]: any }>({
             isLink: false,
             action: () => {
               if (!isSelected)
-                rsProps.callSection("custom", "report", report.id, report)
-              setSelectedReport(isSelected ? null : report)
+                // setViewReportItem(report)
+                // rsProps.callSection("custom", "report", report.id, report)
+                setSelectedReport(isSelected ? null : report)
             },
           },
           {
@@ -202,12 +208,12 @@ const AdminReport = <T extends { [key: string]: any }>({
         className="d-flex text-decoration-underline"
         style={{ cursor: "pointer" }}
         onClick={() => {
-          rsProps.callSection(
-            "custom",
-            "report",
-            selectedReport.id,
-            selectedReport
-          )
+          // rsProps.callSection(
+          //   "custom",
+          //   "report",
+          //   selectedReport.id,
+          //   selectedReport
+          // )
           setSelectedReport(selectedReport)
         }}
       >
@@ -251,15 +257,21 @@ const AdminReport = <T extends { [key: string]: any }>({
   const defaultDetails = [
     { location: { latitude: 1, longitude: 1 }, map: "", nearestPlace: "" },
   ]
+
   const allReports = !reports
     ? defaultDetails
     : reports?.data.map(getSelectedReport)
-  const allAssets = !assets
-    ? defaultDetails
-    : assets?.data.map(getSelectedAsset)
+
+  const getAssets = (assets: IAssets) => {
+    return !assets ? defaultDetails : assets?.data?.map(getSelectedAsset)
+  }
+  const getAllAssets = (assets: IAllAssets) => {
+    return !assets ? defaultDetails : assets?.data?.map(getSelectedAsset)
+  }
+  const mapAssets = selectedReport ? getAllAssets(allAssets) : getAssets(assets)
 
   const getLocationDetails = (): ILocationDetails[] => {
-    return [...allReports, ...allAssets]
+    return [...allReports, ...mapAssets]
   }
 
   return (
@@ -282,11 +294,15 @@ const AdminReport = <T extends { [key: string]: any }>({
         </div>
         <div className="admin-report-body">
           <div className="admin-report">
-            <div className="admin-report-left">
+            <div
+              className={`admin-report-left ${
+                selectedReport ? "item-open" : ""
+              }`}
+            >
               <NoMediaComponent
                 locationDetails={
                   selectedReport
-                    ? [getSelectedReport(selectedReport), ...allAssets]
+                    ? [getSelectedReport(selectedReport), ...mapAssets]
                     : getLocationDetails() || [{ latitude: 1, longitude: 1 }]
                 }
                 load={false}
@@ -294,34 +310,99 @@ const AdminReport = <T extends { [key: string]: any }>({
                 defaultZoom={selectedReport ? 10 : 6.5}
               />
             </div>
-            <div className="admin-report-right">
-              {reportsGroupedByDate ? (
-                <div className="table-wrapper">
-                  {Object.values(reportsGroupedByDate)?.map((report, index) => (
-                    <TableWrapper
-                      title={Object.keys(reportsGroupedByDate)[index]}
-                      key={index}
-                    >
-                      <ReportTable
-                        header={["Time", "Report", "Location", "Status"]}
-                        record={getTableReport(report)}
-                        hideNumbering
-                        lastCardElementRef={lastCardElementRef}
-                      />
-                    </TableWrapper>
-                  ))}
-                </div>
+            <div
+              className={`admin-report-right ${
+                selectedReport ? "item-open" : ""
+              }`}
+            >
+              {selectedReport ? (
+                <ViewReportItem
+                  feed={selectedReport}
+                  backToAllReports={() => {
+                    setSelectedReport(null)
+                  }}
+                />
               ) : null}
+              <ReportSection
+                hide={!!selectedReport}
+                getTableReport={getTableReport}
+                lastCardElementRef={lastCardElementRef}
+                reportsGroupedByDate={reportsGroupedByDate}
+              />
             </div>
           </div>
-          {loadReports ? (
-            <div className="text-center">
-              <PulseSVG />
-            </div>
-          ) : null}
+          <Loader loadReports={loadReports} />
         </div>
       </div>
     </>
+  )
+}
+
+interface IVRI {
+  backToAllReports: () => void
+  feed?: IReport | null
+}
+
+const ViewReportItem: React.FC<IVRI> = ({ backToAllReports, feed }) => {
+  return (
+    <div className="view-report-item-container">
+      <div className="back-btn-container">
+        <button className="button-action danger" onClick={backToAllReports}>
+          Back
+        </button>
+      </div>
+      <div className="view-report-item">
+        <MainViewLocal feed={feed!} />
+      </div>
+    </div>
+  )
+}
+
+const Loader = ({ loadReports }: { loadReports: boolean }) => {
+  return (
+    <>
+      {loadReports ? (
+        <div className="text-center">
+          <PulseSVG />
+        </div>
+      ) : null}
+    </>
+  )
+}
+
+interface IReportSection {
+  reportsGroupedByDate: ObjectType
+  getTableReport: (data: IReport[]) => ITableRecord[]
+  lastCardElementRef: (node: any) => void
+  hide?: boolean
+}
+
+const ReportSection: React.FC<IReportSection> = ({
+  reportsGroupedByDate,
+  getTableReport,
+  lastCardElementRef,
+  hide,
+}) => {
+  return (
+    <div className={hide ? "hide-prop" : ""}>
+      {reportsGroupedByDate ? (
+        <div className="table-wrapper">
+          {Object.values(reportsGroupedByDate)?.map((report, index) => (
+            <TableWrapper
+              title={Object.keys(reportsGroupedByDate)[index]}
+              key={index}
+            >
+              <ReportTable
+                header={["Time", "Report", "Location", "Status"]}
+                record={getTableReport(report)}
+                hideNumbering
+                lastCardElementRef={lastCardElementRef}
+              />
+            </TableWrapper>
+          ))}
+        </div>
+      ) : null}
+    </div>
   )
 }
 
@@ -355,12 +436,10 @@ const TableWrapper = ({
 
 export const ViewReport = ({
   rsProps,
-  assets,
 }: {
   rsProps?: IRightSection<IReport>
-  assets: IAsset[]
 }) => {
-  return <MainView feed={rsProps?.data!} assets={assets} />
+  return <MainView feed={rsProps?.data!} />
 }
 
 export default AdminReport

@@ -30,11 +30,19 @@
       align-items: stretch;
       .admin-report-left {
         flex-basis: 60%;
+        transition: 0.2s ease-in-out;
+        &.item-open {
+          flex-basis: 53%;
+        }
       }
       .admin-report-right {
         flex-basis: 40%;
+        transition: 0.2s ease-in-out;
         overflow: auto;
         padding-left: 15px;
+        &.item-open {
+          flex-basis: 47%;
+        }
       }
       // gap: 15px;
       // max-height: 60vh;
@@ -148,4 +156,19 @@
   }
   .table-wrapper-box-body {
   }
+}
+
+.view-report-item-container {
+  .back-btn-container {
+    margin-bottom: 1rem;
+  }
+  .view-report-item {
+    padding: 0;
+    overflow: auto;
+    max-height: 70vh;
+  }
+}
+
+.hide-prop {
+  display: none;
 }
