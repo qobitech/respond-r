@@ -1,24 +1,31 @@
 import { ILocation } from "components/map/new-map"
-import { IAsset } from "interfaces/IAsset"
+import { IAsset, IAssets } from "interfaces/IAsset"
 import React, { useState, useEffect } from "react"
 import { ITableRecord, TableSection } from "../traffic"
 import "./style.scss"
 import { TypeButton } from "utils/new/button"
 import { PulseSVG, RefreshSVG } from "utils/new/svgs"
 import { useGlobalContext } from "components/layout"
-import { IAssetQuery } from "store/actions/admin-actions/assets"
+import { IATE, IAssetQuery } from "store/actions/admin-actions/assets"
+import { IReport } from "interfaces/IReport"
 
 export const LocationLocalAssets = ({
   radius,
   location,
+  assets,
+  assignAssets,
+  feed,
 }: {
   location: ILocation
   radius: number
+  assets: IAssets
+  assignAssets: (data: IATE) => void
+  feed: IReport
 }) => {
   const { action, state } = useGlobalContext()
 
   const loadAllAssets = state?.asset.getAllAssetsLoading
-  const allAssets = state?.asset.getAllAssets?.data
+  const allAssets = assets.data
 
   const [localRadius, setLocalRadius] = useState<number>(0)
   const [nearbyAssets, setNearbyAssets] = useState<IAsset[]>([])
@@ -104,9 +111,24 @@ export const LocationLocalAssets = ({
     ],
     rowActions: [
       {
-        value: "Link asset",
-        isLink: false,
+        value: "Assign",
+        isLink: true,
         buttonType: "outlined",
+        action: () => {
+          const assetData: IATE = {
+            assetId: asset.id,
+            assignedBy: {
+              id: 1,
+              userName: "SYS-USER",
+            },
+            emergency: {
+              emergencyId: feed.id,
+              emergencyType: feed.status,
+            },
+          }
+          console.log("wefewewdwe")
+          assignAssets(assetData)
+        },
       },
     ],
   }))

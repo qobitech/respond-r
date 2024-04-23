@@ -44,6 +44,8 @@ import LocationAssets, { LocationLocalAssets } from "./asset/location-assets"
 import { ILocation } from "components/map/new-map"
 import { isBaseURL } from "utils/constants"
 import { useGlobalContext } from "components/layout"
+import { IATE } from "store/actions/admin-actions/assets"
+import { IAssets } from "interfaces/IAsset"
 
 export interface IPHUS<T> {
   feeds: T[]
@@ -757,7 +759,17 @@ const LiveFeedItemComponent = ({
   )
 }
 
-export const MainViewLocal = ({ feed }: { feed: IReport | null }) => {
+interface IMVL {
+  feed: IReport | null
+  assignAssets: (data: IATE) => void
+  assets: IAssets
+}
+
+export const MainViewLocal: React.FC<IMVL> = ({
+  feed,
+  assignAssets,
+  assets,
+}) => {
   const [fileIndex, setFileIndex] = useState<number>(0)
 
   const handleFileIndex = (nav: "left" | "right") => {
@@ -814,7 +826,12 @@ export const MainViewLocal = ({ feed }: { feed: IReport | null }) => {
             </div>
             <ActionComponent
               title="Action"
-              actions={[{ label: "Assign" }, { label: "Update status" }]}
+              actions={[
+                {
+                  label: "Assign",
+                },
+                { label: "Update status" },
+              ]}
             />
           </div>
           <div className="tab-section">
@@ -868,6 +885,9 @@ export const MainViewLocal = ({ feed }: { feed: IReport | null }) => {
                       latitude: parseFloat(feed?.latitude || "0"),
                       longitude: parseFloat(feed?.longitude || "0"),
                     }}
+                    assets={assets}
+                    assignAssets={assignAssets}
+                    feed={feed}
                   />
                 </div>
               </div>
@@ -1029,7 +1049,17 @@ const Assets = ({ location }: { location: ILocation }) => {
   )
 }
 
-const AssetsLocal = ({ location }: { location: ILocation }) => {
+const AssetsLocal = ({
+  location,
+  assets,
+  assignAssets,
+  feed,
+}: {
+  location: ILocation
+  assets: IAssets
+  assignAssets: (data: IATE) => void
+  feed: IReport
+}) => {
   const [radius, setRadius] = useState<number>(0)
 
   return (
@@ -1044,7 +1074,13 @@ const AssetsLocal = ({ location }: { location: ILocation }) => {
         max={2000}
         value={radius}
       />
-      <LocationLocalAssets location={location} radius={radius} />
+      <LocationLocalAssets
+        location={location}
+        radius={radius}
+        assets={assets}
+        assignAssets={assignAssets}
+        feed={feed}
+      />
     </div>
   )
 }

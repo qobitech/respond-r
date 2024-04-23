@@ -89,6 +89,8 @@ export const assets = generateActionTypes([
   "getAssets",
   "createAsset",
   "getAssetById",
+  "assignAssetToEmergency",
+  "updateReportStatus",
 ])
 
 export const logged = generateActionTypes([

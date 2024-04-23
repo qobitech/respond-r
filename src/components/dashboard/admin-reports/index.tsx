@@ -24,6 +24,7 @@ import police_station from "../../../extras/images/asset_icons/police-station.sv
 import traffic_light from "../../../extras/images/asset_icons/traffic-light.svg"
 import drts_patrol from "../../../extras/images/asset_icons/drts-patrol.svg"
 import { useGlobalContext } from "components/layout"
+import { IATE, IURS } from "store/actions/admin-actions/assets"
 
 const getIconUrl = (type: assetType) => {
   switch (type) {
@@ -117,7 +118,7 @@ const AdminReport = <T extends { [key: string]: any }>({
   linkAsset: (assetId: string) => void
   lastCardElementRef: (node: any) => void
 }) => {
-  const { state } = useGlobalContext()
+  const { state, action } = useGlobalContext()
   if (!state) return <></>
 
   const allAssets = state?.asset.getAllAssets
@@ -274,6 +275,14 @@ const AdminReport = <T extends { [key: string]: any }>({
     return [...allReports, ...mapAssets]
   }
 
+  const assignAssets = (data: IATE) => {
+    action?.assignAssetToEmergency(data)
+  }
+
+  const updateReport = (data: IURS) => {
+    action?.updateReportStatus(data)
+  }
+
   return (
     <>
       <CopyComponent {...copyProps} />
@@ -321,6 +330,8 @@ const AdminReport = <T extends { [key: string]: any }>({
                   backToAllReports={() => {
                     setSelectedReport(null)
                   }}
+                  assignAssets={assignAssets}
+                  assets={assets}
                 />
               ) : null}
               <ReportSection
@@ -341,9 +352,16 @@ const AdminReport = <T extends { [key: string]: any }>({
 interface IVRI {
   backToAllReports: () => void
   feed?: IReport | null
+  assignAssets: (data: IATE) => void
+  assets: IAssets
 }
 
-const ViewReportItem: React.FC<IVRI> = ({ backToAllReports, feed }) => {
+const ViewReportItem: React.FC<IVRI> = ({
+  backToAllReports,
+  feed,
+  assignAssets,
+  assets,
+}) => {
   return (
     <div className="view-report-item-container">
       <div className="back-btn-container">
@@ -352,7 +370,11 @@ const ViewReportItem: React.FC<IVRI> = ({ backToAllReports, feed }) => {
         </button>
       </div>
       <div className="view-report-item">
-        <MainViewLocal feed={feed!} />
+        <MainViewLocal
+          feed={feed!}
+          assignAssets={assignAssets}
+          assets={assets}
+        />
       </div>
     </div>
   )
