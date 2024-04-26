@@ -123,10 +123,9 @@ export const LocationLocalAssets = ({
             },
             emergency: {
               emergencyId: feed.id,
-              emergencyType: feed.status,
+              emergencyType: "police",
             },
           }
-          console.log("wefewewdwe")
           assignAssets(assetData)
         },
       },

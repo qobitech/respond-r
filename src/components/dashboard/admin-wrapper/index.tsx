@@ -29,6 +29,7 @@ const AdminWrapper = ({
   fetchReports,
   addAsset,
   linkAsset,
+  organization,
 }: {
   children?: any
   section: typeAdminSections
@@ -36,6 +37,7 @@ const AdminWrapper = ({
   fetchReports: (page?: number) => void
   addAsset: () => void
   linkAsset: (assetId: string) => void
+  organization: "Police" | "Fire" | "Medical"
 }) => {
   const { action, state } = useGlobalContext()
   if (!state) return <></>
@@ -117,6 +119,7 @@ const AdminWrapper = ({
                   fetchAssets={fetchAssets}
                   linkAsset={linkAsset}
                   lastCardElementRef={lastCardElementRef}
+                  organization={organization}
                 />
               ) : null}
               {tab === tabEnums.FEED ? children : null}

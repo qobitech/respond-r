@@ -44,7 +44,7 @@ import LocationAssets, { LocationLocalAssets } from "./asset/location-assets"
 import { ILocation } from "components/map/new-map"
 import { isBaseURL } from "utils/constants"
 import { useGlobalContext } from "components/layout"
-import { IATE } from "store/actions/admin-actions/assets"
+import { IATE, IURS } from "store/actions/admin-actions/assets"
 import { IAssets } from "interfaces/IAsset"
 
 export interface IPHUS<T> {
@@ -678,6 +678,7 @@ export const PageComponent: React.FC<IPageComponent> = ({
             fetchReports={fetchReports}
             addAsset={addAsset}
             linkAsset={linkAsset}
+            organization={organization}
           >
             <div className="overview-page">
               {signalRProps?.feed ? (
@@ -763,12 +764,14 @@ interface IMVL {
   feed: IReport | null
   assignAssets: (data: IATE) => void
   assets: IAssets
+  updateReport: (data: IURS) => void
 }
 
 export const MainViewLocal: React.FC<IMVL> = ({
   feed,
   assignAssets,
   assets,
+  updateReport,
 }) => {
   const [fileIndex, setFileIndex] = useState<number>(0)
 
@@ -789,6 +792,29 @@ export const MainViewLocal: React.FC<IMVL> = ({
   }
 
   const [tab, setTab] = useState(tabEnum.INFO)
+
+  const updateReportStatus = (status: string) => {
+    const data: IURS = {
+      assignedBy: {
+        id: 1,
+        userName: "SYS-USER",
+      },
+      emergency: {
+        emergencyId: feed?.id || "",
+        emergencyType: "",
+      },
+      status,
+    }
+    updateReport(data)
+  }
+
+  const reportStatusProps = [
+    "New",
+    "Assigned",
+    "Accepted",
+    "Closed",
+    "Rejected",
+  ]
 
   return (
     <div className="video-section">
@@ -825,13 +851,13 @@ export const MainViewLocal: React.FC<IMVL> = ({
               <p>{feed?.deviceId || "..."}</p>
             </div>
             <ActionComponent
-              title="Action"
-              actions={[
-                {
-                  label: "Assign",
+              title="Update Status"
+              actions={reportStatusProps.map((status) => ({
+                label: status,
+                action: () => {
+                  updateReportStatus(status.toLowerCase())
                 },
-                { label: "Update status" },
-              ]}
+              }))}
             />
           </div>
           <div className="tab-section">
@@ -876,6 +902,10 @@ export const MainViewLocal: React.FC<IMVL> = ({
                           <MarkerSVG />
                         </div>
                       }
+                    />
+                    <InfoSectionItem
+                      label="Status"
+                      value={feed?.status || "..."}
                     />
                   </div>
                 </div>

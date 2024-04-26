@@ -1,4 +1,4 @@
-import { baseurlReport, baseurlCommandReport, isBaseURL } from "utils/constants"
+import { baseurlReport, isBaseURL } from "utils/constants"
 import * as utils from "../../services/new/utils"
 import { assets } from "store/types"
 
@@ -67,7 +67,7 @@ export interface IATE {
 }
 
 export const assignAssetToEmergency = (data: IATE) => {
-  return utils.httpPutMethod({
+  return utils.httpPostMethod({
     apiData: {
       url: "",
       customurl: `${
@@ -93,10 +93,12 @@ export interface IURS {
 }
 
 export const updateReportStatus = (data: IURS) => {
-  return utils.httpPutMethod({
+  return utils.httpPostMethod({
     apiData: {
       url: "",
-      customurl: `AllocationManager/update-event-status`,
+      customurl: `${
+        isBaseURL("commandURL") + "/api/v1/"
+      }AllocationManager/update-event-status`,
       header: utils.header(""),
       data,
     },

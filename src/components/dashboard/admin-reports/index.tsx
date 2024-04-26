@@ -25,6 +25,8 @@ import traffic_light from "../../../extras/images/asset_icons/traffic-light.svg"
 import drts_patrol from "../../../extras/images/asset_icons/drts-patrol.svg"
 import { useGlobalContext } from "components/layout"
 import { IATE, IURS } from "store/actions/admin-actions/assets"
+import { useQueryValuesHook } from "utils/hooks"
+import { useNavigate } from "react-router-dom"
 
 const getIconUrl = (type: assetType) => {
   switch (type) {
@@ -108,6 +110,7 @@ const AdminReport = <T extends { [key: string]: any }>({
   showHeader,
   linkAsset,
   lastCardElementRef,
+  organization,
 }: {
   data: IReportData<T>
   reports: IReports
@@ -117,14 +120,22 @@ const AdminReport = <T extends { [key: string]: any }>({
   showHeader: boolean
   linkAsset: (assetId: string) => void
   lastCardElementRef: (node: any) => void
+  organization: "Police" | "Fire" | "Medical"
 }) => {
   const { state, action } = useGlobalContext()
   if (!state) return <></>
 
+  const navigate = useNavigate()
+  const { reportId } = useQueryValuesHook()
   const allAssets = state?.asset.getAllAssets
   const assets = state?.asset.getAssets
 
   const [selectedReport, setSelectedReport] = useState<IReport | null>(null)
+
+  const handleSelectReport = (report: IReport | null) => {
+    setSelectedReport(report)
+    navigate(report ? `?reportId=${report?.id}` : `?`)
+  }
 
   const reportsGroupedByDate = reports?.data?.reduce((acc, obj) => {
     const date: string = obj.createdAt.split("T")[0]
@@ -134,6 +145,22 @@ const AdminReport = <T extends { [key: string]: any }>({
     acc[date].push(obj)
     return acc
   }, {} as ObjectType)
+
+  useEffect(() => {
+    if (reports?.data?.length) {
+      if (reportId) {
+        const reportById = reports?.data.filter(
+          (report) => report.id === reportId
+        )?.[0]
+        if (reportById) {
+          handleSelectReport(reportById)
+        } else {
+          // fetch report by id
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reports])
 
   const getTableReport = (data: IReport[]): ITableRecord[] => {
     if (!data) return []
@@ -147,20 +174,14 @@ const AdminReport = <T extends { [key: string]: any }>({
             value: getTime(report.updatedAt),
             isLink: false,
             action: () => {
-              if (!isSelected)
-                // rsProps.callSection("custom", "report", report.id, report)
-                // setViewReportItem(report)
-                setSelectedReport(isSelected ? null : report)
+              handleSelectReport(report)
             },
           },
           {
             value: report.description,
             isLink: false,
             action: () => {
-              if (!isSelected)
-                // setViewReportItem(report)
-                // rsProps.callSection("custom", "report", report.id, report)
-                setSelectedReport(isSelected ? null : report)
+              handleSelectReport(report)
             },
             textLength: 25,
             cellWidth: "180px",
@@ -170,10 +191,7 @@ const AdminReport = <T extends { [key: string]: any }>({
             value: report.nearestPlace,
             isLink: false,
             action: () => {
-              if (!isSelected)
-                // setViewReportItem(report)
-                // rsProps.callSection("custom", "report", report.id, report)
-                setSelectedReport(isSelected ? null : report)
+              handleSelectReport(report)
             },
           },
           {
@@ -209,13 +227,7 @@ const AdminReport = <T extends { [key: string]: any }>({
         className="d-flex text-decoration-underline"
         style={{ cursor: "pointer" }}
         onClick={() => {
-          // rsProps.callSection(
-          //   "custom",
-          //   "report",
-          //   selectedReport.id,
-          //   selectedReport
-          // )
-          setSelectedReport(selectedReport)
+          handleSelectReport(selectedReport)
         }}
       >
         {selectedReport.nearestPlace}
@@ -276,11 +288,23 @@ const AdminReport = <T extends { [key: string]: any }>({
   }
 
   const assignAssets = (data: IATE) => {
-    action?.assignAssetToEmergency(data)
+    action?.assignAssetToEmergency({
+      ...data,
+      emergency: {
+        ...data.emergency,
+        emergencyType: organization.toLowerCase(),
+      },
+    })
   }
 
   const updateReport = (data: IURS) => {
-    action?.updateReportStatus(data)
+    action?.updateReportStatus({
+      ...data,
+      emergency: {
+        ...data.emergency,
+        emergencyType: organization.toLowerCase(),
+      },
+    })
   }
 
   return (
@@ -328,10 +352,11 @@ const AdminReport = <T extends { [key: string]: any }>({
                 <ViewReportItem
                   feed={selectedReport}
                   backToAllReports={() => {
-                    setSelectedReport(null)
+                    handleSelectReport(null)
                   }}
                   assignAssets={assignAssets}
                   assets={assets}
+                  updateReport={updateReport}
                 />
               ) : null}
               <ReportSection
@@ -354,6 +379,7 @@ interface IVRI {
   feed?: IReport | null
   assignAssets: (data: IATE) => void
   assets: IAssets
+  updateReport: (data: IURS) => void
 }
 
 const ViewReportItem: React.FC<IVRI> = ({
@@ -361,6 +387,7 @@ const ViewReportItem: React.FC<IVRI> = ({
   feed,
   assignAssets,
   assets,
+  updateReport,
 }) => {
   return (
     <div className="view-report-item-container">
@@ -374,6 +401,7 @@ const ViewReportItem: React.FC<IVRI> = ({
           feed={feed!}
           assignAssets={assignAssets}
           assets={assets}
+          updateReport={updateReport}
         />
       </div>
     </div>
