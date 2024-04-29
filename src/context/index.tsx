@@ -1,6 +1,7 @@
 import { IAction } from "interfaces/IAction"
 import { IOrganization } from "interfaces/IOrganization"
 import { IStates } from "interfaces/IReducer"
+import { IReport } from "interfaces/IReport"
 import { IRole } from "interfaces/IRole"
 import { createContext } from "react"
 
@@ -26,6 +27,9 @@ export interface IGlobalContext {
   globalStartConnection?: { action: boolean; url: string }
   state?: IStates
   action?: IAction
+  setSelectedReport?: (report: IReport | null) => void
+  selectedReport?: IReport | null
+  setReportById?: () => void
 }
 
 export const GlobalContext = createContext<IGlobalContext>({

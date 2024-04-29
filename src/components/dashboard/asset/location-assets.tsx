@@ -25,7 +25,7 @@ export const LocationLocalAssets = ({
   const { action, state } = useGlobalContext()
 
   const loadAllAssets = state?.asset.getAllAssetsLoading
-  const allAssets = assets.data
+  const allAssets = assets?.data
 
   const [localRadius, setLocalRadius] = useState<number>(0)
   const [nearbyAssets, setNearbyAssets] = useState<IAsset[]>([])

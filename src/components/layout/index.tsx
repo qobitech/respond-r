@@ -10,6 +10,9 @@ import ScrollIntoViewController from "./ScrollIntoViewController"
 import { GlobalContext, IGlobalContext, themeType } from "context"
 import { PulseSVG } from "utils/new/svgs"
 import { GODUSER } from "utils/new/constants/roles"
+import { IReport } from "interfaces/IReport"
+import { useNavigate } from "react-router-dom"
+import { useQueryValuesHook } from "utils/hooks"
 
 export const useGlobalContext = (): IGlobalContext => {
   const context = useContext(GlobalContext)
@@ -122,6 +125,7 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
     action: boolean
     url: string
   }>({ action: false, url: "" })
+  const [selectedReport, setSelectedReport] = useState<IReport | null>(null)
 
   const activateGlobalStartConnection = (url: string) => {
     setGlobalStartConnection(() => ({
@@ -150,6 +154,31 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
     return actionsRoles?.includes(action) || false
   }
 
+  const navigate = useNavigate()
+
+  const handleSelectReport = (report: IReport | null) => {
+    setSelectedReport?.(report)
+    navigate(report ? `?reportId=${report?.id}` : `?`)
+  }
+
+  const { reportId } = useQueryValuesHook()
+
+  const setReportById = () => {
+    const reports = states?.report.getAllReports
+    if (reports?.data?.length) {
+      if (reportId) {
+        const reportById = reports?.data.filter(
+          (report) => report.id === reportId
+        )?.[0]
+        if (reportById) {
+          handleSelectReport(reportById)
+        } else {
+          // fetch report by id
+        }
+      }
+    }
+  }
+
   return (
     <GlobalContext.Provider
       value={{
@@ -169,6 +198,9 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
         globalStartConnection,
         state: states,
         action: props as unknown as IAction,
+        setSelectedReport: handleSelectReport,
+        selectedReport,
+        setReportById,
       }}
     >
       <div className={`theme-${theme}`}>

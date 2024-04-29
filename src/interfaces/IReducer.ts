@@ -7,7 +7,7 @@ import { IDemoEPolice } from "./IDemo"
 import { IRoles } from "./IRole"
 import { IOrganizations } from "./IOrganization"
 import { IActionsForRole, ICreateAction, IRoleActions } from "./IRoleActions"
-import { IReports } from "./IReport"
+import { IReports, IUpdateReportStatus } from "./IReport"
 import { IAllAssets, IAssetByID, IAssets } from "./IAsset"
 
 export interface IAuthReducer {
@@ -133,6 +133,9 @@ export interface IReportReducer {
   getAllReports: IReports
   getAllReportsLoading: boolean
   getAllReportsError: any
+  updateReportStatus: IUpdateReportStatus
+  updateReportStatusLoading: boolean
+  updateReportStatusError: any
 }
 
 export interface IAssetReducer {

@@ -27,3 +27,10 @@ export interface IReports {
   total: number
   pageSize: number
 }
+
+export interface IUpdateReportStatus {
+  isSuccessful: boolean
+  statusCode: number
+  message: string
+  data: null
+}

@@ -5,10 +5,6 @@ export const getBaseUrl = (type: typeBaseUrls) => {
   return url
 }
 
-const clearBaseUrl = (type: typeBaseUrls) => {
-  localStorage.removeItem(type)
-}
-
 export const pageurl = {
   LANDING_PAGE: "/",
   EMIAL_VERIFICATION: "/verify-email",

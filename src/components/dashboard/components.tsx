@@ -44,8 +44,10 @@ import LocationAssets, { LocationLocalAssets } from "./asset/location-assets"
 import { ILocation } from "components/map/new-map"
 import { isBaseURL } from "utils/constants"
 import { useGlobalContext } from "components/layout"
-import { IATE, IURS } from "store/actions/admin-actions/assets"
+import { IATE } from "store/actions/admin-actions/assets"
 import { IAssets } from "interfaces/IAsset"
+import { IURS } from "store/actions/admin-actions/report"
+import { IReportReducer } from "interfaces/IReducer"
 
 export interface IPHUS<T> {
   feeds: T[]
@@ -627,13 +629,18 @@ export const PageComponent: React.FC<IPageComponent> = ({
   signalRURL,
   organization,
 }) => {
-  const { action, state } = useGlobalContext()
+  const { action, state, setReportById } = useGlobalContext()
+
   const [selecteAssetId, setSelectedAssetId] = useState<string | null>(null)
+
   const fetchReports = (page?: number) => {
     const currentPage = state?.report?.getAllReports?.currentPage
     action?.getAllReports(
       organization,
-      `?sort=desc&pageNumber=${(currentPage || 1) + (page || 0)}`
+      `?sort=desc&pageNumber=${(currentPage || 1) + (page || 0)}`,
+      () => {
+        setReportById?.()
+      }
     )
   }
 
@@ -765,6 +772,7 @@ interface IMVL {
   assignAssets: (data: IATE) => void
   assets: IAssets
   updateReport: (data: IURS) => void
+  updateReportProps: IReportReducer
 }
 
 export const MainViewLocal: React.FC<IMVL> = ({
@@ -772,6 +780,7 @@ export const MainViewLocal: React.FC<IMVL> = ({
   assignAssets,
   assets,
   updateReport,
+  updateReportProps,
 }) => {
   const [fileIndex, setFileIndex] = useState<number>(0)
 
@@ -858,6 +867,7 @@ export const MainViewLocal: React.FC<IMVL> = ({
                   updateReportStatus(status.toLowerCase())
                 },
               }))}
+              load={updateReportProps.updateReportStatusLoading}
             />
           </div>
           <div className="tab-section">
@@ -1118,9 +1128,11 @@ const AssetsLocal = ({
 export const ActionComponent = ({
   actions,
   title,
+  load,
 }: {
   title?: string
   actions?: Array<{ label: string; action?: () => void }>
+  load?: boolean
 }) => {
   return (
     <div className="dropdown cta-section">
@@ -1134,6 +1146,12 @@ export const ActionComponent = ({
         aria-expanded="false"
       >
         {title || "Action"}
+        {load ? (
+          <>
+            &nbsp;&nbsp;
+            <PulseSVG />
+          </>
+        ) : null}
       </button>
 
       <div
@@ -1141,8 +1159,8 @@ export const ActionComponent = ({
         aria-labelledby="dropdownMenuButton"
         style={{ cursor: "pointer" }}
       >
-        {actions?.map((i) => (
-          <p className="dropdown-item m-0 py-2" onClick={i.action}>
+        {actions?.map((i, index) => (
+          <p className="dropdown-item m-0 py-2" onClick={i.action} key={index}>
             {i.label}
           </p>
         ))}

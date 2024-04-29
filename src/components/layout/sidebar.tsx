@@ -6,7 +6,6 @@ import {
   CarsSVG,
   FireExtinguisherSVG,
   HamburgerSVG,
-  LogoSVG,
   ManagementSVG,
   MedicalSVG,
   PoliceSVG,
