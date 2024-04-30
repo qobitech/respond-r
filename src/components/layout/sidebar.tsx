@@ -15,14 +15,21 @@ import { ISSUPERADMIN, ORGANIZATION } from "utils/new/constants"
 import { GODUSER } from "utils/new/constants/roles"
 import { managementTabEnums } from "components/dashboard/admin-management"
 import Logo from "../../extras/images/CHITHUB_LOGO.png"
+import { IReport } from "interfaces/IReport"
 
 interface IProps {
   setMenuOpen: (menuOpen: boolean) => (dispatch: any) => void
   menuOpen: boolean
   logOut: () => (dispatch: Function) => void
+  handleSelectReport: (report: IReport | null) => void
 }
 
-const SideBar = ({ setMenuOpen, menuOpen, logOut }: IProps) => {
+const SideBar = ({
+  setMenuOpen,
+  menuOpen,
+  logOut,
+  handleSelectReport,
+}: IProps) => {
   const location = useLocation()
   const navigate = useNavigate()
   function _isUrl(page: string) {
@@ -98,7 +105,10 @@ const SideBar = ({ setMenuOpen, menuOpen, logOut }: IProps) => {
           <li
             className={`side-menu-item ${i.isActive ? "active" : ""}`}
             key={index}
-            onClick={() => navigate(i.url)}
+            onClick={() => {
+              handleSelectReport(null)
+              navigate(i.url)
+            }}
           >
             {i.imgsrc}
             <p>{i.title}</p>

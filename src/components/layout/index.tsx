@@ -10,7 +10,7 @@ import ScrollIntoViewController from "./ScrollIntoViewController"
 import { GlobalContext, IGlobalContext, themeType } from "context"
 import { PulseSVG } from "utils/new/svgs"
 import { GODUSER } from "utils/new/constants/roles"
-import { IReport } from "interfaces/IReport"
+import { IReport, IReports } from "interfaces/IReport"
 import { useNavigate } from "react-router-dom"
 import { useQueryValuesHook } from "utils/hooks"
 
@@ -156,18 +156,18 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
 
   const navigate = useNavigate()
 
+  const { reportId } = useQueryValuesHook()
+
   const handleSelectReport = (report: IReport | null) => {
     setSelectedReport?.(report)
     navigate(report ? `?reportId=${report?.id}` : `?`)
   }
 
-  const { reportId } = useQueryValuesHook()
-
-  const setReportById = () => {
-    const reports = states?.report.getAllReports
-    if (reports?.data?.length) {
+  const setReportById = (data: IReports) => {
+    const reports = data.data
+    if (reports?.length) {
       if (reportId) {
-        const reportById = reports?.data.filter(
+        const reportById = reports?.filter(
           (report) => report.id === reportId
         )?.[0]
         if (reportById) {
@@ -214,6 +214,7 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
           setMenuOpen={setMenuOpen}
           menuOpen={menuOpen || false}
           logOut={logOut}
+          handleSelectReport={handleSelectReport}
         />
         <div className={`page_layout fitContent`}>
           <Navbar

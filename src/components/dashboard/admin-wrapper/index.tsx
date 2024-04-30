@@ -72,9 +72,24 @@ const AdminWrapper = ({
     if (!localReports) {
       setLocalReports(() => reports)
     } else {
-      const { data, ...rest } = reports
+      const { data: newData, ...rest } = reports
       const { data: oldData } = localReports
-      const combinedData = [...oldData, ...data]
+
+      // Replace old data with new data if their IDs match
+      const updatedData = oldData.map((oldItem) => {
+        const matchingNewItem = newData.find(
+          (newItem) => newItem.id === oldItem.id
+        )
+        return matchingNewItem || oldItem
+      })
+
+      // Merge new items that don't have the same ID as old items
+      const newItemsToAdd = newData.filter(
+        (newItem) => !oldData.some((oldItem) => oldItem.id === newItem.id)
+      )
+
+      const combinedData = [...updatedData, ...newItemsToAdd]
+
       const newReport = { ...rest, data: combinedData }
       if (newReport.data !== reports.data) {
         setLocalReports(() => newReport)

@@ -9,6 +9,8 @@ import { useGlobalContext } from "components/layout"
 import { IATE, IAssetQuery } from "store/actions/admin-actions/assets"
 import { IReport } from "interfaces/IReport"
 
+export type statusType = "loading" | "success" | "error" | null
+
 export const LocationLocalAssets = ({
   radius,
   location,
@@ -19,7 +21,10 @@ export const LocationLocalAssets = ({
   location: ILocation
   radius: number
   assets: IAssets
-  assignAssets: (data: IATE) => void
+  assignAssets: (
+    data: IATE,
+    callBack: (status: statusType, id: string) => void
+  ) => void
   feed: IReport
 }) => {
   const { action, state } = useGlobalContext()
@@ -84,6 +89,18 @@ export const LocationLocalAssets = ({
     return deg * (Math.PI / 180)
   }
 
+  const [requestStatus, setRequestStatus] = useState<{
+    id: string
+    status: statusType
+  } | null>(null)
+
+  const setRequestCallback = (status: statusType, id: string) => {
+    setRequestStatus({ id, status })
+  }
+
+  const isStatus = (status: statusType, id: string) =>
+    requestStatus?.status === status && requestStatus.id === id
+
   const tableRecord: ITableRecord[] = nearbyAssets?.map((asset) => ({
     id: asset.id,
     row: [
@@ -111,9 +128,10 @@ export const LocationLocalAssets = ({
     ],
     rowActions: [
       {
-        value: "Assign",
+        value: isStatus("success", asset.id) ? "Assigned" : "Assign",
         isLink: true,
         buttonType: "outlined",
+        load: isStatus("loading", asset.id),
         action: () => {
           const assetData: IATE = {
             assetId: asset.id,
@@ -126,7 +144,7 @@ export const LocationLocalAssets = ({
               emergencyType: "police",
             },
           }
-          assignAssets(assetData)
+          assignAssets(assetData, setRequestCallback)
         },
       },
     ],

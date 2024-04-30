@@ -151,6 +151,9 @@ export interface IAssetReducer {
   getAssetById: IAssetByID
   getAssetByIdLoading: boolean
   getAssetByIdError: any
+  assignAssetToEmergency: any
+  assignAssetToEmergencyLoading: boolean
+  assignAssetToEmergencyError: any
 }
 
 export interface IStates {

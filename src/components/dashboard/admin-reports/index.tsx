@@ -27,6 +27,8 @@ import { useGlobalContext } from "components/layout"
 import { IATE } from "store/actions/admin-actions/assets"
 import { IURS } from "store/actions/admin-actions/report"
 import { IReportReducer } from "interfaces/IReducer"
+import { assets as assetsType } from "../../../store/types"
+import { statusType } from "../asset/location-assets"
 
 const getIconUrl = (type: assetType) => {
   switch (type) {
@@ -122,7 +124,7 @@ const AdminReport = <T extends { [key: string]: any }>({
   lastCardElementRef: (node: any) => void
   organization: "Police" | "Fire" | "Medical"
 }) => {
-  const { state, action, setReportById, selectedReport, setSelectedReport } =
+  const { state, action, selectedReport, setSelectedReport } =
     useGlobalContext()
   if (!state) return <></>
   const allAssets = state?.asset.getAllAssets
@@ -156,9 +158,10 @@ const AdminReport = <T extends { [key: string]: any }>({
   }, {} as ObjectType)
 
   useEffect(() => {
-    setReportById?.()
+    fetchReports()
+    fetchAssets()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reports])
+  }, [])
 
   const getTableReport = (data: IReport[]): ITableRecord[] => {
     if (!data) return []
@@ -204,12 +207,6 @@ const AdminReport = <T extends { [key: string]: any }>({
       }
     })
   }
-
-  useEffect(() => {
-    fetchReports()
-    fetchAssets()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const [copyProps] = useCopy()
 
@@ -285,14 +282,30 @@ const AdminReport = <T extends { [key: string]: any }>({
     return [...allReports, ...mapAssets]
   }
 
-  const assignAssets = (data: IATE) => {
-    action?.assignAssetToEmergency({
-      ...data,
-      emergency: {
-        ...data.emergency,
-        emergencyType: organization.toLowerCase(),
+  const assignAssets = (
+    data: IATE,
+    callBack: (status: statusType, id: string) => void
+  ) => {
+    callBack("loading", data.assetId)
+    action?.assignAssetToEmergency(
+      {
+        ...data,
+        emergency: {
+          ...data.emergency,
+          emergencyType: organization.toLowerCase(),
+        },
       },
-    })
+      () => {
+        callBack("success", data.assetId)
+        setTimeout(() => {
+          action.clearAction(assetsType.assignAssetToEmergency)
+          callBack(null, data.assetId)
+        }, 1500)
+      },
+      () => {
+        callBack("error", data.assetId)
+      }
+    )
   }
 
   return (
@@ -366,7 +379,10 @@ const AdminReport = <T extends { [key: string]: any }>({
 interface IVRI {
   backToAllReports: () => void
   feed?: IReport | null
-  assignAssets: (data: IATE) => void
+  assignAssets: (
+    data: IATE,
+    callBack: (status: statusType, id: string) => void
+  ) => void
   assets: IAssets
   updateReport: (data: IURS) => void
   updateReportProps: IReportReducer

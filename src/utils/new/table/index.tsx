@@ -115,6 +115,7 @@ export interface ICellAction extends ICell {
   background?: string
   buttonType?: "bold" | "outlined" | "disabled" | "danger" | undefined
   hide?: boolean
+  load?: boolean
 }
 
 export interface ITableRecord {
@@ -319,6 +320,7 @@ const CellValueActionComponent: React.FC<ICVAC> = ({
   buttonType,
   view,
   hide,
+  load,
 }) => {
   const navigate = useNavigate()
   return (
@@ -332,6 +334,7 @@ const CellValueActionComponent: React.FC<ICVAC> = ({
           style={{ height: "35px", fontSize: "12px" }}
           onClick={() => (isLink ? action?.() : navigate(url || ""))}
           className="mr-2"
+          load={load}
         />
       ) : null}
     </>

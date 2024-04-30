@@ -34,13 +34,16 @@ import {
 import { GODUSER } from "utils/new/constants/roles"
 import { ORGANIZATION } from "utils/new/constants"
 import AdminWrapper from "./admin-wrapper"
-import { IReport } from "interfaces/IReport"
+import { IReport, IReports } from "interfaces/IReport"
 import { typeAdminSections } from "./admin-management"
 import { trafficReportData } from "./traffic/mock-data"
 import { ViewReport, getTime } from "./admin-reports"
 import CreateAsset from "./asset/create-asset"
 import LinkAsset from "./asset/link-asset"
-import LocationAssets, { LocationLocalAssets } from "./asset/location-assets"
+import LocationAssets, {
+  LocationLocalAssets,
+  statusType,
+} from "./asset/location-assets"
 import { ILocation } from "components/map/new-map"
 import { isBaseURL } from "utils/constants"
 import { useGlobalContext } from "components/layout"
@@ -638,8 +641,8 @@ export const PageComponent: React.FC<IPageComponent> = ({
     action?.getAllReports(
       organization,
       `?sort=desc&pageNumber=${(currentPage || 1) + (page || 0)}`,
-      () => {
-        setReportById?.()
+      (data) => {
+        setReportById?.(data as IReports)
       }
     )
   }
@@ -769,7 +772,10 @@ const LiveFeedItemComponent = ({
 
 interface IMVL {
   feed: IReport | null
-  assignAssets: (data: IATE) => void
+  assignAssets: (
+    data: IATE,
+    callBack: (status: statusType, id: string) => void
+  ) => void
   assets: IAssets
   updateReport: (data: IURS) => void
   updateReportProps: IReportReducer
@@ -1097,7 +1103,10 @@ const AssetsLocal = ({
 }: {
   location: ILocation
   assets: IAssets
-  assignAssets: (data: IATE) => void
+  assignAssets: (
+    data: IATE,
+    callBack: (status: statusType, id: string) => void
+  ) => void
   feed: IReport
 }) => {
   const [radius, setRadius] = useState<number>(0)
