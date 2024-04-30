@@ -131,7 +131,8 @@ interface IResultTable {
   hideNumbering?: boolean
   tableAction?: ITableAction
   handleTableAction?: () => void
-  lastCardElementRef: (node: any) => void
+  // lastCardElementRef: (node: any) => void
+  lastCardElementRef: React.RefObject<HTMLTableRowElement>
 }
 
 const ReportTable: React.FC<IResultTable> = ({

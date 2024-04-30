@@ -1,57 +1,24 @@
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useState } from "react"
+import { useLocation } from "react-router-dom"
 
 const ScrollIntoViewController = ({ children }: { children: any }) => {
-  const debounce = (func: Function, wait: number) => {
-    let timeout: NodeJS.Timeout
-    return () => {
-      clearTimeout(timeout)
-      timeout = setTimeout(() => {
-        func()
-      }, wait)
-    }
-  }
+  const { pathname } = useLocation()
 
-  const rootRef = useRef<HTMLDivElement>(null)
-  const isVisible = useRef<boolean>(false)
-
-  // const [isVisible, setIsVisible] = useState<boolean>(false)
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debounceScroll = debounce(() => {
-    if (!isVisible.current) {
-      rootRef.current?.scrollIntoView({ behavior: "smooth" })
-    }
-  }, 250)
-
-  const observer = useRef<IntersectionObserver | null>(null)
+  const [prevLocation, setPrevLocation] = useState<string | null>(null)
 
   useEffect(() => {
-    observer.current = new IntersectionObserver(
-      ([entry]) => {
-        // setIsVisible(entry.isIntersecting)
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        isVisible.current === entry.isIntersecting
-      },
-      { threshold: 0.5 }
-    )
-    if (rootRef.current) {
-      observer.current.observe(rootRef.current)
+    if (pathname !== prevLocation) {
+      const body = document.querySelector("#root")
+      body?.scrollIntoView({ behavior: "smooth" })
+      // eslint-disable-next-line
+      setPrevLocation(() => pathname)
     }
     return () => {
-      if (observer.current) {
-        observer.current.disconnect()
-      }
+      setPrevLocation(() => null)
     }
-  }, [])
-
-  useEffect(() => {
-    debounceScroll()
-    // return () => {
-    //   setPrevLocation(() => null)
-    // }
     // eslint-disable-next-line
-  }, [debounceScroll])
+  }, [pathname])
 
-  return <div ref={rootRef}>{children}</div>
+  return <>{children}</>
 }
 export default ScrollIntoViewController

@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import "./index.scss"
 import "../global.scss"
-import AdminReport, { ReportStatus } from "../admin-reports"
+import AdminReport, { ObjectType, ReportStatus } from "../admin-reports"
 import { ISSUPERADMIN } from "utils/new/constants"
 import { GODUSER } from "utils/new/constants/roles"
 import { PlusSVG, PulseSVG, RefreshSVG } from "utils/new/svgs"
@@ -47,22 +47,42 @@ const AdminWrapper = ({
   const [showHeader, setShowHeader] = useState<boolean>(false)
 
   const [localReports, setLocalReports] = useState<IReports | null>(null)
-  const [continuePagination, setContinuePagination] = useState<boolean>(false)
+  const [groupedReports, setGroupedReports] = useState<ObjectType>({})
 
   const hasmore =
-    continuePagination &&
     state?.report?.getAllReports?.currentPage *
       state?.report?.getAllReports?.pageSize <
-      state?.report?.getAllReports?.total
+    state?.report?.getAllReports?.total
 
-  const [lastCardElementRef] = useInfiniteScroll(loadReports!, hasmore, () => {
-    fetchReports?.(1)
-  })
+  const lastCardElementRef = useRef<HTMLTableRowElement>(null)
+
+  const observer = useInfiniteScroll(
+    lastCardElementRef,
+    { threshold: 0.5 },
+    () => {
+      if (hasmore) fetchReports?.()
+    }
+  )
+
+  const groupReports = (reports: IReports) => {
+    setGroupedReports((prev) => {
+      prev =
+        reports?.data?.reduce((acc, obj) => {
+          const date: string = obj.createdAt.split("T")[0]
+          if (!acc[date]) {
+            acc[date] = []
+          }
+          acc[date].push(obj)
+          return acc
+        }, {} as ObjectType) || {}
+      return prev
+    })
+  }
 
   const combineReports = () => {
-    setContinuePagination(false)
     if (!localReports) {
       setLocalReports(() => reports)
+      groupReports(reports)
     } else {
       const { data: newData, ...rest } = reports
       const { data: oldData } = localReports
@@ -85,7 +105,7 @@ const AdminWrapper = ({
       const newReport = { ...rest, data: combinedData }
       if (newReport.data !== reports.data) {
         setLocalReports(() => newReport)
-        setContinuePagination(true)
+        groupReports(newReport)
       }
     }
   }
@@ -102,7 +122,12 @@ const AdminWrapper = ({
 
   useEffect(() => {
     if (!loadReports) {
+      if (lastCardElementRef.current) {
+        observer.current?.observe(lastCardElementRef.current)
+      }
       combineReports()
+    } else {
+      observer.current?.disconnect()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadReports])
@@ -144,6 +169,7 @@ const AdminWrapper = ({
                   linkAsset={linkAsset}
                   lastCardElementRef={lastCardElementRef}
                   updateLocalReportStatusByID={updateLocalReportStatusByID}
+                  groupedReports={groupedReports}
                 />
               ) : null}
               {tab === tabEnums.FEED ? children : null}

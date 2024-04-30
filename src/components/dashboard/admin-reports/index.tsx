@@ -99,7 +99,7 @@ export const getTime = (date: string) => {
   return `${formattedHours}:${formattedMinutes}:${formattedSeconds} ${amPM}`
 }
 
-interface ObjectType {
+export interface ObjectType {
   [key: string]: IReport[]
 }
 
@@ -111,14 +111,17 @@ const AdminReport = <T extends { [key: string]: any }>({
   linkAsset,
   lastCardElementRef,
   updateLocalReportStatusByID,
+  groupedReports,
 }: {
   data: IReportData<T>
   reports: IReports
   loadReports: boolean
   showHeader: boolean
   linkAsset: (assetId: string) => void
-  lastCardElementRef: (node: any) => void
+  // lastCardElementRef: (node: any) => void
+  lastCardElementRef: React.RefObject<HTMLTableRowElement>
   updateLocalReportStatusByID: (id: string, status: string) => void
+  groupedReports: ObjectType
 }) => {
   const {
     state,
@@ -156,15 +159,6 @@ const AdminReport = <T extends { [key: string]: any }>({
       }
     )
   }
-
-  const reportsGroupedByDate = reports?.data?.reduce((acc, obj) => {
-    const date: string = obj.createdAt.split("T")[0]
-    if (!acc[date]) {
-      acc[date] = []
-    }
-    acc[date].push(obj)
-    return acc
-  }, {} as ObjectType)
 
   const getTableReport = (data: IReport[]): ITableRecord[] => {
     if (!data) return []
@@ -368,7 +362,7 @@ const AdminReport = <T extends { [key: string]: any }>({
                 hide={!!selectedReport}
                 getTableReport={getTableReport}
                 lastCardElementRef={lastCardElementRef}
-                reportsGroupedByDate={reportsGroupedByDate}
+                reportsGroupedByDate={groupedReports}
               />
             </div>
           </div>
@@ -434,7 +428,8 @@ const Loader = ({ loadReports }: { loadReports: boolean }) => {
 interface IReportSection {
   reportsGroupedByDate: ObjectType
   getTableReport: (data: IReport[]) => ITableRecord[]
-  lastCardElementRef: (node: any) => void
+  // lastCardElementRef: (node: any) => void
+  lastCardElementRef: React.RefObject<HTMLTableRowElement>
   hide?: boolean
 }
 

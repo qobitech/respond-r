@@ -130,25 +130,59 @@ export const useImage = (): IUseImage => {
   }
 }
 
+// export const useInfiniteScroll = (
+//   load: boolean,
+//   hasmore: boolean,
+//   getData?: () => void
+// ): [lastCardElementRef: (node: any) => void] => {
+//   const observer = useRef<IntersectionObserver | null>(null)
+//   const lastCardElementRef = useCallback(
+//     (node: any) => {
+//       if (load) return
+//       if (observer?.current) observer?.current?.disconnect?.()
+//       observer.current = new IntersectionObserver((entries) => {
+//         if (entries[0].isIntersecting && hasmore) {
+//           getData?.()
+//         }
+//       })
+//       if (node) observer?.current?.observe(node)
+//     },
+//     [load, getData, hasmore]
+//   )
+
+//   return [lastCardElementRef]
+// }
+
 export const useInfiniteScroll = (
-  load: boolean,
-  hasmore: boolean,
-  getData?: () => void
-): [lastCardElementRef: (node: any) => void] => {
+  targetRef: React.MutableRefObject<HTMLElement | null>,
+  options: IntersectionObserverInit,
+  getData: () => void
+) => {
   const observer = useRef<IntersectionObserver | null>(null)
-  const lastCardElementRef = useCallback(
-    (node: any) => {
-      if (load) return
-      if (observer?.current) observer?.current?.disconnect?.()
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasmore) {
-          getData?.()
+
+  const handleIntersection = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          getData()
         }
       })
-      if (node) observer?.current?.observe(node)
     },
-    [load, getData, hasmore]
+    [getData]
   )
 
-  return [lastCardElementRef]
+  useEffect(() => {
+    if (targetRef.current) {
+      observer.current = new IntersectionObserver(handleIntersection, options)
+      observer.current.observe(targetRef.current)
+    }
+
+    return () => {
+      if (observer.current) {
+        observer.current.disconnect()
+      }
+    }
+  }, [targetRef, handleIntersection, options])
+
+  return observer
 }

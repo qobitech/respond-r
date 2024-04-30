@@ -860,7 +860,7 @@ export const MainViewLocal: React.FC<IMVL> = ({
               actions={reportStatusProps.map((status) => ({
                 label: status,
                 action: () => {
-                  updateReportStatus(status.toLowerCase())
+                  updateReportStatus(status?.toLowerCase())
                 },
               }))}
               load={updateReportProps.updateReportStatusLoading}
@@ -903,7 +903,7 @@ export const MainViewLocal: React.FC<IMVL> = ({
                       icon={
                         <div
                           onClick={() => handleFullScreen(feed.map || "")}
-                          className={`location-map-icon ${feed?.status.toLowerCase()}`}
+                          className={`location-map-icon ${feed?.status?.toLowerCase()}`}
                         >
                           <MarkerSVG />
                         </div>
@@ -914,7 +914,7 @@ export const MainViewLocal: React.FC<IMVL> = ({
                       value={feed?.status || "..."}
                       icon={
                         <div
-                          className={`status-ball ${feed?.status.toLowerCase()}`}
+                          className={`status-ball ${feed?.status?.toLowerCase()}`}
                         />
                       }
                       iconPosition="left"
