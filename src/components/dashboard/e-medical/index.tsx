@@ -7,7 +7,6 @@ const IMedicalPage = () => {
     <PageComponent
       section="E-healthcare"
       signalRURL="SendMedicalEmergencyNotification"
-      organization="Medical"
     />
   )
 }

@@ -11,8 +11,9 @@ import { GlobalContext, IGlobalContext, themeType } from "context"
 import { PulseSVG } from "utils/new/svgs"
 import { GODUSER } from "utils/new/constants/roles"
 import { IReport, IReports } from "interfaces/IReport"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { useQueryValuesHook } from "utils/hooks"
+import { url } from "enums/Route"
 
 export const useGlobalContext = (): IGlobalContext => {
   const context = useContext(GlobalContext)
@@ -179,6 +180,37 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
     }
   }
 
+  const location = useLocation()
+
+  const getOrganizationPath = () => {
+    if (location.pathname.includes(url.FIRESERVICE)) return "Fire"
+    if (location.pathname.includes(url.MEDICAL)) return "Medical"
+    if (location.pathname.includes(url.POLICE)) return "Police"
+    return null
+  }
+
+  const organization = getOrganizationPath()
+
+  const fetchAssets = () => {
+    if (!organization) return
+    const action = props as unknown as IAction
+    action?.getAssets()
+  }
+
+  const fetchReports = (page?: number) => {
+    if (!organization) return
+    const currentPage = states?.report?.getAllReports?.currentPage || 1
+
+    const action = props as unknown as IAction
+    action?.getAllReports(
+      organization,
+      `?sort=desc&pageNumber=${page ? page : currentPage + 1}`,
+      (data) => {
+        setReportById?.(data as IReports)
+      }
+    )
+  }
+
   return (
     <GlobalContext.Provider
       value={{
@@ -201,6 +233,9 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
         setSelectedReport: handleSelectReport,
         selectedReport,
         setReportById,
+        fetchAssets,
+        fetchReports,
+        organization,
       }}
     >
       <div className={`theme-${theme}`}>

@@ -26,25 +26,17 @@ const AdminWrapper = ({
   children,
   section,
   data,
-  fetchReports,
   addAsset,
   linkAsset,
-  organization,
 }: {
   children?: any
   section: typeAdminSections
   data?: Array<{ [key: string]: any }>
-  fetchReports: (page?: number) => void
   addAsset: () => void
   linkAsset: (assetId: string) => void
-  organization: "Police" | "Fire" | "Medical"
 }) => {
-  const { action, state } = useGlobalContext()
+  const { state, fetchReports, fetchAssets, organization } = useGlobalContext()
   if (!state) return <></>
-
-  const fetchAssets = () => {
-    action?.getAssets()
-  }
 
   const reports = state?.report.getAllReports
   const loadReports = state?.report.getAllReportsLoading
@@ -64,7 +56,7 @@ const AdminWrapper = ({
       state?.report?.getAllReports?.total
 
   const [lastCardElementRef] = useInfiniteScroll(loadReports!, hasmore, () => {
-    fetchReports(1)
+    fetchReports?.(1)
   })
 
   const combineReports = () => {
@@ -98,12 +90,31 @@ const AdminWrapper = ({
     }
   }
 
+  const updateLocalReportStatusByID = (id: string, status: string) => {
+    setLocalReports((prev) => {
+      if (!prev) return null
+      const reportIndex = prev.data.map((i) => i.id).indexOf(id)
+      if (reportIndex === -1) return prev
+      prev.data[reportIndex].status = status
+      return prev
+    })
+  }
+
   useEffect(() => {
     if (!loadReports) {
       combineReports()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadReports])
+
+  useEffect(() => {
+    if (organization !== null) {
+      setLocalReports(null)
+      fetchReports?.(1)
+      fetchAssets?.()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [organization])
 
   return (
     <>
@@ -128,13 +139,11 @@ const AdminWrapper = ({
                 <AdminReport
                   data={{ title: section, data: data || [] }}
                   reports={localReports!}
-                  fetchReports={fetchReports}
                   loadReports={loadReports}
                   showHeader={showHeader}
-                  fetchAssets={fetchAssets}
                   linkAsset={linkAsset}
                   lastCardElementRef={lastCardElementRef}
-                  organization={organization}
+                  updateLocalReportStatusByID={updateLocalReportStatusByID}
                 />
               ) : null}
               {tab === tabEnums.FEED ? children : null}
@@ -155,8 +164,8 @@ interface IHeader {
   tab: string
   createAssetLoading: boolean
   loadReports: boolean
-  fetchReports: (page?: number) => void
-  fetchAssets: () => void
+  fetchReports?: (page?: number) => void
+  fetchAssets?: () => void
   addAsset: () => void
 }
 
@@ -196,8 +205,8 @@ const Header: React.FC<IHeader> = ({
           </button>
           <button
             onClick={() => {
-              fetchReports()
-              fetchAssets()
+              fetchReports?.(1)
+              fetchAssets?.()
             }}
           >
             REFRESH&nbsp;&nbsp;&nbsp;

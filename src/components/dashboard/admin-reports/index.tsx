@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import "./index.scss"
 import { TypeInput } from "utils/new/input"
 import { TypeButton } from "utils/new/button"
@@ -106,26 +106,29 @@ interface ObjectType {
 const AdminReport = <T extends { [key: string]: any }>({
   data,
   reports,
-  fetchReports,
-  fetchAssets,
   loadReports,
   showHeader,
   linkAsset,
   lastCardElementRef,
-  organization,
+  updateLocalReportStatusByID,
 }: {
   data: IReportData<T>
   reports: IReports
-  fetchReports: (page?: number) => void
-  fetchAssets: () => void
   loadReports: boolean
   showHeader: boolean
   linkAsset: (assetId: string) => void
   lastCardElementRef: (node: any) => void
-  organization: "Police" | "Fire" | "Medical"
+  updateLocalReportStatusByID: (id: string, status: string) => void
 }) => {
-  const { state, action, selectedReport, setSelectedReport } =
-    useGlobalContext()
+  const {
+    state,
+    action,
+    selectedReport,
+    setSelectedReport,
+    fetchAssets,
+    fetchReports,
+    organization,
+  } = useGlobalContext()
   if (!state) return <></>
   const allAssets = state?.asset.getAllAssets
   const assets = state?.asset.getAssets
@@ -137,13 +140,19 @@ const AdminReport = <T extends { [key: string]: any }>({
         ...data,
         emergency: {
           ...data.emergency,
-          emergencyType: organization.toLowerCase(),
+          emergencyType: organization?.toLowerCase() as string,
         },
       },
       () => {
+        function capitalizeFirstLetter(str: string) {
+          // Convert the string to lowercase and then capitalize the first letter
+          return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+        }
+        const id = data.emergency.emergencyId
+        updateLocalReportStatusByID(id, capitalizeFirstLetter(data.status))
         // refresh data
-        fetchReports()
-        fetchAssets()
+        fetchReports?.()
+        fetchAssets?.()
       }
     )
   }
@@ -156,12 +165,6 @@ const AdminReport = <T extends { [key: string]: any }>({
     acc[date].push(obj)
     return acc
   }, {} as ObjectType)
-
-  useEffect(() => {
-    fetchReports()
-    fetchAssets()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const getTableReport = (data: IReport[]): ITableRecord[] => {
     if (!data) return []
@@ -292,7 +295,7 @@ const AdminReport = <T extends { [key: string]: any }>({
         ...data,
         emergency: {
           ...data.emergency,
-          emergencyType: organization.toLowerCase(),
+          emergencyType: organization?.toLowerCase() as string,
         },
       },
       () => {
@@ -319,7 +322,7 @@ const AdminReport = <T extends { [key: string]: any }>({
               style={{ width: "max-content", height: "max-content" }}
               role="button"
               title="Refresh Reports"
-              onClick={() => fetchReports()}
+              onClick={() => fetchReports?.(1)}
             >
               {loadReports ? <PulseSVG /> : <RefreshSVG />}
             </div>

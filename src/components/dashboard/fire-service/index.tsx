@@ -7,7 +7,6 @@ const IFireServicePage = () => {
     <PageComponent
       section="E-fire department"
       signalRURL="SendFireEmergencyNotification"
-      organization="Fire"
     />
   )
 }

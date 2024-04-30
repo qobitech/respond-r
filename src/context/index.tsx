@@ -30,6 +30,9 @@ export interface IGlobalContext {
   setSelectedReport?: (report: IReport | null) => void
   selectedReport?: IReport | null
   setReportById?: (data: IReports) => void
+  fetchAssets?: () => void
+  fetchReports?: (page?: number) => void
+  organization?: "Fire" | "Police" | "Medical" | null
 }
 
 export const GlobalContext = createContext<IGlobalContext>({

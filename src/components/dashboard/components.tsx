@@ -34,7 +34,7 @@ import {
 import { GODUSER } from "utils/new/constants/roles"
 import { ORGANIZATION } from "utils/new/constants"
 import AdminWrapper from "./admin-wrapper"
-import { IReport, IReports } from "interfaces/IReport"
+import { IReport } from "interfaces/IReport"
 import { typeAdminSections } from "./admin-management"
 import { trafficReportData } from "./traffic/mock-data"
 import { ViewReport, getTime } from "./admin-reports"
@@ -624,28 +624,15 @@ export const PageHeader = ({
 export interface IPageComponent {
   section: typeAdminSections
   signalRURL: typeSignalRURL
-  organization: "Fire" | "Police" | "Medical"
 }
 
 export const PageComponent: React.FC<IPageComponent> = ({
   section,
   signalRURL,
-  organization,
 }) => {
-  const { action, state, setReportById } = useGlobalContext()
+  const { action, state, fetchReports } = useGlobalContext()
 
   const [selecteAssetId, setSelectedAssetId] = useState<string | null>(null)
-
-  const fetchReports = (page?: number) => {
-    const currentPage = state?.report?.getAllReports?.currentPage
-    action?.getAllReports(
-      organization,
-      `?sort=desc&pageNumber=${(currentPage || 1) + (page || 0)}`,
-      (data) => {
-        setReportById?.(data as IReports)
-      }
-    )
-  }
 
   const rightSectionProps = state?.global.rightSection
   const rsProps = useRightSection<IReport>(
@@ -654,7 +641,7 @@ export const PageComponent: React.FC<IPageComponent> = ({
   )
   // const allAssets = state?.asset?.getAllAssets?.Data || []
   const signalRProps = useSignalR<IReport>(signalRURL, () => {
-    fetchReports()
+    fetchReports?.(1)
   })
 
   const addAsset = () => {
@@ -685,10 +672,8 @@ export const PageComponent: React.FC<IPageComponent> = ({
           <AdminWrapper
             section={section}
             data={trafficReportData}
-            fetchReports={fetchReports}
             addAsset={addAsset}
             linkAsset={linkAsset}
-            organization={organization}
           >
             <div className="overview-page">
               {signalRProps?.feed ? (

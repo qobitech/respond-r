@@ -7,7 +7,6 @@ const IPolicePage = () => {
     <PageComponent
       section="E-police"
       signalRURL="SendPoliceEmergencyNotification"
-      organization="Police"
     />
   )
 }
