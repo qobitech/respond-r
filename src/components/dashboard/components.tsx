@@ -539,12 +539,14 @@ export const InfoSectionItem = ({
   values,
   status,
   icon,
+  iconPosition,
 }: {
   label: string
   value: string | undefined
   values?: Array<string | undefined>
   status?: boolean
   icon?: JSX.Element
+  iconPosition?: "left" | "right"
 }) => {
   const isStatus = typeof status !== "undefined"
   return (
@@ -552,13 +554,16 @@ export const InfoSectionItem = ({
       <p className="vehicle-info-label">{label}</p>
       <div className="vehicle-row-item">
         {!values?.length ? (
-          <p
-            className={`vehicle-info-value overflow ${
-              label.includes("Reg") ? "reg-number" : ""
-            } ${isStatus ? "status-text" : ""}`}
-          >
-            {value || "..."}
-          </p>
+          <div className="d-flex align-items-center gap-10">
+            {iconPosition === "left" ? icon : null}
+            <p
+              className={`vehicle-info-value overflow ${
+                label.includes("Reg") ? "reg-number" : ""
+              } ${isStatus ? "status-text" : ""}`}
+            >
+              {value || "..."}
+            </p>
+          </div>
         ) : (
           <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
             {values.map((i, index) => (
@@ -578,7 +583,7 @@ export const InfoSectionItem = ({
                 ) : null}
               </div>
             ))}
-            {icon}
+            {iconPosition !== "left" ? icon : null}
           </div>
         )}
         {isStatus ? (
@@ -898,7 +903,7 @@ export const MainViewLocal: React.FC<IMVL> = ({
                       icon={
                         <div
                           onClick={() => handleFullScreen(feed.map || "")}
-                          className="location-map-icon"
+                          className={`location-map-icon ${feed?.status.toLowerCase()}`}
                         >
                           <MarkerSVG />
                         </div>
@@ -907,6 +912,12 @@ export const MainViewLocal: React.FC<IMVL> = ({
                     <InfoSectionItem
                       label="Status"
                       value={feed?.status || "..."}
+                      icon={
+                        <div
+                          className={`status-ball ${feed?.status.toLowerCase()}`}
+                        />
+                      }
+                      iconPosition="left"
                     />
                   </div>
                 </div>

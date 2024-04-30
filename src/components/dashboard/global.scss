@@ -82,6 +82,54 @@
     width: 15px;
     height: auto;
   }
+  &.accepted {
+    svg path {
+      fill: yellow;
+    }
+  }
+  &.new {
+    svg path {
+      fill: red;
+    }
+  }
+  &.assigned {
+    svg path {
+      fill: blue;
+    }
+  }
+  &.closed {
+    svg path {
+      fill: green;
+    }
+  }
+  &.rejected {
+    svg path {
+      fill: grey;
+    }
+  }
+}
+
+.status-ball {
+  min-width: 10px;
+  min-height: 10px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  &.accepted {
+    background: yellow;
+  }
+  &.new {
+    background: red;
+  }
+  &.assigned {
+    background: blue;
+  }
+  &.closed {
+    background: green;
+  }
+  &.rejected {
+    background: grey;
+  }
 }
 
 .media-container {
@@ -638,5 +686,78 @@
 .border-line {
   @include themify($themes) {
     border: 1px solid themed("border");
+  }
+}
+
+.gap-20 {
+  gap: 20px;
+  @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+    &:not(:last-child) {
+      margin-right: 20px;
+    }
+  }
+}
+.gap-25 {
+  gap: 20px;
+  @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+    &:not(:last-child) {
+      margin-right: 25px;
+    }
+  }
+}
+.gap-10 {
+  gap: 10px;
+  @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+}
+.gap-50 {
+  gap: 40px;
+  @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+    &:not(:last-child) {
+      margin-right: 50px;
+    }
+  }
+}
+.gap-40 {
+  gap: 40px;
+  @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+    &:not(:last-child) {
+      margin-right: 40px;
+    }
+  }
+}
+.gap-30 {
+  gap: 30px;
+  @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+    &:not(:last-child) {
+      margin-right: 30px;
+    }
+  }
+}
+.gap-7 {
+  gap: 7px;
+  @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+    &:not(:last-child) {
+      margin-right: 7px;
+    }
+  }
+}
+.gap-5 {
+  gap: 5px;
+  @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+    &:not(:last-child) {
+      margin-right: 5px;
+    }
+  }
+}
+.gap-15 {
+  gap: 15px;
+  @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+    &:not(:last-child) {
+      margin-right: 15px;
+    }
   }
 }
