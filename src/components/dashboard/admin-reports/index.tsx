@@ -131,6 +131,7 @@ const AdminReport = <T extends { [key: string]: any }>({
     fetchAssets,
     fetchReports,
     organization,
+    setSideToast,
   } = useGlobalContext()
   if (!state) return <></>
   const allAssets = state?.asset.getAllAssets
@@ -156,6 +157,11 @@ const AdminReport = <T extends { [key: string]: any }>({
         // refresh data
         fetchReports?.()
         fetchAssets?.()
+        setSideToast?.({
+          notice: "Event updated successfully",
+          show: true,
+          status: true,
+        })
       }
     )
   }
@@ -293,6 +299,11 @@ const AdminReport = <T extends { [key: string]: any }>({
         },
       },
       () => {
+        setSideToast?.({
+          notice: "Asset assigned successfully",
+          show: true,
+          status: true,
+        })
         callBack("success", data.assetId)
         setTimeout(() => {
           action.clearAction(assetsType.assignAssetToEmergency)

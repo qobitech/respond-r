@@ -14,6 +14,7 @@ import { IReport, IReports } from "interfaces/IReport"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useQueryValuesHook } from "utils/hooks"
 import { url } from "enums/Route"
+import { ISideToast } from "utils/new/toast"
 
 export const useGlobalContext = (): IGlobalContext => {
   const context = useContext(GlobalContext)
@@ -127,6 +128,11 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
     url: string
   }>({ action: false, url: "" })
   const [selectedReport, setSelectedReport] = useState<IReport | null>(null)
+  const [sideToast, setSideToast] = useState<ISideToast>({
+    notice: "",
+    show: false,
+    status: false,
+  })
 
   const activateGlobalStartConnection = (url: string) => {
     setGlobalStartConnection(() => ({
@@ -236,6 +242,8 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
         fetchAssets,
         fetchReports,
         organization,
+        setSideToast,
+        sideToast,
       }}
     >
       <div className={`theme-${theme}`}>
@@ -261,6 +269,8 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
             searchVehicleByRegNumber={searchVehicleByRegNumber}
             searchLoad={searchLoad}
             setSearch={setSearch}
+            setSideToast={setSideToast}
+            sideToast={sideToast}
           />
           <ScrollIntoViewController>
             <div className="contents">{children}</div>

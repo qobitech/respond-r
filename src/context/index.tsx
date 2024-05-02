@@ -4,6 +4,7 @@ import { IStates } from "interfaces/IReducer"
 import { IReport, IReports } from "interfaces/IReport"
 import { IRole } from "interfaces/IRole"
 import { createContext } from "react"
+import { ISideToast } from "utils/new/toast"
 
 export type themeType = "dark" | "light"
 
@@ -33,6 +34,8 @@ export interface IGlobalContext {
   fetchAssets?: () => void
   fetchReports?: (page?: number) => void
   organization?: "Fire" | "Police" | "Medical" | null
+  setSideToast?: (toast: ISideToast) => void
+  sideToast?: ISideToast
 }
 
 export const GlobalContext = createContext<IGlobalContext>({

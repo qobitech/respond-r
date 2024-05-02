@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { url } from "enums/Route"
 import "./navbar.scss"
-import Toast from "utils/new/toast"
+import Toast, { ISideToast, SideToast } from "utils/new/toast"
 import { INotification } from "interfaces/IGlobal"
 import { isLogged } from "utils/new/constants"
 import {
@@ -34,6 +34,8 @@ interface NavbarProps {
     type: vehicleSearchType
   ) => (dispatch: any) => void
   searchLoad?: boolean
+  setSideToast: (toast: ISideToast) => void
+  sideToast: ISideToast
 }
 
 type pageType =
@@ -171,6 +173,10 @@ const Navbar = (props: NavbarProps) => {
       <Toast
         status={props.notifyUser?.status || false}
         notice={props.notifyUser?.notice || ""}
+      />
+      <SideToast
+        sideToast={props.sideToast}
+        setSideToast={props.setSideToast}
       />
     </div>
   )
