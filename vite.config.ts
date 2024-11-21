@@ -57,6 +57,10 @@ export default defineConfig(({ mode }) => {
           NodeModulesPolyfillPlugin()
         ]
       }
+    },
+    build: {
+      outDir: 'build' // Set the output directory to 'build'
+      // Other build options can go here
     }
   }
 })
