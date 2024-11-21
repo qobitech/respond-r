@@ -39,7 +39,8 @@ export const identity_server = 'https://identityserver.myapiservices.net/api/v1'
 
 export const RESPONDR_QR_BASE_URL = `http://127.0.0.1:30814/api/v1`
 export const RESPONDR_CM_BASE_URL = `http://127.0.0.1:30817/api/v1`
-export const VEHICLE_QEURY_BASE_URL = `http://127.0.0.1:30903/api/v1/Vehicle`
+export const VEHICLE_QR_BASE_URL = `https://etraffica.ngrok.app/vehicle-query/api/v1/Vehicle`
+export const IN_CAR_QR_BASE_URL = `http://127.0.0.1:30816/api/v1`
 
 export const validEmailRegex = /\S+@\S+\.\S+/
 
