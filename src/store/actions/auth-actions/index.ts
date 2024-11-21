@@ -67,9 +67,7 @@ export const requestPasswordToken = (email: { [key: string]: any }) => {
   return utils.httpPostMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/PasswordReset/TokenLink/${
-        email!?.email
-      }`,
+      customurl: `${RESPONDR_CM_BASE_URL}/PasswordReset/TokenLink/${email?.email}`,
       header: utils.headerNoAuth()
     },
     actionType: authType.requestPasswordToken,
