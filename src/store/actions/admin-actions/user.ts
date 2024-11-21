@@ -1,58 +1,60 @@
-import { baseurl } from "utils/constants"
-import * as utils from "../../services/new/utils"
-import { user } from "store/types"
+import { RESPONDR_QR_BASE_URL, RESPONDR_CM_BASE_URL } from "utils/constants";
+import * as utils from "../../services/new/utils";
+import { user } from "store/types";
 
 export const createUser = (
-  data: object,
-  onSuccess?: (res: any) => void,
-  onFailure?: (err: any) => void
+	data: object,
+	onSuccess?: (res: any) => void,
+	onFailure?: (err: any) => void
 ) => {
-  return utils.httpPostMethod({
-    apiData: {
-      url: "",
-      customurl: `${baseurl}/Auth/register`,
-      header: utils.header(""),
-      data,
-    },
-    actionType: user.createUser,
-    onSuccess: (res) => {
-      onSuccess?.(res)
-    },
-    onFailure: (err) => {
-      onFailure?.(err)
-    },
-  })
-}
+	return utils.httpPostMethod({
+		apiData: {
+			url: "",
+			customurl: `${RESPONDR_CM_BASE_URL}/Auth/register`,
+			header: utils.header(""),
+			data,
+		},
+		actionType: user.createUser,
+		onSuccess: (res) => {
+			onSuccess?.(res);
+		},
+		onFailure: (err) => {
+			onFailure?.(err);
+		},
+	});
+};
 
 export const getAllUsers = (query: string) => {
-  return utils.httpGetMethod({
-    apiData: {
-      url: "",
-      customurl: `${baseurl}/User/paged${query}`,
-      header: utils.header(""),
-    },
-    actionType: user.getAllUsers,
-  })
-}
+	return utils.httpGetMethod({
+		apiData: {
+			url: "",
+			customurl: `${RESPONDR_QR_BASE_URL}/User/paged${query}`,
+			header: utils.header(""),
+		},
+		actionType: user.getAllUsers,
+	});
+};
 
 export const getUserById = (id: string) => {
-  return utils.httpGetMethod({
-    apiData: {
-      url: "",
-      customurl: `${baseurl}/Admin/UserManagement/${id || ""}`,
-      header: utils.header(""),
-    },
-    actionType: user.getUserById,
-  })
-}
+	return utils.httpGetMethod({
+		apiData: {
+			url: "",
+			customurl: `${RESPONDR_QR_BASE_URL}/Admin/UserManagement/${
+				id || ""
+			}`,
+			header: utils.header(""),
+		},
+		actionType: user.getUserById,
+	});
+};
 
 export const deleteUser = (id: string) => {
-  return utils.httpDeleteMethod({
-    apiData: {
-      url: "",
-      customurl: `${baseurl}/Admin/UserManagement/DeleteUser`,
-      header: utils.header(""),
-    },
-    actionType: user.deleteUser,
-  })
-}
+	return utils.httpDeleteMethod({
+		apiData: {
+			url: "",
+			customurl: `${RESPONDR_CM_BASE_URL}/Admin/UserManagement/DeleteUser`,
+			header: utils.header(""),
+		},
+		actionType: user.deleteUser,
+	});
+};
