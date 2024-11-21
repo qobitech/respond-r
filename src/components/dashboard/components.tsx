@@ -139,7 +139,6 @@ export const useSignalR = <T extends {}>(
   useEffect(() => {
     // connection?.on("SendPoliceEmergencyNotification", (data: any) => {
     connection?.on(signalKey, (data: any) => {
-      console.log(data, "juju")
       playHit()
       setFeeds(() => [...handleDataStream(feeds, mapDataArray, "")(data)])
       onSignal?.()

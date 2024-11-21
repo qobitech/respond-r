@@ -31,7 +31,7 @@
       p {
         font-size: 1.3525rem;
         line-height: 2rem;
-        margin: 0 0 2.35rem;
+        margin: 0 0 0.35rem;
         @include themify($themes) {
           color: themed("infovalue");
         }
@@ -41,7 +41,7 @@
         display: flex;
         align-items: center;
         gap: 30px;
-        margin: 0 0 5.75rem;
+        margin: 0 0 3.75rem;
         .event-item {
           display: flex;
           align-items: center;

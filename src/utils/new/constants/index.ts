@@ -10,25 +10,25 @@ export const getUserToken = () => {
   return token
 }
 
-const defaulttoken = {
-  UserId: "dfvwcwcwewcewcewc",
-  Organisation: "respondR",
-  Username: "qobi",
-  Email: "frank@respond-r.com",
-  PhoneNumber: "+2348063457529",
-  Role: "respondR-admin",
-  nbf: 2342342442342,
-  exp: 2342343243243,
-  iat: 24234324324324,
-}
+// const defaulttoken = {
+//   UserId: "dfvwcwcwewcewcewc",
+//   Organisation: "respondR",
+//   Username: "qobi",
+//   Email: "frank@respond-r.com",
+//   PhoneNumber: "+2348063457529",
+//   Role: "respondR-admin",
+//   nbf: 2342342442342,
+//   exp: 2342343243243,
+//   iat: 24234324324324,
+// }
 
-// export const USERTOKEN = getUserToken()
-export const USERTOKEN = defaulttoken
+export const USERTOKEN = getUserToken()
+// export const USERTOKEN = defaulttoken
 
-export const isLogged = true
-// export const isLogged = USERTOKEN?.exp
-//   ? !(USERTOKEN?.exp * 1000 < Date.now())
-//   : false
+// export const isLogged = true
+export const isLogged = USERTOKEN?.exp
+  ? !(USERTOKEN?.exp * 1000 < Date.now())
+  : false
 
 export const PAGE_SIZE = 20
 
