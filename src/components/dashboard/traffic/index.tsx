@@ -517,10 +517,10 @@ const MainView = ({
               {
                 location: {
                   latitude: parseFloat(
-                    vehicleData?.createLocation.latitude || '0'
+                    vehicleData?.createLocation?.latitude ?? '0'
                   ),
                   longitude: parseFloat(
-                    vehicleData?.createLocation.longitude || '0'
+                    vehicleData?.createLocation?.longitude ?? '0'
                   )
                 },
                 map: '',
@@ -1234,31 +1234,31 @@ const VehicleOffenseItem = ({
         />
         <VehicleInfoSectionItem
           label="Additional"
-          value={vehicleOffense?.offense?.additional || 'None'}
+          value={vehicleOffense?.offense?.additional ?? 'None'}
         />
         <VehicleInfoSectionItem
           label="Status"
-          value={vehicleOffense?.status?.name || '...'}
+          value={vehicleOffense?.status?.name ?? '...'}
         />
         <VehicleInfoSectionItem
           label="Device"
-          value={vehicleOffense?.devise?.name}
+          value={vehicleOffense?.devise?.name ?? ''}
         />
         <VehicleInfoSectionItem
           label="Longitude"
-          value={vehicleOffense?.longitude}
+          value={vehicleOffense?.longitude ?? '0'}
         />
         <VehicleInfoSectionItem
           label="Latitude"
-          value={vehicleOffense?.latitude}
+          value={vehicleOffense?.latitude ?? '0'}
         />
         <VehicleInfoSectionItem
           label="Address"
-          value={vehicleOffense?.address}
+          value={vehicleOffense?.address ?? ''}
         />
         <VehicleInfoSectionItem
           label="User"
-          value={vehicleOffense?.user?.userName}
+          value={vehicleOffense?.user?.userName ?? ''}
         />
       </div>
     </div>
