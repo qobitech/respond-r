@@ -1,23 +1,22 @@
-import React, { useEffect } from 'react'
-import {createBrowserHistory} from 'history';
+import { useEffect } from 'react'
+import { createBrowserHistory } from 'history'
 
-let oldpath = "";
+let oldpath = ''
 
-const ScrollIntoView = (props: any) => {  
+const ScrollIntoView = (props: any) => {
+  const history = createBrowserHistory()
 
-  let history = createBrowserHistory();
-  
-  useEffect(()=>{  
+  useEffect(() => {
     const doit = () => {
-      if(history.location.pathname !== oldpath){
-        const body = document.querySelector('#root');
-        body!.scrollIntoView({behavior: 'smooth'})
-        oldpath = history.location.pathname;
+      if (history.location.pathname !== oldpath) {
+        const body = document.querySelector('#root')
+        body.scrollIntoView({ behavior: 'smooth' })
+        oldpath = history.location.pathname
       }
-    };
-    doit();
+    }
+    doit()
   })
-  return(<>{props.children}</>);
-};
+  return <>{props.children}</>
+}
 
-export default ScrollIntoView;
+export default ScrollIntoView

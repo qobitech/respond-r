@@ -1,56 +1,56 @@
-import { baseurlReport, isBaseURL } from "utils/constants"
-import * as utils from "../../services/new/utils"
-import { assets } from "store/types"
+import { baseurlReport, isBaseURL } from 'utils/constants'
+import * as utils from '../../services/new/utils'
+import { assets } from 'store/types'
 
 export const getAssets = () => {
   return utils.httpGetMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurlReport}Asset/get-all-paged`,
-      header: utils.header(""),
+      header: utils.header('')
     },
-    actionType: assets.getAssets,
+    actionType: assets.getAssets
   })
 }
 
 export interface IAssetQuery {
-  overwrite?: "true" | "false"
+  overwrite?: 'true' | 'false'
   getLatest?: string
 }
 
 export const getAllAssets = ({ overwrite, getLatest }: IAssetQuery) => {
-  const ov = overwrite === "true" ? "overwrite=true&" : ""
-  const gl = getLatest === "true" ? "getLatest=true" : ""
-  const q = ov || gl ? "?" : ""
+  const ov = overwrite === 'true' ? 'overwrite=true&' : ''
+  const gl = getLatest === 'true' ? 'getLatest=true' : ''
+  const q = ov || gl ? '?' : ''
   return utils.httpGetMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurlReport}Asset/get-all${q}${ov}${gl}`,
-      header: utils.header(""),
+      header: utils.header('')
     },
-    actionType: assets.getAllAssets,
+    actionType: assets.getAllAssets
   })
 }
 
 export const createAsset = () => {
   return utils.httpPostMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurlReport}Asset`,
-      header: utils.header(""),
+      header: utils.header('')
     },
-    actionType: assets.createAsset,
+    actionType: assets.createAsset
   })
 }
 
 export const getAssetById = (assetId: string) => {
   return utils.httpGetMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurlReport}Asset/${assetId}`,
-      header: utils.header(""),
+      header: utils.header('')
     },
-    actionType: assets.getAssetById,
+    actionType: assets.getAssetById
   })
 }
 
@@ -73,15 +73,15 @@ export const assignAssetToEmergency = (
 ) => {
   return utils.httpPostMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${
-        isBaseURL("commandURL") + "/api/v1/"
+        isBaseURL('commandURL') + '/api/v1/'
       }AllocationManager/assign-asset-to-emergency`,
-      header: utils.header(""),
-      data,
+      header: utils.header(''),
+      data
     },
     actionType: assets.assignAssetToEmergency,
     onSuccess,
-    onFailure,
+    onFailure
   })
 }

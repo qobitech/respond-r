@@ -1,8 +1,8 @@
-import { url } from "enums/Route"
-import { baseurl } from "../../../utils/constants"
-import * as utils from "../../services/new/utils"
-import { authType } from "store/types"
-import { TOKENKEY } from "utils/new/constants"
+import { url } from 'enums/Route'
+import { baseurl } from '../../../utils/constants'
+import * as utils from '../../services/new/utils'
+import { authType } from 'store/types'
+import { TOKENKEY } from 'utils/new/constants'
 // import { ILogin } from "interfaces/IAuth"
 
 const setAuthorizationHeader = (token: string) => {
@@ -12,34 +12,34 @@ const setAuthorizationHeader = (token: string) => {
 export const registerOrganization = (adminDetails: object) => {
   return utils.httpPostMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurl}/UserManagement/OrganizationRegistration`,
       header: utils.headerNoAuth(),
-      data: adminDetails,
+      data: adminDetails
     },
-    actionType: authType.registerOrganization,
+    actionType: authType.registerOrganization
   })
 }
 
 export const verifyEmail = (data: object) => {
   return utils.httpPostMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurl}/UserManagement/VerifyToken`,
       header: utils.headerNoAuth(),
-      data,
+      data
     },
-    actionType: authType.verifyEmail,
+    actionType: authType.verifyEmail
   })
 }
 
 export const userLogin = (data: { email: string; password: string }) => {
   return utils.httpPostMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurl}/Auth/Login`,
       header: utils.headerNoAuth(),
-      data,
+      data
     },
     actionType: authType.userLogin,
     onSuccess: (res: any) => {
@@ -47,85 +47,85 @@ export const userLogin = (data: { email: string; password: string }) => {
       setTimeout(() => {
         window.location.reload()
       }, 1500)
-    },
+    }
   })
 }
 
 export const passwordReset = (data: object) => {
   return utils.httpPostMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurl}/UserManagement/PasswordReset/UpdatePassword`,
       header: utils.headerNoAuth(),
-      data,
+      data
     },
-    actionType: authType.passwordReset,
+    actionType: authType.passwordReset
   })
 }
 
 export const requestPasswordToken = (email: { [key: string]: any }) => {
   return utils.httpPostMethod({
     apiData: {
-      url: "",
-      customurl: `${baseurl}/PasswordReset/TokenLink/${email!?.email}`,
-      header: utils.headerNoAuth(),
+      url: '',
+      customurl: `${baseurl}/PasswordReset/TokenLink/${email?.email}`,
+      header: utils.headerNoAuth()
     },
     actionType: authType.requestPasswordToken,
     onSuccess: (res) => {
       if (res.status === 200) window.location.href = url.RESET_PASSWORD
-    },
+    }
   })
 }
 
 export const verifyPasswordResetToken = (data: object) => {
   return utils.httpPostMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurl}/PasswordReset/ValidateToken`,
       header: utils.headerNoAuth(),
-      data,
+      data
     },
-    actionType: authType.verifyPasswordResetToken,
+    actionType: authType.verifyPasswordResetToken
   })
 }
 
 export const updatePassword = (data: object) => {
   return utils.httpPostMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurl}/ChangePassword`,
       header: utils.headerNoAuth(),
-      data,
+      data
     },
-    actionType: authType.updatePassword,
+    actionType: authType.updatePassword
   })
 }
 
 export const generateAccessToken = (data: object) => {
   return utils.httpPostMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurl}/connect/token`,
       header: utils.headerNoAuth(),
-      data,
+      data
     },
-    actionType: authType.generateAccessToken,
+    actionType: authType.generateAccessToken
   })
 }
 
 export const getRefreshToken = (data: object) => {
   return utils.httpPostMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurl}/Session/RefreshToken`,
       header: utils.headerNoAuth(),
-      data,
+      data
     },
-    actionType: authType.getRefreshToken,
+    actionType: authType.getRefreshToken
   })
 }
 
 export const logOut = () => (dispatch: Function) => {
-  localStorage.removeItem("respondr-token")
+  localStorage.removeItem('respondr-token')
   window.location.href = url.LOGIN
 }

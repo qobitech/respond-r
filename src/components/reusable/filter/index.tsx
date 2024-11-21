@@ -1,9 +1,9 @@
-import React from "react"
-import { TypeButton } from "utils/new/button"
-import { TypeInput } from "utils/new/input"
-import "./index.scss"
+import React from 'react'
+import { TypeButton } from 'utils/new/button'
+import { TypeInput } from 'utils/new/input'
+import './index.scss'
 
-export type filterType = "text" | "date" | "select"
+export type filterType = 'text' | 'date' | 'select'
 
 export interface IFilterData {
   placeholder: string
@@ -22,7 +22,7 @@ const FilterComponent: React.FC<IFilter> = ({
   filterData,
   handleFilter,
   handleFilterClear,
-  closeFilter,
+  closeFilter
 }) => {
   return (
     <div className="filter-container">
@@ -38,7 +38,7 @@ const FilterComponent: React.FC<IFilter> = ({
       </div>
       <div className="filter-items">
         {filterData.map((i, index) => {
-          if (i.type !== "select") {
+          if (i.type !== 'select') {
             return <TypeInput {...i} key={index} />
           }
           return <div key={index}></div>

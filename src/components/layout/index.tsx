@@ -1,20 +1,20 @@
-import React, { ReactNode, useContext, useEffect, useState } from "react"
-import Navbar from "./navbar"
-import Footer from "./footer"
-import "./index.scss"
-import { isLogged, USERTOKEN } from "utils/new/constants"
-import { IStates } from "interfaces/IReducer"
-import { IAction } from "interfaces/IAction"
-import SideBar from "./sidebar"
-import ScrollIntoViewController from "./ScrollIntoViewController"
-import { GlobalContext, IGlobalContext, themeType } from "context"
-import { PulseSVG } from "utils/new/svgs"
-import { GODUSER } from "utils/new/constants/roles"
-import { IReport, IReports } from "interfaces/IReport"
-import { useLocation, useNavigate } from "react-router-dom"
-import { useQueryValuesHook } from "utils/hooks"
-import { url } from "enums/Route"
-import { ISideToast } from "utils/new/toast"
+import React, { ReactNode, useContext, useEffect, useState } from 'react'
+import Navbar from './navbar'
+import Footer from './footer'
+import './index.scss'
+import { isLogged, USERTOKEN } from 'utils/new/constants'
+import { IStates } from 'interfaces/IReducer'
+import { IAction } from 'interfaces/IAction'
+import SideBar from './sidebar'
+import ScrollIntoViewController from './ScrollIntoViewController'
+import { GlobalContext, IGlobalContext, themeType } from 'context'
+import { PulseSVG } from 'utils/new/svgs'
+import { GODUSER } from 'utils/new/constants/roles'
+import { IReport, IReports } from 'interfaces/IReport'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useQueryValuesHook } from 'utils/hooks'
+import { url } from 'enums/Route'
+import { ISideToast } from 'utils/new/toast'
 
 export const useGlobalContext = (): IGlobalContext => {
   const context = useContext(GlobalContext)
@@ -28,7 +28,7 @@ interface PageProps {
 }
 
 export const getActionRoles = () => {
-  const actionRoles = localStorage.getItem("actionRoles")
+  const actionRoles = localStorage.getItem('actionRoles')
   if (actionRoles) return JSON.parse(actionRoles) as string[]
   return []
 }
@@ -36,12 +36,12 @@ export const getActionRoles = () => {
 export const storeActionRoles = (actionsRoles: string[] | undefined) => {
   if (!actionsRoles?.length) return
   if (!getActionRoles().length) {
-    localStorage.setItem("actionRoles", JSON.stringify(actionsRoles))
+    localStorage.setItem('actionRoles', JSON.stringify(actionsRoles))
   }
 }
 
 export const clearActionRoles = () => {
-  localStorage.removeItem("actionRoles")
+  localStorage.removeItem('actionRoles')
 }
 
 const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
@@ -55,7 +55,7 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
     searchVehicleByRegNumber,
     getLoggedActionsForRole,
     getLoggedOrganization,
-    getLoggedRoles,
+    getLoggedRoles
   } = props as unknown as IAction
 
   const searchLoad =
@@ -72,7 +72,7 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
     let timeOut: NodeJS.Timeout
     if (notifyUser)
       timeOut = setTimeout(() => {
-        setNotificationStatus("", false)
+        setNotificationStatus('', false)
       }, 3000)
 
     return () => {
@@ -82,9 +82,9 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
 
   const query = (sign: string) =>
     GODUSER
-      ? ""
+      ? ''
       : `${sign}OrganisationId=${
-          getOrganization?.("name", USERTOKEN.Organisation)?.id || ""
+          getOrganization?.('name', USERTOKEN.Organisation)?.id || ''
         }`
 
   const getAllLoggedRoles = (query: string) => {
@@ -94,7 +94,7 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
 
   useEffect(() => {
     if (isLogged) {
-      if (!roles) getAllLoggedRoles(query("?"))
+      if (!roles) getAllLoggedRoles(query('?'))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [organizations])
@@ -102,7 +102,7 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
   useEffect(() => {
     if (isLogged) {
       if (!actionsRoles) getLoggedActionsForRole(USERTOKEN.Role)
-      if (!organizations) getLoggedOrganization("")
+      if (!organizations) getLoggedOrganization('')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -113,43 +113,43 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
     states?.logged.getLoggedRolesLoading
 
   const isBrowserDefaultDark = () =>
-    window.matchMedia("(prefers-color-scheme: dark)").matches
+    window.matchMedia('(prefers-color-scheme: dark)').matches
 
   const getDefaultTheme = (): themeType => {
-    const localStorageTheme = localStorage.getItem("theme")
-    const browserDefault = isBrowserDefaultDark() ? "dark" : "light"
+    const localStorageTheme = localStorage.getItem('theme')
+    const browserDefault = isBrowserDefaultDark() ? 'dark' : 'light'
     return (localStorageTheme || browserDefault) as themeType
   }
 
   const [theme, setTheme] = useState<themeType>(getDefaultTheme())
-  const [search, setSearchValue] = useState<string>("")
+  const [search, setSearchValue] = useState<string>('')
   const [globalStartConnection, setGlobalStartConnection] = useState<{
     action: boolean
     url: string
-  }>({ action: false, url: "" })
+  }>({ action: false, url: '' })
   const [selectedReport, setSelectedReport] = useState<IReport | null>(null)
   const [sideToast, setSideToast] = useState<ISideToast>({
-    notice: "",
+    notice: '',
     show: false,
-    status: false,
+    status: false
   })
 
   const activateGlobalStartConnection = (url: string) => {
     setGlobalStartConnection(() => ({
       action: true,
-      url,
+      url
     }))
   }
 
   const disableGlobalStartConnection = () => {
     setGlobalStartConnection((prev) => ({
       action: false,
-      url: "",
+      url: ''
     }))
   }
 
-  const getOrganization = (type: "id" | "name", key: string | number) => {
-    if (type === "id") return organizations?.find((org) => org.id === key)
+  const getOrganization = (type: 'id' | 'name', key: string | number) => {
+    if (type === 'id') return organizations?.find((org) => org.id === key)
     return organizations?.find((org) => org.name === key)
   }
 
@@ -189,9 +189,9 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
   const location = useLocation()
 
   const getOrganizationPath = () => {
-    if (location.pathname.includes(url.FIRESERVICE)) return "Fire"
-    if (location.pathname.includes(url.MEDICAL)) return "Medical"
-    if (location.pathname.includes(url.POLICE)) return "Police"
+    if (location.pathname.includes(url.FIRESERVICE)) return 'Fire'
+    if (location.pathname.includes(url.MEDICAL)) return 'Medical'
+    if (location.pathname.includes(url.POLICE)) return 'Police'
     return null
   }
 
@@ -210,7 +210,7 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
     const action = props as unknown as IAction
     action?.getAllReports(
       organization,
-      `?sort=desc&pageNumber=${page ? page : currentPage + 1}`,
+      `?sort=desc&pageNumber=${page || currentPage + 1}`,
       (data) => {
         setReportById?.(data as IReports)
       }
@@ -230,7 +230,7 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
         roles: roles || [],
         getRole,
         isAction,
-        userOrganization: getOrganization?.("name", USERTOKEN.Organisation),
+        userOrganization: getOrganization?.('name', USERTOKEN.Organisation),
         activateGlobalStartConnection,
         disableGlobalStartConnection,
         globalStartConnection,
@@ -243,7 +243,7 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
         fetchReports,
         organization,
         setSideToast,
-        sideToast,
+        sideToast
       }}
     >
       <div className={`theme-${theme}`}>
@@ -286,7 +286,7 @@ export default Page
 
 export const ActionWrapper = ({
   action,
-  children,
+  children
 }: {
   action: string
   children?: any

@@ -1,25 +1,25 @@
-import axios, { AxiosResponse } from "axios"
-import { TOKEN } from "utils/new/constants"
+import axios, { AxiosResponse } from 'axios'
+import { TOKEN } from 'utils/new/constants'
 
 export const header = (token?: string) => ({
-  "Content-type": "application/json",
-  "Access-Control-Allow-Origin": "*",
-  Authorization: `Bearer ${token || TOKEN}`,
+  'Content-type': 'application/json',
+  'Access-Control-Allow-Origin': '*',
+  Authorization: `Bearer ${token || TOKEN}`
 })
 
 export const headerMultiPart = () => ({
-  "Access-Control-Allow-Origin": "*",
+  'Access-Control-Allow-Origin': '*'
 })
 
 export const headerNoAuth = () => ({
-  "Content-type": "application/json",
-  "Access-Control-Allow-Origin": "*",
+  'Content-type': 'application/json',
+  'Access-Control-Allow-Origin': '*'
 })
 
 export const headerAuth = () => ({
-  "Content-type": "application/json",
-  "Access-Control-Allow-Origin": "*",
-  Authorization: "Bearer ",
+  'Content-type': 'application/json',
+  'Access-Control-Allow-Origin': '*',
+  Authorization: 'Bearer '
 })
 
 let source: any
@@ -38,7 +38,7 @@ type I_API_REQUEST = (
   url: string | undefined,
   headers: { [key: string]: any },
   data: any,
-  method: "get" | "post" | "put" | "delete" | "patch",
+  method: 'get' | 'post' | 'put' | 'delete' | 'patch',
   timeout: number | null,
   validateStatus?: (status: number) => boolean
 ) => Promise<AxiosResponse<any, any>>
@@ -58,24 +58,24 @@ const apiRequest: I_API_REQUEST = async (
     data,
     timeout: timeout || 0,
     validateStatus,
-    headers,
+    headers
   }).then((res) => res)
 }
 
 export const getErrMsg = (error: any) => {
   if (error != null) {
     const { data } = error.response || {}
-    if (typeof data === "object") {
+    if (typeof data === 'object') {
       const { message } = data || {}
       return message
     }
     return data
   }
-  return ""
+  return ''
 }
 
 const statusFunction = (onStatus?: (res: any) => void, res?: any) => {
-  if (typeof onStatus === "function") onStatus(res)
+  if (typeof onStatus === 'function') onStatus(res)
 }
 
 const apiRespond = (
@@ -127,13 +127,15 @@ export const httpGetMethod = ({
   apiData: { url, header, customurl },
   actionType: { dataLoading, dataAction, dataError },
   onSuccess,
-  onFailure,
+  onFailure
 }: I_HTTPMETHOD) => {
   const requesturl =
-    customurl != null ? customurl : process.env.REACT_APP_BASE_URL + "" + url
+    customurl != null
+      ? customurl
+      : import.meta.env.VITE_REACT_APP_BASE_URL + '' + url
   return (dispatch: any) => {
     dispatch({ type: dataLoading, payload: true })
-    apiRequest(`${requesturl}`, header, null, "get", null, () => true)
+    apiRequest(`${requesturl}`, header, null, 'get', null, () => true)
       .then((resp) => {
         handleResponse(
           resp,
@@ -146,7 +148,7 @@ export const httpGetMethod = ({
       })
       .catch((error) => {
         if (axios.isCancel(error)) {
-          console.log("Request canceled", error.message)
+          console.log('Request canceled', error.message)
         } else {
           apiRespond(dispatch, dataError, getErrMsg(error), onFailure)
         }
@@ -161,13 +163,15 @@ export const httpPostMethod = ({
   apiData: { url, header, data, customurl },
   actionType: { dataLoading, dataAction, dataError },
   onSuccess,
-  onFailure,
+  onFailure
 }: I_HTTPMETHOD) => {
   const requesturl =
-    customurl != null ? customurl : process.env.REACT_APP_BASE_URL + "" + url
+    customurl != null
+      ? customurl
+      : import.meta.env.VITE_REACT_APP_BASE_URL + '' + url
   return (dispatch: any) => {
     dispatch({ type: dataLoading, payload: true })
-    apiRequest(`${requesturl}`, header, JSON.stringify(data), "post", TIMEOUT)
+    apiRequest(`${requesturl}`, header, JSON.stringify(data), 'post', TIMEOUT)
       .then((resp) => {
         handleResponse(
           resp,
@@ -180,7 +184,7 @@ export const httpPostMethod = ({
       })
       .catch((error) => {
         if (axios.isCancel(error)) {
-          console.log("Request canceled", error.message)
+          console.log('Request canceled', error.message)
         } else {
           apiRespond(dispatch, dataError, getErrMsg(error), onFailure)
         }
@@ -192,20 +196,20 @@ export const httpPostMethod = ({
 }
 
 export const clearHttp = ({
-  actionType: { dataLoading, dataAction, dataError },
+  actionType: { dataLoading, dataAction, dataError }
 }: {
   actionType: I_ACTION_TYPE
 }) => {
   return (dispatch: any) => {
     dispatch({ type: dataLoading, payload: false })
     dispatch({ type: dataAction, payload: [] })
-    dispatch({ type: dataError, payload: "" })
+    dispatch({ type: dataError, payload: '' })
   }
 }
 
 export const clearHttpByValue = ({
   actionType: { dataLoading, dataAction, dataError },
-  dataActionValue,
+  dataActionValue
 }: {
   actionType: I_ACTION_TYPE
   dataActionValue: any
@@ -213,7 +217,7 @@ export const clearHttpByValue = ({
   return (dispatch: any) => {
     dispatch({ type: dataLoading, payload: false })
     dispatch({ type: dataAction, payload: dataActionValue })
-    dispatch({ type: dataError, payload: "" })
+    dispatch({ type: dataError, payload: '' })
   }
 }
 
@@ -221,13 +225,15 @@ export const httpPutMethod = ({
   apiData: { url, header, data, customurl },
   actionType: { dataLoading, dataAction, dataError },
   onSuccess,
-  onFailure,
+  onFailure
 }: I_HTTPMETHOD) => {
   const requesturl =
-    customurl != null ? customurl : process.env.REACT_APP_BASE_URL + "" + url
+    customurl != null
+      ? customurl
+      : import.meta.env.VITE_REACT_APP_BASE_URL + '' + url
   return (dispatch: any) => {
     dispatch({ type: dataLoading, payload: true })
-    apiRequest(`${requesturl}`, header, data, "put", TIMEOUT)
+    apiRequest(`${requesturl}`, header, data, 'put', TIMEOUT)
       .then((resp) => {
         handleResponse(
           resp,
@@ -240,7 +246,7 @@ export const httpPutMethod = ({
       })
       .catch((error) => {
         if (axios.isCancel(error)) {
-          console.log("Request canceled", error.message)
+          console.log('Request canceled', error.message)
         } else {
           apiRespond(dispatch, dataError, getErrMsg(error), onFailure)
         }
@@ -255,13 +261,15 @@ export const httpPatchMethod = ({
   apiData: { url, header, data, customurl },
   actionType: { dataLoading, dataAction, dataError },
   onSuccess,
-  onFailure,
+  onFailure
 }: I_HTTPMETHOD) => {
   const requesturl =
-    customurl != null ? customurl : process.env.REACT_APP_BASE_URL + "" + url
+    customurl != null
+      ? customurl
+      : import.meta.env.VITE_REACT_APP_BASE_URL + '' + url
   return (dispatch: any) => {
     dispatch({ type: dataLoading, payload: true })
-    apiRequest(`${requesturl}`, header, data, "patch", TIMEOUT)
+    apiRequest(`${requesturl}`, header, data, 'patch', TIMEOUT)
       .then((resp) => {
         handleResponse(
           resp,
@@ -274,7 +282,7 @@ export const httpPatchMethod = ({
       })
       .catch((error) => {
         if (axios.isCancel(error)) {
-          console.log("Request canceled", error.message)
+          console.log('Request canceled', error.message)
         } else {
           apiRespond(dispatch, dataError, getErrMsg(error), onFailure)
         }
@@ -289,13 +297,15 @@ export const httpDeleteMethod = ({
   apiData: { url, header, data, customurl },
   actionType: { dataLoading, dataAction, dataError },
   onSuccess,
-  onFailure,
+  onFailure
 }: I_HTTPMETHOD) => {
   const requesturl =
-    customurl != null ? customurl : process.env.REACT_APP_BASE_URL + "" + url
+    customurl != null
+      ? customurl
+      : import.meta.env.VITE_REACT_APP_BASE_URL + '' + url
   return (dispatch: any) => {
     dispatch({ type: dataLoading, payload: true })
-    apiRequest(`${requesturl}`, header, data, "delete", TIMEOUT)
+    apiRequest(`${requesturl}`, header, data, 'delete', TIMEOUT)
       .then((resp) => {
         handleResponse(
           resp,
@@ -308,7 +318,7 @@ export const httpDeleteMethod = ({
       })
       .catch((error) => {
         if (axios.isCancel(error)) {
-          console.log("Request canceled", error.message)
+          console.log('Request canceled', error.message)
         } else {
           apiRespond(dispatch, dataError, getErrMsg(error), onFailure)
         }

@@ -14,123 +14,123 @@ const generateActionTypes = <K extends string>(
         ({
           [i]: {
             dataAction: i,
-            dataLoading: i + "Loading",
-            dataError: i + "Error",
-          },
+            dataLoading: i + 'Loading',
+            dataError: i + 'Error'
+          }
         } as unknown as { [R in K]: IPropActions })
     )
   )
 }
 
 export const authType = generateActionTypes([
-  "registerOrganization",
-  "verifyEmail",
-  "userLogin",
-  "passwordReset",
-  "requestPasswordToken",
-  "verifyPasswordResetToken",
-  "updatePassword",
-  "generateAccessToken",
-  "getRefreshToken",
+  'registerOrganization',
+  'verifyEmail',
+  'userLogin',
+  'passwordReset',
+  'requestPasswordToken',
+  'verifyPasswordResetToken',
+  'updatePassword',
+  'generateAccessToken',
+  'getRefreshToken'
 ])
 
 export const globalType = generateActionTypes([
-  "menuOpen",
-  "subMenuOpen",
-  "notifyUser",
-  "rightSection",
-  "search",
+  'menuOpen',
+  'subMenuOpen',
+  'notifyUser',
+  'rightSection',
+  'search'
 ])
 
 export const apiScopeType = generateActionTypes([
-  "getAPIScopes",
-  "createAPIScope",
-  "updateAPIScope",
+  'getAPIScopes',
+  'createAPIScope',
+  'updateAPIScope'
 ])
 
 export const applications = generateActionTypes([
-  "getAllApplications",
-  "getApplicationById",
-  "deleteApplication",
-  "createApplication",
-  "updateApplication",
+  'getAllApplications',
+  'getApplicationById',
+  'deleteApplication',
+  'createApplication',
+  'updateApplication'
 ])
 
 export const role = generateActionTypes([
-  "getAllRoles",
-  "createRole",
-  "updateRole",
-  "deleteRole",
-  "getPermissions",
-  "getRolesForOrganisation",
-  "unassignMultipleActionsForRole",
+  'getAllRoles',
+  'createRole',
+  'updateRole',
+  'deleteRole',
+  'getPermissions',
+  'getRolesForOrganisation',
+  'unassignMultipleActionsForRole'
 ])
 
 export const organization = generateActionTypes([
-  "getAllOrganization",
-  "createOrganization",
-  "updateOrganization",
-  "deleteOrganization",
+  'getAllOrganization',
+  'createOrganization',
+  'updateOrganization',
+  'deleteOrganization'
 ])
 
 export const action = generateActionTypes([
-  "getAllAction",
-  "createAction",
-  "updateAction",
-  "deleteAction",
-  "addActionToRole",
-  "getActionsForRole",
+  'getAllAction',
+  'createAction',
+  'updateAction',
+  'deleteAction',
+  'addActionToRole',
+  'getActionsForRole'
 ])
 
 export const report = generateActionTypes([
-  "getAllReports",
-  "updateReportStatus",
+  'getAllReports',
+  'updateReportStatus'
 ])
 
 export const assets = generateActionTypes([
-  "getAllAssets",
-  "getAssets",
-  "createAsset",
-  "getAssetById",
-  "assignAssetToEmergency",
+  'getAllAssets',
+  'getAssets',
+  'createAsset',
+  'getAssetById',
+  'assignAssetToEmergency'
 ])
 
 export const logged = generateActionTypes([
-  "getLoggedActionsForRole",
-  "getLoggedOrganization",
-  "getLoggedRoles",
+  'getLoggedActionsForRole',
+  'getLoggedOrganization',
+  'getLoggedRoles'
 ])
 
 export const user = generateActionTypes([
-  "createUser",
-  "updateUser",
-  "getAllUsers",
-  "deleteUser",
-  "getUserById",
+  'createUser',
+  'updateUser',
+  'getAllUsers',
+  'deleteUser',
+  'getUserById'
 ])
 
-export const demoActions = generateActionTypes(["getDemoEPoliceNotifications"])
+export const demoActions = generateActionTypes(['getDemoEPoliceNotifications'])
 
 export const vehicles = generateActionTypes([
-  "getVehicleByRegNumber",
-  "searchVehicleByRegNumber",
-  "searchVehicleByChasisNumber",
+  'getVehicleByRegNumber',
+  'searchVehicleByRegNumber',
+  'searchVehicleByChasisNumber'
 ])
 
 export const billing = generateActionTypes([
-  "getAPIBundles",
-  "getAPIBundleById",
-  "createAPIBundle",
-  "updateAPIBundle",
-  "deleteAPIBundle",
-  "getAPIConfigs",
-  "createAPIConfig",
-  "updateAPIConfig",
-  "deleteAPIConfig",
-  "getAPIConfigGroups",
-  "createAPIConfigGroup",
-  "updateAPIConfigGroup",
-  "getClientSubscriptions",
-  "subscribeToBundle",
-  "addAppsToSub",
+  'getAPIBundles',
+  'getAPIBundleById',
+  'createAPIBundle',
+  'updateAPIBundle',
+  'deleteAPIBundle',
+  'getAPIConfigs',
+  'createAPIConfig',
+  'updateAPIConfig',
+  'deleteAPIConfig',
+  'getAPIConfigGroups',
+  'createAPIConfigGroup',
+  'updateAPIConfigGroup',
+  'getClientSubscriptions',
+  'subscribeToBundle',
+  'addAppsToSub'
 ])

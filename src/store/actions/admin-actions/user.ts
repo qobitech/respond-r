@@ -1,6 +1,6 @@
-import { baseurl } from "utils/constants"
-import * as utils from "../../services/new/utils"
-import { user } from "store/types"
+import { baseurl } from 'utils/constants'
+import * as utils from '../../services/new/utils'
+import { user } from 'store/types'
 
 export const createUser = (
   data: object,
@@ -9,10 +9,10 @@ export const createUser = (
 ) => {
   return utils.httpPostMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurl}/Auth/register`,
-      header: utils.header(""),
-      data,
+      header: utils.header(''),
+      data
     },
     actionType: user.createUser,
     onSuccess: (res) => {
@@ -20,39 +20,39 @@ export const createUser = (
     },
     onFailure: (err) => {
       onFailure?.(err)
-    },
+    }
   })
 }
 
 export const getAllUsers = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurl}/User/paged${query}`,
-      header: utils.header(""),
+      header: utils.header('')
     },
-    actionType: user.getAllUsers,
+    actionType: user.getAllUsers
   })
 }
 
 export const getUserById = (id: string) => {
   return utils.httpGetMethod({
     apiData: {
-      url: "",
-      customurl: `${baseurl}/Admin/UserManagement/${id || ""}`,
-      header: utils.header(""),
+      url: '',
+      customurl: `${baseurl}/Admin/UserManagement/${id || ''}`,
+      header: utils.header('')
     },
-    actionType: user.getUserById,
+    actionType: user.getUserById
   })
 }
 
 export const deleteUser = (id: string) => {
   return utils.httpDeleteMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurl}/Admin/UserManagement/DeleteUser`,
-      header: utils.header(""),
+      header: utils.header('')
     },
-    actionType: user.deleteUser,
+    actionType: user.deleteUser
   })
 }

@@ -1,10 +1,10 @@
-import React from "react"
-import { Routes, Route } from "react-router-dom"
-import { routes } from "utils/route"
-import AuthRoute from "utils/route/auth"
-import PublicRoute from "utils/route/public"
-import { url } from "enums/Route"
-import Page404 from "utils/404"
+import React from 'react'
+import { Routes, Route } from 'react-router-dom'
+import { routes } from 'utils/route'
+import AuthRoute from 'utils/route/auth'
+import PublicRoute from 'utils/route/public'
+import { url } from 'enums/Route'
+import Page404 from 'utils/404'
 
 const RouteList = () => {
   const getPath = (path: string) => {
@@ -19,7 +19,7 @@ const RouteList = () => {
   return (
     <>
       <Routes>
-        {routes!?.map((item) => {
+        {routes?.map((item) => {
           const { paths, PageRenders } = item
 
           return (
@@ -30,7 +30,7 @@ const RouteList = () => {
                     path={getPath(paths[index])}
                     index={index === 0}
                     element={
-                      item.routeType !== "public" ? (
+                      item.routeType !== 'public' ? (
                         <AuthRoute element={PageRender} />
                       ) : (
                         <PublicRoute element={PageRender} />

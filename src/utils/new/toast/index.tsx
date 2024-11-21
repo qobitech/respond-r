@@ -1,6 +1,6 @@
-import React, { useEffect } from "react"
-import "./index.scss"
-import { CheckSVG, CloseSVG } from "../svgs"
+import React, { useEffect } from 'react'
+import './index.scss'
+import { CheckSVG, CloseSVG } from '../svgs'
 
 interface IHN {
   notice: string
@@ -12,8 +12,8 @@ const Toast: React.FC<IHN> = ({ notice, status }) => {
     <>
       {notice ? (
         <div
-          className={`toast-container ${status ? "success" : ""}`}
-          style={{ width: "100%" }}
+          className={`toast-container ${status ? 'success' : ''}`}
+          style={{ width: '100%' }}
         >
           <CheckSVG color="#fff" />
           <p>{notice}</p>
@@ -37,12 +37,12 @@ export interface ISideToastComp {
 
 export const SideToast: React.FC<ISideToastComp> = ({
   sideToast,
-  setSideToast,
+  setSideToast
 }) => {
   const { notice, show, status } = sideToast
 
   const resetSideToast = () => {
-    setSideToast({ notice: "", status: false, show: false })
+    setSideToast({ notice: '', status: false, show: false })
   }
 
   useEffect(() => {
@@ -60,8 +60,8 @@ export const SideToast: React.FC<ISideToastComp> = ({
 
   return (
     <div
-      className={`side-toast-container ${status ? "success" : ""} ${
-        show ? "menuopen" : "menuclose"
+      className={`side-toast-container ${status ? 'success' : ''} ${
+        show ? 'menuopen' : 'menuclose'
       } rounded`}
     >
       <div className="side-toast-container-content gap-10">
@@ -75,7 +75,7 @@ export const SideToast: React.FC<ISideToastComp> = ({
         </div>
         <CheckSVG />
         <p className="m-0 text-small">
-          {notice || "Asset assigned successfully"}
+          {notice || 'Asset assigned successfully'}
         </p>
       </div>
     </div>

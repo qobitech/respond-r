@@ -1,16 +1,16 @@
-import React from "react"
-import { useNavigate } from "react-router-dom"
-import { url } from "enums/Route"
-import "./index.scss"
-import cars from "../../../extras/images/animation/Animation - 1707465062653.json"
-import Lottie from "react-lottie"
-import { TypeButton } from "utils/new/button"
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { url } from 'enums/Route'
+import './index.scss'
+import cars from '../../../extras/images/animation/Animation - 1707465062653.json'
+import Lottie from 'react-lottie'
+import { TypeButton } from 'utils/new/button'
 import {
   FireExtinguisherSVG,
   MedicalSVG,
   PoliceSVG,
-  TrafficSVG,
-} from "utils/new/svgs"
+  TrafficSVG
+} from 'utils/new/svgs'
 
 const LandingPage = () => {
   const navigate = useNavigate()
@@ -18,17 +18,17 @@ const LandingPage = () => {
   const defaultOptions = {
     loop: true,
     autoplay: true,
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
+      preserveAspectRatio: 'xMidYMid slice'
+    }
   }
 
   const events = [
-    { title: "TrafficWardens", logo: <TrafficSVG /> },
-    { title: "Police", logo: <PoliceSVG /> },
-    { title: "FireFighters", logo: <FireExtinguisherSVG /> },
-    { title: "Medics", logo: <MedicalSVG /> },
+    { title: 'TrafficWardens', logo: <TrafficSVG /> },
+    { title: 'Police', logo: <PoliceSVG /> },
+    { title: 'FireFighters', logo: <FireExtinguisherSVG /> },
+    { title: 'Medics', logo: <MedicalSVG /> }
   ]
 
   return (

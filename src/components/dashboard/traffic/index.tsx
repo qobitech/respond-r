@@ -1,48 +1,49 @@
-import React, { FC, useEffect, useState } from "react"
-import "../global.scss"
-import "./index.scss"
-import { IStates, IVehicleReducer } from "interfaces/IReducer"
-import Table, { ICell, ICellAction } from "utils/new/table"
-import "../../../utils/new/pagination.scss"
-import "../../../utils/new/page.scss"
-import { Loader } from "utils/new/components"
+import React, { FC, useEffect, useState } from 'react'
+import '../global.scss'
+import './index.scss'
+import { IStates, IVehicleReducer } from 'interfaces/IReducer'
+import Table, { ICell, ICellAction } from 'utils/new/table'
+import '../../../utils/new/pagination.scss'
+import '../../../utils/new/page.scss'
+import { Loader } from 'utils/new/components'
 import {
   FlagSVG,
   MediaSVG,
   NoteSVG,
   PulseSVG,
   VideoSVG,
-  PasteSVG,
-} from "utils/new/svgs"
+  PasteSVG
+} from 'utils/new/svgs'
 import RightSection, {
   IRightSection,
-  useRightSection,
-} from "components/reusable/right-section"
-import { TypeInput } from "utils/new/input"
-import { TypeButton } from "utils/new/button"
-import { IFeed, IHit } from "interfaces/IStream"
-import { handleDataStream } from "./data"
-import * as signalR from "@microsoft/signalr"
-import { CopyComponent, ICopyProps, useCopy, useFormHook } from "utils/new/hook"
-import * as yup from "yup"
-import { IAction } from "interfaces/IAction"
+  useRightSection
+} from 'components/reusable/right-section'
+import { TypeInput } from 'utils/new/input'
+import { TypeButton } from 'utils/new/button'
+import { IFeed, IHit } from 'interfaces/IStream'
+import { handleDataStream } from './data'
+import * as signalR from '@microsoft/signalr'
+import { CopyComponent, ICopyProps, useCopy, useFormHook } from 'utils/new/hook'
+import * as yup from 'yup'
+import { IAction } from 'interfaces/IAction'
 import {
   ISOTDetails,
   ISearchVehicle,
   IVehicle,
   IVehicleNote,
   IVehicleOffense,
-  IVehicleSearch,
-} from "interfaces/IVehicle"
-import { vehicles } from "store/types"
-import { Accordion, useAccordion } from "components/reusable/accordion"
-import Switch, { Case } from "components/reusable/switch"
-import ReactPaginate from "react-paginate"
-import { IframeComponent } from "../components"
-import { vehicleSearchType } from "store/actions/global"
-import { IVehicleSearchPayload } from "interfaces/IGlobal"
-import { useGlobalContext } from "components/layout"
-import { ILocation, MapChart } from "components/map/new-map"
+  IVehicleSearch
+} from 'interfaces/IVehicle'
+import { vehicles } from 'store/types'
+import { Accordion, useAccordion } from 'components/reusable/accordion'
+import Switch, { Case } from 'components/reusable/switch'
+import ReactPaginate from 'react-paginate'
+import { IframeComponent } from '../components'
+import { vehicleSearchType } from 'store/actions/global'
+import { IVehicleSearchPayload } from 'interfaces/IGlobal'
+import { useGlobalContext } from 'components/layout'
+import { ILocation, MapChart } from 'components/map/new-map'
+import hitSound from '../../../extras/audio/hit.mp3'
 
 interface IProps {
   states?: IStates
@@ -55,19 +56,19 @@ export interface ITableRecord {
 }
 
 const tabEnum = {
-  VEHICLEINFO: "Vehicle Info",
-  OFFENSES: "Offenses",
-  OWNERINFO: "Owner Info",
-  SOT: "SOT",
-  INSTANCE: "Instance",
-  NOTES: "Notes",
+  VEHICLEINFO: 'Vehicle Info',
+  OFFENSES: 'Offenses',
+  OWNERINFO: 'Owner Info',
+  SOT: 'SOT',
+  INSTANCE: 'Instance',
+  NOTES: 'Notes'
 }
 
 export const getConnection = (url: string) => {
   return new signalR.HubConnectionBuilder()
     .withUrl(url, {
       skipNegotiation: true,
-      transport: signalR.HttpTransportType.WebSockets,
+      transport: signalR.HttpTransportType.WebSockets
     })
     .configureLogging(signalR.LogLevel.Trace)
     .withAutomaticReconnect()
@@ -75,10 +76,10 @@ export const getConnection = (url: string) => {
 }
 
 export type typeConnectionStatus =
-  | "connecting"
-  | "connected"
-  | "re-connecting"
-  | "closed"
+  | 'connecting'
+  | 'connected'
+  | 're-connecting'
+  | 'closed'
 interface IUS {
   hits: IHit[]
   feeds: IFeed[]
@@ -87,13 +88,13 @@ interface IUS {
 }
 
 const configFormEnums = {
-  connectionUrl: "connectionUrl",
-  filePath: "filePath",
-  rtspUrl: "rtspUrl",
-  policeSignalR: "policeSignalR",
-  medicalSignalR: "medicalSignalR",
-  fireSignalR: "fireSignalR",
-  globalSignalR: "globalSignalR",
+  connectionUrl: 'connectionUrl',
+  filePath: 'filePath',
+  rtspUrl: 'rtspUrl',
+  policeSignalR: 'policeSignalR',
+  medicalSignalR: 'medicalSignalR',
+  fireSignalR: 'fireSignalR',
+  globalSignalR: 'globalSignalR'
 } as const
 
 export type chkType = (typeof configFormEnums)[keyof typeof configFormEnums]
@@ -114,7 +115,7 @@ export const setUrl = (urlKey: chkType, value: string) => {
 }
 
 const setUrls = (data: any) => {
-  for (let i in data) {
+  for (const i in data) {
     if (data[i]) setUrl(i as chkType, data[i])
   }
 }
@@ -126,25 +127,25 @@ interface IUSIO {
   rtspurl: string | null
 }
 
-export type streamTypes = "started" | "loading" | "error"
+export type streamTypes = 'started' | 'loading' | 'error'
 export const streamEnums = {
-  STARTED: "started",
-  LOADING: "loading",
-  ERROR: "error",
+  STARTED: 'started',
+  LOADING: 'loading',
+  ERROR: 'error'
 }
 
 const useRTSP = (): IUSIO => {
   const [
-    streamStatus,
+    streamStatus
     // setStreamStatus
   ] = useState<streamTypes | null>(null)
-  const [rtspurl, setRtspURL] = useState<string | null>(getUrl("rtspUrl"))
+  const [rtspurl, setRtspURL] = useState<string | null>(getUrl('rtspUrl'))
 
   const sendRTSPURL = (url?: string) => {
     // setStreamStatus("loading")
-    if (url && url !== rtspurl) setUrl("rtspUrl", url)
+    if (url && url !== rtspurl) setUrl('rtspUrl', url)
     // httpRequest(url || rtspurl || "")
-    setRtspURL(url || "")
+    setRtspURL(url || '')
   }
 
   const stopRTSPFeed = () => {
@@ -156,7 +157,7 @@ const useRTSP = (): IUSIO => {
     sendRTSPURL,
     streamStatus,
     stopRTSPFeed,
-    rtspurl,
+    rtspurl
   }
 }
 
@@ -165,7 +166,7 @@ const useSignalR = (): IUS => {
   const [hits, setHits] = useState<IHit[]>([])
   const [feeds, setFeeds] = useState<IFeed[]>([])
   const [connectionStatus, setConnectionStatus] =
-    useState<typeConnectionStatus>("closed")
+    useState<typeConnectionStatus>('closed')
   const [trigger, setTrigger] = useState<number>(0)
 
   const handleTrigger = () => {
@@ -174,23 +175,23 @@ const useSignalR = (): IUS => {
   }
 
   const startConnection = (url: string) => {
-    setConnectionStatus("connecting")
-    const storedUrl = getUrl("connectionUrl") || ""
+    setConnectionStatus('connecting')
+    const storedUrl = getUrl('connectionUrl') || ''
     if (url || storedUrl) {
       const connection = getConnection(url || storedUrl)
       connection
         ?.start()
         .then(() => {
-          setConnectionStatus("connected")
+          setConnectionStatus('connected')
         })
         .catch(() => {
-          setConnectionStatus("closed")
+          setConnectionStatus('closed')
         })
       setConnection(connection)
     }
   }
 
-  const hit = new Audio(require("../../../extras/audio/hit.mp3"))
+  const hit = new Audio(hitSound)
   const playHit = () => {
     hit.play()
   }
@@ -200,23 +201,23 @@ const useSignalR = (): IUS => {
   }
 
   useEffect(() => {
-    connection?.on("SendNotification", (data: IFeed) => {
+    connection?.on('SendNotification', (data: IFeed) => {
       handleTrigger()
-      setFeeds(handleDataStream(feeds, mapDataArray, "regNumber")(data))
+      setFeeds(handleDataStream(feeds, mapDataArray, 'regNumber')(data))
     })
-    connection?.on("SendHits", (data: IHit) => {
+    connection?.on('SendHits', (data: IHit) => {
       handleTrigger()
-      setHits(handleDataStream(hits, mapDataArray, "regNumber")(data))
+      setHits(handleDataStream(hits, mapDataArray, 'regNumber')(data))
       playHit()
     })
     connection?.onreconnecting(() => {
-      setConnectionStatus("re-connecting")
+      setConnectionStatus('re-connecting')
     })
     connection?.onreconnected(() => {
-      setConnectionStatus("connected")
+      setConnectionStatus('connected')
     })
     connection?.onclose(() => {
-      setConnectionStatus("closed")
+      setConnectionStatus('closed')
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connection])
@@ -225,14 +226,14 @@ const useSignalR = (): IUS => {
     hits,
     feeds,
     connectionStatus,
-    startConnection,
+    startConnection
   }
 }
 
 export const getFilePath = (i: string) => {
-  if (!i) return ""
-  if (!getUrl("filePath")) return ""
-  return getUrl("filePath") + `/` + i.replaceAll("\\", "/")
+  if (!i) return ''
+  if (!getUrl('filePath')) return ''
+  return getUrl('filePath') + `/` + i.replaceAll('\\', '/')
 }
 
 const Overview: React.FC<IProps> = ({ states, ...props }) => {
@@ -243,15 +244,15 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
   const searchedVehicleByReg = states?.vehicle.searchVehicleByRegNumber
 
   const vehicleSearchResult =
-    searchAction?.type === "chasis"
+    searchAction?.type === 'chasis'
       ? searchedVehicleByChasis
-      : searchAction?.type === "regnumber"
+      : searchAction?.type === 'regnumber'
       ? searchedVehicleByReg
       : null
 
   const rightSectionProps = states?.global.rightSection
   const vehicle = states?.vehicle
-  const [mediaUrl, setMediaUrl] = useState<string>("")
+  const [mediaUrl, setMediaUrl] = useState<string>('')
   const [flags, setFlags] = useState<string[]>([])
   // const [camera, setCamera] = useState<string>()
 
@@ -259,9 +260,8 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
     // get vehicle by reg number
     clearAction(vehicles.getVehicleByRegNumber)
     getVehicleByRegNumber(i.regNumber)
-    console.log("feed")
-    setFlags(i.flags as string[])
-    // setCamera(i.cameraName)
+    console.log('feed')
+    setFlags(i.flags)
     setMediaUrl(getFilePath(i.filePath))
   }
 
@@ -269,8 +269,8 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
     // get vehicle by reg number
     clearAction(vehicles.getVehicleByRegNumber)
     getVehicleByRegNumber(i.regNumber)
-    console.log("hit")
-    setFlags(i.flag as string[])
+    console.log('hit')
+    setFlags(i.flag)
     setMediaUrl(getFilePath(i.displayUrl))
   }
 
@@ -290,7 +290,7 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
   return (
     <>
       <RightSection rsProps={rsProps}>
-        {rsProps.isView("custom", "settings") ? (
+        {rsProps.isView('custom', 'settings') ? (
           <Configuration signalRProps={signalRProps} rtspProps={rtspProps} />
         ) : null}
       </RightSection>
@@ -300,7 +300,7 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
           <div className="overview-page">
             <MainView
               mediaUrl={mediaUrl}
-              flags={flags!}
+              flags={flags}
               isImage={isImage}
               isRtsp={isRtsp}
               rtspProps={rtspProps}
@@ -334,7 +334,7 @@ const MediaRTSPToggle = ({
   isRtsp,
   setSelectedView,
   setIsMedia,
-  isMedia,
+  isMedia
 }: {
   isImage: boolean
   isRtsp: boolean
@@ -345,19 +345,19 @@ const MediaRTSPToggle = ({
   return (
     <div className="video-section-header-tab pb-2">
       <button
-        className={isImage ? "active" : ""}
+        className={isImage ? 'active' : ''}
         onClick={() => setSelectedView?.(0)}
       >
         SIGNAL R
       </button>
       <button
-        className={isRtsp ? "active" : ""}
+        className={isRtsp ? 'active' : ''}
         onClick={() => setSelectedView?.(1)}
       >
         RTSP FEED
       </button>
       <button className="show-hide-media" onClick={() => setIsMedia(!isMedia)}>
-        {!isMedia ? "SHOW" : "HIDE"}
+        {!isMedia ? 'SHOW' : 'HIDE'}
         &nbsp;MEDIA&nbsp;&nbsp;
         <MediaSVG height="40" width="40" />
       </button>
@@ -372,7 +372,7 @@ const MainView = ({
   isRtsp,
   rtspProps,
   setSelectedView,
-  vehicle,
+  vehicle
 }: {
   mediaUrl: string
   flags: string[]
@@ -390,30 +390,30 @@ const MainView = ({
 
   const carTags = [
     {
-      title: "VIOLATIONS",
+      title: 'VIOLATIONS',
       status: vehicleData?.hasViolation,
-      class: "danger",
+      class: 'danger'
     },
     {
-      title: "WARNINGS",
+      title: 'WARNINGS',
       status: vehicleData?.hasWarning,
-      class: "warning",
+      class: 'warning'
     },
     {
-      title: "IS ANONYMOUS",
+      title: 'IS ANONYMOUS',
       status: vehicleData?.isAnonymous,
-      class: "",
+      class: ''
     },
     {
-      title: "IS STOLEN",
+      title: 'IS STOLEN',
       status: vehicleData?.isStolen,
-      class: "",
+      class: ''
     },
     {
-      title: "MIS MATCH",
+      title: 'MIS MATCH',
       status: vehicleData?.hasMisMatch,
-      class: "danger",
-    },
+      class: 'danger'
+    }
   ]
 
   const vehicleNotes = vehicle?.getVehicleByRegNumber?.data?.notes
@@ -422,9 +422,9 @@ const MainView = ({
     <>
       <div className="video-section">
         <MediaRTSPToggle
-          isImage={isImage!}
-          isRtsp={isRtsp!}
-          setSelectedView={setSelectedView!}
+          isImage={isImage}
+          isRtsp={isRtsp}
+          setSelectedView={setSelectedView}
           isMedia={isMedia}
           setIsMedia={setIsMedia}
         />
@@ -438,7 +438,7 @@ const MainView = ({
                     {carTags.map((i, index) => (
                       <p
                         className={`p-btn-status ${i.class} ${
-                          i.status ? "" : "hide-btn"
+                          i.status ? '' : 'hide-btn'
                         } no-btn`}
                         key={index}
                       >
@@ -448,13 +448,13 @@ const MainView = ({
                   </div>
                 ) : null}
               </div>
-              <div className={`media-container ${isMedia ? "" : "hide"}`}>
-                <div className={`media-box ${isRtsp ? "" : "hide"}`}>
+              <div className={`media-container ${isMedia ? '' : 'hide'}`}>
+                <div className={`media-box ${isRtsp ? '' : 'hide'}`}>
                   {/* <Stream /> */}
-                  <IframeComponent src={rtspProps.rtspurl || ""} />
+                  <IframeComponent src={rtspProps.rtspurl || ''} />
                 </div>
                 {isMedia ? (
-                  <div className={`media-box ${isImage ? "" : "hide"}`}>
+                  <div className={`media-box ${isImage ? '' : 'hide'}`}>
                     <img src={mediaUrl} alt="media" />
                   </div>
                 ) : null}
@@ -464,7 +464,7 @@ const MainView = ({
                   <div className="tab-header">
                     {Object.values(tabEnum).map((i, index) => (
                       <div
-                        className={`tab-item ${i === tab ? "active" : ""}`}
+                        className={`tab-item ${i === tab ? 'active' : ''}`}
                         key={index}
                         onClick={() => setTab(i)}
                       >
@@ -512,20 +512,20 @@ const MainView = ({
           </>
         ) : (
           <NoMediaComponent
-            load={vehicle?.getVehicleByRegNumberLoading!}
+            load={vehicle?.getVehicleByRegNumberLoading}
             locationDetails={[
               {
                 location: {
                   latitude: parseFloat(
-                    vehicleData?.createLocation.latitude || "0"
+                    vehicleData?.createLocation.latitude || '0'
                   ),
                   longitude: parseFloat(
-                    vehicleData?.createLocation.longitude || "0"
-                  ),
+                    vehicleData?.createLocation.longitude || '0'
+                  )
                 },
-                map: "",
-                nearestPlace: "",
-              },
+                map: '',
+                nearestPlace: ''
+              }
             ]}
           />
         )}
@@ -536,21 +536,21 @@ const MainView = ({
 
 const LiveFeedStatusComponent = ({
   signalRProps,
-  title,
+  title
 }: {
   signalRProps: IUS
   title?: string
 }) => {
-  const isConnect = signalRProps.connectionStatus === "closed"
+  const isConnect = signalRProps.connectionStatus === 'closed'
 
   return (
     <div className="live-feed-component">
       <div className="live-feed-header-section">
-        <p className="lf-header">{title || "LIVE FEED"}</p>
+        <p className="lf-header">{title || 'LIVE FEED'}</p>
         <p
           className={`lf-status ${signalRProps.connectionStatus}`}
           onClick={() => {
-            if (isConnect) signalRProps.startConnection("")
+            if (isConnect) signalRProps.startConnection('')
           }}
         >
           <span className={`lf-status-bop ${signalRProps.connectionStatus}`} />
@@ -568,7 +568,7 @@ const LiveFeedComponent = ({
   setSearch,
   searchAction,
   copyProps,
-  vehicleSearchResult,
+  vehicleSearchResult
 }: {
   handleHitRequest: (i: IHit) => void
   handleFeedRequest: (i: IFeed) => void
@@ -590,11 +590,11 @@ const LiveFeedComponent = ({
   return (
     <div className="live-feed-component">
       {searchAction?.search ? (
-        <div style={{ width: "90%" }}>
+        <div style={{ width: '90%' }}>
           <SearchSectionHeader setSearch={setSearch} />
         </div>
       ) : (
-        <div style={{ width: "90%" }}>
+        <div style={{ width: '90%' }}>
           <LiveFeedFilterHeader
             filterProps={useFilterProps}
             filters={filters}
@@ -603,7 +603,7 @@ const LiveFeedComponent = ({
       )}
 
       {searchAction?.search ? (
-        <div style={{ width: "90%" }}>
+        <div style={{ width: '90%' }}>
           <div className="live-feed-component-wrapper">
             <SearchResults
               vehicleSearchResult={vehicleSearchResult}
@@ -631,7 +631,7 @@ const LiveFeedResults = ({
   handleHitRequest,
   copyProps,
   isFeed,
-  isHit,
+  isHit
 }: {
   signalRProps: IUS
   handleHitRequest: (i: IHit) => void
@@ -650,14 +650,14 @@ const LiveFeedResults = ({
               <LiveFeedItemComponent
                 key={i.regNumber}
                 carColor={i.colour}
-                carMake={i.make || "..."}
-                carType={i.model || "..."}
+                carMake={i.make || '...'}
+                carType={i.model || '...'}
                 imgSrc={getFilePath(i.filePath)}
-                offense={i.flags?.[0] ? i.flags?.length + "" : "0"}
+                offense={i.flags?.[0] ? i.flags?.length + '' : '0'}
                 regNumber={i.regNumber}
                 handleOnClick={() => {
                   handleFeedRequest(i)
-                  setSearchValue?.(i.regNumber as string)
+                  setSearchValue?.(i.regNumber)
                 }}
               />
             ))
@@ -673,10 +673,10 @@ const LiveFeedResults = ({
               <LiveHitItemComponent
                 key={i.regNumber}
                 carColor={i.colour}
-                carMake={i.make || "..."}
-                carModel={i.model || "..."}
+                carMake={i.make || '...'}
+                carModel={i.model || '...'}
                 imgSrc={getFilePath(i.displayUrl)}
-                offense={i.flag?.[0] ? i.flag?.length + "" : "0"}
+                offense={i.flag?.[0] ? i.flag?.length + '' : '0'}
                 regNumber={i.regNumber}
                 handleOnClick={() => {
                   handleHitRequest(i)
@@ -726,7 +726,7 @@ const LiveHitItemComponent: FC<ILHIC> = (props) => {
           {props.carColor ? (
             <div
               className={`lf-color ${
-                props.carColor === "white" ? "border" : ""
+                props.carColor === 'white' ? 'border' : ''
               }`}
               style={{ background: props.carColor }}
               title={props.carColor}
@@ -763,7 +763,7 @@ const LiveFeedItemComponent: FC<ILFIC> = (props) => {
   return (
     <div className="live-feed-item-component" onClick={props.handleOnClick}>
       <div className="lf-media-section">
-        {props.imgSrc ? <img src={props.imgSrc} alt="" /> : ""}
+        {props.imgSrc ? <img src={props.imgSrc} alt="" /> : ''}
       </div>
       <div className="lf-info-section">
         <div className="vehicle-reg-number-info">
@@ -776,7 +776,7 @@ const LiveFeedItemComponent: FC<ILFIC> = (props) => {
           {props.carColor ? (
             <div
               className={`lf-color ${
-                props.carColor === "white" ? "border" : ""
+                props.carColor === 'white' ? 'border' : ''
               }`}
               style={{ background: props.carColor }}
               title={props.carColor}
@@ -804,8 +804,8 @@ interface IVIS {
 }
 
 const getStatus = (val?: boolean) => {
-  if (val) return "Valid"
-  return "Expired"
+  if (val) return 'Valid'
+  return 'Expired'
 }
 
 const getDate = (val: string) => {
@@ -815,20 +815,20 @@ const getDate = (val: string) => {
 const VehicleInfoSection: FC<IVIS> = ({ vehicleData }) => {
   const sot = vehicleData?.sotDetails?.[0]
   return (
-    <div className="vehicle-info-section" style={{ marginTop: "40px" }}>
+    <div className="vehicle-info-section" style={{ marginTop: '40px' }}>
       <VehicleInfoSectionItem
         label="License"
-        value={getDate(sot?.service?.license?.expiryDate || "")}
+        value={getDate(sot?.service?.license?.expiryDate || '')}
         status={sot?.service?.license?.isActive}
       />
       <VehicleInfoSectionItem
         label="Insurance"
-        value={getDate(vehicleData?.vehicleInsurance?.expiryDate || "")}
+        value={getDate(vehicleData?.vehicleInsurance?.expiryDate || '')}
         status={vehicleData?.vehicleInsurance?.isValid}
       />
       <VehicleInfoSectionItem
         label="Road Worthiness"
-        value={getDate(sot?.service?.roadWorthiness?.expiryDate || "")}
+        value={getDate(sot?.service?.roadWorthiness?.expiryDate || '')}
         status={sot?.service?.roadWorthiness?.isActive}
       />
       <VehicleInfoSectionItem
@@ -855,46 +855,46 @@ const VehicleOffensesSection: FC<IVIS> = ({ vehicleData }) => {
     useState<IVehicleOffense | null>(null)
 
   const tableData = vehicleData?.vehicleOffenses?.map((i, index) => ({
-    id: index + "",
+    id: index + '',
     row: [
       {
         value: i.offense.name,
         isLink: false,
-        url: "",
+        url: '',
         action: () => {
           setVehicleOffenseItem(i)
-        },
+        }
       },
       {
         value: new Date(i.createdAt).toDateString(),
         isLink: false,
-        url: "",
-        action: () => {},
+        url: '',
+        action: () => {}
       },
       {
         value: i.offense.fineAmount,
         isLink: false,
-        url: "",
-        action: () => {},
+        url: '',
+        action: () => {}
       },
       {
         value: i.offense.code,
         isLink: false,
-        url: "",
-        action: () => {},
-      },
+        url: '',
+        action: () => {}
+      }
     ],
     rowActions: [
       {
-        value: "View",
+        value: 'View',
         isLink: true,
-        url: "",
+        url: '',
         action: () => {
           setVehicleOffenseItem(i)
         },
-        buttonType: "bold",
-      },
-    ],
+        buttonType: 'bold'
+      }
+    ]
   })) as ITableRecord[]
 
   const handlePrev = () => {
@@ -910,7 +910,7 @@ const VehicleOffensesSection: FC<IVIS> = ({ vehicleData }) => {
         />
       ) : (
         <TableSection
-          header={["Title", "Date", "Fine", "Code", "Action"]}
+          header={['Title', 'Date', 'Fine', 'Code', 'Action']}
           record={tableData}
         />
       )}
@@ -920,35 +920,35 @@ const VehicleOffensesSection: FC<IVIS> = ({ vehicleData }) => {
 
 const VehicleInstanceSection: FC<IVIS> = ({ vehicleData }) => {
   const tableData = vehicleData?.instances?.map((i, index) => ({
-    id: index + "",
+    id: index + '',
     row: [
       {
         value: i.camera,
         isLink: false,
-        url: "",
-        action: () => {},
+        url: '',
+        action: () => {}
       },
       {
         value: new Date(i.createdAt).toDateString(),
         isLink: false,
-        url: "",
-        action: () => {},
-      },
+        url: '',
+        action: () => {}
+      }
     ],
     rowActions: [
       {
-        value: "View",
+        value: 'View',
         isLink: true,
-        url: "",
+        url: '',
         action: () => {},
-        buttonType: "bold",
-      },
-    ],
+        buttonType: 'bold'
+      }
+    ]
   })) as ITableRecord[]
 
   return (
     <div className="table-container-section">
-      <TableSection header={["Camera", "Date", "Action"]} record={tableData} />
+      <TableSection header={['Camera', 'Date', 'Action']} record={tableData} />
     </div>
   )
 }
@@ -957,44 +957,44 @@ const VehicleSOTSection: FC<IVIS> = ({ vehicleData }) => {
   const [vehicleSOTItem, setVehicleSOTItem] = useState<ISOTDetails | null>(null)
 
   const tableData = vehicleData?.sotDetails?.map((i, index) => ({
-    id: index + "",
+    id: index + '',
     row: [
       {
         value: i.owner.fullName,
         isLink: false,
-        url: "",
-        action: () => {},
+        url: '',
+        action: () => {}
       },
       {
         value: i.regNumber,
         isLink: false,
-        url: "",
-        action: () => {},
+        url: '',
+        action: () => {}
       },
       {
         value: i.make,
         isLink: false,
-        url: "",
-        action: () => {},
+        url: '',
+        action: () => {}
       },
       {
         value: i.model,
         isLink: false,
-        url: "",
-        action: () => {},
-      },
+        url: '',
+        action: () => {}
+      }
     ],
     rowActions: [
       {
-        value: "View",
+        value: 'View',
         isLink: true,
-        url: "",
+        url: '',
         action: () => {
           setVehicleSOTItem(i)
         },
-        buttonType: "bold",
-      },
-    ],
+        buttonType: 'bold'
+      }
+    ]
   })) as ITableRecord[]
 
   const handlePrev = () => {
@@ -1007,7 +1007,7 @@ const VehicleSOTSection: FC<IVIS> = ({ vehicleData }) => {
         <VehicleSOTItem sot={vehicleSOTItem} handlePrev={handlePrev} />
       ) : (
         <TableSection
-          header={["Owner", "Reg Number", "Make", "Model", "Action"]}
+          header={['Owner', 'Reg Number', 'Make', 'Model', 'Action']}
           record={tableData}
         />
       )}
@@ -1042,7 +1042,7 @@ const CarNotes = ({
   notes,
   setTab,
   isViewAll,
-  title,
+  title
 }: {
   notes: IVehicleNote[] | undefined | null
   setTab: React.Dispatch<React.SetStateAction<string>>
@@ -1106,14 +1106,14 @@ const CarFlags = ({ flags }: { flags: string[] }) => {
 
 const VehicleSOTItem = ({
   sot,
-  handlePrev,
+  handlePrev
 }: {
   sot: ISOTDetails | null
   handlePrev: () => void
 }) => {
   const accordionProps = useAccordion()
 
-  const accordionData = ["Vehicle Owner", "Vehicle Info", "Vehicle License"]
+  const accordionData = ['Vehicle Owner', 'Vehicle Info', 'Vehicle License']
   return (
     <div>
       <div className="vehicle-cta-back">
@@ -1201,7 +1201,7 @@ const VehicleSOTItem = ({
 
 const VehicleOffenseItem = ({
   vehicleOffense,
-  handlePrev,
+  handlePrev
 }: {
   vehicleOffense: IVehicleOffense | null
   handlePrev: () => void
@@ -1234,11 +1234,11 @@ const VehicleOffenseItem = ({
         />
         <VehicleInfoSectionItem
           label="Additional"
-          value={vehicleOffense?.offense?.additional || "None"}
+          value={vehicleOffense?.offense?.additional || 'None'}
         />
         <VehicleInfoSectionItem
           label="Status"
-          value={vehicleOffense?.status?.name || "..."}
+          value={vehicleOffense?.status?.name || '...'}
         />
         <VehicleInfoSectionItem
           label="Device"
@@ -1268,7 +1268,7 @@ const VehicleOffenseItem = ({
 export const VehicleInfoSectionItem = ({
   label,
   value,
-  status,
+  status
 }: // onClick,
 {
   label: string
@@ -1277,13 +1277,13 @@ export const VehicleInfoSectionItem = ({
   // onClick?: () => void
 }) => {
   const { setSearch: setSearchValue } = useGlobalContext()
-  const isStatus = typeof status !== "undefined"
-  const isReg = label.includes("Reg") && label.includes("Number")
+  const isStatus = typeof status !== 'undefined'
+  const isReg = label.includes('Reg') && label.includes('Number')
   return (
     <div
       className="vehicle-info-section-item"
       onClick={() => {
-        if (isReg) setSearchValue?.(value || "")
+        if (isReg) setSearchValue?.(value || '')
       }}
     >
       <p className="vehicle-info-label">{label}</p>
@@ -1291,15 +1291,15 @@ export const VehicleInfoSectionItem = ({
         <div className="vehicle-reg-number-info">
           <p
             className={`vehicle-info-value overflow ${
-              isReg ? "reg-number" : ""
-            } ${isStatus ? "status-text" : ""}`}
+              isReg ? 'reg-number' : ''
+            } ${isStatus ? 'status-text' : ''}`}
           >
-            {value || "..."}
+            {value || '...'}
           </p>
           {isReg ? <PasteSVG /> : null}
         </div>
         {isStatus ? (
-          <p className={`p-btn-status no-btn ${status ? "success" : "danger"}`}>
+          <p className={`p-btn-status no-btn ${status ? 'success' : 'danger'}`}>
             {getStatus(status || false)}
           </p>
         ) : null}
@@ -1310,7 +1310,7 @@ export const VehicleInfoSectionItem = ({
 
 const VehicleInfoSectionColorItem = ({
   label,
-  value,
+  value
 }: {
   label: string
   value: string | undefined
@@ -1318,9 +1318,9 @@ const VehicleInfoSectionColorItem = ({
   return (
     <div className="vehicle-info-section-item">
       <p className="vehicle-info-label">{label}</p>
-      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <div
-          className={`vehicle-info-color ${value === "white" ? "border" : ""}`}
+          className={`vehicle-info-color ${value === 'white' ? 'border' : ''}`}
           title={value}
           style={{ background: value }}
         />
@@ -1332,25 +1332,25 @@ const VehicleInfoSectionColorItem = ({
 
 const Configuration = ({
   signalRProps,
-  rtspProps,
+  rtspProps
 }: {
   signalRProps: IUS
   rtspProps: IUSIO
   rsProps?: IRightSection<{}>
 }) => {
-  const tabEnums = { FEED: "Feed", RTSP: "RTSP" }
+  const tabEnums = { FEED: 'Feed', RTSP: 'RTSP' }
 
   const [tab, setTab] = useState<string>(tabEnums.FEED)
 
   return (
     <div>
       <LiveFeedStatusComponent signalRProps={signalRProps} title="Status" />
-      <div style={{ paddingBottom: "20px" }} />
+      <div style={{ paddingBottom: '20px' }} />
       <div className="tab-section">
         <div className="tab-header">
           {Object.values(tabEnums).map((i, index) => (
             <div
-              className={`tab-item ${i === tab ? "active" : ""}`}
+              className={`tab-item ${i === tab ? 'active' : ''}`}
               key={index}
               onClick={() => setTab(i)}
             >
@@ -1371,26 +1371,26 @@ const Configuration = ({
 
 const RTSPForm = ({ rtspProps }: { rtspProps: IUSIO }) => {
   const [hookForm] = useFormHook<{ rtspUrl: string }>({
-    rtspUrl: yup.string().required("rstp url is required"),
+    rtspUrl: yup.string().required('rstp url is required')
   })
 
   useEffect(() => {
-    const rtspUrl = getUrl("rtspUrl")
-    if (!!rtspUrl) {
-      hookForm.setValue("rtspUrl", rtspUrl)
+    const rtspUrl = getUrl('rtspUrl')
+    if (rtspUrl) {
+      hookForm.setValue('rtspUrl', rtspUrl)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const btnTitle =
-    rtspProps.streamStatus === "started" && !!hookForm.watch("rtspUrl")
-      ? "Refresh RTSP Feed"
-      : "Request RTSP Feed"
+    rtspProps.streamStatus === 'started' && !!hookForm.watch('rtspUrl')
+      ? 'Refresh RTSP Feed'
+      : 'Request RTSP Feed'
 
   const handleRTSPFeed = (data: { rtspUrl: string }) => {
-    if (hookForm.watch("rtspUrl")) {
+    if (hookForm.watch('rtspUrl')) {
       rtspProps.sendRTSPURL(data.rtspUrl)
-      setUrl("rtspUrl", data.rtspUrl)
+      setUrl('rtspUrl', data.rtspUrl)
     }
   }
 
@@ -1403,19 +1403,19 @@ const RTSPForm = ({ rtspProps }: { rtspProps: IUSIO }) => {
       <TypeInput
         placeholder="Enter url"
         label="RTSP URL"
-        {...hookForm.register("rtspUrl")}
+        {...hookForm.register('rtspUrl')}
         error={hookForm.formState.errors.rtspUrl?.message}
       />
-      <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
         <TypeButton
           title={btnTitle}
           onClick={hookForm.handleSubmit(handleRTSPFeed)}
-          load={rtspProps.streamStatus === "loading"}
+          load={rtspProps.streamStatus === 'loading'}
         />
         <TypeButton
           title="Stop RTSP Feed"
           onClick={resetRTSPFeed}
-          buttonType={rtspProps.streamStatus === null ? "disabled" : "outlined"}
+          buttonType={rtspProps.streamStatus === null ? 'disabled' : 'outlined'}
         />
       </div>
     </form>
@@ -1429,27 +1429,27 @@ interface IFeedFormHK {
 
 const FeedForm = ({ signalRProps }: { signalRProps: IUS }) => {
   const [hookForm] = useFormHook<IFeedFormHK>({
-    connectionUrl: yup.string().required("connection url is required"),
-    filePath: yup.string().required("file path is required"),
+    connectionUrl: yup.string().required('connection url is required'),
+    filePath: yup.string().required('file path is required')
   })
 
   useEffect(() => {
-    const storedData = getUrl("connectionUrl")
-    if (!!storedData) {
-      hookForm.setValue("connectionUrl", storedData)
+    const storedData = getUrl('connectionUrl')
+    if (storedData) {
+      hookForm.setValue('connectionUrl', storedData)
     }
-    const filePath = getUrl("filePath")
-    if (!!filePath) {
-      hookForm.setValue("filePath", filePath)
+    const filePath = getUrl('filePath')
+    if (filePath) {
+      hookForm.setValue('filePath', filePath)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const btnTitle =
-    signalRProps.connectionStatus === "connected" &&
+    signalRProps.connectionStatus === 'connected' &&
     !!hookForm.watch().connectionUrl
-      ? "Refresh Feed"
-      : "Request Feed"
+      ? 'Refresh Feed'
+      : 'Request Feed'
 
   const handleSubmit = (data: IFeedFormHK) => {
     signalRProps.startConnection(data.connectionUrl)
@@ -1461,21 +1461,21 @@ const FeedForm = ({ signalRProps }: { signalRProps: IUS }) => {
       <TypeInput
         placeholder="Enter url"
         label="Connection URL"
-        {...hookForm.register("connectionUrl")}
+        {...hookForm.register('connectionUrl')}
         error={hookForm.formState.errors.connectionUrl?.message}
       />
       <TypeInput
         placeholder="Enter url"
         label="File Path"
-        {...hookForm.register("filePath")}
+        {...hookForm.register('filePath')}
         error={hookForm.formState.errors.filePath?.message}
       />
       <div
         style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "20px",
-          marginBottom: "30px",
+          display: 'flex',
+          alignItems: 'center',
+          gap: '20px',
+          marginBottom: '30px'
         }}
       >
         <TypeButton
@@ -1502,7 +1502,7 @@ const useFilterSection = (defaultSelected: string): IUFS => {
   }
   return {
     selectedFilter,
-    handleFilter,
+    handleFilter
   }
 }
 
@@ -1513,10 +1513,10 @@ interface ILFS {
 
 const LiveFeedFilterHeader: FC<ILFS> = ({ filterProps, filters }) => {
   return (
-    <div className="live-feed-filter-section" style={{ gap: "15px" }}>
+    <div className="live-feed-filter-section" style={{ gap: '15px' }}>
       {filters.map((i, index) => (
         <button
-          className={filterProps.selectedFilter === i ? "active" : ""}
+          className={filterProps.selectedFilter === i ? 'active' : ''}
           key={index}
           onClick={() => filterProps.handleFilter(i)}
         >
@@ -1528,7 +1528,7 @@ const LiveFeedFilterHeader: FC<ILFS> = ({ filterProps, filters }) => {
 }
 
 const SearchSectionHeader = ({
-  setSearch,
+  setSearch
 }: {
   setSearch: (
     search: boolean,
@@ -1542,7 +1542,7 @@ const SearchSectionHeader = ({
       <button
         className="active"
         onClick={() => setSearch(false, null)}
-        style={{ cursor: "pointer" }}
+        style={{ cursor: 'pointer' }}
       >
         <i className="fas fa-arrow-left mr-2" />
         Back to feed
@@ -1553,12 +1553,12 @@ const SearchSectionHeader = ({
 
 const SearchResults = ({
   vehicleSearchResult,
-  handleFeedRequest,
+  handleFeedRequest
 }: {
   vehicleSearchResult: IVehicleSearch | undefined | null
   handleFeedRequest: (i: IFeed) => void
 }) => {
-  const tabEnums = { LOCAL: "Local", REMOTE: "Remote" }
+  const tabEnums = { LOCAL: 'Local', REMOTE: 'Remote' }
 
   const [tab, setTab] = useState<string>(tabEnums.LOCAL)
 
@@ -1567,12 +1567,12 @@ const SearchResults = ({
 
   return (
     <div>
-      <div style={{ paddingBottom: "20px" }} />
+      <div style={{ paddingBottom: '20px' }} />
       <div className="tab-section">
         <div className="tab-header">
           {Object.values(tabEnums).map((i, index) => (
             <div
-              className={`tab-item ${i === tab ? "active" : ""}`}
+              className={`tab-item ${i === tab ? 'active' : ''}`}
               key={index}
               onClick={() => setTab(i)}
             >
@@ -1587,12 +1587,12 @@ const SearchResults = ({
                 <p className="no-data-txt">No data</p>
               ) : (
                 <LiveFeedItemComponent
-                  carColor={local.color || "..."}
-                  carMake={local.make || "..."}
-                  imgSrc={getFilePath(local.filePath || "...")}
-                  carType={local.model || "..."}
-                  offense={(local?.flags?.length || 0) + ""}
-                  regNumber={local.regNumber || "..."}
+                  carColor={local.color || '...'}
+                  carMake={local.make || '...'}
+                  imgSrc={getFilePath(local.filePath || '...')}
+                  carType={local.model || '...'}
+                  offense={(local?.flags?.length || 0) + ''}
+                  regNumber={local.regNumber || '...'}
                   handleOnClick={() => {
                     handleFeedRequest(convertSearchDataToFeed(local))
                   }}
@@ -1606,12 +1606,12 @@ const SearchResults = ({
                 <p className="no-data-txt">No data</p>
               ) : (
                 <LiveFeedItemComponent
-                  carColor={remote.color || "..."}
-                  carMake={remote.make || "..."}
-                  imgSrc={remote.mainImageUrl || "..."}
-                  carType={remote.model || "..."}
-                  offense={(remote?.flags?.length || 0) + ""}
-                  regNumber={remote.regNumber || "..."}
+                  carColor={remote.color || '...'}
+                  carMake={remote.make || '...'}
+                  imgSrc={remote.mainImageUrl || '...'}
+                  carType={remote.model || '...'}
+                  offense={(remote?.flags?.length || 0) + ''}
+                  regNumber={remote.regNumber || '...'}
                   handleOnClick={() => {
                     handleFeedRequest(convertRemoteSearchDataToFeed(remote))
                   }}
@@ -1628,59 +1628,53 @@ const SearchResults = ({
 const convertSearchDataToFeed = (
   i: ISearchVehicle | undefined | null
 ): IFeed => ({
-  cameraName: i?.cameraName || "",
-  classification: i?.classification || "",
-  code: i?.code || "",
-  colour: i?.color || "",
-  filePath: i?.filePath || "",
+  cameraName: i?.cameraName || '',
+  classification: i?.classification || '',
+  code: i?.code || '',
+  colour: i?.color || '',
+  filePath: i?.filePath || '',
   flags: i?.flags || [],
   isOnBlackList: i?.isOnBlackList || false,
   isUploaded: !!i?.isUploaded,
-  make: i?.make || "",
-  model: i?.model || "",
-  orientation: i?.orientation || "",
-  regNumber: i?.regNumber || "",
-  timeStamp: i?.timeStamp || "",
-  vehicleType: i?.model || "",
+  make: i?.make || '',
+  model: i?.model || '',
+  orientation: i?.orientation || '',
+  regNumber: i?.regNumber || '',
+  timeStamp: i?.timeStamp || '',
+  vehicleType: i?.model || ''
 })
 
 const convertRemoteSearchDataToFeed = (
   i: IVehicle | undefined | null
 ): IFeed => ({
-  cameraName: "",
-  classification: i?.classification || "",
-  code: i?.code || "",
-  colour: i?.color || "",
-  filePath: i?.mainImageUrl ? i?.mainImageUrl.replace("?dl=0", "?raw=1") : "",
+  cameraName: '',
+  classification: i?.classification || '',
+  code: i?.code || '',
+  colour: i?.color || '',
+  filePath: i?.mainImageUrl ? i?.mainImageUrl.replace('?dl=0', '?raw=1') : '',
   flags: i?.flags || [],
   isOnBlackList: i?.hasFlag || false,
   isUploaded: false,
-  make: i?.make || "",
-  model: i?.model || "",
-  orientation: "",
-  regNumber: i?.regNumber || "",
-  timeStamp: "",
-  vehicleType: i?.model || "",
+  make: i?.make || '',
+  model: i?.model || '',
+  orientation: '',
+  regNumber: i?.regNumber || '',
+  timeStamp: '',
+  vehicleType: i?.model || ''
 })
-
-export interface ITableRecord {
-  id: string
-  row: ICell[]
-  rowActions: ICellAction[]
-}
 
 export const TableSection = ({
   header,
   record,
   handlePagination,
-  hideTableAction,
+  hideTableAction
 }: {
   header: string[]
   record: ITableRecord[]
   handlePagination?: (selectedItem: { selected: number }) => void
   hideTableAction?: boolean
 }) => {
-  const isPagination = typeof handlePagination === "function"
+  const isPagination = typeof handlePagination === 'function'
   return (
     <div>
       <div className="table-section">
@@ -1699,8 +1693,8 @@ export const TableSection = ({
             nextLabel=">>"
             pageCount={1}
             onPageChange={handlePagination}
-            containerClassName={"pagination"}
-            activeClassName={"active"}
+            containerClassName={'pagination'}
+            activeClassName={'active'}
             renderOnZeroPageCount={undefined}
             forcePage={1}
           />
@@ -1723,7 +1717,7 @@ export interface ILocationDetails {
 export const NoMediaComponent = ({
   load,
   locationDetails,
-  defaultZoom,
+  defaultZoom
 }: {
   load: boolean
   locationDetails: ILocationDetails[]
@@ -1748,7 +1742,7 @@ export const NoMediaComponent = ({
     //     </p>
     //   </a>
     // ),
-    markerColor: i.markerColor,
+    markerColor: i.markerColor
   }))
 
   return (

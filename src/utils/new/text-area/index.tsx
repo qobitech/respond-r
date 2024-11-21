@@ -1,8 +1,8 @@
-import React from "react"
-import TextPrompt from "../text-prompt"
-import "./index.scss"
+import React from 'react'
+import TextPrompt from '../text-prompt'
+import './index.scss'
 
-interface IInput extends React.ComponentPropsWithoutRef<"textarea"> {
+interface IInput extends React.ComponentPropsWithoutRef<'textarea'> {
   label?: string
   error?: string | undefined
 }
@@ -17,7 +17,7 @@ export const TypeTextArea = React.forwardRef(
           <textarea
             {...props}
             ref={ref as React.LegacyRef<HTMLTextAreaElement> | undefined}
-            className={error ? "is-error" : ""}
+            className={error ? 'is-error' : ''}
           />
           {!!error && (
             <>

@@ -1,4 +1,4 @@
-import { naijaPhoneRegex } from "./constants"
+import { naijaPhoneRegex } from './constants'
 
 // export function checkIfNull<R> ( item: R ) {
 //     if(item === null || item === undefined || (typeof item === 'string' && item.length === 0)) {
@@ -11,7 +11,7 @@ export const checkIfNull = <R>(item: R): boolean => {
   if (
     item === null ||
     item === undefined ||
-    (typeof item === "string" && item.length === 0)
+    (typeof item === 'string' && item.length === 0)
   ) {
     return false
   } else {
@@ -23,19 +23,19 @@ export const checkIfUrl = <R>(item: R): boolean => {
   let url: URL
 
   try {
-    url = new URL(typeof item === "string" ? item : "")
+    url = new URL(typeof item === 'string' ? item : '')
   } catch (_) {
     return false
   }
 
-  return url.protocol === "http:" || url.protocol === "https:"
+  return url.protocol === 'http:' || url.protocol === 'https:'
 }
 
 export const dateCleaner = (item: string) => {
-  if (item!?.length > 0) {
+  if (item?.length > 0) {
     return new Date(item).toDateString()
   } else {
-    return ""
+    return ''
   }
 }
 
@@ -44,19 +44,19 @@ export const timeCleaner = (item: string) => {
 }
 
 export const separator = (name: string) => {
-  let arr = name!
-    ?.split("")
+  const arr = name
+    ?.split('')
     .map((item) => {
-      if (item === item!?.toUpperCase()) return " " + item
+      if (item === item?.toUpperCase()) return ' ' + item
       else return item
     })
     .toString()
-    .replace(/,/g, "")
-  return arr!?.charAt(0).toUpperCase() + arr!?.slice(1).toLowerCase()
+    .replace(/,/g, '')
+  return arr?.charAt(0).toUpperCase() + arr?.slice(1).toLowerCase()
 }
 
 export const handleFloat = (item: string) => {
-  var floatItem = parseFloat(item)
+  const floatItem = parseFloat(item)
   if (isNaN(floatItem)) {
     return 0
   } else {
@@ -70,7 +70,7 @@ export const validatePhoneNumber = (
   setOtherErrors: any,
   setOtherValidations: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
-  if (!naijaPhoneRegex.test(value!?.replaceAll("-", ""))) {
+  if (!naijaPhoneRegex.test(value?.replaceAll('-', ''))) {
     setOtherErrors((p: any) => ({ ...p, [name]: `${name} not valid` }))
     setOtherValidations(false)
   } else {
@@ -92,10 +92,10 @@ export const validateUsername = (
   >,
   setOtherValidations: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
-  if (value!?.length < 8) {
+  if (value?.length < 8) {
     setOtherErrors((p) => ({
       ...p,
-      [name]: `${name} must be at least 8 characters`,
+      [name]: `${name} must be at least 8 characters`
     }))
     setOtherValidations(false)
   } else {
@@ -117,10 +117,10 @@ export const validatePassword = (
   setOtherValidations: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   if (
-    formDetails!?.password!?.length > 5 &&
-    formDetails!?.confirmPassword!?.length > 5
+    formDetails?.password?.length > 5 &&
+    formDetails?.confirmPassword?.length > 5
   ) {
-    if (formDetails!?.password !== formDetails!?.confirmPassword) {
+    if (formDetails?.password !== formDetails?.confirmPassword) {
       setOtherErrors((p) => ({ ...p, password: `password must match` }))
       setOtherErrors((p) => ({ ...p, confirmPassword: `password must match` }))
       setOtherValidations(false)
@@ -133,24 +133,24 @@ export const validatePassword = (
     setOtherErrors((p) => ({
       ...p,
       password:
-        formDetails!?.password!?.length < 6
+        formDetails?.password?.length < 6
           ? `password must be atleast 6 characters`
-          : "",
+          : ''
     }))
     setOtherErrors((p) => ({
       ...p,
       confirmPassword:
-        formDetails!?.confirmPassword!?.length < 6
+        formDetails?.confirmPassword?.length < 6
           ? `password must be atleast 6 characters`
-          : "",
+          : ''
     }))
     setOtherValidations(false)
   }
 }
 
-function toCamelCase(str: string) {
+export function toCamelCase(str: string) {
   return str.replace(/([-_][a-z])/gi, ($1) => {
-    return $1.toUpperCase().replace("-", "").replace("_", "")
+    return $1.toUpperCase().replace('-', '').replace('_', '')
   })
 }
 

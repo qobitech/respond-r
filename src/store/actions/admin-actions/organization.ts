@@ -1,15 +1,15 @@
-import { baseurl } from "utils/constants"
-import * as utils from "../../services/new/utils"
-import { organization } from "store/types"
+import { baseurl } from 'utils/constants'
+import * as utils from '../../services/new/utils'
+import { organization } from 'store/types'
 
 export const getAllOrganization = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
-      url: "",
-      customurl: `${baseurl}/Organisation/${query || ""}`,
-      header: utils.header(""),
+      url: '',
+      customurl: `${baseurl}/Organisation/${query || ''}`,
+      header: utils.header('')
     },
-    actionType: organization.getAllOrganization,
+    actionType: organization.getAllOrganization
   })
 }
 
@@ -21,10 +21,10 @@ export const createOrganization = (
 ) => {
   return utils.httpPostMethod({
     apiData: {
-      url: "",
-      customurl: `${baseurl}/Organisation/${update ? "update" : "add"}`,
-      header: utils.header(""),
-      data,
+      url: '',
+      customurl: `${baseurl}/Organisation/${update ? 'update' : 'add'}`,
+      header: utils.header(''),
+      data
     },
     actionType: update
       ? organization.updateOrganization
@@ -34,17 +34,17 @@ export const createOrganization = (
     },
     onFailure: (err) => {
       onFailure?.(err)
-    },
+    }
   })
 }
 
 export const deleteOrganization = (id: string) => {
   return utils.httpDeleteMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurl}/Organisation/delete?id=${id}`,
-      header: utils.header(""),
+      header: utils.header('')
     },
-    actionType: organization.deleteOrganization,
+    actionType: organization.deleteOrganization
   })
 }

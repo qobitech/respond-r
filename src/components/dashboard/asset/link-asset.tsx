@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react"
-import { TypeButton } from "utils/new/button"
-import { TypeInput } from "utils/new/input"
-import "./style.scss"
-import { PulseSVG } from "utils/new/svgs"
-import { ActionComponent } from "../components"
-import { clearAction } from "store/actions/global"
-import { assets } from "../../../store/types"
-import { IRightSection } from "components/reusable/right-section"
-import { IReport } from "interfaces/IReport"
-import { useGlobalContext } from "components/layout"
+import React, { useEffect, useState } from 'react'
+import { TypeButton } from 'utils/new/button'
+import { TypeInput } from 'utils/new/input'
+import './style.scss'
+import { PulseSVG } from 'utils/new/svgs'
+import { ActionComponent } from '../components'
+import { clearAction } from 'store/actions/global'
+import { assets } from '../../../store/types'
+import { IRightSection } from 'components/reusable/right-section'
+import { IReport } from 'interfaces/IReport'
+import { useGlobalContext } from 'components/layout'
 
 const LinkAsset = ({
   assetId,
-  rsProps,
+  rsProps
 }: {
   assetId: string | null
   rsProps?: IRightSection<IReport>
@@ -38,17 +38,17 @@ const LinkAsset = ({
 
   const assetProps = [
     {
-      label: "Asset name",
-      value: getAssetById?.name,
+      label: 'Asset name',
+      value: getAssetById?.name
     },
-    { label: "Type", value: getAssetById?.type },
-    { label: "Short code", value: getAssetById?.shortCode },
-    { label: "Category", value: getAssetById?.category },
-    { label: "Longitude", value: getAssetById?.location.longitude },
-    { label: "Latitude", value: getAssetById?.location.latitude },
-    { label: "Contact Name", value: getAssetById?.contact.name },
-    { label: "Contact Phone", value: getAssetById?.contact.phone },
-    { label: "Contact Role", value: getAssetById?.contact.role },
+    { label: 'Type', value: getAssetById?.type },
+    { label: 'Short code', value: getAssetById?.shortCode },
+    { label: 'Category', value: getAssetById?.category },
+    { label: 'Longitude', value: getAssetById?.location.longitude },
+    { label: 'Latitude', value: getAssetById?.location.latitude },
+    { label: 'Contact Name', value: getAssetById?.contact.name },
+    { label: 'Contact Phone', value: getAssetById?.contact.phone },
+    { label: 'Contact Role', value: getAssetById?.contact.role }
   ]
 
   return (
@@ -63,7 +63,7 @@ const LinkAsset = ({
           label="Asset ID"
           type="search"
           placeholder="Search asset"
-          value={formValue || ""}
+          value={formValue || ''}
           onChange={({ target }) => {
             const { value } = target
             setFormValue(value)
@@ -72,7 +72,7 @@ const LinkAsset = ({
         <TypeButton
           title="Search Asset"
           load={getAssetByIdLoading}
-          onClick={() => action?.getAssetById(assetId!)}
+          onClick={() => action?.getAssetById(assetId)}
           buttonSize="small"
         />
       </form>
@@ -85,22 +85,23 @@ const LinkAsset = ({
               title="Action"
               actions={[
                 {
-                  label: "Update asset",
+                  label: 'Update asset',
                   action: () => {
-                    rsProps?.callSection("update", "asset")
-                  },
-                },
+                    rsProps?.callSection('update', 'asset')
+                  }
+                }
                 // { label: "Delete asset" },
               ]}
             />
           </div>
           <div className="link-assets-information form-body px-4 pt-4">
-            {assetProps.map((asset) => (
+            {assetProps.map((asset, index) => (
               <TypeInput
                 readOnly
-                value={asset.value || "no info"}
+                value={asset.value || 'no info'}
                 label={asset.label}
                 isonlyview
+                key={index}
               />
             ))}
           </div>

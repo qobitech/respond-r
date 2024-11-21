@@ -1,15 +1,15 @@
-import React, { useEffect } from "react"
-import Table, { ICell, ICellAction, useTableAction } from "utils/new/table"
-import "../../../../utils/new/pagination.scss"
-import "../../../../utils/new/page.scss"
-import "./management.scss"
-import { TypeButton } from "../../../../utils/new/button"
-import RightSection, { useRightSection } from "../../../reusable/right-section"
-import { IStates } from "interfaces/IReducer"
-import { IAction } from "interfaces/IAction"
-import { PageHeader } from "components/dashboard/components"
-import CreateRole from "./create-organization"
-import { IOrganization } from "interfaces/IOrganization"
+import React, { useEffect } from 'react'
+import Table, { ICell, ICellAction, useTableAction } from 'utils/new/table'
+import '../../../../utils/new/pagination.scss'
+import '../../../../utils/new/page.scss'
+import './management.scss'
+import { TypeButton } from '../../../../utils/new/button'
+import RightSection, { useRightSection } from '../../../reusable/right-section'
+import { IStates } from 'interfaces/IReducer'
+import { IAction } from 'interfaces/IAction'
+import { PageHeader } from 'components/dashboard/components'
+import CreateRole from './create-organization'
+import { IOrganization } from 'interfaces/IOrganization'
 
 interface IProps {
   states?: IStates
@@ -17,7 +17,7 @@ interface IProps {
 }
 
 const OrganizationPage: React.FC<IProps> = ({ states, actions }) => {
-  const { callRightSection, getAllOrganization } = actions as IAction
+  const { callRightSection, getAllOrganization } = actions
 
   const rightSectionProps = states?.global.rightSection
 
@@ -29,7 +29,7 @@ const OrganizationPage: React.FC<IProps> = ({ states, actions }) => {
   )
 
   useEffect(() => {
-    getAllOrganization("")
+    getAllOrganization('')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -39,20 +39,20 @@ const OrganizationPage: React.FC<IProps> = ({ states, actions }) => {
     rowActions: ICellAction[]
   }
 
-  console.log(organizationState?.getAllOrganization?.data, "juju")
+  console.log(organizationState?.getAllOrganization?.data, 'juju')
 
   const record: ITable[] = organizationState?.getAllOrganization?.data?.map(
     (i) => ({
-      id: "1",
+      id: '1',
       row: [
         {
           value: i.id,
-          isLink: false,
+          isLink: false
         },
         {
           value: i.name,
-          isLink: false,
-        },
+          isLink: false
+        }
       ],
       rowActions: [
         // {
@@ -63,19 +63,19 @@ const OrganizationPage: React.FC<IProps> = ({ states, actions }) => {
         //   },
         // },
         {
-          value: "Edit Details",
+          value: 'Edit Details',
           isLink: true,
           action: () => {
-            rsProps.callSection("custom", "update-org", i.id.toString(), i)
-          },
+            rsProps.callSection('custom', 'update-org', i.id.toString(), i)
+          }
         },
         {
-          value: "Delete",
+          value: 'Delete',
           isLink: true,
-          buttonType: "danger",
-          action: () => {},
-        },
-      ],
+          buttonType: 'danger',
+          action: () => {}
+        }
+      ]
     })
   ) as ITable[]
 
@@ -103,7 +103,7 @@ const OrganizationPage: React.FC<IProps> = ({ states, actions }) => {
   // ]
 
   const tableActionEnums = {
-    DELETE: "Delete",
+    DELETE: 'Delete'
   }
 
   const getTableActionEnums = (): { [key: string]: string } | null => {
@@ -128,24 +128,24 @@ const OrganizationPage: React.FC<IProps> = ({ states, actions }) => {
   return (
     <>
       <RightSection rsProps={rsProps}>
-        {rsProps.isView("custom", "create-org") ||
-        rsProps.isView("custom", "update-org") ? (
-          <CreateRole states={states!} actions={actions!} />
+        {rsProps.isView('custom', 'create-org') ||
+        rsProps.isView('custom', 'update-org') ? (
+          <CreateRole states={states} actions={actions} />
         ) : null}
-        {rsProps.isView("custom", "view-org") ? <></> : null}
-        {rsProps.isView("custom", "update-org") ? <></> : null}
+        {rsProps.isView('custom', 'view-org') ? <></> : null}
+        {rsProps.isView('custom', 'update-org') ? <></> : null}
       </RightSection>
       <div>
         <PageHeader
           title="Organization Management"
-          load={organizationState?.getAllOrganizationLoading!}
+          load={organizationState?.getAllOrganizationLoading}
         />
         <div className="cta-header-section">
           <TypeButton
             buttonSize="small"
             title="Add Organization"
             onClick={() => {
-              rsProps.callSection("custom", "create-org")
+              rsProps.callSection('custom', 'create-org')
             }}
           />
         </div>
@@ -170,7 +170,7 @@ const OrganizationPage: React.FC<IProps> = ({ states, actions }) => {
             )} */}
           </div>
           <Table
-            header={["ID", "Organization", "Action"]}
+            header={['ID', 'Organization', 'Action']}
             record={record}
             hideNumbering
             handleTableAction={handleTableAction}

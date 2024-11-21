@@ -1,4 +1,4 @@
-import { vehicleSearchType } from "store/actions/global"
+import { vehicleSearchType } from 'store/actions/global'
 
 export interface INotification {
   notice: string

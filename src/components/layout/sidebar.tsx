@@ -1,7 +1,7 @@
-import React from "react"
-import { useLocation, useNavigate } from "react-router-dom"
-import "./sidebar.scss"
-import { url } from "enums/Route"
+import React from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import './sidebar.scss'
+import { url } from 'enums/Route'
 import {
   CarsSVG,
   FireExtinguisherSVG,
@@ -9,13 +9,13 @@ import {
   ManagementSVG,
   MedicalSVG,
   PoliceSVG,
-  SwitchSVG,
-} from "utils/new/svgs"
-import { ISSUPERADMIN, ORGANIZATION } from "utils/new/constants"
-import { GODUSER } from "utils/new/constants/roles"
-import { managementTabEnums } from "components/dashboard/admin-management"
-import Logo from "../../extras/images/CHITHUB_LOGO.png"
-import { IReport } from "interfaces/IReport"
+  SwitchSVG
+} from 'utils/new/svgs'
+import { ISSUPERADMIN, ORGANIZATION } from 'utils/new/constants'
+import { GODUSER } from 'utils/new/constants/roles'
+import { managementTabEnums } from 'components/dashboard/admin-management'
+import Logo from '../../extras/images/CHITHUB_LOGO.png'
+import { IReport } from 'interfaces/IReport'
 
 interface IProps {
   setMenuOpen: (menuOpen: boolean) => (dispatch: any) => void
@@ -28,7 +28,7 @@ const SideBar = ({
   setMenuOpen,
   menuOpen,
   logOut,
-  handleSelectReport,
+  handleSelectReport
 }: IProps) => {
   const location = useLocation()
   const navigate = useNavigate()
@@ -38,45 +38,45 @@ const SideBar = ({
 
   const menuItems = [
     {
-      title: "Traffic",
+      title: 'Traffic',
       imgsrc: <CarsSVG />,
       isActive: _isUrl(url.TRAFFIC),
       url: url.TRAFFIC,
-      id: "e-traffic",
+      id: 'e-traffic'
     },
     {
-      title: "E-Police",
+      title: 'E-Police',
       imgsrc: <PoliceSVG />,
       isActive: _isUrl(url.POLICE),
       url: url.POLICE,
-      id: "e-police",
+      id: 'e-police'
     },
     {
-      title: "Fire Service",
+      title: 'Fire Service',
       imgsrc: <FireExtinguisherSVG />,
       isActive: _isUrl(url.FIRESERVICE),
       url: url.FIRESERVICE,
-      id: "firefighter",
+      id: 'firefighter'
     },
     {
-      title: "E-Medical",
+      title: 'E-Medical',
       imgsrc: <MedicalSVG />,
       isActive: _isUrl(url.MEDICAL),
       url: url.MEDICAL,
-      id: "e-medical",
+      id: 'e-medical'
     },
     {
-      title: "Management",
+      title: 'Management',
       imgsrc: <ManagementSVG />,
       isActive: _isUrl(url.MANAGEMENT),
       url: `${url.MANAGEMENT}/${managementTabEnums.USERS}`,
-      id: "management",
-    },
+      id: 'management'
+    }
   ].filter((i) =>
     GODUSER
       ? i
       : ISSUPERADMIN
-      ? i.id === "management" || i.id === ORGANIZATION
+      ? i.id === 'management' || i.id === ORGANIZATION
       : i.id === ORGANIZATION
   )
 
@@ -86,7 +86,7 @@ const SideBar = ({
 
   return (
     <div
-      className={`side-bar ${menuOpen ? "side_menu_open" : "side_menu_close"}`}
+      className={`side-bar ${menuOpen ? 'side_menu_open' : 'side_menu_close'}`}
     >
       <div className="header">
         <div className="hamburger" onClick={handleMenu}>
@@ -103,7 +103,7 @@ const SideBar = ({
       <nav className="side-menu-container">
         {menuItems.map((i, index) => (
           <li
-            className={`side-menu-item ${i.isActive ? "active" : ""}`}
+            className={`side-menu-item ${i.isActive ? 'active' : ''}`}
             key={index}
             onClick={() => {
               handleSelectReport(null)

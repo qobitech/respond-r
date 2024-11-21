@@ -1,18 +1,18 @@
-import React from "react"
-import { FieldValues, Path, PathValue, UseFormReturn } from "react-hook-form"
-import { TypeInput } from "../input"
-import TypePhoneInput from "../phone-input"
-import { TypeSelect } from "../select"
-import { TypeTextArea } from "../text-area"
-import { TypeCheckbox } from "../checkbox"
+import React from 'react'
+import { FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form'
+import { TypeInput } from '../input'
+import TypePhoneInput from '../phone-input'
+import { TypeSelect } from '../select'
+import { TypeTextArea } from '../text-area'
+import { TypeCheckbox } from '../checkbox'
 
 export type typecomponent =
-  | "input"
-  | "phone"
-  | "select"
-  | "text-area"
-  | "radio"
-  | "check-box"
+  | 'input'
+  | 'phone'
+  | 'select'
+  | 'text-area'
+  | 'radio'
+  | 'check-box'
 
 interface ISelectOptions {
   id: number
@@ -32,7 +32,7 @@ export interface IFormComponent {
   cta?: {
     text: string
     link: string
-    type: "external" | "internal"
+    type: 'external' | 'internal'
   }
   isonlyview?: boolean
   onChange?: (value: string) => void
@@ -45,13 +45,13 @@ interface IFormBuilder<T extends FieldValues> {
 
 const FormBuilder = <T extends FieldValues>({
   formComponent,
-  hookForm,
+  hookForm
 }: IFormBuilder<T>) => {
   return (
     <>
       {formComponent.map((i) => (
         <div key={i.id}>
-          {i.component === "input" && (
+          {i.component === 'input' && (
             <TypeInput
               {...hookForm.register(i.id as Path<T>)}
               label={i.label}
@@ -63,7 +63,7 @@ const FormBuilder = <T extends FieldValues>({
               isonlyview={i.isonlyview}
             />
           )}
-          {i.component === "phone" && (
+          {i.component === 'phone' && (
             <TypePhoneInput
               {...hookForm.register(i.id as Path<T>)}
               label={i.label}
@@ -81,12 +81,12 @@ const FormBuilder = <T extends FieldValues>({
               value={hookForm.watch(i.id as Path<T>)}
             />
           )}
-          {i.component === "select" && (
+          {i.component === 'select' && (
             <TypeSelect
               {...hookForm.register(i.id as Path<T>)}
-              initoption={i.initOptions as ISelectOptions}
-              optionsdata={i.optionData as ISelectOptions[]}
-              customwidth={"100%"}
+              initoption={i.initOptions}
+              optionsdata={i.optionData}
+              customwidth={'100%'}
               label={i.label}
               error={
                 hookForm.formState.errors?.[i.id as Path<T>]?.message as string
@@ -97,7 +97,7 @@ const FormBuilder = <T extends FieldValues>({
               }}
             />
           )}
-          {i.component === "text-area" && (
+          {i.component === 'text-area' && (
             <TypeTextArea
               {...hookForm.register(i.id as Path<T>)}
               placeholder={i.placeHolder}
@@ -107,7 +107,7 @@ const FormBuilder = <T extends FieldValues>({
               }
             />
           )}
-          {i.component === "check-box" && (
+          {i.component === 'check-box' && (
             <TypeCheckbox
               {...hookForm.register(i.id as Path<T>)}
               error={
@@ -115,7 +115,7 @@ const FormBuilder = <T extends FieldValues>({
               }
             />
           )}
-          {i.component === "radio" && (
+          {i.component === 'radio' && (
             <TypeTextArea
               {...hookForm.register(i.id as Path<T>)}
               placeholder={i.placeHolder}

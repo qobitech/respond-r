@@ -1,18 +1,18 @@
-import { IRightSection } from "components/reusable/right-section"
-import { IAction } from "interfaces/IAction"
-import { IStates } from "interfaces/IReducer"
-import React, { useEffect, useState } from "react"
-import { RoleSelectItem } from "../action-old/create"
-import { IRole } from "interfaces/IRole"
-import TextPrompt from "utils/new/text-prompt"
-import { PulseSVG } from "utils/new/svgs"
-import { TypeButton } from "utils/new/button"
-import { useGlobalContext } from "components/layout"
+import { IRightSection } from 'components/reusable/right-section'
+import { IAction } from 'interfaces/IAction'
+import { IStates } from 'interfaces/IReducer'
+import React, { useEffect, useState } from 'react'
+import { RoleSelectItem } from '../action-old/create'
+import { IRole } from 'interfaces/IRole'
+import TextPrompt from 'utils/new/text-prompt'
+import { PulseSVG } from 'utils/new/svgs'
+import { TypeButton } from 'utils/new/button'
+import { useGlobalContext } from 'components/layout'
 
 const ViewActions = ({
   actions,
   states,
-  rsProps,
+  rsProps
 }: {
   states: IStates
   actions: IAction
@@ -22,10 +22,10 @@ const ViewActions = ({
   const { getActionsForRole } = actions
   const actionRolesLoading = states.actions.getActionsForRoleLoading
   const actionRoles = states?.actions?.getActionsForRole?.data
-  const name = rsProps?.data?.name || ""
+  const name = rsProps?.data?.name || ''
   const id = rsProps?.data?.id || 0
   const organization = getOrganization?.(
-    "id",
+    'id',
     rsProps?.data?.organisationId || 0
   )?.name
   // const roleActions = rsProps?.data?.actions
@@ -52,17 +52,17 @@ const ViewActions = ({
     actions?.unassignMultipleActionsForRole(
       {
         actionIds: actionRoles.map((i) => parseInt(i)),
-        roleId: id,
+        roleId: id
       },
       () => {
         setResponse({
-          message: "actions unassigned successfully",
-          isSuccessful: true,
+          message: 'actions unassigned successfully',
+          isSuccessful: true
         })
       },
       (err) => {
         console.log(err)
-        setResponse({ message: "Something went wrong", isSuccessful: false })
+        setResponse({ message: 'Something went wrong', isSuccessful: false })
       }
     )
   }
@@ -70,19 +70,19 @@ const ViewActions = ({
   const handleUnassignActions = () => {
     actions?.unassignMultipleActionsForRole({
       actionIds: selectedActions.map((i) => parseInt(i)),
-      roleId: id,
+      roleId: id
     })
   }
 
   const isAll = selectedActions?.length === actionRoles?.length
 
   return (
-    <div className="d-flex flex-column" style={{ gap: "30px" }}>
+    <div className="d-flex flex-column" style={{ gap: '30px' }}>
       <div className="card-section px-4 py-4">
         <div className="pb-4">
           <div
             className="role-title d-flex align-items-center justify-content-center mb-4"
-            style={{ gap: "20px" }}
+            style={{ gap: '20px' }}
           >
             <p>
               Actions for {name} ({organization})
@@ -106,7 +106,7 @@ const ViewActions = ({
       </div>
       <div
         className="d-flex align-items-center justify-content-center mt-4"
-        style={{ gap: "20px" }}
+        style={{ gap: '20px' }}
       >
         <TypeButton
           buttonSize="small"
@@ -130,7 +130,7 @@ const ViewActions = ({
       <div className="my-3" />
       {response !== null ? (
         <TextPrompt
-          prompt={response?.message || ""}
+          prompt={response?.message || ''}
           status={response?.isSuccessful}
         />
       ) : null}

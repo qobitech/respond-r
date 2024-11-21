@@ -1,16 +1,16 @@
-import React, { useEffect } from "react"
+import React, { useEffect } from 'react'
 // import { useNavigate } from "react-router-dom"
-import "./index.scss"
-import { TypeButton } from "utils/new/button"
-import { IStates } from "interfaces/IReducer"
+import './index.scss'
+import { TypeButton } from 'utils/new/button'
+import { IStates } from 'interfaces/IReducer'
 // import { useFormHook } from "utils/new/hook"
-import * as yup from "yup"
-import { IAction } from "interfaces/IAction"
-import { authType } from "store/types"
-import TextPrompt from "utils/new/text-prompt"
-import { UseFormReturn } from "react-hook-form"
-import FormBuilder from "utils/new/form-builder"
-import { registerOrganizationFC } from "utils/new/constants/form-components"
+import * as yup from 'yup'
+import { IAction } from 'interfaces/IAction'
+import { authType } from 'store/types'
+import TextPrompt from 'utils/new/text-prompt'
+import { UseFormReturn } from 'react-hook-form'
+import FormBuilder from 'utils/new/form-builder'
+import { registerOrganizationFC } from 'utils/new/constants/form-components'
 
 interface IProps {
   states?: IStates
@@ -30,16 +30,16 @@ export interface IRegisterHookForm {
 }
 
 export const registerSchema = {
-  email: yup.string().email().required("Email is required"),
-  userName: yup.string().required("User name is required"),
-  address: yup.string().required("Address is required"),
-  organizationName: yup.string().required("Organization name is required"),
-  state: yup.string().required("State is required"),
-  employeeId: yup.string().required("Employee id is required"),
-  phoneNumber: yup.string().required("Phone number is required"),
+  email: yup.string().email().required('Email is required'),
+  userName: yup.string().required('User name is required'),
+  address: yup.string().required('Address is required'),
+  organizationName: yup.string().required('Organization name is required'),
+  state: yup.string().required('State is required'),
+  employeeId: yup.string().required('Employee id is required'),
+  phoneNumber: yup.string().required('Phone number is required'),
   role: yup.string(),
-  password: yup.string().required("Password is required"),
-  confirmPassword: yup.string().required("Confirm Password is required"),
+  password: yup.string().required('Password is required'),
+  confirmPassword: yup.string().required('Confirm Password is required')
 }
 
 interface IRegisterForm {
@@ -53,7 +53,7 @@ export const RegisterForm: React.FC<IRegisterForm> = ({
   hookForm,
   handleAction,
   loading,
-  error,
+  error
 }) => {
   const { handleSubmit } = hookForm
   return (
@@ -64,7 +64,7 @@ export const RegisterForm: React.FC<IRegisterForm> = ({
           title="REGISTER"
           load={loading}
           type="submit"
-          buttonType={loading ? "disabled" : "bold"}
+          buttonType={loading ? 'disabled' : 'bold'}
           disabled={loading}
         />
       </div>

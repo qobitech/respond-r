@@ -1,15 +1,15 @@
-import { baseurl } from "utils/constants"
-import * as utils from "../../services/new/utils"
-import { role } from "store/types"
+import { baseurl } from 'utils/constants'
+import * as utils from '../../services/new/utils'
+import { role } from 'store/types'
 
 export const getAllRoles = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
-      url: "",
-      customurl: `${baseurl}/Role${query || ""}`,
-      header: utils.header(""),
+      url: '',
+      customurl: `${baseurl}/Role${query || ''}`,
+      header: utils.header('')
     },
-    actionType: role.getAllRoles,
+    actionType: role.getAllRoles
   })
 }
 
@@ -21,10 +21,10 @@ export const createRole = (
 ) => {
   return utils.httpPostMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: update ? `${baseurl}/Role/update` : `${baseurl}/Role/addRole`,
-      header: utils.header(""),
-      data,
+      header: utils.header(''),
+      data
     },
     actionType: role.createRole,
     onSuccess: (res) => {
@@ -32,40 +32,40 @@ export const createRole = (
     },
     onFailure: (err) => {
       onFailure?.(err)
-    },
+    }
   })
 }
 
 export const deleteRole = (name: string) => {
   return utils.httpDeleteMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurl}/Role/delete?roleName=${name}`,
-      header: utils.header(""),
+      header: utils.header('')
     },
-    actionType: role.deleteRole,
+    actionType: role.deleteRole
   })
 }
 
 export const getPermissions = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurl}/Permissions/GetAll`,
-      header: utils.header(""),
+      header: utils.header('')
     },
-    actionType: role.getPermissions,
+    actionType: role.getPermissions
   })
 }
 
 export const getRolesForOrganisation = (id: string) => {
   return utils.httpGetMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurl}/Role/getRolesForOrganisation?orgId=${id}`,
-      header: utils.header(""),
+      header: utils.header('')
     },
-    actionType: role.getRolesForOrganisation,
+    actionType: role.getRolesForOrganisation
   })
 }
 
@@ -79,10 +79,10 @@ export const unassignMultipleActionsForRole = (
 ) => {
   return utils.httpPostMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurl}/Action/UnassignMultiplectionsForRole`,
-      header: utils.header(""),
-      data,
+      header: utils.header(''),
+      data
     },
     actionType: role.unassignMultipleActionsForRole,
     onSuccess: (res) => {
@@ -90,6 +90,6 @@ export const unassignMultipleActionsForRole = (
     },
     onFailure: (err) => {
       onFailure?.(err)
-    },
+    }
   })
 }

@@ -1,18 +1,18 @@
-import { IRightSection } from "components/reusable/right-section"
-import { IAction } from "interfaces/IAction"
-import { IStates } from "interfaces/IReducer"
-import { IRoleAction } from "interfaces/IRoleActions"
-import React, { useEffect, useState } from "react"
-import { RoleSelectItem, SelectedItems } from "../action-old/create"
-import { TypeButton } from "utils/new/button"
-import TextPrompt from "utils/new/text-prompt"
+import { IRightSection } from 'components/reusable/right-section'
+import { IAction } from 'interfaces/IAction'
+import { IStates } from 'interfaces/IReducer'
+import { IRoleAction } from 'interfaces/IRoleActions'
+import React, { useEffect, useState } from 'react'
+import { RoleSelectItem, SelectedItems } from '../action-old/create'
+import { TypeButton } from 'utils/new/button'
+import TextPrompt from 'utils/new/text-prompt'
 
 const AssignToRole = ({
   states,
   actions,
   rsProps,
   selectedItems,
-  onRemoveSelectedItems,
+  onRemoveSelectedItems
 }: {
   states: IStates
   actions: IAction
@@ -24,8 +24,8 @@ const AssignToRole = ({
   const roleState = states.role.getAllRoles
 
   useEffect(() => {
-    getAllRoles("")
-    getAllOrganization("")
+    getAllRoles('')
+    getAllOrganization('')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -43,7 +43,7 @@ const AssignToRole = ({
     })
   }
 
-  const isPlural = (value: any[]) => (value.length > 1 ? "s" : "")
+  const isPlural = (value: any[]) => (value.length > 1 ? 's' : '')
 
   const selectedRoleActions = roleState.data
     .filter((role) => selectedRoles?.includes(role.id.toString()))
@@ -73,19 +73,19 @@ const AssignToRole = ({
 
   const isSingle = filteredSelectedItems.length === 1
   const isBulk = rsProps?.data === undefined
-  const id = rsProps?.data?.id || ""
-  const name = rsProps?.data?.name || ""
+  const id = rsProps?.data?.id || ''
+  const name = rsProps?.data?.name || ''
   const selectedActions = isBulk
     ? filteredSelectedItems.length
-      ? "(" + filteredSelectedItems.length + ")"
-      : ""
-    : "(1)"
+      ? '(' + filteredSelectedItems.length + ')'
+      : ''
+    : '(1)'
 
   const assignRoleToActions = () => {
     if (!selectedRoles[0]) {
       setResponse({
-        message: "Please select roles",
-        isSuccessful: false,
+        message: 'Please select roles',
+        isSuccessful: false
       })
     } else {
       actions.addActionToRole(
@@ -93,18 +93,18 @@ const AssignToRole = ({
           roleId: selectedRoles,
           actionId: isBulk
             ? filteredSelectedItems.map((item) => item.id.toString())
-            : [id],
+            : [id]
         },
         () => {
           setResponse({
-            message: "Actions assigned to role(s) successfully",
-            isSuccessful: true,
+            message: 'Actions assigned to role(s) successfully',
+            isSuccessful: true
           })
         },
         () => {
           setResponse({
-            message: "Something went wrong",
-            isSuccessful: false,
+            message: 'Something went wrong',
+            isSuccessful: false
           })
         }
       )
@@ -112,7 +112,7 @@ const AssignToRole = ({
   }
 
   return (
-    <div className="d-flex flex-column" style={{ gap: "30px" }}>
+    <div className="d-flex flex-column" style={{ gap: '30px' }}>
       <div className="card-section px-4 py-4">
         <div className="pb-4">
           <div className="role-title">
@@ -123,7 +123,7 @@ const AssignToRole = ({
               filteredSelectedItems.map((i, index) => (
                 <div key={i.id} className="pt-3">
                   <SelectedItems
-                    id={i.id + ""}
+                    id={i.id + ''}
                     title={i.name}
                     onRemove={!isSingle ? onRemoveSelectedItems : undefined}
                     index={index + 1}
@@ -132,7 +132,7 @@ const AssignToRole = ({
               ))
             ) : (
               <SelectedItems
-                id={id + ""}
+                id={id + ''}
                 title={name}
                 onRemove={undefined}
                 index={1}
@@ -145,15 +145,15 @@ const AssignToRole = ({
         <div className="pb-4">
           <div className="role-title">
             <p>
-              Selected Roles{" "}
-              {selectedRoles.length ? "(" + selectedRoles.length + ")" : ""}
+              Selected Roles{' '}
+              {selectedRoles.length ? '(' + selectedRoles.length + ')' : ''}
             </p>
           </div>
           <div className="grid-items">
             {roleState?.data?.map((i) => (
               <div key={i.id} className="">
                 <RoleSelectItem
-                  id={i.id + ""}
+                  id={i.id + ''}
                   title={i.name}
                   setValue={setValue}
                 />
@@ -174,7 +174,7 @@ const AssignToRole = ({
       </div>
       {response !== null ? (
         <TextPrompt
-          prompt={response?.message || ""}
+          prompt={response?.message || ''}
           status={response?.isSuccessful}
         />
       ) : null}

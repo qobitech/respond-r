@@ -1,7 +1,7 @@
-import React from "react"
-import { connect } from "react-redux"
-import Page from "components/layout"
-import { actions } from "store/actions"
+import React from 'react'
+import { connect } from 'react-redux'
+import Page from 'components/layout'
+import { actions } from 'store/actions'
 
 const DataWrapper: React.FC<{
   children: any
@@ -13,7 +13,7 @@ const DataWrapper: React.FC<{
 type mapStateProps = (state: any) => { states: any }
 
 const mapStateToProps: mapStateProps = (state: any) => ({
-  states: Object.assign({}, state),
+  states: Object.assign({}, state)
 })
 
 const mapDispatchToProps = { ...actions }

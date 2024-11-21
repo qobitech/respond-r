@@ -1,8 +1,8 @@
-import React from "react"
-import TextPrompt from "../text-prompt"
-import "./style.scss"
+import React from 'react'
+import TextPrompt from '../text-prompt'
+import './style.scss'
 
-interface ISelect extends React.ComponentPropsWithoutRef<"select"> {
+interface ISelect extends React.ComponentPropsWithoutRef<'select'> {
   label?: string
   error?: string | undefined
   optionsdata?: Array<{
@@ -38,13 +38,13 @@ export const TypeSelect = React.forwardRef(
     ref
   ) => {
     return (
-      <div className="type-select" style={{ width: props.customwidth || "" }}>
+      <div className="type-select" style={{ width: props.customwidth || '' }}>
         <div className="form-container">
           {label && <label htmlFor={props.id || props.name}>{label}</label>}
           <select
             {...props}
             ref={ref as React.LegacyRef<HTMLSelectElement> | undefined}
-            className={error ? "is-error" : ""}
+            className={error ? 'is-error' : ''}
           >
             <option disabled={disableInit} value={initoption.value}>
               {initoption.label}

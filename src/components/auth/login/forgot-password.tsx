@@ -1,13 +1,10 @@
-import React from "react"
-import { url } from "enums/Route"
-import { useNavigate } from "react-router"
-import "./index.scss"
-import { TypeInput } from "utils/new/input"
-import { TypeButton } from "utils/new/button"
+import { url } from 'enums/Route'
+import { useNavigate } from 'react-router'
+import './index.scss'
+import { TypeInput } from 'utils/new/input'
+import { TypeButton } from 'utils/new/button'
 
-interface IProps {}
-
-const ForgotPassword = (props: IProps) => {
+const ForgotPassword = () => {
   const navigate = useNavigate()
 
   return (

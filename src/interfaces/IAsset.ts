@@ -66,13 +66,13 @@ export interface ICreateAsset {
 }
 
 export type assetType =
-  | "police-vehicle"
-  | "fire-truck"
-  | "police"
-  | "street-camera"
-  | "frsc-patrol"
-  | "hospital"
-  | "ambulance"
-  | "police-station"
-  | "traffic-light"
-  | "drts-patrol"
+  | 'police-vehicle'
+  | 'fire-truck'
+  | 'police'
+  | 'street-camera'
+  | 'frsc-patrol'
+  | 'hospital'
+  | 'ambulance'
+  | 'police-station'
+  | 'traffic-light'
+  | 'drts-patrol'

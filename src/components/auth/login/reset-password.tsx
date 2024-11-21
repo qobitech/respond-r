@@ -1,9 +1,6 @@
-import React from "react"
-import "./index.scss"
+import './index.scss'
 
-interface IProps {}
-
-const ResetPassword = (props: IProps) => {
+const ResetPassword = () => {
   return (
     <>
       {/* <div className="login-page">

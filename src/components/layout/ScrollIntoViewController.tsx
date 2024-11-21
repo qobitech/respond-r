@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react"
-import { useLocation } from "react-router-dom"
+import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 
 const ScrollIntoViewController = ({ children }: { children: any }) => {
   const { pathname } = useLocation()
@@ -8,8 +8,8 @@ const ScrollIntoViewController = ({ children }: { children: any }) => {
 
   useEffect(() => {
     if (pathname !== prevLocation) {
-      const body = document.querySelector("#root")
-      body?.scrollIntoView({ behavior: "smooth" })
+      const body = document.querySelector('#root')
+      body?.scrollIntoView({ behavior: 'smooth' })
       // eslint-disable-next-line
       setPrevLocation(() => pathname)
     }

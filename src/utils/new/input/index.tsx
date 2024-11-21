@@ -1,8 +1,8 @@
-import React from "react"
-import TextPrompt from "../text-prompt"
-import "./index.scss"
+import React from 'react'
+import TextPrompt from '../text-prompt'
+import './index.scss'
 
-interface IInput extends React.ComponentPropsWithoutRef<"input"> {
+interface IInput extends React.ComponentPropsWithoutRef<'input'> {
   label?: string
   error?: string | undefined
   isonlyview?: boolean
@@ -18,8 +18,8 @@ export const TypeInput = React.forwardRef(
           <input
             {...props}
             ref={ref as React.LegacyRef<HTMLInputElement> | undefined}
-            className={`${error ? "is-error" : ""} ${
-              isonlyview ? "isonlyview" : ""
+            className={`${error ? 'is-error' : ''} ${
+              isonlyview ? 'isonlyview' : ''
             }`}
             disabled={props.disabled || isonlyview}
           />

@@ -1,3 +1,3 @@
-import { ORGANIZATION, ROLE } from "."
+import { ORGANIZATION, ROLE } from '.'
 
-export const GODUSER = ROLE === "respondR-admin" && ORGANIZATION === "respondR"
+export const GODUSER = ROLE === 'respondR-admin' && ORGANIZATION === 'respondR'

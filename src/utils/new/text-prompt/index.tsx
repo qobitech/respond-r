@@ -1,7 +1,7 @@
-import React from "react"
-import { useNavigate } from "react-router-dom"
-import "./index.scss"
-import { CheckSVG, InfoSVG } from "../svgs"
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import './index.scss'
+import { CheckSVG, InfoSVG } from '../svgs'
 
 interface ITP {
   prompt: string
@@ -9,7 +9,7 @@ interface ITP {
   noStatus?: boolean
   url?: string
   underline?: boolean
-  iconPosition?: "left" | "right"
+  iconPosition?: 'left' | 'right'
   textColor?: string
 }
 
@@ -20,30 +20,30 @@ const TextPrompt: React.FC<ITP> = ({
   url,
   underline,
   iconPosition,
-  textColor,
+  textColor
 }) => {
   const navigate = useNavigate()
   return (
     <div className="text-prompt">
       {prompt && (
         <p
-          className={`${noStatus ? "" : status ? "success" : "danger"} ${
-            url ? "cursor-pointer" : ""
+          className={`${noStatus ? '' : status ? 'success' : 'danger'} ${
+            url ? 'cursor-pointer' : ''
           }`}
-          style={{ textDecoration: url && underline ? "underline" : "" }}
+          style={{ textDecoration: url && underline ? 'underline' : '' }}
           onClick={() => {
             if (url) navigate(url)
           }}
         >
-          {iconPosition === "left" ||
+          {iconPosition === 'left' ||
             (!iconPosition && (
               <span>
                 <IconComponent status={status} />
                 &nbsp;&nbsp;
               </span>
             ))}
-          <span style={{ color: textColor || "" }}>{prompt}</span>
-          {iconPosition === "right" && (
+          <span style={{ color: textColor || '' }}>{prompt}</span>
+          {iconPosition === 'right' && (
             <span>
               &nbsp;&nbsp;
               <IconComponent status={status} />

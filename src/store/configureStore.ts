@@ -1,8 +1,8 @@
-import { applyMiddleware, createStore, compose, StoreEnhancer } from "redux"
-import thunkMiddleware from "redux-thunk"
-import monitorReducerEnhancer from "./enhancers/monitorReducer"
-import loggerMiddleware from "./middleware/logger"
-import reducers from "./reducers"
+import { applyMiddleware, createStore, compose, StoreEnhancer } from 'redux'
+import thunkMiddleware from 'redux-thunk'
+import monitorReducerEnhancer from './enhancers/monitorReducer'
+import loggerMiddleware from './middleware/logger'
+import reducers from './reducers'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export default function configureStore(preloadedState?: any) {

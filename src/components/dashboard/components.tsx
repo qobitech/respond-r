@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from 'react'
 import {
   NoFeeds,
   NoMediaComponent,
@@ -6,22 +6,22 @@ import {
   getConnection,
   getUrl,
   setUrl,
-  typeConnectionStatus,
-} from "./traffic"
-import { handleDataStream } from "./traffic/data"
+  typeConnectionStatus
+} from './traffic'
+import { handleDataStream } from './traffic/data'
 import RightSection, {
   IRightSection,
-  useRightSection,
-} from "components/reusable/right-section"
+  useRightSection
+} from 'components/reusable/right-section'
 import {
   IUseImage,
   handleFullScreen,
   useFormHook,
-  useImage,
-} from "utils/new/hook"
-import * as yup from "yup"
-import { TypeInput } from "utils/new/input"
-import { TypeButton } from "utils/new/button"
+  useImage
+} from 'utils/new/hook'
+import * as yup from 'yup'
+import { TypeInput } from 'utils/new/input'
+import { TypeButton } from 'utils/new/button'
 import {
   Calendar2SVG,
   LeftNavSVG,
@@ -29,28 +29,28 @@ import {
   MarkerSVG,
   PhoneSVG,
   PulseSVG,
-  RightNavSVG,
-} from "utils/new/svgs"
-import { GODUSER } from "utils/new/constants/roles"
-import { ORGANIZATION } from "utils/new/constants"
-import AdminWrapper from "./admin-wrapper"
-import { IReport } from "interfaces/IReport"
-import { typeAdminSections } from "./admin-management"
-import { trafficReportData } from "./traffic/mock-data"
-import { ViewReport, getTime } from "./admin-reports"
-import CreateAsset from "./asset/create-asset"
-import LinkAsset from "./asset/link-asset"
+  RightNavSVG
+} from 'utils/new/svgs'
+import { GODUSER } from 'utils/new/constants/roles'
+import { ORGANIZATION } from 'utils/new/constants'
+import AdminWrapper from './admin-wrapper'
+import { IReport } from 'interfaces/IReport'
+import { typeAdminSections } from './admin-management'
+import { trafficReportData } from './traffic/mock-data'
+import { ViewReport, getTime } from './admin-reports'
+import CreateAsset from './asset/create-asset'
+import LinkAsset from './asset/link-asset'
 import LocationAssets, {
   LocationLocalAssets,
-  statusType,
-} from "./asset/location-assets"
-import { ILocation } from "components/map/new-map"
-import { isBaseURL } from "utils/constants"
-import { useGlobalContext } from "components/layout"
-import { IATE } from "store/actions/admin-actions/assets"
-import { IAssets } from "interfaces/IAsset"
-import { IURS } from "store/actions/admin-actions/report"
-import { IReportReducer } from "interfaces/IReducer"
+  statusType
+} from './asset/location-assets'
+import { ILocation } from 'components/map/new-map'
+import { isBaseURL } from 'utils/constants'
+import { useGlobalContext } from 'components/layout'
+import { IATE } from 'store/actions/admin-actions/assets'
+import { IAssets } from 'interfaces/IAsset'
+import { IURS } from 'store/actions/admin-actions/report'
+import { IReportReducer } from 'interfaces/IReducer'
 
 export interface IPHUS<T> {
   feeds: T[]
@@ -63,9 +63,9 @@ export interface IPHUS<T> {
 }
 
 export type typeSignalRURL =
-  | "SendFireEmergencyNotification"
-  | "SendPoliceEmergencyNotification"
-  | "SendMedicalEmergencyNotification"
+  | 'SendFireEmergencyNotification'
+  | 'SendPoliceEmergencyNotification'
+  | 'SendMedicalEmergencyNotification'
 
 export const useSignalR = <T extends {}>(
   signalKey: typeSignalRURL,
@@ -75,21 +75,21 @@ export const useSignalR = <T extends {}>(
   const [feeds, setFeeds] = useState<T[]>([])
   const [feed, setFeed] = useState<T | null>(null)
   const [connectionStatus, setConnectionStatus] =
-    useState<typeConnectionStatus>("closed")
+    useState<typeConnectionStatus>('closed')
 
   const handleFeedSelect = (feed: T | null) => {
     setFeed(feed)
   }
 
   const startConnection = (url: string) => {
-    const commandURL = isBaseURL("commandURL")
-      ? isBaseURL("commandURL") + "/notificationHub"
-      : ""
-    const defaultURL = process.env.REACT_APP_SIGNALR || ""
-    setConnectionStatus("connecting")
-    const storedUrl = getUrl("globalSignalR") || ""
+    const commandURL = isBaseURL('commandURL')
+      ? isBaseURL('commandURL') + '/notificationHub'
+      : ''
+    const defaultURL = import.meta.env.VITE_REACT_APP_SIGNALR || ''
+    setConnectionStatus('connecting')
+    const storedUrl = getUrl('globalSignalR') || ''
     if (!commandURL && !url && !storedUrl && !!defaultURL) {
-      setConnectionStatus("closed")
+      setConnectionStatus('closed')
       return
     }
     const connection = getConnection(
@@ -98,32 +98,32 @@ export const useSignalR = <T extends {}>(
     connection
       ?.start()
       .then(() => {
-        setConnectionStatus("connected")
+        setConnectionStatus('connected')
       })
       .catch(() => {
-        setConnectionStatus("closed")
+        setConnectionStatus('closed')
       })
     setConnection(connection)
   }
 
   useEffect(() => {
-    startConnection("")
+    startConnection('')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const stopConnection = () => {
-    setConnectionStatus("closed")
+    setConnectionStatus('closed')
     connection?.off(signalKey)
     connection?.stop()
   }
 
-  const hit = new Audio(require("../../extras/audio/hit.mp3"))
+  const hit = new Audio(require('../../extras/audio/hit.mp3'))
   const playHit = () => {
     hit.play()
   }
 
   const mapDataArray = (i: any) => {
-    return ""
+    return ''
   }
 
   // const handleDemoFeeds = (feeds: T[]) => {
@@ -140,17 +140,17 @@ export const useSignalR = <T extends {}>(
     // connection?.on("SendPoliceEmergencyNotification", (data: any) => {
     connection?.on(signalKey, (data: any) => {
       playHit()
-      setFeeds(() => [...handleDataStream(feeds, mapDataArray, "")(data)])
+      setFeeds(() => [...handleDataStream(feeds, mapDataArray, '')(data)])
       onSignal?.()
     })
     connection?.onreconnecting(() => {
-      setConnectionStatus("re-connecting")
+      setConnectionStatus('re-connecting')
     })
     connection?.onreconnected(() => {
-      setConnectionStatus("connected")
+      setConnectionStatus('connected')
     })
     connection?.onclose(() => {
-      setConnectionStatus("closed")
+      setConnectionStatus('closed')
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connection])
@@ -161,7 +161,7 @@ export const useSignalR = <T extends {}>(
     startConnection,
     stopConnection,
     handleFeedSelect,
-    feed,
+    feed
     //   handleDemoFeeds,
   }
 }
@@ -169,15 +169,15 @@ export const useSignalR = <T extends {}>(
 export const SettingsSection = <T extends {}>({
   signalR,
   urlKey,
-  rsProps,
+  rsProps
 }: {
   signalR: IPHUS<T>
   urlKey: chkType
   rsProps?: IRightSection<{}> | undefined
 }) => {
   const tabEnums = {
-    PAGE: "Connection",
-    URL: "ENV Configuration",
+    PAGE: 'Connection',
+    URL: 'ENV Configuration'
   }
 
   const [tab, setTab] = useState<string>(tabEnums.PAGE)
@@ -187,7 +187,7 @@ export const SettingsSection = <T extends {}>({
       <div className="tab-header">
         {Object.values(tabEnums).map((i, index) => (
           <div
-            className={`tab-item ${i === tab ? "active" : ""}`}
+            className={`tab-item ${i === tab ? 'active' : ''}`}
             key={index}
             onClick={() => setTab(i)}
           >
@@ -207,30 +207,30 @@ export const SettingsSection = <T extends {}>({
 
 export const ENVForm = () => {
   const [commandhookForm] = useFormHook<{ commandURL: string }>({
-    commandURL: yup.string().required("command url is required"),
+    commandURL: yup.string().required('command url is required')
   })
   const [queryhookForm] = useFormHook<{ queryURL: string }>({
-    queryURL: yup.string().required("query url is required"),
+    queryURL: yup.string().required('query url is required')
   })
 
   const saveCommandURL = ({ commandURL }: { commandURL: string }) => {
-    localStorage.setItem("commandURL", commandURL.trim())
+    localStorage.setItem('commandURL', commandURL.trim())
   }
 
   const saveQueryURL = ({ queryURL }: { queryURL: string }) => {
-    localStorage.setItem("queryURL", queryURL.trim())
+    localStorage.setItem('queryURL', queryURL.trim())
   }
 
   useEffect(() => {
-    if (isBaseURL("commandURL"))
-      commandhookForm.setValue("commandURL", isBaseURL("commandURL"))
-    if (isBaseURL("queryURL"))
-      queryhookForm.setValue("queryURL", isBaseURL("queryURL"))
+    if (isBaseURL('commandURL'))
+      commandhookForm.setValue('commandURL', isBaseURL('commandURL'))
+    if (isBaseURL('queryURL'))
+      queryhookForm.setValue('queryURL', isBaseURL('queryURL'))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function clearBaseUrl(arg0: string) {
-    throw new Error("Function not implemented.")
+    throw new Error('Function not implemented.')
   }
 
   return (
@@ -239,10 +239,10 @@ export const ENVForm = () => {
         <TypeInput
           placeholder="Enter url"
           label="Query URL"
-          {...queryhookForm.register("queryURL")}
+          {...queryhookForm.register('queryURL')}
           error={queryhookForm.formState.errors.queryURL?.message}
         />
-        <div className="d-flex align-items-center" style={{ gap: "20px" }}>
+        <div className="d-flex align-items-center" style={{ gap: '20px' }}>
           <TypeButton
             title="Save"
             onClick={queryhookForm.handleSubmit(saveQueryURL)}
@@ -252,7 +252,7 @@ export const ENVForm = () => {
             title="Clear"
             onClick={() => {
               queryhookForm.reset()
-              clearBaseUrl("queryURL")
+              clearBaseUrl('queryURL')
             }}
             buttonSize="small"
             buttonType="outlined"
@@ -264,10 +264,10 @@ export const ENVForm = () => {
         <TypeInput
           placeholder="Enter url"
           label="Command URL"
-          {...commandhookForm.register("commandURL")}
+          {...commandhookForm.register('commandURL')}
           error={commandhookForm.formState.errors.commandURL?.message}
         />
-        <div className="d-flex align-items-center" style={{ gap: "20px" }}>
+        <div className="d-flex align-items-center" style={{ gap: '20px' }}>
           <TypeButton
             title="Save"
             onClick={commandhookForm.handleSubmit(saveCommandURL)}
@@ -277,7 +277,7 @@ export const ENVForm = () => {
             title="Clear"
             onClick={() => {
               commandhookForm.reset()
-              clearBaseUrl("commandURL")
+              clearBaseUrl('commandURL')
             }}
             buttonSize="small"
             buttonType="outlined"
@@ -291,23 +291,23 @@ export const ENVForm = () => {
 export const FeedForm = <T extends {}>({
   signalR,
   rsProps,
-  urlKey,
+  urlKey
 }: {
   signalR: IPHUS<T>
   rsProps?: IRightSection<{}>
   urlKey: chkType
 }) => {
   const [hookForm] = useFormHook<{ signalR: string }>({
-    signalR: yup.string().required("connection url is required"),
+    signalR: yup.string().required('connection url is required')
   })
 
   useEffect(() => {
-    const commandURL = isBaseURL("commandURL")
-      ? isBaseURL("commandURL") + "/notificationHub"
-      : ""
+    const commandURL = isBaseURL('commandURL')
+      ? isBaseURL('commandURL') + '/notificationHub'
+      : ''
     const rtspUrl = commandURL || getUrl(urlKey)
-    if (!!rtspUrl) {
-      hookForm.setValue("signalR", rtspUrl)
+    if (rtspUrl) {
+      hookForm.setValue('signalR', rtspUrl)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -320,9 +320,9 @@ export const FeedForm = <T extends {}>({
   // }, [signalR.connectionStatus])
 
   const btnTitle =
-    signalR.connectionStatus === "connected" && !!hookForm.watch("signalR")
-      ? "Refresh Feed"
-      : "Request Feed"
+    signalR.connectionStatus === 'connected' && !!hookForm.watch('signalR')
+      ? 'Refresh Feed'
+      : 'Request Feed'
 
   const handleRTSPFeed = (data: { signalR: string }) => {
     signalR.startConnection(data.signalR)
@@ -338,21 +338,21 @@ export const FeedForm = <T extends {}>({
       <TypeInput
         placeholder="Enter url"
         label="Connection URL"
-        {...hookForm.register("signalR")}
+        {...hookForm.register('signalR')}
         error={hookForm.formState.errors.signalR?.message}
       />
-      <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
         <TypeButton
           title={btnTitle}
           onClick={hookForm.handleSubmit(handleRTSPFeed)}
-          load={signalR.connectionStatus === "connecting"}
+          load={signalR.connectionStatus === 'connecting'}
           buttonSize="small"
         />
         <TypeButton
           title="Stop Feed"
           onClick={resetRTSPFeed}
           buttonType={
-            signalR.connectionStatus === null ? "disabled" : "outlined"
+            signalR.connectionStatus === null ? 'disabled' : 'outlined'
           }
           buttonSize="small"
         />
@@ -364,7 +364,7 @@ export const FeedForm = <T extends {}>({
 export const Configuration = <T extends {}>({
   signalR,
   rsProps,
-  urlKey,
+  urlKey
 }: {
   signalR: IPHUS<T>
   rsProps?: IRightSection<{}>
@@ -372,7 +372,7 @@ export const Configuration = <T extends {}>({
 }) => {
   return (
     <div>
-      <div style={{ paddingBottom: "20px" }} />
+      <div style={{ paddingBottom: '20px' }} />
       <SettingsSection signalR={signalR} urlKey={urlKey} rsProps={rsProps} />
     </div>
   )
@@ -380,21 +380,21 @@ export const Configuration = <T extends {}>({
 
 export const LiveFeedStatusComponent = <T extends {}>({
   signalRProps,
-  title,
+  title
 }: {
   signalRProps: IPHUS<T>
   title?: string
 }) => {
-  const isConnect = signalRProps.connectionStatus === "closed"
+  const isConnect = signalRProps.connectionStatus === 'closed'
 
   return (
     <div className="live-feed-component">
       <div className="live-feed-header-section">
-        <p className="lf-header">{title || "LIVE FEED"}</p>
+        <p className="lf-header">{title || 'LIVE FEED'}</p>
         <p
           className={`lf-status ${signalRProps.connectionStatus}`}
           onClick={() => {
-            if (isConnect) signalRProps.startConnection("")
+            if (isConnect) signalRProps.startConnection('')
           }}
         >
           <span className={`lf-status-bop ${signalRProps.connectionStatus}`} />
@@ -409,11 +409,11 @@ export const Media = ({
   files,
   fileIndex,
   handleFileIndex,
-  imgProps,
+  imgProps
 }: {
   files?: string[]
   fileIndex: number
-  handleFileIndex: (nav: "left" | "right") => void
+  handleFileIndex: (nav: 'left' | 'right') => void
   imgProps: IUseImage
 }) => {
   const isLeft = fileIndex > 0
@@ -421,16 +421,16 @@ export const Media = ({
 
   return (
     <div className="media-container-box">
-      <MediaItem url={files?.[fileIndex] || ""} imgProps={imgProps} />
+      <MediaItem url={files?.[fileIndex] || ''} imgProps={imgProps} />
       <div
-        className={`nav-btn nav-left ${isLeft ? "" : "no-click"}`}
-        onClick={() => handleFileIndex("left")}
+        className={`nav-btn nav-left ${isLeft ? '' : 'no-click'}`}
+        onClick={() => handleFileIndex('left')}
       >
         <LeftNavSVG />
       </div>
       <div
-        className={`nav-btn nav-right ${isRight ? "" : "no-click"}`}
-        onClick={() => handleFileIndex("right")}
+        className={`nav-btn nav-right ${isRight ? '' : 'no-click'}`}
+        onClick={() => handleFileIndex('right')}
       >
         <RightNavSVG />
       </div>
@@ -440,14 +440,17 @@ export const Media = ({
 
 interface IMediaURL {
   mediaUrl: {
-    type: "video" | "image" | null
+    type: 'video' | 'image' | null
     url: string
     load: boolean
   }
 }
 
-const isImageExist = (url: string, imgProps: IUseImage): Promise<boolean> =>
-  new Promise((resolve) => {
+const isImageExist = async (
+  url: string,
+  imgProps: IUseImage
+): Promise<boolean> =>
+  await new Promise((resolve) => {
     const img = new Image()
     img.onload = () => {
       imgProps.handleLoad(true)
@@ -465,7 +468,7 @@ const isImageExist = (url: string, imgProps: IUseImage): Promise<boolean> =>
     const cleanup = () => {
       img.onload = null
       img.onerror = null
-      img.src = ""
+      img.src = ''
       imgProps.handleLoad(false)
       imgProps.handleError(false)
     }
@@ -473,29 +476,29 @@ const isImageExist = (url: string, imgProps: IUseImage): Promise<boolean> =>
 
 const useGetMediaUrl = (url: string, imgProps: IUseImage): IMediaURL => {
   const getMediaUrl = async (): Promise<{
-    type: "video" | "image" | null
+    type: 'video' | 'image' | null
     url: string
     load: boolean
   }> => {
     if (url) {
       const isImage = await isImageExist(url, imgProps)
       return {
-        type: isImage ? "image" : "video",
+        type: isImage ? 'image' : 'video',
         url,
-        load: false,
+        load: false
       }
     } else {
-      return { type: "image", url: "", load: false }
+      return { type: 'image', url: '', load: false }
     }
   }
   const [mediaUrl, setMediaUrl] = useState<{
-    type: "video" | "image" | null
+    type: 'video' | 'image' | null
     url: string
     load: boolean
-  }>({ type: "image", url: "", load: false })
+  }>({ type: 'image', url: '', load: false })
 
   useEffect(() => {
-    setMediaUrl({ load: true, type: null, url: "" })
+    setMediaUrl({ load: true, type: null, url: '' })
     getMediaUrl().then((data) => {
       setMediaUrl(data)
     })
@@ -503,7 +506,7 @@ const useGetMediaUrl = (url: string, imgProps: IUseImage): IMediaURL => {
   }, [url])
 
   return {
-    mediaUrl,
+    mediaUrl
   }
 }
 
@@ -516,9 +519,9 @@ const MediaItem = ({ url, imgProps }: { url: string; imgProps: IUseImage }) => {
     <div className="w-100 h-100 d-flex align-items-center justify-content-center">
       {mediaUrl.load ? (
         <PulseSVG />
-      ) : mediaUrl.type === "image" ? (
+      ) : mediaUrl.type === 'image' ? (
         <img src={mediaUrl.url} alt="" />
-      ) : mediaUrl.type === "video" ? (
+      ) : mediaUrl.type === 'video' ? (
         <video controls>
           <source src={`${mediaUrl.url}#t=1,3`} type="video/mp4" />
         </video>
@@ -528,8 +531,8 @@ const MediaItem = ({ url, imgProps }: { url: string; imgProps: IUseImage }) => {
 }
 
 const getStatus = (val?: boolean) => {
-  if (val) return "Valid"
-  return "Expired"
+  if (val) return 'Valid'
+  return 'Expired'
 }
 
 export const InfoSectionItem = ({
@@ -538,55 +541,55 @@ export const InfoSectionItem = ({
   values,
   status,
   icon,
-  iconPosition,
+  iconPosition
 }: {
   label: string
   value: string | undefined
   values?: Array<string | undefined>
   status?: boolean
   icon?: JSX.Element
-  iconPosition?: "left" | "right"
+  iconPosition?: 'left' | 'right'
 }) => {
-  const isStatus = typeof status !== "undefined"
+  const isStatus = typeof status !== 'undefined'
   return (
     <div className="vehicle-info-section-item">
       <p className="vehicle-info-label">{label}</p>
       <div className="vehicle-row-item">
         {!values?.length ? (
           <div className="d-flex align-items-center gap-10">
-            {iconPosition === "left" ? icon : null}
+            {iconPosition === 'left' ? icon : null}
             <p
               className={`vehicle-info-value overflow ${
-                label.includes("Reg") ? "reg-number" : ""
-              } ${isStatus ? "status-text" : ""}`}
+                label.includes('Reg') ? 'reg-number' : ''
+              } ${isStatus ? 'status-text' : ''}`}
             >
-              {value || "..."}
+              {value || '...'}
             </p>
           </div>
         ) : (
-          <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
             {values.map((i, index) => (
               <div
                 key={index}
-                style={{ display: "flex", alignItems: "center", gap: "15px" }}
+                style={{ display: 'flex', alignItems: 'center', gap: '15px' }}
               >
                 <p
                   className={`vehicle-info-value overflow ${
-                    label.includes("Reg") ? "reg-number" : ""
-                  } ${isStatus ? "status-text" : ""}`}
+                    label.includes('Reg') ? 'reg-number' : ''
+                  } ${isStatus ? 'status-text' : ''}`}
                 >
-                  {i || "..."}
+                  {i || '...'}
                 </p>
                 {index !== values.length - 1 ? (
                   <div className="lf-text-separator" />
                 ) : null}
               </div>
             ))}
-            {iconPosition !== "left" ? icon : null}
+            {iconPosition !== 'left' ? icon : null}
           </div>
         )}
         {isStatus ? (
-          <p className={`p-btn-status no-btn ${status ? "success" : "danger"}`}>
+          <p className={`p-btn-status no-btn ${status ? 'success' : 'danger'}`}>
             {getStatus(status || false)}
           </p>
         ) : null}
@@ -599,9 +602,9 @@ export const IframeComponent = ({ src }: { src: string }) => {
   return (
     <div>
       <iframe
-        src={src || ""}
+        src={src || ''}
         title="firefighter"
-        style={{ width: "100%", height: "408px" }}
+        style={{ width: '100%', height: '408px' }}
         sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
       ></iframe>
     </div>
@@ -610,7 +613,7 @@ export const IframeComponent = ({ src }: { src: string }) => {
 
 export const PageHeader = ({
   load,
-  title,
+  title
 }: {
   load: boolean
   title: string
@@ -618,7 +621,7 @@ export const PageHeader = ({
   return (
     <div className="header-management">
       <h1>
-        {title} {!GODUSER ? "(" + ORGANIZATION + ")" : ""}
+        {title} {!GODUSER ? '(' + ORGANIZATION + ')' : ''}
       </h1>
       {load ? <PulseSVG /> : null}
     </div>
@@ -632,7 +635,7 @@ export interface IPageComponent {
 
 export const PageComponent: React.FC<IPageComponent> = ({
   section,
-  signalRURL,
+  signalRURL
 }) => {
   const { action, state, fetchReports } = useGlobalContext()
 
@@ -649,26 +652,26 @@ export const PageComponent: React.FC<IPageComponent> = ({
   })
 
   const addAsset = () => {
-    rsProps.callSection("create", "asset")
+    rsProps.callSection('create', 'asset')
   }
 
   const linkAsset = (assetId: string) => {
     setSelectedAssetId(assetId)
-    rsProps.callSection("custom", "link-asset")
+    rsProps.callSection('custom', 'link-asset')
   }
 
   return (
     <>
       <RightSection rsProps={rsProps}>
-        {rsProps.isView("custom", "settings") ? (
+        {rsProps.isView('custom', 'settings') ? (
           <Configuration signalR={signalRProps} urlKey="globalSignalR" />
         ) : null}
-        {rsProps.isView("create", "asset") ? <CreateAsset /> : null}
-        {rsProps.isView("update", "asset") ? <CreateAsset /> : null}
-        {rsProps.isView("custom", "link-asset") ? (
+        {rsProps.isView('create', 'asset') ? <CreateAsset /> : null}
+        {rsProps.isView('update', 'asset') ? <CreateAsset /> : null}
+        {rsProps.isView('custom', 'link-asset') ? (
           <LinkAsset assetId={selecteAssetId} />
         ) : null}
-        {rsProps.isView("custom", "report") ? <ViewReport /> : null}
+        {rsProps.isView('custom', 'report') ? <ViewReport /> : null}
       </RightSection>
       <div className="main-page">
         <div className="pg-container">
@@ -681,7 +684,7 @@ export const PageComponent: React.FC<IPageComponent> = ({
           >
             <div className="overview-page">
               {signalRProps?.feed ? (
-                <MainView feed={signalRProps.feed!} />
+                <MainView feed={signalRProps.feed} />
               ) : (
                 <NoMediaComponent
                   load={false}
@@ -689,15 +692,15 @@ export const PageComponent: React.FC<IPageComponent> = ({
                     {
                       location: {
                         latitude: parseFloat(
-                          signalRProps.feed?.latitude || "0"
+                          signalRProps.feed?.latitude || '0'
                         ),
                         longitude: parseFloat(
-                          signalRProps.feed?.longitude || "0"
-                        ),
+                          signalRProps.feed?.longitude || '0'
+                        )
                       },
-                      map: signalRProps.feed?.map || "",
-                      nearestPlace: signalRProps.feed?.nearestPlace || "",
-                    },
+                      map: signalRProps.feed?.map || '',
+                      nearestPlace: signalRProps.feed?.nearestPlace || ''
+                    }
                   ]}
                 />
               )}
@@ -728,7 +731,7 @@ export const PageComponent: React.FC<IPageComponent> = ({
 
 const LiveFeedItemComponent = ({
   feed,
-  handleOnClick,
+  handleOnClick
 }: {
   feed: IReport | null
   handleOnClick: () => void
@@ -736,20 +739,20 @@ const LiveFeedItemComponent = ({
   return (
     <div className="map-feed-item-component" onClick={handleOnClick}>
       <div className="lf-media-section">
-        <img src={feed?.mediaFiles?.[0] || ""} alt="" />
+        <img src={feed?.mediaFiles?.[0] || ''} alt="" />
       </div>
       <div className="lf-info-section">
-        <p className="lf-description">{feed?.description || "..."}</p>
+        <p className="lf-description">{feed?.description || '...'}</p>
 
         <div className="lf-location">
           <LocationSVG />
           <div className="lf-location-items">
-            <p title={feed?.state || "..."} style={{ margin: "0" }}>
-              {feed?.state || "..."}
+            <p title={feed?.state || '...'} style={{ margin: '0' }}>
+              {feed?.state || '...'}
             </p>
             <div className="lf-text-separator" />
-            <p style={{ margin: "0" }} title={feed?.city || "..."}>
-              {feed?.city || "..."}
+            <p style={{ margin: '0' }} title={feed?.city || '...'}>
+              {feed?.city || '...'}
             </p>
           </div>
         </div>
@@ -775,14 +778,14 @@ export const MainViewLocal: React.FC<IMVL> = ({
   assignAssets,
   assets,
   updateReport,
-  updateReportProps,
+  updateReportProps
 }) => {
   const [fileIndex, setFileIndex] = useState<number>(0)
 
-  const handleFileIndex = (nav: "left" | "right") => {
+  const handleFileIndex = (nav: 'left' | 'right') => {
     setFileIndex((prev) => {
-      if (nav === "left") return Math.max(0, prev - 1)
-      if (nav === "right")
+      if (nav === 'left') return Math.max(0, prev - 1)
+      if (nav === 'right')
         return Math.min((feed?.mediaFiles?.length || 1) - 1, prev + 1)
       return prev
     })
@@ -791,8 +794,8 @@ export const MainViewLocal: React.FC<IMVL> = ({
   const imgProps = useImage()
 
   const tabEnum = {
-    INFO: "Info",
-    ASSETS: "Assets",
+    INFO: 'Info',
+    ASSETS: 'Assets'
   }
 
   const [tab, setTab] = useState(tabEnum.INFO)
@@ -801,23 +804,23 @@ export const MainViewLocal: React.FC<IMVL> = ({
     const data: IURS = {
       assignedBy: {
         id: 1,
-        userName: "SYS-USER",
+        userName: 'SYS-USER'
       },
       emergency: {
-        emergencyId: feed?.id || "",
-        emergencyType: "",
+        emergencyId: feed?.id || '',
+        emergencyType: ''
       },
-      status,
+      status
     }
     updateReport(data)
   }
 
   const reportStatusProps = [
-    "New",
-    "Assigned",
-    "Accepted",
-    "Closed",
-    "Rejected",
+    'New',
+    'Assigned',
+    'Accepted',
+    'Closed',
+    'Rejected'
   ]
 
   return (
@@ -834,7 +837,7 @@ export const MainViewLocal: React.FC<IMVL> = ({
       </div>
       <div className="media-nav-count">
         <p>
-          {fileIndex + 1} of {feed?.mediaFiles?.length || "..."}
+          {fileIndex + 1} of {feed?.mediaFiles?.length || '...'}
         </p>
         <div className="loader-box">{imgProps.isLoaded && <PulseSVG />}</div>
       </div>
@@ -846,13 +849,13 @@ export const MainViewLocal: React.FC<IMVL> = ({
               <p>
                 {feed?.createdAt
                   ? new Date(feed.createdAt).toDateString()
-                  : "..."}
+                  : '...'}
                 &nbsp;-&nbsp;<i>{getTime(feed?.createdAt)}</i>
               </p>
             </div>
             <div className="icon-txt">
               <PhoneSVG />
-              <p>{feed?.deviceId || "..."}</p>
+              <p>{feed?.deviceId || '...'}</p>
             </div>
             <ActionComponent
               title="Update Status"
@@ -860,7 +863,7 @@ export const MainViewLocal: React.FC<IMVL> = ({
                 label: status,
                 action: () => {
                   updateReportStatus(status?.toLowerCase())
-                },
+                }
               }))}
               load={updateReportProps.updateReportStatusLoading}
             />
@@ -869,7 +872,7 @@ export const MainViewLocal: React.FC<IMVL> = ({
             <div className="tab-header">
               {Object.values(tabEnum).map((i, index) => (
                 <div
-                  className={`tab-item ${i === tab ? "active" : ""}`}
+                  className={`tab-item ${i === tab ? 'active' : ''}`}
                   key={index}
                   onClick={() => setTab(i)}
                 >
@@ -879,29 +882,29 @@ export const MainViewLocal: React.FC<IMVL> = ({
             </div>
             <div className="tab-content">
               <div className="tab-body">
-                <div className={tab === tabEnum.INFO ? "" : "d-none"}>
+                <div className={tab === tabEnum.INFO ? '' : 'd-none'}>
                   <div className="mb-5">
                     <InfoSectionItem
                       label="Description"
-                      value={feed?.description || "..."}
+                      value={feed?.description || '...'}
                     />
                   </div>
                   <div className="vehicle-info-section">
                     <InfoSectionItem
                       label="Transaction ID"
-                      value={feed?.transactionId || "..."}
+                      value={feed?.transactionId || '...'}
                     />
                     <InfoSectionItem
                       label="Words"
-                      value={feed?.words || "..."}
+                      value={feed?.words || '...'}
                     />
                     <InfoSectionItem
                       label="Location"
-                      value={feed?.city + " | " + feed?.state || "..."}
+                      value={feed?.city + ' | ' + feed?.state || '...'}
                       values={[feed?.city, feed?.state]}
                       icon={
                         <div
-                          onClick={() => handleFullScreen(feed.map || "")}
+                          onClick={() => handleFullScreen(feed.map || '')}
                           className={`location-map-icon ${feed?.status?.toLowerCase()}`}
                         >
                           <MarkerSVG />
@@ -910,7 +913,7 @@ export const MainViewLocal: React.FC<IMVL> = ({
                     />
                     <InfoSectionItem
                       label="Status"
-                      value={feed?.status || "..."}
+                      value={feed?.status || '...'}
                       icon={
                         <div
                           className={`status-ball ${feed?.status?.toLowerCase()}`}
@@ -920,11 +923,11 @@ export const MainViewLocal: React.FC<IMVL> = ({
                     />
                   </div>
                 </div>
-                <div className={tab === tabEnum.ASSETS ? "" : "d-none"}>
+                <div className={tab === tabEnum.ASSETS ? '' : 'd-none'}>
                   <AssetsLocal
                     location={{
-                      latitude: parseFloat(feed?.latitude || "0"),
-                      longitude: parseFloat(feed?.longitude || "0"),
+                      latitude: parseFloat(feed?.latitude || '0'),
+                      longitude: parseFloat(feed?.longitude || '0')
                     }}
                     assets={assets}
                     assignAssets={assignAssets}
@@ -943,10 +946,10 @@ export const MainViewLocal: React.FC<IMVL> = ({
 export const MainView = ({ feed }: { feed: IReport | null }) => {
   const [fileIndex, setFileIndex] = useState<number>(0)
 
-  const handleFileIndex = (nav: "left" | "right") => {
+  const handleFileIndex = (nav: 'left' | 'right') => {
     setFileIndex((prev) => {
-      if (nav === "left") return Math.max(0, prev - 1)
-      if (nav === "right")
+      if (nav === 'left') return Math.max(0, prev - 1)
+      if (nav === 'right')
         return Math.min((feed?.mediaFiles?.length || 1) - 1, prev + 1)
       return prev
     })
@@ -955,8 +958,8 @@ export const MainView = ({ feed }: { feed: IReport | null }) => {
   const imgProps = useImage()
 
   const tabEnum = {
-    INFO: "Info",
-    ASSETS: "Assets",
+    INFO: 'Info',
+    ASSETS: 'Assets'
   }
 
   const [tab, setTab] = useState(tabEnum.INFO)
@@ -975,7 +978,7 @@ export const MainView = ({ feed }: { feed: IReport | null }) => {
       </div>
       <div className="media-nav-count">
         <p>
-          {fileIndex + 1} of {feed?.mediaFiles?.length || "..."}
+          {fileIndex + 1} of {feed?.mediaFiles?.length || '...'}
         </p>
         <div className="loader-box">{imgProps.isLoaded && <PulseSVG />}</div>
       </div>
@@ -987,24 +990,24 @@ export const MainView = ({ feed }: { feed: IReport | null }) => {
               <p>
                 {feed?.createdAt
                   ? new Date(feed.createdAt).toDateString()
-                  : "..."}
+                  : '...'}
                 &nbsp;-&nbsp;<i>{getTime(feed?.createdAt)}</i>
               </p>
             </div>
             <div className="icon-txt">
               <PhoneSVG />
-              <p>{feed?.deviceId || "..."}</p>
+              <p>{feed?.deviceId || '...'}</p>
             </div>
             <ActionComponent
               title="Action"
-              actions={[{ label: "Assign" }, { label: "Update status" }]}
+              actions={[{ label: 'Assign' }, { label: 'Update status' }]}
             />
           </div>
           <div className="tab-section">
             <div className="tab-header">
               {Object.values(tabEnum).map((i, index) => (
                 <div
-                  className={`tab-item ${i === tab ? "active" : ""}`}
+                  className={`tab-item ${i === tab ? 'active' : ''}`}
                   key={index}
                   onClick={() => setTab(i)}
                 >
@@ -1014,29 +1017,29 @@ export const MainView = ({ feed }: { feed: IReport | null }) => {
             </div>
             <div className="tab-content">
               <div className="tab-body">
-                <div className={tab === tabEnum.INFO ? "" : "d-none"}>
+                <div className={tab === tabEnum.INFO ? '' : 'd-none'}>
                   <div className="mb-5">
                     <InfoSectionItem
                       label="Description"
-                      value={feed?.description || "..."}
+                      value={feed?.description || '...'}
                     />
                   </div>
                   <div className="vehicle-info-section">
                     <InfoSectionItem
                       label="Transaction ID"
-                      value={feed?.transactionId || "..."}
+                      value={feed?.transactionId || '...'}
                     />
                     <InfoSectionItem
                       label="Words"
-                      value={feed?.words || "..."}
+                      value={feed?.words || '...'}
                     />
                     <InfoSectionItem
                       label="Location"
-                      value={feed?.city + " | " + feed?.state || "..."}
+                      value={feed?.city + ' | ' + feed?.state || '...'}
                       values={[feed?.city, feed?.state]}
                       icon={
                         <div
-                          onClick={() => handleFullScreen(feed.map || "")}
+                          onClick={() => handleFullScreen(feed.map || '')}
                           className="location-map-icon"
                         >
                           <MarkerSVG />
@@ -1045,12 +1048,12 @@ export const MainView = ({ feed }: { feed: IReport | null }) => {
                     />
                   </div>
                 </div>
-                <div className={tab === tabEnum.ASSETS ? "" : "d-none"}>
+                <div className={tab === tabEnum.ASSETS ? '' : 'd-none'}>
                   <Assets
                     // allAssets={assets}
                     location={{
-                      latitude: parseFloat(feed?.latitude || "0"),
-                      longitude: parseFloat(feed?.longitude || "0"),
+                      latitude: parseFloat(feed?.latitude || '0'),
+                      longitude: parseFloat(feed?.longitude || '0')
                     }}
                   />
                 </div>
@@ -1094,7 +1097,7 @@ const AssetsLocal = ({
   location,
   assets,
   assignAssets,
-  feed,
+  feed
 }: {
   location: ILocation
   assets: IAssets
@@ -1132,7 +1135,7 @@ const AssetsLocal = ({
 export const ActionComponent = ({
   actions,
   title,
-  load,
+  load
 }: {
   title?: string
   actions?: Array<{ label: string; action?: () => void }>
@@ -1149,7 +1152,7 @@ export const ActionComponent = ({
         aria-haspopup="true"
         aria-expanded="false"
       >
-        {title || "Action"}
+        {title || 'Action'}
         {load ? (
           <>
             &nbsp;&nbsp;
@@ -1161,7 +1164,7 @@ export const ActionComponent = ({
       <div
         className="dropdown-menu"
         aria-labelledby="dropdownMenuButton"
-        style={{ cursor: "pointer" }}
+        style={{ cursor: 'pointer' }}
       >
         {actions?.map((i, index) => (
           <p className="dropdown-item m-0 py-2" onClick={i.action} key={index}>

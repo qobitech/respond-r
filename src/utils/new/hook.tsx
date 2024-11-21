@@ -1,15 +1,14 @@
-import { UseFormReturn, useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
-import * as yup from "yup"
-import { useCallback, useEffect, useRef, useState } from "react"
-import React from "react"
+import { UseFormReturn, useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 export const useFormHook = <T extends {}>(objSchema: {}): [
   UseFormReturn<T, any>
 ] => {
   const schema = yup.object().shape(objSchema)
   const formMethods = useForm<T>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema)
   })
 
   return [formMethods]
@@ -26,15 +25,15 @@ export interface ICopyProps {
 
 export const useCopy = (): [ICopyProps] => {
   const [copySuccess, setCopySuccess] = useState<boolean>(false)
-  const [url, setUrl] = useState<string>("")
-  const [action, setAction] = useState<string>("")
+  const [url, setUrl] = useState<string>('')
+  const [action, setAction] = useState<string>('')
 
   useEffect(() => {
     let timer: NodeJS.Timeout
     if (copySuccess) {
       timer = setTimeout(() => {
         setCopySuccess(() => false)
-        setAction("")
+        setAction('')
       }, 1000)
     }
     return () => {
@@ -47,9 +46,9 @@ export const useCopy = (): [ICopyProps] => {
   ) => {
     e?.preventDefault()
     shareURLRef?.current?.select()
-    document.execCommand("copy")
+    document.execCommand('copy')
     setCopySuccess(true)
-    setUrl("")
+    setUrl('')
   }
 
   useEffect(() => {
@@ -67,14 +66,14 @@ export const useCopy = (): [ICopyProps] => {
       url,
       copySuccess,
       setAction,
-      action,
-    },
+      action
+    }
   ]
 }
 
 export const CopyComponent = ({
   url,
-  shareURLRef,
+  shareURLRef
 }: {
   url: string
   shareURLRef: React.RefObject<HTMLTextAreaElement>
@@ -89,7 +88,7 @@ export const CopyComponent = ({
         style={{
           width: 0,
           height: 0,
-          opacity: 0,
+          opacity: 0
         }}
         ref={shareURLRef}
         readOnly
@@ -100,7 +99,7 @@ export const CopyComponent = ({
 
 export const handleFullScreen = (url: string) => {
   const params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=1300,height=650,left=50,top=0`
-  window.open(url, "Danfo App", params)
+  window.open(url, 'Danfo App', params)
 }
 
 export interface IUseImage {
@@ -126,7 +125,7 @@ export const useImage = (): IUseImage => {
     isLoaded,
     isError,
     handleError,
-    handleLoad,
+    handleLoad
   }
 }
 

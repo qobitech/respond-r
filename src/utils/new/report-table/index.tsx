@@ -1,9 +1,9 @@
-import React, { useState } from "react"
-import "./table.scss"
-import { TypeCheckbox } from "../checkbox"
-import { PAGE_SIZE } from "../constants"
-import ReactPaginate from "react-paginate"
-import { AssignSVG, ReviewSVG } from "../svgs"
+import React, { useState } from 'react'
+import './table.scss'
+import { TypeCheckbox } from '../checkbox'
+import { PAGE_SIZE } from '../constants'
+import ReactPaginate from 'react-paginate'
+import { AssignSVG, ReviewSVG } from '../svgs'
 
 export interface ITableAction {
   action: string
@@ -31,7 +31,7 @@ export interface ITableAction {
 interface IPaginationParams {
   current: number
   total: number
-  onPageChange?(selectedItem: { selected: number }): void
+  onPageChange?: (selectedItem: { selected: number }) => void
   isPagination: boolean
   load: boolean
 }
@@ -44,8 +44,8 @@ interface ITableArgs {
 }
 
 export const useTableAction = (tableArg?: ITableArgs): ITableAction => {
-  const [action, setAction] = useState<string>("")
-  const [searchValue, setSearchValue] = useState<string>("")
+  const [action, setAction] = useState<string>('')
+  const [searchValue, setSearchValue] = useState<string>('')
   const [selectedItems, setSelectedItems] = useState<string[]>([])
 
   const handleSelectAll = (
@@ -57,7 +57,7 @@ export const useTableAction = (tableArg?: ITableArgs): ITableAction => {
       if (checked) {
         return [...record.map((i) => i.id)]
       }
-      setAction("")
+      setAction('')
       return []
     })
   }
@@ -88,7 +88,7 @@ export const useTableAction = (tableArg?: ITableArgs): ITableAction => {
     setSearchValue,
     searchAction: tableArg?.searchAction,
     paginationParams: tableArg?.paginationParams,
-    searchPlaceHolder: tableArg?.searchPlaceHolder,
+    searchPlaceHolder: tableArg?.searchPlaceHolder
   }
 }
 
@@ -111,9 +111,9 @@ export interface ICell {
 export interface ICellAction extends ICell {
   icon?: string
   color?: string
-  view?: "text" | "icon" | "both"
+  view?: 'text' | 'icon' | 'both'
   background?: string
-  buttonType?: "bold" | "outlined" | "disabled" | "danger" | undefined
+  buttonType?: 'bold' | 'outlined' | 'disabled' | 'danger' | undefined
   hide?: boolean
 }
 
@@ -131,7 +131,6 @@ interface IResultTable {
   hideNumbering?: boolean
   tableAction?: ITableAction
   handleTableAction?: () => void
-  // lastCardElementRef: (node: any) => void
   lastCardElementRef: React.RefObject<HTMLTableRowElement>
 }
 
@@ -141,8 +140,7 @@ const ReportTable: React.FC<IResultTable> = ({
   currentPage,
   hideNumbering,
   tableAction,
-  handleTableAction,
-  lastCardElementRef,
+  lastCardElementRef
 }) => {
   const isRecord = record?.length > 0
   const isCheckedRow = (id: string) => {
@@ -167,7 +165,7 @@ const ReportTable: React.FC<IResultTable> = ({
                 return (
                   <th
                     key={index}
-                    style={{ display: "flex", alignItems: "center" }}
+                    style={{ display: 'flex', alignItems: 'center' }}
                   >
                     {!hideCheck && (
                       <div style={{ marginRight: 25 }}>
@@ -193,11 +191,11 @@ const ReportTable: React.FC<IResultTable> = ({
             record.map((i, jindex) => (
               <tr
                 key={jindex}
-                className={i.isSelected ? `selected-table-row` : ""}
+                className={i.isSelected ? `selected-table-row` : ''}
                 ref={jindex + 1 === record.length ? lastCardElementRef : null}
               >
                 {!hideNumbering && (
-                  <td style={{ padding: "10px 0px 10px 10px" }}>
+                  <td style={{ padding: '10px 0px 10px 10px' }}>
                     <p style={{ margin: 0 }}>
                       {jindex + 1 + ((currentPage || 0) - 1) * PAGE_SIZE}
                     </p>
@@ -207,7 +205,7 @@ const ReportTable: React.FC<IResultTable> = ({
                   if (jindex === 0) {
                     return (
                       <td key={index}>
-                        <div style={{ display: "flex", alignItems: "center" }}>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
                           {!hideCheck && (
                             <div style={{ marginRight: 25 }}>
                               <TypeCheckbox
@@ -246,8 +244,8 @@ const ReportTable: React.FC<IResultTable> = ({
                             {...j}
                             nomargin={
                               index === i?.rowActions.length - 1
-                                ? "true"
-                                : "false"
+                                ? 'true'
+                                : 'false'
                             }
                           />
                         ))
@@ -274,8 +272,8 @@ const ReportTable: React.FC<IResultTable> = ({
                 nextLabel=">>"
                 pageCount={tableAction?.paginationParams?.total || 0}
                 onPageChange={tableAction?.paginationParams?.onPageChange}
-                containerClassName={"pagination"}
-                activeClassName={"active"}
+                containerClassName={'pagination'}
+                activeClassName={'active'}
                 forcePage={
                   tableAction?.paginationParams?.current
                     ? tableAction?.paginationParams?.current - 1
@@ -296,16 +294,16 @@ const CellValueComponent: React.FC<ICell> = ({
   textLength,
   cellWidth,
   classProps,
-  dangerouselySetHtml,
+  dangerouselySetHtml
 }) => {
   return (
     <TDContent
       action={action}
       value={value}
-      textLength={textLength!}
-      cellWidth={cellWidth!}
-      classProps={classProps!}
-      dangerouselySetHtml={dangerouselySetHtml!}
+      textLength={textLength}
+      cellWidth={cellWidth}
+      classProps={classProps}
+      dangerouselySetHtml={dangerouselySetHtml}
     />
   )
 }
@@ -325,7 +323,7 @@ const TDContent: React.FC<ITDC> = ({
   textLength,
   cellWidth,
   classProps,
-  dangerouselySetHtml,
+  dangerouselySetHtml
 }) => {
   const [summarizeText, setSummarizeText] = useState<boolean>(
     () => !!textLength
@@ -333,9 +331,9 @@ const TDContent: React.FC<ITDC> = ({
   const isSumm = value ? value?.toString().length > textLength : false
   const cellValue = value
     ? textLength
-      ? value?.toString().substring(0, textLength) + (isSumm ? "..." : "")
+      ? value?.toString().substring(0, textLength) + (isSumm ? '...' : '')
       : value?.toString()
-    : ""
+    : ''
   return (
     <>
       {dangerouselySetHtml ? (
@@ -345,7 +343,7 @@ const TDContent: React.FC<ITDC> = ({
           <span
             className={`d-block ${classProps}`}
             onClick={action}
-            style={{ width: cellWidth || "" }}
+            style={{ width: cellWidth || '' }}
             role="button"
           >
             {summarizeText ? cellValue : value}
@@ -354,7 +352,7 @@ const TDContent: React.FC<ITDC> = ({
             <span onClick={() => setSummarizeText(!summarizeText)}>
               <i
                 className={`ml-2 table-cell-border p-1 rounded fas fa-angle-${
-                  summarizeText ? "up" : "down"
+                  summarizeText ? 'up' : 'down'
                 }`}
               />
             </span>
@@ -366,7 +364,7 @@ const TDContent: React.FC<ITDC> = ({
 }
 
 interface ICVAC extends ICellAction {
-  nomargin?: "true" | "false"
+  nomargin?: 'true' | 'false'
 }
 
 const CellValueActionComponent: React.FC<ICVAC> = ({
@@ -377,7 +375,7 @@ const CellValueActionComponent: React.FC<ICVAC> = ({
   color,
   buttonType,
   view,
-  hide,
+  hide
 }) => {
   return (
     <>
@@ -393,12 +391,12 @@ const CellValueActionComponent: React.FC<ICVAC> = ({
         // />
 
       ) : null} */}
-      <div className="d-flex align-items-center" style={{ gap: "30px" }}>
+      <div className="d-flex align-items-center" style={{ gap: '30px' }}>
         <div
           style={{
-            width: "max-content",
-            height: "max-content",
-            cursor: "pointer",
+            width: 'max-content',
+            height: 'max-content',
+            cursor: 'pointer'
           }}
           title="Assign Report"
         >
@@ -406,9 +404,9 @@ const CellValueActionComponent: React.FC<ICVAC> = ({
         </div>
         <div
           style={{
-            width: "max-content",
-            height: "max-content",
-            cursor: "pointer",
+            width: 'max-content',
+            height: 'max-content',
+            cursor: 'pointer'
           }}
           title="Review Report"
         >

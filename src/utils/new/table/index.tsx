@@ -1,13 +1,13 @@
-import React, { FC, useState } from "react"
-import "./table.scss"
-import { TypeCheckbox } from "../checkbox"
-import { PAGE_SIZE } from "../constants"
-import { TypeButton } from "../button"
-import { useNavigate } from "react-router-dom"
-import { TypeSelect } from "../select"
-import { TypeInput } from "../input"
-import ReactPaginate from "react-paginate"
-import { CloseSVG } from "../svgs"
+import React, { FC, useState } from 'react'
+import './table.scss'
+import { TypeCheckbox } from '../checkbox'
+import { PAGE_SIZE } from '../constants'
+import { TypeButton } from '../button'
+import { useNavigate } from 'react-router-dom'
+import { TypeSelect } from '../select'
+import { TypeInput } from '../input'
+import ReactPaginate from 'react-paginate'
+import { CloseSVG } from '../svgs'
 
 export interface ITableAction {
   action: string
@@ -35,7 +35,7 @@ export interface ITableAction {
 interface IPaginationParams {
   current: number
   total: number
-  onPageChange?(selectedItem: { selected: number }): void
+  onPageChange?: (selectedItem: { selected: number }) => void
   isPagination: boolean
   load: boolean
 }
@@ -48,8 +48,8 @@ interface ITableArgs {
 }
 
 export const useTableAction = (tableArg?: ITableArgs): ITableAction => {
-  const [action, setAction] = useState<string>("")
-  const [searchValue, setSearchValue] = useState<string>("")
+  const [action, setAction] = useState<string>('')
+  const [searchValue, setSearchValue] = useState<string>('')
   const [selectedItems, setSelectedItems] = useState<string[]>([])
 
   const handleSelectAll = (
@@ -61,7 +61,7 @@ export const useTableAction = (tableArg?: ITableArgs): ITableAction => {
       if (checked) {
         return [...record.map((i) => i.id)]
       }
-      setAction("")
+      setAction('')
       return []
     })
   }
@@ -92,7 +92,7 @@ export const useTableAction = (tableArg?: ITableArgs): ITableAction => {
     setSearchValue,
     searchAction: tableArg?.searchAction,
     paginationParams: tableArg?.paginationParams,
-    searchPlaceHolder: tableArg?.searchPlaceHolder,
+    searchPlaceHolder: tableArg?.searchPlaceHolder
   }
 }
 
@@ -111,9 +111,9 @@ export interface ICell {
 export interface ICellAction extends ICell {
   icon?: string
   color?: string
-  view?: "text" | "icon" | "both"
+  view?: 'text' | 'icon' | 'both'
   background?: string
-  buttonType?: "bold" | "outlined" | "disabled" | "danger" | undefined
+  buttonType?: 'bold' | 'outlined' | 'disabled' | 'danger' | undefined
   hide?: boolean
   load?: boolean
 }
@@ -141,7 +141,7 @@ const Table: React.FC<IResultTable> = ({
   hideNumbering,
   tableAction,
   handleTableAction,
-  hideTableAction,
+  hideTableAction
 }) => {
   const isRecord = record?.length > 0
   const isCheckedRow = (id: string) => {
@@ -173,7 +173,7 @@ const Table: React.FC<IResultTable> = ({
                 return (
                   <th
                     key={index}
-                    style={{ display: "flex", alignItems: "center" }}
+                    style={{ display: 'flex', alignItems: 'center' }}
                   >
                     {!hideCheck && (
                       <div style={{ marginRight: 25 }}>
@@ -200,7 +200,7 @@ const Table: React.FC<IResultTable> = ({
               <tr key={jindex}>
                 {!hideNumbering && (
                   <td
-                    style={{ padding: "10px 0px 10px 10px" }}
+                    style={{ padding: '10px 0px 10px 10px' }}
                     width={`${100 / header.length}%`}
                   >
                     <p style={{ margin: 0 }}>
@@ -212,7 +212,7 @@ const Table: React.FC<IResultTable> = ({
                   if (index === 0) {
                     return (
                       <td key={index} width={`${100 / header.length}%`}>
-                        <div style={{ display: "flex", alignItems: "center" }}>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
                           {!hideCheck && (
                             <div style={{ marginRight: 25 }}>
                               <TypeCheckbox
@@ -245,8 +245,8 @@ const Table: React.FC<IResultTable> = ({
                           {...j}
                           nomargin={
                             index === i?.rowActions.length - 1
-                              ? "true"
-                              : "false"
+                              ? 'true'
+                              : 'false'
                           }
                         />
                       ))
@@ -272,8 +272,8 @@ const Table: React.FC<IResultTable> = ({
                 nextLabel=">>"
                 pageCount={tableAction?.paginationParams?.total || 0}
                 onPageChange={tableAction?.paginationParams?.onPageChange}
-                containerClassName={"pagination"}
-                activeClassName={"active"}
+                containerClassName={'pagination'}
+                activeClassName={'active'}
                 forcePage={
                   tableAction?.paginationParams?.current
                     ? tableAction?.paginationParams?.current - 1
@@ -300,7 +300,7 @@ interface ITDC {
 const TDContent: React.FC<ITDC> = ({ action, value }) => {
   return (
     <p className="m-0 d-flex align-items-center text-small" onClick={action}>
-      <span className="d-block" style={{ width: "120px" }}>
+      <span className="d-block" style={{ width: '120px' }}>
         {value}
       </span>
     </p>
@@ -308,7 +308,7 @@ const TDContent: React.FC<ITDC> = ({ action, value }) => {
 }
 
 interface ICVAC extends ICellAction {
-  nomargin?: "true" | "false"
+  nomargin?: 'true' | 'false'
 }
 
 const CellValueActionComponent: React.FC<ICVAC> = ({
@@ -320,7 +320,7 @@ const CellValueActionComponent: React.FC<ICVAC> = ({
   buttonType,
   view,
   hide,
-  load,
+  load
 }) => {
   const navigate = useNavigate()
   return (
@@ -329,10 +329,10 @@ const CellValueActionComponent: React.FC<ICVAC> = ({
         <TypeButton
           buttonSize="small"
           color={color}
-          title={view !== "icon" ? value + "" : ""}
+          title={view !== 'icon' ? value + '' : ''}
           buttonType={buttonType}
-          style={{ height: "35px", fontSize: "12px" }}
-          onClick={() => (isLink ? action?.() : navigate(url || ""))}
+          style={{ height: '35px', fontSize: '12px' }}
+          onClick={() => (isLink ? action?.() : navigate(url || ''))}
           className="mr-2"
           load={load}
         />
@@ -352,37 +352,37 @@ interface ITableActionComponent {
 const TableActionComponent: FC<ITableActionComponent> = ({
   tableAction,
   handleTableAction,
-  isCTA,
+  isCTA
 }) => {
   const isTableAction = !!tableAction?.selectedItems?.[0]
   return (
     <div
       style={{
-        position: "sticky",
-        left: 0,
+        position: 'sticky',
+        left: 0
       }}
       className={`pb-3 d-flex align-items-center justify-content-between table-action`}
     >
       <div
         className="d-flex align-items-center bulk-action"
-        style={{ gap: "20px" }}
+        style={{ gap: '20px' }}
       >
         <TypeSelect
-          initoption={{ label: "Select action", value: "" }}
+          initoption={{ label: 'Select action', value: '' }}
           optionsdata={Object.values(tableAction?.actionEnums || {}).map(
             (i, index) => ({
               id: index,
               label: i,
-              value: i,
+              value: i
             })
           )}
           disabled={!isTableAction}
-          value={tableAction?.action || ""}
+          value={tableAction?.action || ''}
           style={{
-            width: "150px",
-            height: "40px",
-            fontSize: "13px",
-            outline: "0",
+            width: '150px',
+            height: '40px',
+            fontSize: '13px',
+            outline: '0'
           }}
           onChange={({ target }) => {
             const { value } = target
@@ -392,26 +392,26 @@ const TableActionComponent: FC<ITableActionComponent> = ({
         <TypeButton
           buttonSize="small"
           title="Proceed"
-          buttonType={isTableAction && isCTA ? "outlined" : "disabled"}
+          buttonType={isTableAction && isCTA ? 'outlined' : 'disabled'}
           onClick={handleTableAction}
           disabled={!isTableAction || !isCTA}
         />
       </div>
       <div
         className="d-flex align-items-center bulk-action"
-        style={{ gap: "20px" }}
+        style={{ gap: '20px' }}
       >
         <div className="position-relative w-100">
           <TypeInput
             value={tableAction?.searchValue}
             style={{
-              minWidth: "250px",
-              height: "40px",
-              fontSize: "13px",
-              outline: "0",
-              paddingRight: tableAction?.searchValue ? "40px" : "",
+              minWidth: '250px',
+              height: '40px',
+              fontSize: '13px',
+              outline: '0',
+              paddingRight: tableAction?.searchValue ? '40px' : ''
             }}
-            placeholder={tableAction?.searchPlaceHolder || "Search here"}
+            placeholder={tableAction?.searchPlaceHolder || 'Search here'}
             onChange={({ target }) => {
               const { value } = target
               tableAction?.setSearchValue(value)
@@ -420,10 +420,10 @@ const TableActionComponent: FC<ITableActionComponent> = ({
           {tableAction?.searchValue ? (
             <div
               className="position-absolute d-flex align-items-center h-100 px-3"
-              style={{ right: 0, top: 0, cursor: "pointer" }}
+              style={{ right: 0, top: 0, cursor: 'pointer' }}
               onClick={() => {
-                tableAction?.setSearchValue("")
-                tableAction?.searchAction?.("")
+                tableAction?.setSearchValue('')
+                tableAction?.searchAction?.('')
               }}
             >
               <CloseSVG />
@@ -434,7 +434,7 @@ const TableActionComponent: FC<ITableActionComponent> = ({
           buttonSize="small"
           title="Search"
           buttonType={
-            tableAction?.searchValue && isCTA ? "outlined" : "disabled"
+            tableAction?.searchValue && isCTA ? 'outlined' : 'disabled'
           }
           onClick={() => {
             tableAction?.searchAction?.(tableAction.searchValue)

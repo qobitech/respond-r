@@ -1,10 +1,10 @@
-import React from "react"
-import InputPhone from "react-phone-input-2"
-import "react-phone-input-2/lib/bootstrap.css"
-import "./index.scss"
-import TextPrompt from "../text-prompt"
+import React from 'react'
+import InputPhone from 'react-phone-input-2'
+import 'react-phone-input-2/lib/bootstrap.css'
+import './index.scss'
+import TextPrompt from '../text-prompt'
 
-interface IInput extends React.ComponentPropsWithoutRef<"input"> {
+interface IInput extends React.ComponentPropsWithoutRef<'input'> {
   label?: string
   error?: string | undefined
   customwidth?: string | number
@@ -18,12 +18,12 @@ const TypePhoneInput = React.forwardRef(
         <div className="form-container">
           {label && <label htmlFor={props.id || props.name}>{label}</label>}
           <InputPhone
-            country={"eg"}
+            country={'eg'}
             enableSearch={true}
             {...props}
-            value={(props.value || "") as string}
+            value={(props.value || '') as string}
             onChange={handleOnChange}
-            inputClass={`${error ? "is-error" : null} ${props.className || ""}`}
+            inputClass={`${error ? 'is-error' : null} ${props.className || ''}`}
             inputStyle={props.style}
           />
           {!!error && (
@@ -36,5 +36,7 @@ const TypePhoneInput = React.forwardRef(
     )
   }
 )
+
+TypePhoneInput.displayName = 'TypePhoneInput'
 
 export default TypePhoneInput

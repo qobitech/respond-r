@@ -1,15 +1,15 @@
-import React, { useEffect } from "react"
-import { TypeButton } from "utils/new/button"
-import "./index.scss"
-import { useFormHook } from "utils/new/hook"
-import * as yup from "yup"
-import { IStates } from "interfaces/IReducer"
-import { IAction } from "interfaces/IAction"
-import TextPrompt from "utils/new/text-prompt"
-import { authType } from "../../../store/types"
-import { UseFormReturn } from "react-hook-form"
-import FormBuilder from "utils/new/form-builder"
-import { loginFC } from "utils/new/constants/form-components"
+import React, { useEffect } from 'react'
+import { TypeButton } from 'utils/new/button'
+import './index.scss'
+import { useFormHook } from 'utils/new/hook'
+import * as yup from 'yup'
+import { IStates } from 'interfaces/IReducer'
+import { IAction } from 'interfaces/IAction'
+import TextPrompt from 'utils/new/text-prompt'
+import { authType } from '../../../store/types'
+import { UseFormReturn } from 'react-hook-form'
+import FormBuilder from 'utils/new/form-builder'
+import { loginFC } from 'utils/new/constants/form-components'
 
 interface IProps {
   states?: IStates
@@ -31,7 +31,7 @@ export const LoginForm: React.FC<ILoginForm> = ({
   hookForm,
   handleAction,
   loading,
-  error,
+  error
 }) => {
   const { handleSubmit } = hookForm
   // const navigate = useNavigate()
@@ -46,7 +46,7 @@ export const LoginForm: React.FC<ILoginForm> = ({
           title="LOGIN"
           load={loading}
           type="submit"
-          buttonType={loading ? "disabled" : "bold"}
+          buttonType={loading ? 'disabled' : 'bold'}
           disabled={loading}
         />
       </div>
@@ -68,8 +68,8 @@ const Login: React.FC<IProps> = ({ states, ...props }) => {
   const data = states?.auth.userLogin
 
   const loginSchema = {
-    email: yup.string().email().required("Email is required"),
-    password: yup.string().required("Password is required"),
+    email: yup.string().email().required('Email is required'),
+    password: yup.string().required('Password is required')
   }
 
   const [hookForm] = useFormHook<ILoginHookForm>(loginSchema)
@@ -81,7 +81,7 @@ const Login: React.FC<IProps> = ({ states, ...props }) => {
 
   useEffect(() => {
     if (data?.isSuccessful) {
-      setNotificationStatus("Login Successful", true)
+      setNotificationStatus('Login Successful', true)
     }
   }, [data?.isSuccessful, setNotificationStatus])
 
@@ -92,10 +92,10 @@ const Login: React.FC<IProps> = ({ states, ...props }) => {
   }, [clearAction])
 
   const loginFormProps = {
-    error: dataError || "",
+    error: dataError || '',
     loading: dataLoading || false,
     handleAction: handleLogin,
-    hookForm,
+    hookForm
   }
 
   return (

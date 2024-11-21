@@ -1,22 +1,22 @@
-import { ILocation } from "components/map/new-map"
-import { IAsset, IAssets } from "interfaces/IAsset"
-import React, { useState, useEffect } from "react"
-import { ITableRecord, TableSection } from "../traffic"
-import "./style.scss"
-import { TypeButton } from "utils/new/button"
-import { PulseSVG, RefreshSVG } from "utils/new/svgs"
-import { useGlobalContext } from "components/layout"
-import { IATE, IAssetQuery } from "store/actions/admin-actions/assets"
-import { IReport } from "interfaces/IReport"
+import { ILocation } from 'components/map/new-map'
+import { IAsset, IAssets } from 'interfaces/IAsset'
+import React, { useState, useEffect } from 'react'
+import { ITableRecord, TableSection } from '../traffic'
+import './style.scss'
+import { TypeButton } from 'utils/new/button'
+import { PulseSVG, RefreshSVG } from 'utils/new/svgs'
+import { useGlobalContext } from 'components/layout'
+import { IATE, IAssetQuery } from 'store/actions/admin-actions/assets'
+import { IReport } from 'interfaces/IReport'
 
-export type statusType = "loading" | "success" | "error" | null
+export type statusType = 'loading' | 'success' | 'error' | null
 
 export const LocationLocalAssets = ({
   radius,
   location,
   assets,
   assignAssets,
-  feed,
+  feed
 }: {
   location: ILocation
   radius: number
@@ -61,7 +61,7 @@ export const LocationLocalAssets = ({
       return distance <= radius
     })
 
-    setNearbyAssets(filteredAssets!)
+    setNearbyAssets(filteredAssets)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location, allAssets, radius])
 
@@ -109,7 +109,7 @@ export const LocationLocalAssets = ({
         isLink: true,
         action: () => {
           setSelectedAsset(asset)
-        },
+        }
       },
       {
         value:
@@ -118,39 +118,39 @@ export const LocationLocalAssets = ({
             location.longitude,
             parseFloat(asset.location.latitude),
             parseFloat(asset.location.longitude)
-          ).toFixed(2) + " km",
-        isLink: false,
+          ).toFixed(2) + ' km',
+        isLink: false
       },
       {
         value: asset.contact.name,
-        isLink: false,
-      },
+        isLink: false
+      }
     ],
     rowActions: [
       {
-        value: isStatus("success", asset.id) ? "Assigned" : "Assign",
+        value: isStatus('success', asset.id) ? 'Assigned' : 'Assign',
         isLink: true,
-        buttonType: "outlined",
-        load: isStatus("loading", asset.id),
+        buttonType: 'outlined',
+        load: isStatus('loading', asset.id),
         action: () => {
           const assetData: IATE = {
             assetId: asset.id,
             assignedBy: {
               id: 1,
-              userName: "SYS-USER",
+              userName: 'SYS-USER'
             },
             emergency: {
               emergencyId: feed.id,
-              emergencyType: "police",
-            },
+              emergencyType: 'police'
+            }
           }
           assignAssets(assetData, setRequestCallback)
-        },
-      },
-    ],
+        }
+      }
+    ]
   }))
 
-  const isDisabled = localRadius === radius ? "disabled" : ""
+  const isDisabled = localRadius === radius ? 'disabled' : ''
 
   return (
     <>
@@ -158,25 +158,25 @@ export const LocationLocalAssets = ({
         <div className="d-flex align-items-center justify-content-between mb-4">
           <h2
             className="text-little m-0 text-color"
-            style={{ fontSize: "16px" }}
+            style={{ fontSize: '16px' }}
           >
             {nearbyAssets?.length || 0} Assets within {radius} km from report
             location
           </h2>
-          <div className="d-flex align-items-center" style={{ gap: "20px" }}>
+          <div className="d-flex align-items-center" style={{ gap: '20px' }}>
             <button
               className={`button-action ${isDisabled}`}
               onClick={() => {
-                fetchAllAssets({ getLatest: "true" }, true)
+                fetchAllAssets({ getLatest: 'true' }, true)
               }}
             >
-              Fetch Assets{loadAllAssets ? <PulseSVG /> : ""}
+              Fetch Assets{loadAllAssets ? <PulseSVG /> : ''}
             </button>
             {allAssets?.length ? (
               <button
                 className={`button-action ${isDisabled}`}
                 onClick={() => {
-                  fetchAllAssets({ getLatest: "true" }, true)
+                  fetchAllAssets({ getLatest: 'true' }, true)
                 }}
               >
                 Refresh&nbsp;{loadAllAssets ? <PulseSVG /> : <RefreshSVG />}
@@ -197,12 +197,12 @@ export const LocationLocalAssets = ({
         ) : null}
 
         <div
-          style={{ height: "250px", overflow: "auto" }}
+          style={{ height: '250px', overflow: 'auto' }}
           className="border-line rounded blats"
         >
           {!selectedAsset ? (
             <TableSection
-              header={["Asset", "Distance (km)", "Contact", "Action"]}
+              header={['Asset', 'Distance (km)', 'Contact', 'Action']}
               record={tableRecord}
               hideTableAction
             />
@@ -218,7 +218,7 @@ export const LocationLocalAssets = ({
 const LocationAssets = ({
   allAssets,
   radius,
-  location,
+  location
 }: {
   location: ILocation
   allAssets: IAsset[]
@@ -275,7 +275,7 @@ const LocationAssets = ({
         isLink: true,
         action: () => {
           setSelectedAsset(asset)
-        },
+        }
       },
       {
         value:
@@ -284,27 +284,27 @@ const LocationAssets = ({
             location.longitude,
             parseFloat(asset.location.latitude),
             parseFloat(asset.location.longitude)
-          ).toFixed(2) + " km",
-        isLink: false,
+          ).toFixed(2) + ' km',
+        isLink: false
       },
       {
         value: asset.contact.name,
-        isLink: false,
-      },
+        isLink: false
+      }
     ],
     rowActions: [
       {
-        value: "Link asset",
+        value: 'Link asset',
         isLink: false,
-        buttonType: "outlined",
-      },
-    ],
+        buttonType: 'outlined'
+      }
+    ]
   }))
 
   return (
     <div>
       <div className="d-flex align-items-center justify-content-between mb-4">
-        <h2 className="text-little m-0 text-color" style={{ fontSize: "16px" }}>
+        <h2 className="text-little m-0 text-color" style={{ fontSize: '16px' }}>
           Assets within {radius} km from report location
         </h2>
         <p className="m-0">{nearbyAssets.length}</p>
@@ -322,12 +322,12 @@ const LocationAssets = ({
       ) : null}
 
       <div
-        style={{ height: "250px", overflow: "auto" }}
+        style={{ height: '250px', overflow: 'auto' }}
         className="border-line rounded blats"
       >
         {!selectedAsset ? (
           <TableSection
-            header={["Asset", "Distance (km)", "Contact", "Action"]}
+            header={['Asset', 'Distance (km)', 'Contact', 'Action']}
             record={tableRecord}
             hideTableAction
           />
@@ -345,7 +345,7 @@ const ViewAsset = ({ asset }: { asset: IAsset }) => {
     <div className="vehicle-info-section p-3">
       {Object.keys(ase)?.map((i, index) => (
         <div key={index}>
-          {typeof ase[i] === "string" || typeof ase[i] === "number" ? (
+          {typeof ase[i] === 'string' || typeof ase[i] === 'number' ? (
             <AssetItem label={i} value={ase[i]} />
           ) : null}
         </div>

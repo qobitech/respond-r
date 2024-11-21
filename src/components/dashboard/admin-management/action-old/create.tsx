@@ -1,16 +1,16 @@
-import { IAction } from "interfaces/IAction"
-import { IStates } from "interfaces/IReducer"
-import React, { useEffect, useState } from "react"
-import { TypeButton } from "utils/new/button"
-import FormBuilder, { IFormComponent } from "utils/new/form-builder"
-import { useFormHook } from "utils/new/hook"
-import TextPrompt from "utils/new/text-prompt"
-import * as yup from "yup"
-import "../../../../utils/new/page.scss"
-import { IRightSection } from "components/reusable/right-section"
-import { IUser } from "interfaces/IUser"
-import { TypeCheckbox } from "utils/new/checkbox"
-import { CloseSVG } from "utils/new/svgs"
+import { IAction } from 'interfaces/IAction'
+import { IStates } from 'interfaces/IReducer'
+import { useEffect, useState } from 'react'
+import { TypeButton } from 'utils/new/button'
+import FormBuilder, { IFormComponent } from 'utils/new/form-builder'
+import { useFormHook } from 'utils/new/hook'
+import TextPrompt from 'utils/new/text-prompt'
+import * as yup from 'yup'
+import '../../../../utils/new/page.scss'
+import { IRightSection } from 'components/reusable/right-section'
+import { IUser } from 'interfaces/IUser'
+import { TypeCheckbox } from 'utils/new/checkbox'
+import { CloseSVG } from 'utils/new/svgs'
 
 interface ICreateAdmin {
   action: string
@@ -20,47 +20,47 @@ interface ICreateAdmin {
 }
 
 const createAdminSchema = (update: boolean) => ({
-  email: yup.string().required("input required"),
-  organisationName: yup.string().required("input required"),
-  userName: yup.string().required("input required"),
-  phoneNumber: yup.string().required("input required"),
-  password: update ? yup.string() : yup.string().required("input required"),
+  email: yup.string().required('input required'),
+  organisationName: yup.string().required('input required'),
+  userName: yup.string().required('input required'),
+  phoneNumber: yup.string().required('input required'),
+  password: update ? yup.string() : yup.string().required('input required'),
   confirmPassword: update
     ? yup.string()
     : yup
         .string()
-        .required("input required")
-        .oneOf([yup.ref("password"), null], "Passwords must match"),
+        .required('input required')
+        .oneOf([yup.ref('password'), null], 'Passwords must match')
 })
 
 const formComponent: IFormComponent[] = [
   {
-    id: "action",
-    label: "Action",
-    placeHolder: "Enter action",
-    type: "text",
-    component: "input",
+    id: 'action',
+    label: 'Action',
+    placeHolder: 'Enter action',
+    type: 'text',
+    component: 'input'
   },
   {
-    id: "description",
-    label: "Description",
-    placeHolder: "Enter description",
-    type: "text",
-    component: "text-area",
-  },
+    id: 'description',
+    label: 'Description',
+    placeHolder: 'Enter description',
+    type: 'text',
+    component: 'text-area'
+  }
 ]
 
 const CreateAction = ({
   states,
   actions,
-  rsProps,
+  rsProps
 }: {
   states: IStates
   actions: IAction
   rsProps?: IRightSection<IUser>
 }) => {
-  const isUpdate = rsProps?.isView("custom", "update-admin")
-  const [hookForm] = useFormHook<ICreateAdmin>(createAdminSchema(isUpdate!))
+  const isUpdate = rsProps?.isView('custom', 'update-admin')
+  const [hookForm] = useFormHook<ICreateAdmin>(createAdminSchema(isUpdate))
   const [response, setResponse] = useState<{
     message: string
     isSuccessful: boolean
@@ -68,10 +68,10 @@ const CreateAction = ({
 
   useEffect(() => {
     if (isUpdate) {
-      hookForm.setValue("action", rsProps?.data?.email || "")
+      hookForm.setValue('action', rsProps?.data?.email || '')
       hookForm.setValue(
-        "description",
-        rsProps?.data?.organisation.name?.toLowerCase() || ""
+        'description',
+        rsProps?.data?.organisation.name?.toLowerCase() || ''
       )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -107,14 +107,14 @@ const CreateAction = ({
       <FormBuilder formComponent={formComponent} hookForm={hookForm} />
       <Organizations />
       <TypeButton
-        title={isUpdate ? "Update" : "Create"}
+        title={isUpdate ? 'Update' : 'Create'}
         onClick={hookForm.handleSubmit(handleAction)}
         load={states.user.createUserLoading}
       />
       <div className="my-3" />
       {response !== null ? (
         <TextPrompt
-          prompt={response?.message || ""}
+          prompt={response?.message || ''}
           status={response?.isSuccessful}
         />
       ) : null}
@@ -126,10 +126,10 @@ export default CreateAction
 
 const Organizations = () => {
   const data = [
-    { id: "traffic", label: "Traffic", value: "traffic" },
-    { id: "e-police", label: "E-Police", value: "e-police" },
-    { id: "firefighter", label: "Fire Service", value: "firefighter" },
-    { id: "e-medical", label: "E-Medical", value: "e-medical" },
+    { id: 'traffic', label: 'Traffic', value: 'traffic' },
+    { id: 'e-police', label: 'E-Police', value: 'e-police' },
+    { id: 'firefighter', label: 'Fire Service', value: 'firefighter' },
+    { id: 'e-medical', label: 'E-Medical', value: 'e-medical' }
   ]
 
   const [selectedOrganizations, setSelectedOrganizations] = useState<string[]>(
@@ -137,7 +137,7 @@ const Organizations = () => {
   )
 
   const setValue = (id: string, checked: boolean) => {
-    const temp = [...selectedOrganizations] || []
+    const temp = selectedOrganizations ?? []
     const index = temp.indexOf(id)
     if (index === -1) {
       if (checked) temp.push(data.filter((i) => i.id === id)?.[0]?.value)
@@ -151,8 +151,13 @@ const Organizations = () => {
     <div className="form-select-section-container p-0 border-0">
       <h5>Select Organizations</h5>
       <div className="form-select-section-content">
-        {data.map((i) => (
-          <SelectItem id={i.id} title={i.label} setValue={setValue} />
+        {data.map((i, index) => (
+          <SelectItem
+            id={i.id}
+            title={i.label}
+            setValue={setValue}
+            key={index}
+          />
         ))}
       </div>
     </div>
@@ -161,10 +166,10 @@ const Organizations = () => {
 
 const Roles = () => {
   const data = [
-    { id: "super-admin", label: "Super Admin", value: "traffic" },
-    { id: "admin", label: "Admin", value: "e-police" },
-    { id: "moderator", label: "Moderator", value: "firefighter" },
-    { id: "field-officer", label: "Field Officer", value: "e-medical" },
+    { id: 'super-admin', label: 'Super Admin', value: 'traffic' },
+    { id: 'admin', label: 'Admin', value: 'e-police' },
+    { id: 'moderator', label: 'Moderator', value: 'firefighter' },
+    { id: 'field-officer', label: 'Field Officer', value: 'e-medical' }
   ]
 
   const [selectedOrganizations, setSelectedOrganizations] = useState<string[]>(
@@ -172,7 +177,7 @@ const Roles = () => {
   )
 
   const setValue = (id: string, checked: boolean) => {
-    const temp = [...selectedOrganizations] || []
+    const temp = selectedOrganizations ?? []
     const index = temp.indexOf(id)
     if (index === -1) {
       if (checked) temp.push(data.filter((i) => i.id === id)?.[0]?.value)
@@ -185,8 +190,13 @@ const Roles = () => {
   return (
     <div className="form-select-section-container m-0">
       <div className="form-select-role-section">
-        {data.map((i) => (
-          <RoleSelectItem id={i.id} title={i.label} setValue={setValue} />
+        {data.map((i, index) => (
+          <RoleSelectItem
+            id={i.id}
+            title={i.label}
+            setValue={setValue}
+            key={index}
+          />
         ))}
       </div>
     </div>
@@ -197,21 +207,21 @@ export const SelectedItems = ({
   id,
   title,
   onRemove,
-  index,
+  index
 }: {
   title: string
   id: string
   onRemove?: (id: string) => void
   index: number
 }) => {
-  const isRemove = typeof onRemove === "function"
+  const isRemove = typeof onRemove === 'function'
   return (
     <div className="role-select-item-wrapper">
       <div className="select-item-content">
         <div className="index-style">
-          <p>{index + ". "}</p>
+          <p>{index + '. '}</p>
         </div>
-        <p>{title || "no title"}</p>
+        <p>{title || 'no title'}</p>
         {isRemove ? (
           <div className="close-container" onClick={() => onRemove(id)}>
             <CloseSVG />
@@ -226,7 +236,7 @@ export const RoleSelectItem = ({
   id,
   title,
   setValue,
-  onRemove,
+  onRemove
 }: {
   title: string
   id: string
@@ -240,7 +250,7 @@ export const RoleSelectItem = ({
     setValue(id, !isChecked)
   }
 
-  const isRemove = typeof onRemove === "function"
+  const isRemove = typeof onRemove === 'function'
   return (
     <div className="role-select-item-wrapper">
       <div onClick={handleOnClick} className="select-item-content">
@@ -259,7 +269,7 @@ export const RoleSelectItem = ({
 const SelectItem = ({
   id,
   title,
-  setValue,
+  setValue
 }: {
   title: string
   id: string

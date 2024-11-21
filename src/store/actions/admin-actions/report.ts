@@ -1,6 +1,6 @@
-import { baseurlReport, isBaseURL } from "utils/constants"
-import * as utils from "../../services/new/utils"
-import { report } from "store/types"
+import { baseurlReport, isBaseURL } from 'utils/constants'
+import * as utils from '../../services/new/utils'
+import { report } from 'store/types'
 
 export const getAllReports = (
   organization: string,
@@ -10,13 +10,13 @@ export const getAllReports = (
 ) => {
   return utils.httpGetMethod({
     apiData: {
-      url: "",
-      customurl: `${baseurlReport}${organization}/get-all-paged${query || ""}`,
-      header: utils.header(""),
+      url: '',
+      customurl: `${baseurlReport}${organization}/get-all-paged${query || ''}`,
+      header: utils.header('')
     },
     actionType: report.getAllReports,
     onSuccess,
-    onFailure,
+    onFailure
   })
 }
 
@@ -39,15 +39,15 @@ export const updateReportStatus = (
 ) => {
   return utils.httpPostMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${
-        isBaseURL("commandURL") + "/api/v1/"
+        isBaseURL('commandURL') + '/api/v1/'
       }AllocationManager/update-event-status`,
-      header: utils.header(""),
-      data,
+      header: utils.header(''),
+      data
     },
     actionType: report.updateReportStatus,
     onSuccess,
-    onFailure,
+    onFailure
   })
 }

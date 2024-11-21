@@ -1,15 +1,15 @@
-import { baseurl } from "utils/constants"
-import * as utils from "../../services/new/utils"
-import { action } from "store/types"
+import { baseurl } from 'utils/constants'
+import * as utils from '../../services/new/utils'
+import { action } from 'store/types'
 
 export const getAllAction = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
-      url: "",
-      customurl: `${baseurl}/Action${query || ""}`,
-      header: utils.header(""),
+      url: '',
+      customurl: `${baseurl}/Action${query || ''}`,
+      header: utils.header('')
     },
-    actionType: action.getAllAction,
+    actionType: action.getAllAction
   })
 }
 
@@ -22,10 +22,10 @@ export const createAction = (
   if (!update)
     return utils.httpPostMethod({
       apiData: {
-        url: "",
+        url: '',
         customurl: `${baseurl}/Action`,
-        header: utils.header(""),
-        data,
+        header: utils.header(''),
+        data
       },
       actionType: action.createAction,
       onSuccess: (res) => {
@@ -33,14 +33,14 @@ export const createAction = (
       },
       onFailure: (err) => {
         onFailure?.(err)
-      },
+      }
     })
   return utils.httpPutMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurl}/Action`,
-      header: utils.header(""),
-      data,
+      header: utils.header(''),
+      data
     },
     actionType: action.createAction,
     onSuccess: (res) => {
@@ -48,7 +48,7 @@ export const createAction = (
     },
     onFailure: (err) => {
       onFailure?.(err)
-    },
+    }
   })
 }
 
@@ -59,9 +59,9 @@ export const getActionsForRole = (
 ) => {
   return utils.httpGetMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurl}/Action/getactionsforrole?roleName=${name}`,
-      header: utils.header(""),
+      header: utils.header('')
     },
     actionType: action.getActionsForRole,
     onSuccess: (res) => {
@@ -69,7 +69,7 @@ export const getActionsForRole = (
     },
     onFailure: (err) => {
       onFailure?.(err)
-    },
+    }
   })
 }
 
@@ -80,10 +80,10 @@ export const addActionToRole = (
 ) => {
   return utils.httpPostMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurl}/Role/addActionsToRole`,
-      header: utils.header(""),
-      data,
+      header: utils.header(''),
+      data
     },
     actionType: action.addActionToRole,
     onSuccess: (res) => {
@@ -91,7 +91,7 @@ export const addActionToRole = (
     },
     onFailure: (err) => {
       onFailure?.(err)
-    },
+    }
   })
 }
 
@@ -102,10 +102,10 @@ export const deleteAction = (
 ) => {
   return utils.httpDeleteMethod({
     apiData: {
-      url: "",
+      url: '',
       customurl: `${baseurl}/Action`,
-      header: utils.header(""),
-      data,
+      header: utils.header(''),
+      data
     },
     actionType: action.deleteAction,
     onSuccess: (res) => {
@@ -113,6 +113,6 @@ export const deleteAction = (
     },
     onFailure: (err) => {
       onFailure?.(err)
-    },
+    }
   })
 }

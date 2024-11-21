@@ -1,37 +1,37 @@
-import React, { useEffect, useState } from "react"
-import "./index.scss"
-import { TypeButton } from "utils/new/button"
-import { useNavigate, useSearchParams } from "react-router-dom"
-import { ICallRightSection } from "store/actions/global"
+import React, { useEffect, useState } from 'react'
+import './index.scss'
+import { TypeButton } from 'utils/new/button'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { ICallRightSection } from 'store/actions/global'
 
 export type actionType =
-  | "create"
-  | "view"
-  | "update"
-  | "delete"
-  | "custom"
+  | 'create'
+  | 'view'
+  | 'update'
+  | 'delete'
+  | 'custom'
   | null
 export type actionComponent =
-  | "settings"
-  | "create-admin"
-  | "view-admin"
-  | "update-admin"
-  | "delete-admin"
-  | "create-role"
-  | "update-role"
-  | "view-role"
-  | "view-role-actions"
-  | "assign-role"
-  | "create-org"
-  | "update-org"
-  | "view-org"
-  | "create-action"
-  | "update-action"
-  | "view-action"
-  | "delete-action"
-  | "asset"
-  | "link-asset"
-  | "report"
+  | 'settings'
+  | 'create-admin'
+  | 'view-admin'
+  | 'update-admin'
+  | 'delete-admin'
+  | 'create-role'
+  | 'update-role'
+  | 'view-role'
+  | 'view-role-actions'
+  | 'assign-role'
+  | 'create-org'
+  | 'update-org'
+  | 'view-org'
+  | 'create-action'
+  | 'update-action'
+  | 'view-action'
+  | 'delete-action'
+  | 'asset'
+  | 'link-asset'
+  | 'report'
   | null
 export type actionId = string | null
 
@@ -50,19 +50,19 @@ export interface IRightSection<K> {
   title: string
   setCtas: React.Dispatch<React.SetStateAction<ICTA[] | null>>
   ctas: ICTA[] | null
-  callSection(
+  callSection: (
     action: actionType,
     component: actionComponent,
     id?: string,
     data?: K
-  ): void
+  ) => void
   isView: (type: actionType, component: actionComponent) => boolean
   data: K | null
   queryId: string | null
   queryAction: actionType
   queryComponent: actionComponent
-  callSectionOnQuery(i?: K): void
-  updateData(data: K | null): void
+  callSectionOnQuery: (i?: K) => void
+  updateData: (data: K | null) => void
 }
 
 export const useRightSection = <K extends {}>(
@@ -71,17 +71,17 @@ export const useRightSection = <K extends {}>(
   onClose?: () => void
 ): IRightSection<K> => {
   const [searchParams] = useSearchParams()
-  const queryId = searchParams.get("id")
-  const queryAction = searchParams.get("action") as actionType
-  const queryComponent = searchParams.get("component") as actionComponent
+  const queryId = searchParams.get('id')
+  const queryAction = searchParams.get('action') as actionType
+  const queryComponent = searchParams.get('component') as actionComponent
   const navigate = useNavigate()
-  const [title, setTitle] = useState<string>("")
+  const [title, setTitle] = useState<string>('')
   const [ctas, setCtas] = useState<ICTA[] | null>(null)
   const [openSection, setOpenSection] = useState<boolean>(() => !!queryId)
   const [action, setAction] = useState<IRSAction>({
     type: null,
     component: null,
-    id: null,
+    id: null
   })
   const [data, setData] = useState<K | null>(null)
 
@@ -95,31 +95,31 @@ export const useRightSection = <K extends {}>(
     id?: string
   ): ICTA[] | null => {
     switch (action) {
-      case "view":
+      case 'view':
         return [
           {
-            title: "Edit",
+            title: 'Edit',
             action: () => {
-              callSection("update", component, id)
-            },
+              callSection('update', component, id)
+            }
           },
           {
-            title: "Delete",
+            title: 'Delete',
             action: () => {
-              callSection("delete", component, id)
+              callSection('delete', component, id)
             },
-            type: "danger",
-          },
+            type: 'danger'
+          }
         ]
-      case "update":
+      case 'update':
         return [
           {
-            title: "Delete",
+            title: 'Delete',
             action: () => {
-              callSection("delete", component, id)
+              callSection('delete', component, id)
             },
-            type: "danger",
-          },
+            type: 'danger'
+          }
         ]
       default:
         return null
@@ -139,19 +139,19 @@ export const useRightSection = <K extends {}>(
     setAction({ type: action, component, id })
     setTitle(
       `${
-        action === "custom" ? "" : action?.toUpperCase()
+        action === 'custom' ? '' : action?.toUpperCase()
       } ${component?.toUpperCase()}`
     )
     setCtas(getCTA(action, component, id))
     setOpenSection(true)
-    navigate(`?action=${action}&component=${component}${id ? "&id=" + id : ""}`)
+    navigate(`?action=${action}&component=${component}${id ? '&id=' + id : ''}`)
     // if (data)
     setData(data as unknown as K)
   }
 
   function callSectionOnQuery(i?: K) {
     if (queryAction && queryComponent)
-      callSection(queryAction, queryComponent, queryId ? queryId + "" : "", i)
+      callSection(queryAction, queryComponent, queryId ? queryId + '' : '', i)
   }
 
   const closeSection = () => {
@@ -189,13 +189,13 @@ export const useRightSection = <K extends {}>(
     queryAction,
     queryComponent,
     callSectionOnQuery,
-    updateData,
+    updateData
   }
 }
 
 interface ICTA {
   title: string
-  type?: "bold" | "outlined" | "disabled" | "danger"
+  type?: 'bold' | 'outlined' | 'disabled' | 'danger'
   action?: () => void
 }
 
@@ -223,7 +223,7 @@ const RightSection = <T extends {}>({ children, rsProps }: IRSection<T>) => {
       ) : null}
       <div
         className={`right_container ${
-          rsProps.openSection ? "menuopen" : "menuclose"
+          rsProps.openSection ? 'menuopen' : 'menuclose'
         }`}
       >
         <div className="rs-header">

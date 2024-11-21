@@ -1,8 +1,8 @@
-import React from "react"
-import TextPrompt from "../text-prompt"
-import "./index.scss"
+import React from 'react'
+import TextPrompt from '../text-prompt'
+import './index.scss'
 
-interface IInput extends React.ComponentPropsWithoutRef<"input"> {
+interface IInput extends React.ComponentPropsWithoutRef<'input'> {
   label?: string
   error?: string | undefined
   children?: any

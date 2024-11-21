@@ -16,7 +16,7 @@ export interface IFeed {
 }
 
 export function isFeed(item: any): item is IFeed {
-  return "filePath" in item
+  return 'filePath' in item
 }
 
 export interface IHit {
@@ -30,5 +30,5 @@ export interface IHit {
 }
 
 export function isHit(item: any): item is IHit {
-  return "displayUrl" in item
+  return 'displayUrl' in item
 }

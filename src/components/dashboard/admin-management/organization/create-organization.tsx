@@ -1,15 +1,15 @@
-import { IAction } from "interfaces/IAction"
-import { IStates } from "interfaces/IReducer"
-import React, { useEffect, useState } from "react"
-import { TypeButton } from "utils/new/button"
-import FormBuilder, { IFormComponent } from "utils/new/form-builder"
-import { useFormHook } from "utils/new/hook"
-import TextPrompt from "utils/new/text-prompt"
-import * as yup from "yup"
-import "../../../../utils/new/page.scss"
-import { IRightSection } from "components/reusable/right-section"
-import { organization } from "store/types"
-import { IOrganization } from "interfaces/IOrganization"
+import { IAction } from 'interfaces/IAction'
+import { IStates } from 'interfaces/IReducer'
+import { useEffect, useState } from 'react'
+import { TypeButton } from 'utils/new/button'
+import FormBuilder, { IFormComponent } from 'utils/new/form-builder'
+import { useFormHook } from 'utils/new/hook'
+import TextPrompt from 'utils/new/text-prompt'
+import * as yup from 'yup'
+import '../../../../utils/new/page.scss'
+import { IRightSection } from 'components/reusable/right-section'
+import { organization } from 'store/types'
+import { IOrganization } from 'interfaces/IOrganization'
 
 interface ICreateOrg {
   name: string
@@ -17,29 +17,29 @@ interface ICreateOrg {
 }
 
 const createOrgSchema = {
-  name: yup.string().required("input required"),
+  name: yup.string().required('input required')
 }
 
 const formComponent: IFormComponent[] = [
   {
-    id: "name",
-    label: "Title",
-    placeHolder: "Enter title",
-    type: "text",
-    component: "input",
-  },
+    id: 'name',
+    label: 'Title',
+    placeHolder: 'Enter title',
+    type: 'text',
+    component: 'input'
+  }
 ]
 
 const CreateOrganization = ({
   states,
   actions,
-  rsProps,
+  rsProps
 }: {
   states: IStates
   actions: IAction
   rsProps?: IRightSection<IOrganization>
 }) => {
-  const isUpdate = rsProps?.isView("custom", "update-org")
+  const isUpdate = rsProps?.isView('custom', 'update-org')
   const [hookForm] = useFormHook<ICreateOrg>(createOrgSchema)
   const [response, setResponse] = useState<{
     message: string
@@ -48,7 +48,7 @@ const CreateOrganization = ({
 
   useEffect(() => {
     if (isUpdate) {
-      hookForm.setValue("name", rsProps?.data?.name || "")
+      hookForm.setValue('name', rsProps?.data?.name || '')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUpdate])
@@ -61,14 +61,14 @@ const CreateOrganization = ({
       isUpdate,
       (res) => {
         setResponse({
-          message: states?.organization?.createOrganization?.message || "",
-          isSuccessful: states?.organization?.createOrganization?.isSuccessful!,
+          message: states?.organization?.createOrganization?.message || '',
+          isSuccessful: states?.organization?.createOrganization?.isSuccessful!
         })
         console.log(res)
       },
       (err) => {
         console.log(err)
-        setResponse({ message: "Something went wrong", isSuccessful: false })
+        setResponse({ message: 'Something went wrong', isSuccessful: false })
       }
     )
   }
@@ -76,14 +76,14 @@ const CreateOrganization = ({
     <div className="card-section px-4 py-4">
       <FormBuilder formComponent={formComponent} hookForm={hookForm} />
       <TypeButton
-        title={isUpdate ? "Update" : "Create"}
+        title={isUpdate ? 'Update' : 'Create'}
         onClick={hookForm.handleSubmit(handleUser)}
         load={states.organization.createOrganizationLoading}
       />
       <div className="my-3" />
-      {response !== null ? (
+      {response ? (
         <TextPrompt
-          prompt={response?.message || ""}
+          prompt={response?.message || ''}
           status={response?.isSuccessful}
         />
       ) : null}

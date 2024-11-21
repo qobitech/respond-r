@@ -1,22 +1,22 @@
-import React, { useEffect } from "react"
-import Table, { ICell, ICellAction, useTableAction } from "utils/new/table"
-import "../../../../utils/new/pagination.scss"
-import "../../../../utils/new/page.scss"
-import "./management.scss"
-import { TypeButton } from "../../../../utils/new/button"
-import { TypeSelect } from "../../../../utils/new/select"
+import React, { useEffect } from 'react'
+import Table, { ICell, ICellAction, useTableAction } from 'utils/new/table'
+import '../../../../utils/new/pagination.scss'
+import '../../../../utils/new/page.scss'
+import './management.scss'
+import { TypeButton } from '../../../../utils/new/button'
+import { TypeSelect } from '../../../../utils/new/select'
 import RightSection, {
-  useRightSection,
-} from "../../../../components/reusable/right-section"
-import { IStates } from "interfaces/IReducer"
-import { IAction } from "interfaces/IAction"
-import CreateAdmin from "./create-admin"
-import { IUser } from "interfaces/IUser"
-import { ISSUPERADMIN, ROLE, USERTOKEN } from "utils/new/constants"
-import { GODUSER } from "utils/new/constants/roles"
-import { PageHeader } from "components/dashboard/components"
-import { ActionWrapper, useGlobalContext } from "components/layout"
-import { PAGENUMBER, PAGESIZE, getQuery } from "../action"
+  useRightSection
+} from '../../../../components/reusable/right-section'
+import { IStates } from 'interfaces/IReducer'
+import { IAction } from 'interfaces/IAction'
+import CreateAdmin from './create-admin'
+import { IUser } from 'interfaces/IUser'
+import { ISSUPERADMIN, ROLE, USERTOKEN } from 'utils/new/constants'
+import { GODUSER } from 'utils/new/constants/roles'
+import { PageHeader } from 'components/dashboard/components'
+import { ActionWrapper, useGlobalContext } from 'components/layout'
+import { PAGENUMBER, PAGESIZE, getQuery } from '../action'
 
 interface IProps {
   states?: IStates
@@ -25,7 +25,7 @@ interface IProps {
 
 const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
   const { isAction, getOrganization, organizations } = useGlobalContext()
-  const { callRightSection, getAllUsers } = actions as IAction
+  const { callRightSection, getAllUsers } = actions
 
   const rightSectionProps = states?.global.rightSection
 
@@ -35,9 +35,9 @@ const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
 
   const query = (sign: string) =>
     GODUSER
-      ? ""
+      ? ''
       : `${sign}OrganisationId=${
-          getOrganization?.("name", USERTOKEN.Organisation)?.id || ""
+          getOrganization?.('name', USERTOKEN.Organisation)?.id || ''
         }`
 
   const getAllUsersFn = (query: string) => {
@@ -47,7 +47,7 @@ const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
 
   useEffect(() => {
     // if (!organizations?.length)
-    getAllUsersFn(query("?"))
+    getAllUsersFn(query('?'))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -58,99 +58,99 @@ const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
   }
 
   const record: ITable[] = userState?.getAllUsers?.data?.map((i) => ({
-    id: "1",
+    id: '1',
     row: [
       {
         value: i.userName,
-        isLink: false,
+        isLink: false
       },
       {
         value: i.email,
-        isLink: false,
+        isLink: false
       },
       {
         value: i.organisation.name,
-        isLink: false,
+        isLink: false
       },
       {
         value: i.roleForReturn?.[0]?.name,
-        isLink: false,
+        isLink: false
       },
       {
         value: i.phoneNumber,
-        isLink: false,
-      },
+        isLink: false
+      }
     ],
     rowActions: [
       {
-        value: "Edit Details",
+        value: 'Edit Details',
         isLink: true,
         action: () => {
-          rsProps.callSection("custom", "update-admin", i.email, i)
+          rsProps.callSection('custom', 'update-admin', i.email, i)
         },
-        hide: !isAction?.("update user"),
+        hide: !isAction?.('update user')
       },
       {
-        value: "Delete User",
+        value: 'Delete User',
         isLink: true,
         action: () => {
-          rsProps.callSection("custom", "delete-admin", i.email, i)
+          rsProps.callSection('custom', 'delete-admin', i.email, i)
         },
-        buttonType: "danger",
-        hide: !isAction?.("delete user"),
-      },
-    ],
+        buttonType: 'danger',
+        hide: !isAction?.('delete user')
+      }
+    ]
   })) as ITable[]
 
   const roleOptionData = [
     {
       id: 1,
-      label: "Super-Admin",
-      value: "Super-Admin",
+      label: 'Super-Admin',
+      value: 'Super-Admin'
     },
     {
       id: 2,
-      label: "Admin",
-      value: "Admin",
+      label: 'Admin',
+      value: 'Admin'
     },
     {
       id: 3,
-      label: "Moderator",
-      value: "Moderator",
+      label: 'Moderator',
+      value: 'Moderator'
     },
     {
       id: 4,
-      label: "Field Officer",
-      value: "Field Officer",
-    },
+      label: 'Field Officer',
+      value: 'Field Officer'
+    }
   ]
 
   const orgOptionData = [
     {
       id: 1,
-      label: "Traffic",
-      value: "Traffic",
+      label: 'Traffic',
+      value: 'Traffic'
     },
     {
       id: 2,
-      label: "E-Police",
-      value: "E-Police",
+      label: 'E-Police',
+      value: 'E-Police'
     },
     {
       id: 3,
-      label: "Fire Service",
-      value: "Fire Service",
+      label: 'Fire Service',
+      value: 'Fire Service'
     },
     {
       id: 4,
-      label: "E-Medical",
-      value: "E-Medical",
-    },
+      label: 'E-Medical',
+      value: 'E-Medical'
+    }
   ]
 
   const tableActionEnums = {
-    REASSIGNROLE: "Re-assign Role",
-    DELETE: "Delete",
+    REASSIGNROLE: 'Re-assign Role',
+    DELETE: 'Delete'
   }
 
   const getTableActionEnums = (): { [key: string]: string } | null => {
@@ -162,21 +162,21 @@ const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
     paginationParams: {
       current: userState?.getAllUsers?.currentPage || 1,
       isPagination: true,
-      load: userState?.getAllUsersLoading!,
+      load: userState?.getAllUsersLoading,
       total: userState?.getAllUsers?.totalPages || 1,
       onPageChange: (selectedItem: { selected: number }) => {
         getAllUsersFn(
           getQuery(`${PAGESIZE}&pageNumber=${selectedItem.selected + 1}`)
         )
-      },
+      }
     },
     searchAction: (name: string) => {
-      const nameQuery = name ? `&name=${name}` : ""
+      const nameQuery = name ? `&name=${name}` : ''
       getAllUsersFn(
-        getQuery(`${PAGESIZE}&${PAGENUMBER}${nameQuery}`) + `${query("&")}`
+        getQuery(`${PAGESIZE}&${PAGENUMBER}${nameQuery}`) + `${query('&')}`
       )
     },
-    searchPlaceHolder: "Search Users",
+    searchPlaceHolder: 'Search Users'
   })
 
   const reAssignRole = (data: string[]) => {}
@@ -199,17 +199,17 @@ const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
   return (
     <>
       <RightSection rsProps={rsProps}>
-        {rsProps.isView("custom", "create-admin") ||
-        rsProps.isView("custom", "update-admin") ? (
-          <CreateAdmin states={states!} actions={actions!} />
+        {rsProps.isView('custom', 'create-admin') ||
+        rsProps.isView('custom', 'update-admin') ? (
+          <CreateAdmin states={states} actions={actions} />
         ) : null}
-        {rsProps.isView("custom", "view-admin") ? <></> : null}
-        {rsProps.isView("custom", "update-admin") ? <></> : null}
+        {rsProps.isView('custom', 'view-admin') ? <></> : null}
+        {rsProps.isView('custom', 'update-admin') ? <></> : null}
       </RightSection>
       <div>
         <PageHeader
           title="User Management"
-          load={userState?.getAllUsersLoading!}
+          load={userState?.getAllUsersLoading}
         />
         <ActionWrapper action="create user">
           <div className="cta-header-section">
@@ -217,7 +217,7 @@ const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
               buttonSize="small"
               title="Create User"
               onClick={() => {
-                rsProps.callSection("custom", "create-admin")
+                rsProps.callSection('custom', 'create-admin')
               }}
             />
           </div>
@@ -225,31 +225,31 @@ const ManagementPage: React.FC<IProps> = ({ states, actions }) => {
         <ActionWrapper action="read user">
           <div className="table-section card-section">
             <div className="filter-management-section">
-              {ROLE === "super-admin" && (
+              {ROLE === 'super-admin' && (
                 <TypeSelect
-                  initoption={{ label: "All", value: "" }}
+                  initoption={{ label: 'All', value: '' }}
                   label="Filter by Role"
                   optionsdata={roleOptionData}
-                  customwidth={"300px"}
+                  customwidth={'300px'}
                 />
               )}
               {GODUSER && (
                 <TypeSelect
-                  initoption={{ label: "All", value: "" }}
+                  initoption={{ label: 'All', value: '' }}
                   label="Filter by Organization"
                   optionsdata={orgOptionData}
-                  customwidth={"300px"}
+                  customwidth={'300px'}
                 />
               )}
             </div>
             <Table
               header={[
-                "Name",
-                "Email",
-                "Organization",
-                "Role",
-                "Phone",
-                "Action",
+                'Name',
+                'Email',
+                'Organization',
+                'Role',
+                'Phone',
+                'Action'
               ].filter((_, index) =>
                 GODUSER ? true : ISSUPERADMIN ? index !== 2 : false
               )}

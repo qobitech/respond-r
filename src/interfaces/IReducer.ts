@@ -1,14 +1,14 @@
-import { ICallRightSection } from "store/actions/global"
-import { INotification, IVehicleSearchPayload } from "./IGlobal"
-import { IAllUsers, ICreateUserError, ICreateUserResponse } from "./IUser"
-import { IVehicleById, IVehicleSearch } from "./IVehicle"
-import { ILoginResponse } from "./IAuth"
-import { IDemoEPolice } from "./IDemo"
-import { IRoles } from "./IRole"
-import { IOrganizations } from "./IOrganization"
-import { IActionsForRole, ICreateAction, IRoleActions } from "./IRoleActions"
-import { IReports, IUpdateReportStatus } from "./IReport"
-import { IAllAssets, IAssetByID, IAssets } from "./IAsset"
+import { ICallRightSection } from 'store/actions/global'
+import { INotification, IVehicleSearchPayload } from './IGlobal'
+import { IAllUsers, ICreateUserError, ICreateUserResponse } from './IUser'
+import { IVehicleById, IVehicleSearch } from './IVehicle'
+import { ILoginResponse } from './IAuth'
+import { IDemoEPolice } from './IDemo'
+import { IRoles } from './IRole'
+import { IOrganizations } from './IOrganization'
+import { IActionsForRole, ICreateAction, IRoleActions } from './IRoleActions'
+import { IReports, IUpdateReportStatus } from './IReport'
+import { IAllAssets, IAssetByID, IAssets } from './IAsset'
 
 export interface IAuthReducer {
   userLogin: ILoginResponse

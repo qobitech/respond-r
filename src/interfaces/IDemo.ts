@@ -28,7 +28,7 @@ export interface IEPoliceRespondr {
   id: string
   latitude: string
   longitude: string
-  map: "https://w3w.co/assessing.stables.bidders"
+  map: 'https://w3w.co/assessing.stables.bidders'
   mediaFiles: string[]
   nearestPlace: string
   referenceId: string

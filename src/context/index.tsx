@@ -1,12 +1,12 @@
-import { IAction } from "interfaces/IAction"
-import { IOrganization } from "interfaces/IOrganization"
-import { IStates } from "interfaces/IReducer"
-import { IReport, IReports } from "interfaces/IReport"
-import { IRole } from "interfaces/IRole"
-import { createContext } from "react"
-import { ISideToast } from "utils/new/toast"
+import { IAction } from 'interfaces/IAction'
+import { IOrganization } from 'interfaces/IOrganization'
+import { IStates } from 'interfaces/IReducer'
+import { IReport, IReports } from 'interfaces/IReport'
+import { IRole } from 'interfaces/IRole'
+import { createContext } from 'react'
+import { ISideToast } from 'utils/new/toast'
 
-export type themeType = "dark" | "light"
+export type themeType = 'dark' | 'light'
 
 export interface IGlobalContext {
   actions?: string[]
@@ -16,7 +16,7 @@ export interface IGlobalContext {
   setTheme?: React.Dispatch<React.SetStateAction<themeType>>
   organizations?: IOrganization[]
   getOrganization?: (
-    type: "id" | "name",
+    type: 'id' | 'name',
     key: string | number
   ) => IOrganization | undefined
   userOrganization?: IOrganization
@@ -33,16 +33,16 @@ export interface IGlobalContext {
   setReportById?: (data: IReports) => void
   fetchAssets?: () => void
   fetchReports?: (page?: number) => void
-  organization?: "Fire" | "Police" | "Medical" | null
+  organization?: 'Fire' | 'Police' | 'Medical' | null
   setSideToast?: (toast: ISideToast) => void
   sideToast?: ISideToast
 }
 
 export const GlobalContext = createContext<IGlobalContext>({
   actions: [],
-  search: "",
-  theme: "dark",
+  search: '',
+  theme: 'dark',
   organizations: [],
   roles: [],
-  globalStartConnection: { action: false, url: "" },
+  globalStartConnection: { action: false, url: '' }
 })

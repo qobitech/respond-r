@@ -1,5 +1,5 @@
-import { IFeed } from "interfaces/IStream"
-import { ISearchVehicle } from "interfaces/IVehicle"
+import { IFeed } from 'interfaces/IStream'
+import { ISearchVehicle } from 'interfaces/IVehicle'
 
 export const MAX_DATA_COUNTER = 20
 
@@ -49,50 +49,50 @@ export const handleDataStream = <T extends IT>(
 }
 
 export const vehicleSearchDemoData: ISearchVehicle = {
-  cameraName: "ere",
-  classification: "rer",
-  code: "34565",
-  color: "RED",
-  createdAt: "34-12-2023",
-  filePath: "eerefefe",
-  flags: ["refrfr"],
-  id: "23efrefew",
+  cameraName: 'ere',
+  classification: 'rer',
+  code: '34565',
+  color: 'RED',
+  createdAt: '34-12-2023',
+  filePath: 'eerefefe',
+  flags: ['refrfr'],
+  id: '23efrefew',
   isOnBlackList: false,
-  isUploaded: "true",
-  make: "CAMRY",
-  model: "CAM",
-  orientation: "erfefwe",
+  isUploaded: 'true',
+  make: 'CAMRY',
+  model: 'CAM',
+  orientation: 'erfefwe',
   registration: {
-    category: "erferfwr",
+    category: 'erferfwr',
     confidence: 20,
-    localGovernment: "ijebu",
-    state: "lagos",
+    localGovernment: 'ijebu',
+    state: 'lagos'
   },
-  regNumber: "dtgerfre",
-  status: "dfefewf",
-  timeStamp: "erferfwr",
-  updatedAt: "ergerfer",
-  uploadedAt: "wefwerggrwe",
-  vehicleType: "erferfefew",
+  regNumber: 'dtgerfre',
+  status: 'dfefewf',
+  timeStamp: 'erferfwr',
+  updatedAt: 'ergerfer',
+  uploadedAt: 'wefwerggrwe',
+  vehicleType: 'erferfefew'
 }
 
 export const vsdd: ISearchVehicle[] = new Array(5).fill(vehicleSearchDemoData)
 
 export const feedDemoData: IFeed = {
-  cameraName: "ere",
-  classification: "rer",
-  code: "34565",
-  filePath: "eerefefe",
-  flags: ["refrfr"],
+  cameraName: 'ere',
+  classification: 'rer',
+  code: '34565',
+  filePath: 'eerefefe',
+  flags: ['refrfr'],
   isOnBlackList: false,
   isUploaded: false,
-  make: "CAMRY",
-  model: "CAM",
-  orientation: "erfefwe",
-  regNumber: "dtgerfre",
-  timeStamp: "erferfwr",
-  vehicleType: "erferfefew",
-  colour: "RED",
+  make: 'CAMRY',
+  model: 'CAM',
+  orientation: 'erfefwe',
+  regNumber: 'dtgerfre',
+  timeStamp: 'erferfwr',
+  vehicleType: 'erferfefew',
+  colour: 'RED'
 }
 
 export const feedDemoDatas = new Array(5).fill(feedDemoData)

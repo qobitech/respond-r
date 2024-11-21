@@ -1,4 +1,4 @@
-import { IPagination } from "./IOther"
+import { IPagination } from './IOther'
 
 export interface IRoleAction {
   name: string

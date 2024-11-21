@@ -1,20 +1,31 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ESNext",
     "baseUrl": "src",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": ["dom", "dom.iterable", "esnext", "es6"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "esnext",
+    "noFallthroughCasesInSwitch": true,
+    "module": "ESNext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "strictNullChecks": false,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "react-jsx",
+    // "types": ["jest", "@testing-library/jest-dom", "vitest/globals"] // Add Jest types
+    "types": ["vite/client", "vitest/globals"] // Add Jest types
   },
-  "include": ["src"]
+  "include": [
+    "src",
+    ".d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "__tests__/page-all.test.js"
+  ],
+  "exclude": ["node_modules"]
 }

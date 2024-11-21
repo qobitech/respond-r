@@ -1,11 +1,11 @@
-import React from "react"
-import ButtonLoader from "./button-loader"
-import "./index.scss"
-import { CloseSVG } from "../svgs"
+import React from 'react'
+import ButtonLoader from './button-loader'
+import './index.scss'
+import { CloseSVG } from '../svgs'
 
-interface IButton extends React.ComponentPropsWithoutRef<"button"> {
-  buttonType?: "bold" | "outlined" | "disabled" | "danger" | "active"
-  buttonSize?: "small" | "medium" | "large" | "table"
+interface IButton extends React.ComponentPropsWithoutRef<'button'> {
+  buttonType?: 'bold' | 'outlined' | 'disabled' | 'danger' | 'active'
+  buttonSize?: 'small' | 'medium' | 'large' | 'table'
   title: string
   load?: boolean
   onClick?: React.MouseEventHandler<HTMLButtonElement>
@@ -30,7 +30,7 @@ export const TypeButton = React.forwardRef(
             <span>{close ? <CloseSVG /> : title}</span>
           ) : (
             <ButtonLoader
-              className={buttonType === "outlined" ? "bg-dark" : ""}
+              className={buttonType === 'outlined' ? 'bg-dark' : ''}
             />
           )}
         </button>
@@ -38,6 +38,8 @@ export const TypeButton = React.forwardRef(
     )
   }
 )
+
+TypeButton.displayName = 'TypeButton'
 
 // export const TypeSmallButton = React.forwardRef(
 //   (

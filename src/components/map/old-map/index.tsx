@@ -1,15 +1,15 @@
-import React, { useMemo } from "react"
+import React, { useMemo } from 'react'
 import {
   GoogleMap,
   useLoadScript,
   // MarkerF,
   // InfoWindow,
-  Marker,
-} from "@react-google-maps/api"
-import "./index.scss"
+  Marker
+} from '@react-google-maps/api'
+import './index.scss'
 
 export default function GoogleMaps({ lat, lng }: Coordinates) {
-  const googleMapsApiKey = process.env.REACT_APP_GOOGLE_API_KEY
+  const googleMapsApiKey = import.meta.env.VITE_REACT_APP_GOOGLE_API_KEY
   if (!googleMapsApiKey) {
     return <div>Error</div>
   }
@@ -33,7 +33,7 @@ const Map = ({ googleMapsApiKey, lat, lng }: MapProps) => {
   // )
 
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey,
+    googleMapsApiKey
   })
   if (!isLoaded) return <div>Loading...</div>
 

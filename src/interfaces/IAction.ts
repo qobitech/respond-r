@@ -1,7 +1,7 @@
-import { ICallRightSection, vehicleSearchType } from "store/actions/global"
-import * as utils from "../store/services/new/utils"
-import { IATE, IAssetQuery } from "store/actions/admin-actions/assets"
-import { IURS } from "store/actions/admin-actions/report"
+import { ICallRightSection, vehicleSearchType } from 'store/actions/global'
+import * as utils from '../store/services/new/utils'
+import { IATE, IAssetQuery } from 'store/actions/admin-actions/assets'
+import { IURS } from 'store/actions/admin-actions/report'
 interface IAuth {
   setAuthorizationHeader: (token: string) => void
   registerOrganization: (adminDetails: object) => (dispatch: Function) => void
@@ -142,7 +142,7 @@ interface IReports {
 interface IAssets {
   getAllAssets: ({
     overwrite,
-    getLatest,
+    getLatest
   }: IAssetQuery) => (dispatch: any) => void
   getAssets: () => (dispatch: any) => void
   createAsset: () => (dispatch: any) => void

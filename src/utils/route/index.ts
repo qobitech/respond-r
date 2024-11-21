@@ -1,21 +1,21 @@
-import { ReactElement } from "react"
-import { url } from "../../enums/Route"
-import LandingPage from "components/public/landing"
-import Login from "components/auth/login"
-import ForgotPassword from "components/auth/login/forgot-password"
-import ResetPassword from "components/auth/login/reset-password"
-import Register from "components/auth/register"
-import VerifyEmail from "components/auth/register/verify-email"
-import Overview from "components/dashboard/traffic"
-import IPolicePage from "components/dashboard/e-police"
-import IFireServicePage from "components/dashboard/fire-service"
-import IMedicalPage from "components/dashboard/e-medical"
-import AdminManagement from "components/dashboard/admin-management"
+import { ReactElement } from 'react'
+import { url } from '../../enums/Route'
+import LandingPage from 'components/public/landing'
+import Login from 'components/auth/login'
+import ForgotPassword from 'components/auth/login/forgot-password'
+import ResetPassword from 'components/auth/login/reset-password'
+import Register from 'components/auth/register'
+import VerifyEmail from 'components/auth/register/verify-email'
+import Overview from 'components/dashboard/traffic'
+import IPolicePage from 'components/dashboard/e-police'
+import IFireServicePage from 'components/dashboard/fire-service'
+import IMedicalPage from 'components/dashboard/e-medical'
+import AdminManagement from 'components/dashboard/admin-management'
 export interface IUrl {
   id: number
-  PageRenders: ((props?: any) => ReactElement | null)[]
+  PageRenders: Array<(props?: any) => ReactElement | null>
   paths: string[]
-  routeType: "public" | "auth"
+  routeType: 'public' | 'auth'
 }
 
 export const routes: IUrl[] = [
@@ -23,51 +23,51 @@ export const routes: IUrl[] = [
     id: 1,
     PageRenders: [LandingPage],
     paths: [url.LANDING_PAGE],
-    routeType: "public",
+    routeType: 'public'
   },
-  { id: 2, PageRenders: [Login], paths: [url.LOGIN], routeType: "public" },
+  { id: 2, PageRenders: [Login], paths: [url.LOGIN], routeType: 'public' },
   {
     id: 3,
     PageRenders: [ForgotPassword],
     paths: [url.FORGOT_PASSWORD],
-    routeType: "public",
+    routeType: 'public'
   },
   {
     id: 4,
     PageRenders: [ResetPassword, ResetPassword],
     paths: [url.RESET_PASSWORD, `${url.RESET_PASSWORD}/:email/:token`],
-    routeType: "public",
+    routeType: 'public'
   },
   {
     id: 5,
     PageRenders: [Register],
     paths: [url.REGISTER],
-    routeType: "public",
+    routeType: 'public'
   },
   {
     id: 6,
     PageRenders: [VerifyEmail, VerifyEmail],
     paths: [url.VERIFY_EMAIL, `${url.VERIFY_EMAIL}/:email/:token`],
-    routeType: "public",
+    routeType: 'public'
   },
-  { id: 7, PageRenders: [Overview], paths: [url.TRAFFIC], routeType: "auth" },
-  { id: 8, PageRenders: [IPolicePage], paths: [url.POLICE], routeType: "auth" },
+  { id: 7, PageRenders: [Overview], paths: [url.TRAFFIC], routeType: 'auth' },
+  { id: 8, PageRenders: [IPolicePage], paths: [url.POLICE], routeType: 'auth' },
   {
     id: 9,
     PageRenders: [AdminManagement],
     paths: [url.MANAGEMENT],
-    routeType: "auth",
+    routeType: 'auth'
   },
   {
     id: 10,
     PageRenders: [IFireServicePage],
     paths: [url.FIRESERVICE],
-    routeType: "auth",
+    routeType: 'auth'
   },
   {
     id: 11,
     PageRenders: [IMedicalPage],
     paths: [url.MEDICAL],
-    routeType: "auth",
-  },
+    routeType: 'auth'
+  }
 ]

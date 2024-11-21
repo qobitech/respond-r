@@ -1,22 +1,22 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useEffect, useRef, useState } from "react"
-import "./index.scss"
-import "../global.scss"
-import AdminReport, { ObjectType, ReportStatus } from "../admin-reports"
-import { ISSUPERADMIN } from "utils/new/constants"
-import { GODUSER } from "utils/new/constants/roles"
-import { PlusSVG, PulseSVG, RefreshSVG } from "utils/new/svgs"
-import { useInfiniteScroll } from "utils/new/hook"
-import { IReports } from "interfaces/IReport"
-import { useGlobalContext } from "components/layout"
+import React, { useEffect, useRef, useState } from 'react'
+import './index.scss'
+import '../global.scss'
+import AdminReport, { ObjectType, ReportStatus } from '../admin-reports'
+import { ISSUPERADMIN } from 'utils/new/constants'
+import { GODUSER } from 'utils/new/constants/roles'
+import { PlusSVG, PulseSVG, RefreshSVG } from 'utils/new/svgs'
+import { useInfiniteScroll } from 'utils/new/hook'
+import { IReports } from 'interfaces/IReport'
+import { useGlobalContext } from 'components/layout'
 
-const tabEnums = { REPORTS: "All Reports", FEED: "Feed" }
+const tabEnums = { REPORTS: 'All Reports', FEED: 'Feed' }
 
 export const adminSections = {
-  TRAFFIC: "E-traffic",
-  POLICE: "E-police",
-  FIRE_DEPARTMENT: "E-fire department",
-  HEALTHCARE: "E-healthcare",
+  TRAFFIC: 'E-traffic',
+  POLICE: 'E-police',
+  FIRE_DEPARTMENT: 'E-fire department',
+  HEALTHCARE: 'E-healthcare'
 } as const
 
 export type typeAdminSections =
@@ -27,7 +27,7 @@ const AdminWrapper = ({
   section,
   data,
   addAsset,
-  linkAsset,
+  linkAsset
 }: {
   children?: any
   section: typeAdminSections
@@ -67,14 +67,14 @@ const AdminWrapper = ({
   const groupReports = (reports: IReports) => {
     setGroupedReports((prev) => {
       prev =
-        reports?.data?.reduce((acc, obj) => {
-          const date: string = obj.createdAt.split("T")[0]
+        reports?.data?.reduce<ObjectType>((acc, obj) => {
+          const date: string = obj.createdAt.split('T')[0]
           if (!acc[date]) {
             acc[date] = []
           }
           acc[date].push(obj)
           return acc
-        }, {} as ObjectType) || {}
+        }, {}) || {}
       return prev
     })
   }
@@ -163,7 +163,7 @@ const AdminWrapper = ({
               {tab === tabEnums.REPORTS ? (
                 <AdminReport
                   data={{ title: section, data: data || [] }}
-                  reports={localReports!}
+                  reports={localReports}
                   loadReports={loadReports}
                   showHeader={showHeader}
                   linkAsset={linkAsset}
@@ -204,13 +204,13 @@ const Header: React.FC<IHeader> = ({
   loadReports,
   fetchAssets,
   fetchReports,
-  addAsset,
+  addAsset
 }) => {
   return (
     <>
       {Object.values(tabEnums).map((i, index) => (
         <div
-          className={`tab-item ${i === tab ? "active" : ""}`}
+          className={`tab-item ${i === tab ? 'active' : ''}`}
           key={index}
           onClick={() => setTab(i)}
         >
@@ -220,9 +220,9 @@ const Header: React.FC<IHeader> = ({
 
       <div
         className={`ml-auto pr-4 align-items-center ${
-          tab !== tabEnums.REPORTS ? "d-none" : "d-flex"
+          tab !== tabEnums.REPORTS ? 'd-none' : 'd-flex'
         }`}
-        style={{ gap: "50px" }}
+        style={{ gap: '50px' }}
       >
         <div className="video-section-header-tab">
           <button onClick={() => addAsset()} className="border-0">
@@ -239,16 +239,16 @@ const Header: React.FC<IHeader> = ({
             {loadReports ? <PulseSVG /> : <RefreshSVG />}
           </button>
           <button
-            className={showHeader ? "active" : ""}
+            className={showHeader ? 'active' : ''}
             onClick={() => {
               setShowHeader(!showHeader)
             }}
           >
-            {showHeader ? "HIDE" : "SHOW"} FILTER
+            {showHeader ? 'HIDE' : 'SHOW'} FILTER
           </button>
         </div>
         <ReportStatus
-          reportStatus={["New", "Assigned", "Accepted", "Closed", "Rejected"]}
+          reportStatus={['New', 'Assigned', 'Accepted', 'Closed', 'Rejected']}
         />
       </div>
     </>

@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
-import { url } from "enums/Route"
-import "./navbar.scss"
-import Toast, { ISideToast, SideToast } from "utils/new/toast"
-import { INotification } from "interfaces/IGlobal"
-import { isLogged } from "utils/new/constants"
+import React, { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { url } from 'enums/Route'
+import './navbar.scss'
+import Toast, { ISideToast, SideToast } from 'utils/new/toast'
+import { INotification } from 'interfaces/IGlobal'
+import { isLogged } from 'utils/new/constants'
 import {
   CarsSVG,
   CogSVG,
@@ -13,14 +13,14 @@ import {
   ManagementSVG,
   MedicalSVG,
   PoliceSVG,
-  PulseSVG,
-} from "utils/new/svgs"
-import { ICallRightSection, vehicleSearchType } from "store/actions/global"
-import TextPrompt from "utils/new/text-prompt"
-import { TypeButton } from "utils/new/button"
-import Toggle from "utils/new/toggle"
-import { useGlobalContext } from "."
-import Logo from "../../extras/images/CHITHUB_LOGO.png"
+  PulseSVG
+} from 'utils/new/svgs'
+import { ICallRightSection, vehicleSearchType } from 'store/actions/global'
+import TextPrompt from 'utils/new/text-prompt'
+import { TypeButton } from 'utils/new/button'
+import Toggle from 'utils/new/toggle'
+import { useGlobalContext } from '.'
+import Logo from '../../extras/images/CHITHUB_LOGO.png'
 
 interface NavbarProps {
   notifyUser: INotification | undefined
@@ -39,11 +39,11 @@ interface NavbarProps {
 }
 
 type pageType =
-  | "e-traffic"
-  | "e-police"
-  | "firefighter"
-  | "management"
-  | "e-medical"
+  | 'e-traffic'
+  | 'e-police'
+  | 'firefighter'
+  | 'management'
+  | 'e-medical'
 
 const Navbar = (props: NavbarProps) => {
   const handleClick = () => {
@@ -66,15 +66,15 @@ const Navbar = (props: NavbarProps) => {
   const getPageIdentifier = (): pageType => {
     switch (true) {
       case isTraffic:
-        return "e-traffic"
+        return 'e-traffic'
       case isFireService:
-        return "firefighter"
+        return 'firefighter'
       case isPolice:
-        return "e-police"
+        return 'e-police'
       case isMedical:
-        return "e-medical"
+        return 'e-medical'
       default:
-        return "management"
+        return 'management'
     }
   }
 
@@ -82,7 +82,7 @@ const Navbar = (props: NavbarProps) => {
     <div className="nav-container">
       <nav
         className="navbarItems"
-        style={{ padding: isLogged ? "1rem 0px" : "0.4rem 0" }}
+        style={{ padding: isLogged ? '1rem 0px' : '0.4rem 0' }}
       >
         {props.menuOpen && <div className="backdrop" onClick={handleClick} />}
 
@@ -122,8 +122,8 @@ const Navbar = (props: NavbarProps) => {
             <ConfigurationComponent
               openSettings={() => {
                 props.callRightSection({
-                  action: "custom",
-                  component: "settings",
+                  action: 'custom',
+                  component: 'settings'
                 })
               }}
             />
@@ -172,7 +172,7 @@ const Navbar = (props: NavbarProps) => {
       </nav>
       <Toast
         status={props.notifyUser?.status || false}
-        notice={props.notifyUser?.notice || ""}
+        notice={props.notifyUser?.notice || ''}
       />
       <SideToast
         sideToast={props.sideToast}
@@ -187,24 +187,24 @@ export default Navbar
 const PageIdentifier = ({ page }: { page: pageType }) => {
   return (
     <div className="page-identifier">
-      {page === "firefighter" ? <FireExtinguisherSVG /> : null}
-      {page === "e-police" ? <PoliceSVG /> : null}
-      {page === "e-traffic" ? <CarsSVG /> : null}
-      {page === "management" ? <ManagementSVG /> : null}
-      {page === "e-medical" ? <MedicalSVG /> : null}
+      {page === 'firefighter' ? <FireExtinguisherSVG /> : null}
+      {page === 'e-police' ? <PoliceSVG /> : null}
+      {page === 'e-traffic' ? <CarsSVG /> : null}
+      {page === 'management' ? <ManagementSVG /> : null}
+      {page === 'e-medical' ? <MedicalSVG /> : null}
       <p>{page}</p>
     </div>
   )
 }
 
 const PoliceSearchComponent = () => {
-  const [inputValue, setInputValue] = useState<string>("")
-  const [error, setError] = useState<string>("")
+  const [inputValue, setInputValue] = useState<string>('')
+  const [error, setError] = useState<string>('')
 
   const handleOnChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = target
     setInputValue(value)
-    setError("")
+    setError('')
   }
 
   // const handleSearch = (searchType: "reg" | "chasis") => {
@@ -219,17 +219,17 @@ const PoliceSearchComponent = () => {
 
   return (
     <form className="nav-search-component" onSubmit={(e) => e.preventDefault()}>
-      <div className="d-flex align-items-center" style={{ gap: "20px" }}>
+      <div className="d-flex align-items-center" style={{ gap: '20px' }}>
         <input
           placeholder="Type here to search"
           onChange={handleOnChange}
           value={inputValue}
-          onBlur={() => setError("")}
-          onFocus={() => setError("")}
+          onBlur={() => setError('')}
+          onFocus={() => setError('')}
           autoFocus={error.length > 0}
           style={{
-            border: error ? "1px solid #f56e9d" : "",
-            marginBottom: error ? "5px" : "0",
+            border: error ? '1px solid #f56e9d' : '',
+            marginBottom: error ? '5px' : '0'
           }}
         />
 
@@ -249,13 +249,13 @@ const PoliceSearchComponent = () => {
 }
 
 const FireSearchComponent = () => {
-  const [inputValue, setInputValue] = useState<string>("")
-  const [error, setError] = useState<string>("")
+  const [inputValue, setInputValue] = useState<string>('')
+  const [error, setError] = useState<string>('')
 
   const handleOnChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = target
     setInputValue(value)
-    setError("")
+    setError('')
   }
 
   // const handleSearch = (searchType: "reg" | "chasis") => {
@@ -270,17 +270,17 @@ const FireSearchComponent = () => {
 
   return (
     <form className="nav-search-component" onSubmit={(e) => e.preventDefault()}>
-      <div className="d-flex align-items-center" style={{ gap: "20px" }}>
+      <div className="d-flex align-items-center" style={{ gap: '20px' }}>
         <input
           placeholder="Type here to search"
           onChange={handleOnChange}
           value={inputValue}
-          onBlur={() => setError("")}
-          onFocus={() => setError("")}
+          onBlur={() => setError('')}
+          onFocus={() => setError('')}
           autoFocus={error.length > 0}
           style={{
-            border: error ? "1px solid #f56e9d" : "",
-            marginBottom: error ? "5px" : "0",
+            border: error ? '1px solid #f56e9d' : '',
+            marginBottom: error ? '5px' : '0'
           }}
         />
 
@@ -303,7 +303,7 @@ const TrafficSearchComponent = ({
   searchVehicleByChasisNumber,
   searchVehicleByRegNumber,
   load,
-  setSearch,
+  setSearch
 }: {
   searchVehicleByChasisNumber: (query: string) => (dispatch: any) => void
   searchVehicleByRegNumber: (query: string) => (dispatch: any) => void
@@ -315,41 +315,41 @@ const TrafficSearchComponent = ({
 }) => {
   const { search } = useGlobalContext()
 
-  const [inputValue, setInputValue] = useState<string>("")
-  const [error, setError] = useState<string>("")
+  const [inputValue, setInputValue] = useState<string>('')
+  const [error, setError] = useState<string>('')
 
   const handleOnChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = target
     setInputValue(value)
-    setError("")
+    setError('')
   }
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!inputValue) {
-      setError("input empty")
+      setError('input empty')
       return
     }
     if (inputValue.length < 11) searchVehicleByRegNumber(inputValue)
     else searchVehicleByChasisNumber(inputValue)
-    setSearch(true, inputValue.length < 11 ? "regnumber" : "chasis")
+    setSearch(true, inputValue.length < 11 ? 'regnumber' : 'chasis')
   }
 
   useEffect(() => {
-    setInputValue(search!)
+    setInputValue(search)
   }, [search])
 
   return (
     <form className="nav-search-component" onSubmit={handleSearch}>
-      <div className="d-flex align-items-center" style={{ gap: "20px" }}>
+      <div className="d-flex align-items-center" style={{ gap: '20px' }}>
         <input
           placeholder="Search reg number or chasis number"
           onChange={handleOnChange}
           value={inputValue.toUpperCase()}
-          onBlur={() => setError("")}
-          onFocus={() => setError("")}
+          onBlur={() => setError('')}
+          onFocus={() => setError('')}
           autoFocus={error.length > 0}
-          className={error ? "error" : ""}
+          className={error ? 'error' : ''}
         />
         {load ? (
           <PulseSVG />
@@ -430,7 +430,7 @@ const TrafficSearchComponent = ({
 // }
 
 const ConfigurationComponent = ({
-  openSettings,
+  openSettings
 }: {
   openSettings: () => void
 }) => {

@@ -1,56 +1,56 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState } from "react"
-import "./index.scss"
-import { TypeInput } from "utils/new/input"
-import { TypeButton } from "utils/new/button"
-import { TypeSelect } from "utils/new/select"
-import ReportTable, { ITableRecord } from "utils/new/report-table"
-import { ILocationDetails, NoMediaComponent } from "../traffic"
-import { IReport, IReports } from "interfaces/IReport"
-import { MainView, MainViewLocal } from "../components"
-import { IRightSection } from "components/reusable/right-section"
-import { PulseSVG, RefreshSVG } from "utils/new/svgs"
-import { IAllAssets, IAsset, IAssets, assetType } from "interfaces/IAsset"
-import { CopyComponent, useCopy } from "utils/new/hook"
-import moveable from "../../../extras/images/moveable.svg"
-import police_vehicle from "../../../extras/images/asset_icons/police-vehicle.svg"
-import fire_truck from "../../../extras/images/asset_icons/fire-truck.svg"
-import police from "../../../extras/images/asset_icons/police.svg"
-import street_camera from "../../../extras/images/asset_icons/street-camera.svg"
-import frsc_patrol from "../../../extras/images/asset_icons/frsc-patrol.svg"
-import hospital from "../../../extras/images/asset_icons/hospital.svg"
-import ambulance from "../../../extras/images/asset_icons/ambulance.svg"
-import police_station from "../../../extras/images/asset_icons/police-station.svg"
-import traffic_light from "../../../extras/images/asset_icons/traffic-light.svg"
-import drts_patrol from "../../../extras/images/asset_icons/drts-patrol.svg"
-import { useGlobalContext } from "components/layout"
-import { IATE } from "store/actions/admin-actions/assets"
-import { IURS } from "store/actions/admin-actions/report"
-import { IReportReducer } from "interfaces/IReducer"
-import { assets as assetsType } from "../../../store/types"
-import { statusType } from "../asset/location-assets"
+import React, { useState } from 'react'
+import './index.scss'
+import { TypeInput } from 'utils/new/input'
+import { TypeButton } from 'utils/new/button'
+import { TypeSelect } from 'utils/new/select'
+import ReportTable, { ITableRecord } from 'utils/new/report-table'
+import { ILocationDetails, NoMediaComponent } from '../traffic'
+import { IReport, IReports } from 'interfaces/IReport'
+import { MainView, MainViewLocal } from '../components'
+import { IRightSection } from 'components/reusable/right-section'
+import { PulseSVG, RefreshSVG } from 'utils/new/svgs'
+import { IAllAssets, IAsset, IAssets, assetType } from 'interfaces/IAsset'
+import { CopyComponent, useCopy } from 'utils/new/hook'
+import moveable from '../../../extras/images/moveable.svg'
+import police_vehicle from '../../../extras/images/asset_icons/police-vehicle.svg'
+import fire_truck from '../../../extras/images/asset_icons/fire-truck.svg'
+import police from '../../../extras/images/asset_icons/police.svg'
+import street_camera from '../../../extras/images/asset_icons/street-camera.svg'
+import frsc_patrol from '../../../extras/images/asset_icons/frsc-patrol.svg'
+import hospital from '../../../extras/images/asset_icons/hospital.svg'
+import ambulance from '../../../extras/images/asset_icons/ambulance.svg'
+import police_station from '../../../extras/images/asset_icons/police-station.svg'
+import traffic_light from '../../../extras/images/asset_icons/traffic-light.svg'
+import drts_patrol from '../../../extras/images/asset_icons/drts-patrol.svg'
+import { useGlobalContext } from 'components/layout'
+import { IATE } from 'store/actions/admin-actions/assets'
+import { IURS } from 'store/actions/admin-actions/report'
+import { IReportReducer } from 'interfaces/IReducer'
+import { assets as assetsType } from '../../../store/types'
+import { statusType } from '../asset/location-assets'
 
 const getIconUrl = (type: assetType) => {
   switch (type) {
-    case "ambulance":
+    case 'ambulance':
       return ambulance
-    case "drts-patrol":
+    case 'drts-patrol':
       return drts_patrol
-    case "fire-truck":
+    case 'fire-truck':
       return fire_truck
-    case "frsc-patrol":
+    case 'frsc-patrol':
       return frsc_patrol
-    case "hospital":
+    case 'hospital':
       return hospital
-    case "police":
+    case 'police':
       return police
-    case "police-station":
+    case 'police-station':
       return police_station
-    case "police-vehicle":
+    case 'police-vehicle':
       return police_vehicle
-    case "street-camera":
+    case 'street-camera':
       return street_camera
-    case "traffic-light":
+    case 'traffic-light':
       return traffic_light
     default:
       return moveable
@@ -67,18 +67,18 @@ export const getReportStatusBg = (status: string) => {
   // Accepted (yellow)
   // Closed (green)
   // Ignored (---)
-  if (!status) return "grey"
+  if (!status) return 'grey'
   switch (status.toLowerCase()) {
-    case "new":
-      return "red"
-    case "assigned":
-      return "blue"
-    case "accepted":
-      return "yellow"
-    case "closed":
-      return "green"
+    case 'new':
+      return 'red'
+    case 'assigned':
+      return 'blue'
+    case 'accepted':
+      return 'yellow'
+    case 'closed':
+      return 'green'
     default:
-      return "grey"
+      return 'grey'
   }
 }
 
@@ -87,7 +87,7 @@ export const getTime = (date: string) => {
   const hours = currentDate.getHours()
   const minutes = currentDate.getMinutes()
   const seconds = currentDate.getSeconds()
-  const amPM = hours >= 12 ? "PM" : "AM" // Determine AM/PM
+  const amPM = hours >= 12 ? 'PM' : 'AM' // Determine AM/PM
 
   // Convert hours to 12-hour format
   const formattedHours = hours % 12 || 12
@@ -111,7 +111,7 @@ const AdminReport = <T extends { [key: string]: any }>({
   linkAsset,
   lastCardElementRef,
   updateLocalReportStatusByID,
-  groupedReports,
+  groupedReports
 }: {
   data: IReportData<T>
   reports: IReports
@@ -131,7 +131,7 @@ const AdminReport = <T extends { [key: string]: any }>({
     fetchAssets,
     fetchReports,
     organization,
-    setSideToast,
+    setSideToast
   } = useGlobalContext()
   if (!state) return <></>
   const allAssets = state?.asset.getAllAssets
@@ -144,8 +144,8 @@ const AdminReport = <T extends { [key: string]: any }>({
         ...data,
         emergency: {
           ...data.emergency,
-          emergencyType: organization?.toLowerCase() as string,
-        },
+          emergencyType: organization?.toLowerCase()
+        }
       },
       () => {
         function capitalizeFirstLetter(str: string) {
@@ -158,9 +158,9 @@ const AdminReport = <T extends { [key: string]: any }>({
         fetchReports?.()
         fetchAssets?.()
         setSideToast?.({
-          notice: "Event updated successfully",
+          notice: 'Event updated successfully',
           show: true,
-          status: true,
+          status: true
         })
       }
     )
@@ -171,7 +171,7 @@ const AdminReport = <T extends { [key: string]: any }>({
     return data?.map((report) => {
       const isSelected = report.id === selectedReport?.id
       return {
-        id: "1",
+        id: '1',
         isSelected,
         row: [
           {
@@ -179,7 +179,7 @@ const AdminReport = <T extends { [key: string]: any }>({
             isLink: false,
             action: () => {
               setSelectedReport?.(report)
-            },
+            }
           },
           {
             value: report.description,
@@ -188,25 +188,25 @@ const AdminReport = <T extends { [key: string]: any }>({
               setSelectedReport?.(report)
             },
             textLength: 25,
-            cellWidth: "180px",
-            classProps: "pl-2 lh-base",
+            cellWidth: '180px',
+            classProps: 'pl-2 lh-base'
           },
           {
             value: report.nearestPlace,
             isLink: false,
             action: () => {
               setSelectedReport?.(report)
-            },
+            }
           },
           {
-            value: "",
+            value: '',
             isLink: false,
             dangerouselySetHtml: `<div style="width: 12px; height: 12px; border-radius: 50%; background: ${getReportStatusBg(
               report.status
-            )}" title="${report.status}"></div>`,
-          },
+            )}" title="${report.status}"></div>`
+          }
         ],
-        rowActions: [],
+        rowActions: []
       }
     })
   }
@@ -215,15 +215,15 @@ const AdminReport = <T extends { [key: string]: any }>({
 
   const getSelectedReport = (selectedReport: IReport) => ({
     location: {
-      latitude: parseFloat(selectedReport.latitude || "0"),
-      longitude: parseFloat(selectedReport.longitude || "0"),
+      latitude: parseFloat(selectedReport.latitude || '0'),
+      longitude: parseFloat(selectedReport.longitude || '0')
     },
     map: selectedReport.map,
     nearestPlace: selectedReport.nearestPlace,
     markerContent: (
       <p
         className="d-flex text-decoration-underline"
-        style={{ cursor: "pointer" }}
+        style={{ cursor: 'pointer' }}
         onClick={() => {
           setSelectedReport?.(selectedReport)
         }}
@@ -231,13 +231,13 @@ const AdminReport = <T extends { [key: string]: any }>({
         {selectedReport.nearestPlace}
       </p>
     ),
-    markerColor: getReportStatusBg(selectedReport.status),
+    markerColor: getReportStatusBg(selectedReport.status)
   })
 
   const getSelectedAsset = (selectedAsset: IAsset) => ({
     location: {
-      latitude: parseFloat(selectedAsset.location.latitude || "0"),
-      longitude: parseFloat(selectedAsset.location.longitude || "0"),
+      latitude: parseFloat(selectedAsset.location.latitude || '0'),
+      longitude: parseFloat(selectedAsset.location.longitude || '0')
     },
     map: selectedAsset.location.map,
     nearestPlace: selectedAsset.location.nearestPlace,
@@ -248,25 +248,25 @@ const AdminReport = <T extends { [key: string]: any }>({
           linkAsset(selectedAsset.id)
         }}
       >
-        <p className="d-flex m-0" style={{ cursor: "pointer" }}>
-          <span style={{ width: "70px" }}>asset:</span> {selectedAsset.type}
+        <p className="d-flex m-0" style={{ cursor: 'pointer' }}>
+          <span style={{ width: '70px' }}>asset:</span> {selectedAsset.type}
         </p>
-        <p className="d-flex m-0" style={{ cursor: "pointer" }}>
-          <span style={{ width: "70px" }}>title:</span> {selectedAsset.name}
+        <p className="d-flex m-0" style={{ cursor: 'pointer' }}>
+          <span style={{ width: '70px' }}>title:</span> {selectedAsset.name}
         </p>
-        <p className="d-flex m-0" style={{ cursor: "pointer" }}>
-          <span style={{ width: "70px" }}>contact:</span>{" "}
+        <p className="d-flex m-0" style={{ cursor: 'pointer' }}>
+          <span style={{ width: '70px' }}>contact:</span>{' '}
           {selectedAsset.contact.name}
         </p>
       </div>
     ),
     markerColor: getReportStatusBg(selectedAsset.status),
     iconUrl: getIconUrl(selectedAsset.type as assetType),
-    iconSize: [20, 20],
+    iconSize: [20, 20]
   })
 
   const defaultDetails = [
-    { location: { latitude: 1, longitude: 1 }, map: "", nearestPlace: "" },
+    { location: { latitude: 1, longitude: 1 }, map: '', nearestPlace: '' }
   ]
 
   const allReports = !reports
@@ -289,29 +289,29 @@ const AdminReport = <T extends { [key: string]: any }>({
     data: IATE,
     callBack: (status: statusType, id: string) => void
   ) => {
-    callBack("loading", data.assetId)
+    callBack('loading', data.assetId)
     action?.assignAssetToEmergency(
       {
         ...data,
         emergency: {
           ...data.emergency,
-          emergencyType: organization?.toLowerCase() as string,
-        },
+          emergencyType: organization?.toLowerCase()
+        }
       },
       () => {
         setSideToast?.({
-          notice: "Asset assigned successfully",
+          notice: 'Asset assigned successfully',
           show: true,
-          status: true,
+          status: true
         })
-        callBack("success", data.assetId)
+        callBack('success', data.assetId)
         setTimeout(() => {
           action.clearAction(assetsType.assignAssetToEmergency)
           callBack(null, data.assetId)
         }, 1500)
       },
       () => {
-        callBack("error", data.assetId)
+        callBack('error', data.assetId)
       }
     )
   }
@@ -320,11 +320,11 @@ const AdminReport = <T extends { [key: string]: any }>({
     <>
       <CopyComponent {...copyProps} />
       <div className="admin-report-section">
-        <div className={`admin-report-header ${!showHeader ? "d-none" : ""}`}>
-          <div className="d-flex align-items-center" style={{ gap: "20px" }}>
+        <div className={`admin-report-header ${!showHeader ? 'd-none' : ''}`}>
+          <div className="d-flex align-items-center" style={{ gap: '20px' }}>
             <h1>{data.title} Reports</h1>
             <div
-              style={{ width: "max-content", height: "max-content" }}
+              style={{ width: 'max-content', height: 'max-content' }}
               role="button"
               title="Refresh Reports"
               onClick={() => fetchReports?.(1)}
@@ -338,14 +338,17 @@ const AdminReport = <T extends { [key: string]: any }>({
           <div className="admin-report">
             <div
               className={`admin-report-left ${
-                selectedReport ? "item-open" : ""
+                selectedReport ? 'item-open' : ''
               }`}
             >
               <NoMediaComponent
                 locationDetails={
                   selectedReport
                     ? [getSelectedReport(selectedReport), ...mapAssets]
-                    : getLocationDetails() || [{ latitude: 1, longitude: 1 }]
+                    : getLocationDetails() ||
+                      ([
+                        { latitude: 1, longitude: 1 }
+                      ] as unknown as ILocationDetails[])
                 }
                 load={false}
                 key={selectedReport ? selectedReport.id : reports?.data?.length}
@@ -354,7 +357,7 @@ const AdminReport = <T extends { [key: string]: any }>({
             </div>
             <div
               className={`admin-report-right ${
-                selectedReport ? "item-open" : ""
+                selectedReport ? 'item-open' : ''
               }`}
             >
               {selectedReport ? (
@@ -402,7 +405,7 @@ const ViewReportItem: React.FC<IVRI> = ({
   assignAssets,
   assets,
   updateReport,
-  updateReportProps,
+  updateReportProps
 }) => {
   return (
     <div className="view-report-item-container">
@@ -413,7 +416,7 @@ const ViewReportItem: React.FC<IVRI> = ({
       </div>
       <div className="view-report-item">
         <MainViewLocal
-          feed={feed!}
+          feed={feed}
           assignAssets={assignAssets}
           assets={assets}
           updateReport={updateReport}
@@ -448,10 +451,10 @@ const ReportSection: React.FC<IReportSection> = ({
   reportsGroupedByDate,
   getTableReport,
   lastCardElementRef,
-  hide,
+  hide
 }) => {
   return (
-    <div className={hide ? "hide-prop" : ""}>
+    <div className={hide ? 'hide-prop' : ''}>
       {reportsGroupedByDate ? (
         <div className="table-wrapper">
           {Object.values(reportsGroupedByDate)?.map((report, index) => (
@@ -460,7 +463,7 @@ const ReportSection: React.FC<IReportSection> = ({
               key={index}
             >
               <ReportTable
-                header={["Time", "Report", "Location", "Status"]}
+                header={['Time', 'Report', 'Location', 'Status']}
                 record={getTableReport(report)}
                 hideNumbering
                 lastCardElementRef={lastCardElementRef}
@@ -475,7 +478,7 @@ const ReportSection: React.FC<IReportSection> = ({
 
 const TableWrapper = ({
   title,
-  children,
+  children
 }: {
   title: string
   children?: any
@@ -490,7 +493,7 @@ const TableWrapper = ({
         <p>{new Date(title).toDateString()}</p>
         <p>
           <span>
-            <i className={`fas fa-angle-${toggle ? "down" : "up"}`} />
+            <i className={`fas fa-angle-${toggle ? 'down' : 'up'}`} />
           </span>
         </p>
       </div>
@@ -502,11 +505,11 @@ const TableWrapper = ({
 }
 
 export const ViewReport = ({
-  rsProps,
+  rsProps
 }: {
   rsProps?: IRightSection<IReport>
 }) => {
-  return <MainView feed={rsProps?.data!} />
+  return <MainView feed={rsProps?.data} />
 }
 
 export default AdminReport
@@ -515,11 +518,11 @@ const FilterSection = () => {
   return (
     <div className="admin-filter-section">
       <TypeSelect
-        initoption={{ label: "All reports", value: "" }}
+        initoption={{ label: 'All reports', value: '' }}
         optionsdata={[
-          { id: 1, label: "Un-assigned reports", value: "unassigned" },
-          { id: 2, label: "Assigned reports", value: "assigned" },
-          { id: 3, label: "Rejected reports", value: "rejected" },
+          { id: 1, label: 'Un-assigned reports', value: 'unassigned' },
+          { id: 2, label: 'Assigned reports', value: 'assigned' },
+          { id: 3, label: 'Rejected reports', value: 'rejected' }
         ]}
       />
       <TypeInput placeholder="Search report or location" />
@@ -530,7 +533,7 @@ const FilterSection = () => {
 
 export const ReportStatus = ({ reportStatus }: { reportStatus: string[] }) => {
   return (
-    <div className="d-flex align-items-center" style={{ gap: "20px" }}>
+    <div className="d-flex align-items-center" style={{ gap: '20px' }}>
       {reportStatus.map((i, index) => (
         <ReportStatusItem status={i} key={index} />
       ))}
@@ -540,17 +543,17 @@ export const ReportStatus = ({ reportStatus }: { reportStatus: string[] }) => {
 
 const ReportStatusItem = ({ status }: { status: string }) => {
   return (
-    <div className="d-flex align-items-center" style={{ gap: "5px" }}>
+    <div className="d-flex align-items-center" style={{ gap: '5px' }}>
       <div
         style={{
-          width: "12px",
-          height: "12px",
-          borderRadius: "50%",
-          background: getReportStatusBg(status),
+          width: '12px',
+          height: '12px',
+          borderRadius: '50%',
+          background: getReportStatusBg(status)
         }}
         title={status}
       ></div>
-      <p className="m-0 text-color" style={{ fontSize: "0.7rem" }}>
+      <p className="m-0 text-color" style={{ fontSize: '0.7rem' }}>
         {status}
       </p>
     </div>
