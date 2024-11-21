@@ -16,22 +16,19 @@ export const pageurl = {
 // export const baseurl = process.env.REACT_APP_ETRAFFIKA_BASEURL;
 
 export const isBaseURL = (url: typeBaseUrls) => {
+  // if (!getBaseUrl) return ""
+  // if (typeof getBaseUrl === "function")
   return getBaseUrl(url)
+  // return ""
 }
-
-// export const baseurl = "https://respondradmin.azurewebsites.net/api/v1"
-export const baseurl = isBaseURL('commandURL')
-  ? isBaseURL('commandURL') + '/api/v1/'
-  : import.meta.env.VITE_REACT_APP_BASEURL ||
-    'https://respondradmin.azurewebsites.net/api/v1'
 
 export const baseurlReport = isBaseURL('queryURL')
   ? isBaseURL('queryURL') + '/api/v1/'
-  : import.meta.env.VITE_REACT_APP_BASEURL_REPORT
+  : process.env.REACT_APP_BASEURL_REPORT
 
 export const baseurlCommandReport = isBaseURL('commandURL')
   ? isBaseURL('commandURL') + '/api/v1/'
-  : import.meta.env.VITE_REACT_APP_BASEURL_REPORT
+  : process.env.REACT_APP_BASEURL_REPORT
 
 export const baseurlEPoliceTest =
   'https://respondr-command-2b9239ad3a3a.herokuapp.com/api/v1'
@@ -39,6 +36,10 @@ export const baseurlEPoliceTest =
 export const identity_server = 'https://identityserver.myapiservices.net/api/v1'
 // https://identitymanager.myapiservices.net/api/v1/UserLogin
 // export const baseurl = 'https://apigateway.myapiservices.net/identity-manager';
+
+export const RESPONDR_QR_BASE_URL = `http://127.0.0.1:30814/api/v1`
+export const RESPONDR_CM_BASE_URL = `http://127.0.0.1:30817/api/v1`
+export const VEHICLE_QEURY_BASE_URL = `http://127.0.0.1:30903/api/v1/Vehicle`
 
 export const validEmailRegex = /\S+@\S+\.\S+/
 

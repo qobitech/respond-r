@@ -22,7 +22,7 @@ const defaulttoken = {
   iat: 24234324324324
 }
 
-// export const USERTOKEN = getUserToken()
+// export const USERTOKEN = getUserToken();
 export const USERTOKEN = defaulttoken
 
 export const isLogged = true

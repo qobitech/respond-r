@@ -4,11 +4,11 @@ import './sidebar.scss'
 import { url } from 'enums/Route'
 import {
   CarsSVG,
-  FireExtinguisherSVG,
+  // FireExtinguisherSVG,
   HamburgerSVG,
   ManagementSVG,
-  MedicalSVG,
-  PoliceSVG,
+  // MedicalSVG,
+  // PoliceSVG,
   SwitchSVG
 } from 'utils/new/svgs'
 import { ISSUPERADMIN, ORGANIZATION } from 'utils/new/constants'
@@ -44,27 +44,27 @@ const SideBar = ({
       url: url.TRAFFIC,
       id: 'e-traffic'
     },
-    {
-      title: 'E-Police',
-      imgsrc: <PoliceSVG />,
-      isActive: _isUrl(url.POLICE),
-      url: url.POLICE,
-      id: 'e-police'
-    },
-    {
-      title: 'Fire Service',
-      imgsrc: <FireExtinguisherSVG />,
-      isActive: _isUrl(url.FIRESERVICE),
-      url: url.FIRESERVICE,
-      id: 'firefighter'
-    },
-    {
-      title: 'E-Medical',
-      imgsrc: <MedicalSVG />,
-      isActive: _isUrl(url.MEDICAL),
-      url: url.MEDICAL,
-      id: 'e-medical'
-    },
+    // {
+    //   title: "E-Police",
+    //   imgsrc: <PoliceSVG />,
+    //   isActive: _isUrl(url.POLICE),
+    //   url: url.POLICE,
+    //   id: "e-police",
+    // },
+    // {
+    //   title: "Fire Service",
+    //   imgsrc: <FireExtinguisherSVG />,
+    //   isActive: _isUrl(url.FIRESERVICE),
+    //   url: url.FIRESERVICE,
+    //   id: "firefighter",
+    // },
+    // {
+    //   title: "E-Medical",
+    //   imgsrc: <MedicalSVG />,
+    //   isActive: _isUrl(url.MEDICAL),
+    //   url: url.MEDICAL,
+    //   id: "e-medical",
+    // },
     {
       title: 'Management',
       imgsrc: <ManagementSVG />,

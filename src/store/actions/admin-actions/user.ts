@@ -1,4 +1,4 @@
-import { baseurl } from 'utils/constants'
+import { RESPONDR_QR_BASE_URL, RESPONDR_CM_BASE_URL } from 'utils/constants'
 import * as utils from '../../services/new/utils'
 import { user } from 'store/types'
 
@@ -10,7 +10,7 @@ export const createUser = (
   return utils.httpPostMethod({
     apiData: {
       url: '',
-      customurl: `${baseurl}/Auth/register`,
+      customurl: `${RESPONDR_CM_BASE_URL}/Auth/register`,
       header: utils.header(''),
       data
     },
@@ -28,7 +28,7 @@ export const getAllUsers = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: '',
-      customurl: `${baseurl}/User/paged${query}`,
+      customurl: `${RESPONDR_QR_BASE_URL}/User/paged${query}`,
       header: utils.header('')
     },
     actionType: user.getAllUsers
@@ -39,7 +39,7 @@ export const getUserById = (id: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: '',
-      customurl: `${baseurl}/Admin/UserManagement/${id || ''}`,
+      customurl: `${RESPONDR_QR_BASE_URL}/Admin/UserManagement/${id || ''}`,
       header: utils.header('')
     },
     actionType: user.getUserById
@@ -50,7 +50,7 @@ export const deleteUser = (id: string) => {
   return utils.httpDeleteMethod({
     apiData: {
       url: '',
-      customurl: `${baseurl}/Admin/UserManagement/DeleteUser`,
+      customurl: `${RESPONDR_CM_BASE_URL}/Admin/UserManagement/DeleteUser`,
       header: utils.header('')
     },
     actionType: user.deleteUser
