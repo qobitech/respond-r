@@ -1,7 +1,8 @@
 import { ILocation } from 'components/map/new-map'
 import { IAsset, IAssets } from 'interfaces/IAsset'
 import React, { useState, useEffect } from 'react'
-import { ITableRecord, TableSection } from '../traffic'
+import { ITableRecord } from '../traffic/utils'
+import { TableSection } from '../traffic/table-section'
 import './style.scss'
 import { TypeButton } from 'utils/new/button'
 import { PulseSVG, RefreshSVG } from 'utils/new/svgs'
@@ -346,7 +347,7 @@ const ViewAsset = ({ asset }: { asset: IAsset }) => {
       {Object.keys(ase)?.map((i, index) => (
         <div key={index}>
           {typeof ase[i] === 'string' || typeof ase[i] === 'number' ? (
-            <AssetItem label={i} value={ase[i]} />
+            <AssetItem label={i} value={ase[i] as string} />
           ) : null}
         </div>
       ))}

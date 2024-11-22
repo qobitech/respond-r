@@ -7,13 +7,13 @@ import { useFormHook } from 'utils/new/hook'
 import TextPrompt from 'utils/new/text-prompt'
 import * as yup from 'yup'
 import '../../../../utils/new/page.scss'
-import { IRightSection } from 'components/reusable/right-section'
 import { IRole } from 'interfaces/IRole'
 import { role } from 'store/types'
 import { useGlobalContext } from 'components/layout'
 import { IOrganization } from 'interfaces/IOrganization'
 import { GODUSER } from 'utils/new/constants/roles'
 import { ISSUPERADMIN } from 'utils/new/constants'
+import { IRightSection } from 'components/reusable/right-section/utils'
 
 interface ICreateRole {
   name: string

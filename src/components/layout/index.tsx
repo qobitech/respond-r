@@ -15,6 +15,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useQueryValuesHook } from 'utils/hooks'
 import { url } from 'enums/Route'
 import { ISideToast } from 'utils/new/toast'
+import { ThemeContext } from 'context/theme-context'
 
 export const useGlobalContext = (): IGlobalContext => {
   const context = useContext(GlobalContext)
@@ -246,38 +247,40 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
         sideToast
       }}
     >
-      <div className={`theme-${theme}`}>
-        {preLoad ? (
-          <div className="pre-loader">
-            <PulseSVG />
-            <p>Please wait...</p>
-          </div>
-        ) : null}
-        <SideBar
-          setMenuOpen={setMenuOpen}
-          menuOpen={menuOpen || false}
-          logOut={logOut}
-          handleSelectReport={handleSelectReport}
-        />
-        <div className={`page_layout fitContent`}>
-          <Navbar
-            notifyUser={notifyUser}
+      <ThemeContext.Provider value={{ theme, setTheme }}>
+        <div className={`theme-${theme}`}>
+          {preLoad ? (
+            <div className="pre-loader">
+              <PulseSVG />
+              <p>Please wait...</p>
+            </div>
+          ) : null}
+          <SideBar
             setMenuOpen={setMenuOpen}
             menuOpen={menuOpen || false}
-            callRightSection={callRightSection}
-            searchVehicleByChasisNumber={searchVehicleByChasisNumber}
-            searchVehicleByRegNumber={searchVehicleByRegNumber}
-            searchLoad={searchLoad}
-            setSearch={setSearch}
-            setSideToast={setSideToast}
-            sideToast={sideToast}
+            logOut={logOut}
+            handleSelectReport={handleSelectReport}
           />
-          <ScrollIntoViewController>
-            <div className="contents">{children}</div>
-          </ScrollIntoViewController>
-          {!isLogged && <Footer />}
+          <div className={`page_layout fitContent`}>
+            <Navbar
+              notifyUser={notifyUser}
+              setMenuOpen={setMenuOpen}
+              menuOpen={menuOpen || false}
+              callRightSection={callRightSection}
+              searchVehicleByChasisNumber={searchVehicleByChasisNumber}
+              searchVehicleByRegNumber={searchVehicleByRegNumber}
+              searchLoad={searchLoad}
+              setSearch={setSearch}
+              setSideToast={setSideToast}
+              sideToast={sideToast}
+            />
+            <ScrollIntoViewController>
+              <div className="contents">{children}</div>
+            </ScrollIntoViewController>
+            {!isLogged && <Footer />}
+          </div>
         </div>
-      </div>
+      </ThemeContext.Provider>
     </GlobalContext.Provider>
   )
 }

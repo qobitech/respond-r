@@ -7,10 +7,10 @@ import { useFormHook } from 'utils/new/hook'
 import TextPrompt from 'utils/new/text-prompt'
 import * as yup from 'yup'
 import '../../../../utils/new/page.scss'
-import { IRightSection } from 'components/reusable/right-section'
 import { IUser } from 'interfaces/IUser'
 import { TypeCheckbox } from 'utils/new/checkbox'
 import { CloseSVG } from 'utils/new/svgs'
+import { IRightSection } from 'components/reusable/right-section/utils'
 
 interface ICreateAdmin {
   action: string

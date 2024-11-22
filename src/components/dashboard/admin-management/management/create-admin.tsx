@@ -8,11 +8,11 @@ import { useFormHook } from 'utils/new/hook'
 import TextPrompt from 'utils/new/text-prompt'
 import * as yup from 'yup'
 import '../../../../utils/new/page.scss'
-import { IRightSection } from 'components/reusable/right-section'
 import { IUser } from 'interfaces/IUser'
 import { GODUSER } from 'utils/new/constants/roles'
 import { useGlobalContext } from 'components/layout'
 import { USERTOKEN } from 'utils/new/constants'
+import { IRightSection } from 'components/reusable/right-section/utils'
 
 interface ICreateAdmin {
   email: string

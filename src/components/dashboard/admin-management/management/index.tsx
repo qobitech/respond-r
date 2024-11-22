@@ -5,9 +5,7 @@ import '../../../../utils/new/page.scss'
 import './management.scss'
 import { TypeButton } from '../../../../utils/new/button'
 import { TypeSelect } from '../../../../utils/new/select'
-import RightSection, {
-  useRightSection
-} from '../../../../components/reusable/right-section'
+import RightSection from '../../../../components/reusable/right-section'
 import { IStates } from 'interfaces/IReducer'
 import { IAction } from 'interfaces/IAction'
 import CreateAdmin from './create-admin'
@@ -17,6 +15,7 @@ import { GODUSER } from 'utils/new/constants/roles'
 import { PageHeader } from 'components/dashboard/components'
 import { ActionWrapper, useGlobalContext } from 'components/layout'
 import { PAGENUMBER, PAGESIZE, getQuery } from '../action'
+import { useRightSection } from 'components/reusable/right-section/hooks'
 
 interface IProps {
   states?: IStates

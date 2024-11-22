@@ -1,4 +1,3 @@
-import { IRightSection } from 'components/reusable/right-section'
 import { IAction } from 'interfaces/IAction'
 import { IStates } from 'interfaces/IReducer'
 import { IRoleAction } from 'interfaces/IRoleActions'
@@ -7,6 +6,7 @@ import { SelectedItems } from '../action-old/create'
 import { TypeButton } from 'utils/new/button'
 import TextPrompt from 'utils/new/text-prompt'
 import { PAGENUMBER, PAGESIZE, getQuery } from '.'
+import { IRightSection } from 'components/reusable/right-section/utils'
 
 const DeleteAction = ({
   states,

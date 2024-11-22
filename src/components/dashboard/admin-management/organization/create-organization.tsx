@@ -7,9 +7,9 @@ import { useFormHook } from 'utils/new/hook'
 import TextPrompt from 'utils/new/text-prompt'
 import * as yup from 'yup'
 import '../../../../utils/new/page.scss'
-import { IRightSection } from 'components/reusable/right-section'
 import { organization } from 'store/types'
 import { IOrganization } from 'interfaces/IOrganization'
+import { IRightSection } from 'components/reusable/right-section/utils'
 
 interface ICreateOrg {
   name: string

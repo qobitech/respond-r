@@ -7,10 +7,10 @@ import { useFormHook } from 'utils/new/hook'
 import TextPrompt from 'utils/new/text-prompt'
 import * as yup from 'yup'
 import '../../../../utils/new/page.scss'
-import { IRightSection } from 'components/reusable/right-section'
 import { action } from 'store/types'
 import { IRoleAction } from 'interfaces/IRoleActions'
 import { PAGENUMBER, PAGESIZE, getQuery } from '.'
+import { IRightSection } from 'components/reusable/right-section/utils'
 
 interface ICreateAction {
   name: string

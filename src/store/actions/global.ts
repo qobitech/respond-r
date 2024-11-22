@@ -1,4 +1,7 @@
-import { actionComponent, actionType } from 'components/reusable/right-section'
+import {
+  actionComponent,
+  actionType
+} from 'components/reusable/right-section/utils'
 import * as utils from '../services/new/utils'
 import { globalType } from '../types'
 

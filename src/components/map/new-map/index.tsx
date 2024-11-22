@@ -2,13 +2,13 @@ import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 import L, { LatLngTuple } from 'leaflet'
 import './index.scss'
 import 'leaflet/dist/leaflet.css'
-import React from 'react'
+import React, { FC } from 'react'
 
-// const ResizeMap = () => {
-//   const map = useMap()
-//   map.getCenter()
-//   return null
-// }
+const ResizeMap: FC = () => {
+  const map = useMap()
+  map.getCenter()
+  return null
+}
 
 export interface ILocation {
   latitude: number
@@ -39,15 +39,12 @@ export const MapChart = ({
   style,
   defaultZoom
 }: MapChartProps) => {
-  const map = useMap()
   if (!locationContents || !locationContents.length) return null
   const centerLocation = getLatLngFromLocation(locationContents[0].location)
   // const bound: L.LatLngBoundsExpression = [
   //   [-100, 500],
   //   [240, 250],
   // ]
-
-  map.getCenter()
 
   const icon = (
     color: string,
@@ -77,7 +74,7 @@ export const MapChart = ({
         scrollWheelZoom={false}
         // bounds={bound}
       >
-        {/* <ResizeMap /> */}
+        <ResizeMap />
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

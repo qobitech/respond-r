@@ -1,4 +1,3 @@
-import { IRightSection } from 'components/reusable/right-section'
 import { IAction } from 'interfaces/IAction'
 import { IStates } from 'interfaces/IReducer'
 import React, { useEffect, useState } from 'react'
@@ -8,6 +7,7 @@ import TextPrompt from 'utils/new/text-prompt'
 import { PulseSVG } from 'utils/new/svgs'
 import { TypeButton } from 'utils/new/button'
 import { useGlobalContext } from 'components/layout'
+import { IRightSection } from 'components/reusable/right-section/utils'
 
 const ViewActions = ({
   actions,

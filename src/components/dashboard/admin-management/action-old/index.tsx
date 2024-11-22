@@ -5,13 +5,14 @@ import '../../../../utils/new/page.scss'
 import './management.scss'
 import { TypeButton } from '../../../../utils/new/button'
 import { TypeSelect } from '../../../../utils/new/select'
-import RightSection, { useRightSection } from '../../../reusable/right-section'
+import RightSection from '../../../reusable/right-section'
 import { IStates } from 'interfaces/IReducer'
 import { IAction } from 'interfaces/IAction'
 import CreateAction from './create'
 import { IUser } from 'interfaces/IUser'
 import { GODUSER } from 'utils/new/constants/roles'
 import { PageHeader } from 'components/dashboard/components'
+import { useRightSection } from 'components/reusable/right-section/hooks'
 
 interface IProps {
   states?: IStates

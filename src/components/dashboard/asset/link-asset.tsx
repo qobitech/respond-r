@@ -6,9 +6,9 @@ import { PulseSVG } from 'utils/new/svgs'
 import { ActionComponent } from '../components'
 import { clearAction } from 'store/actions/global'
 import { assets } from '../../../store/types'
-import { IRightSection } from 'components/reusable/right-section'
 import { IReport } from 'interfaces/IReport'
 import { useGlobalContext } from 'components/layout'
+import { IRightSection } from 'components/reusable/right-section/utils'
 
 const LinkAsset = ({
   assetId,

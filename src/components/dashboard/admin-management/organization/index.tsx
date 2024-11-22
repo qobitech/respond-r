@@ -4,12 +4,13 @@ import '../../../../utils/new/pagination.scss'
 import '../../../../utils/new/page.scss'
 import './management.scss'
 import { TypeButton } from '../../../../utils/new/button'
-import RightSection, { useRightSection } from '../../../reusable/right-section'
+import RightSection from '../../../reusable/right-section'
 import { IStates } from 'interfaces/IReducer'
 import { IAction } from 'interfaces/IAction'
 import { PageHeader } from 'components/dashboard/components'
 import CreateRole from './create-organization'
 import { IOrganization } from 'interfaces/IOrganization'
+import { useRightSection } from 'components/reusable/right-section/hooks'
 
 interface IProps {
   states?: IStates

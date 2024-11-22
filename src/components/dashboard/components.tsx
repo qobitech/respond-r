@@ -1,18 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import {
-  NoFeeds,
-  NoMediaComponent,
-  chkType,
-  getConnection,
-  getUrl,
-  setUrl,
-  typeConnectionStatus
-} from './traffic'
+import { NoFeeds } from './traffic/no-feeds'
 import { handleDataStream } from './traffic/data'
-import RightSection, {
-  IRightSection,
-  useRightSection
-} from 'components/reusable/right-section'
 import {
   IUseImage,
   handleFullScreen,
@@ -51,6 +39,12 @@ import { IATE } from 'store/actions/admin-actions/assets'
 import { IAssets } from 'interfaces/IAsset'
 import { IURS } from 'store/actions/admin-actions/report'
 import { IReportReducer } from 'interfaces/IReducer'
+import { chkType, getConnection, typeConnectionStatus } from './traffic/utils'
+import { getUrl, setUrl } from './traffic/helpers'
+import { NoMediaComponent } from './traffic/no-media-component'
+import { IRightSection } from 'components/reusable/right-section/utils'
+import { useRightSection } from 'components/reusable/right-section/hooks'
+import RightSection from 'components/reusable/right-section'
 
 export interface IPHUS<T> {
   feeds: T[]
