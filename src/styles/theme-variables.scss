@@ -1,3 +1,5 @@
+@use 'sass:map';
+
 $themes: (
   light: (
     side-toast: #046d3c,
@@ -32,7 +34,7 @@ $themes: (
     regnumber: #8d1d1d,
     tdcolor: #5b5b5b,
     author: #636363,
-    disabled: #8f9194,
+    disabled: #8f9194
   ),
   dark: (
     side-toast: #046d3c,
@@ -75,8 +77,8 @@ $themes: (
     regnumber: #c29393,
     tdcolor: #bdecf3,
     author: #e6dfdf,
-    disabled: #222223,
-  ),
+    disabled: #222223
+  )
 );
 
 @mixin themify($themes) {
@@ -84,11 +86,11 @@ $themes: (
     .theme-#{$theme} & {
       $theme-map: () !global;
       @each $key, $submap in $map {
-        $value: map-get(map-get($themes, $theme), "#{$key}");
-        $theme-map: map-merge(
+        $value: map.get(map.get($themes, $theme), '#{$key}');
+        $theme-map: map.merge(
           $theme-map,
           (
-            $key: $value,
+            $key: $value
           )
         ) !global;
       }
@@ -98,5 +100,5 @@ $themes: (
   }
 }
 @function themed($key) {
-  @return map-get($theme-map, $key);
+  @return map.get($theme-map, $key);
 }
