@@ -13409,7 +13409,14 @@ export const vehicleDataDemo: IVehicle = {
     }
   ],
   violationCount: 3,
-  warningCount: 2
+  warningCount: 2,
+  category: '',
+  eventTime: null,
+  isOnWatchList: false,
+  plateColor: null,
+  plateTextColor: null,
+  registration: null,
+  vehicleType: null
 }
 
 export const trafficReportData = [

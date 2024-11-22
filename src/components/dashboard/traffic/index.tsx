@@ -517,10 +517,14 @@ const MainView = ({
               {
                 location: {
                   latitude: parseFloat(
-                    vehicleData?.createLocation?.latitude ?? '0'
+                    vehicleData?.createLocation
+                      ? vehicleData?.createLocation?.latitude
+                      : '0'
                   ),
                   longitude: parseFloat(
-                    vehicleData?.createLocation?.longitude ?? '0'
+                    vehicleData?.createLocation
+                      ? vehicleData?.createLocation?.longitude
+                      : '0'
                   )
                 },
                 map: '',

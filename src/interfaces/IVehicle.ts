@@ -126,24 +126,25 @@ export interface IVehicleNote {
 }
 
 export interface IVehicle {
-  id: string
-  regNumber: string
-  code: string
-  classification: string
+  category: string | null
+  id: string | null
+  regNumber: string | null
+  code: string | null
+  classification: string | null
   createdAt: string
   updatedAt: string
   make: string
-  model: string
-  color: string
+  model: string | null
+  color: string | null
   mainImageUrl: string
-  engineNumber: string
-  chassisNumber: string
-  currentOwner: ICarOwner
-  currentLocation: string
-  createLocation: ICarLocation
+  engineNumber: string | null
+  chassisNumber: string | null
+  currentOwner: ICarOwner | null
+  currentLocation: string | null
+  createLocation: ICarLocation | null
   createDevise: {
     name: string
-  }
+  } | null
   creationRequest: number
   isTaxi: boolean
   isAnonymous: boolean
@@ -161,35 +162,41 @@ export interface IVehicle {
   hasFlag: boolean
   isTruck: boolean
   hasMisMatch: boolean
-  carMakerUrl: string
+  carMakerUrl: string | null
   instanceCount: number
-  violationCount: number
   mediaCount: number
-  warningCount: number
   organisation: {
     id: string
     name: string
-  }
+  } | null
   vehicleInsurance: {
     isValid: boolean
     expiryDate: string
-  }
+  } | null
   vehicleLicense: {
     isValid: boolean
     expiryDate: string
-  }
+  } | null
   vehicleRoadWorthiness: {
     isValid: boolean
     expiryDate: string
-  }
-  sotDetails: ISOTDetails[]
-  media: IMedia[]
-  instances: IInstance[]
-  vehicleOffenses: IVehicleOffense[]
-  vehicleWarnings: IVehicleWarning[]
-  notes: IVehicleNote[]
+  } | null
+  sotDetails: ISOTDetails[] | null
+  media: IMedia[] | null
+  instances: IInstance[] | null
+  vehicleOffenses: IVehicleOffense[] | null
+  vehicleWarnings: IVehicleWarning[] | null
+  notes: IVehicleNote[] | null
   tags: null
   flags: null | string[]
+  eventTime: null
+  isOnWatchList: boolean
+  plateColor: null
+  plateTextColor: null
+  registration: null
+  vehicleType: null
+  violationCount: number | null
+  warningCount: number | null
 }
 
 export interface IVehicleById {
