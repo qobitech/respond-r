@@ -6,7 +6,7 @@ export const getVehicleByRegNumber = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: '',
-      customurl: `${VEHICLE_QR_BASE_URL}/${query || 'kwl76bz'}`,
+      customurl: `${VEHICLE_QR_BASE_URL}/Vehicle/${query || 'kwl76bz'}`,
       header: utils.header('')
     },
     actionType: vehicles.getVehicleByRegNumber
@@ -17,7 +17,9 @@ export const searchVehicleByRegNumber = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: '',
-      customurl: `${IN_CAR_QR_BASE_URL}/search/regNumber/${query || ''}`,
+      customurl: `${IN_CAR_QR_BASE_URL}/Vehicle/search/regNumber/${
+        query || ''
+      }`,
       header: utils.header('')
     },
     actionType: vehicles.searchVehicleByRegNumber
@@ -28,7 +30,7 @@ export const searchVehicleByChasisNumber = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: '',
-      customurl: `${IN_CAR_QR_BASE_URL}/search/chasis/${query || ''}`,
+      customurl: `${IN_CAR_QR_BASE_URL}/Vehicle/search/chasis/${query || ''}`,
       header: utils.header('')
     },
     actionType: vehicles.searchVehicleByChasisNumber
