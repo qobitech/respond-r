@@ -1,6 +1,6 @@
-import { RESPONDR_QR_BASE_URL, RESPONDR_CM_BASE_URL } from 'utils/constants'
+import { RESPONDR_CM_BASE_URL, RESPONDR_QR_BASE_URL } from 'app-constants'
 import * as utils from '../../services/new/utils'
-import { user } from 'store/types'
+import { userTypes } from 'store/types'
 
 export const createUser = (
   data: object,
@@ -14,7 +14,7 @@ export const createUser = (
       header: utils.header(''),
       data
     },
-    actionType: user.createUser,
+    actionType: userTypes.createUser,
     onSuccess: (res) => {
       onSuccess?.(res)
     },
@@ -31,7 +31,7 @@ export const getAllUsers = (query: string) => {
       customurl: `${RESPONDR_QR_BASE_URL}/User/paged${query}`,
       header: utils.header('')
     },
-    actionType: user.getAllUsers
+    actionType: userTypes.getAllUsers
   })
 }
 
@@ -42,7 +42,7 @@ export const getUserById = (id: string) => {
       customurl: `${RESPONDR_QR_BASE_URL}/Admin/UserManagement/${id || ''}`,
       header: utils.header('')
     },
-    actionType: user.getUserById
+    actionType: userTypes.getUserById
   })
 }
 
@@ -53,6 +53,6 @@ export const deleteUser = (id: string) => {
       customurl: `${RESPONDR_CM_BASE_URL}/Admin/UserManagement/DeleteUser`,
       header: utils.header('')
     },
-    actionType: user.deleteUser
+    actionType: userTypes.deleteUser
   })
 }

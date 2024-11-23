@@ -1,6 +1,6 @@
-import { RESPONDR_QR_BASE_URL, RESPONDR_CM_BASE_URL } from 'utils/constants'
+import { RESPONDR_CM_BASE_URL, RESPONDR_QR_BASE_URL } from 'app-constants'
 import * as utils from '../../services/new/utils'
-import { action } from 'store/types'
+import { actionTypes } from 'store/types'
 
 export const getAllAction = (query: string) => {
   return utils.httpGetMethod({
@@ -9,7 +9,7 @@ export const getAllAction = (query: string) => {
       customurl: `${RESPONDR_QR_BASE_URL}/Action${query || ''}`,
       header: utils.header('')
     },
-    actionType: action.getAllAction
+    actionType: actionTypes.getAllAction
   })
 }
 
@@ -27,7 +27,7 @@ export const createAction = (
         header: utils.header(''),
         data
       },
-      actionType: action.createAction,
+      actionType: actionTypes.createAction,
       onSuccess: (res) => {
         onSuccess?.(res)
       },
@@ -42,7 +42,7 @@ export const createAction = (
       header: utils.header(''),
       data
     },
-    actionType: action.createAction,
+    actionType: actionTypes.createAction,
     onSuccess: (res) => {
       onSuccess?.(res)
     },
@@ -63,7 +63,7 @@ export const getActionsForRole = (
       customurl: `${RESPONDR_QR_BASE_URL}/Action/getactionsforrole?roleName=${name}`,
       header: utils.header('')
     },
-    actionType: action.getActionsForRole,
+    actionType: actionTypes.getActionsForRole,
     onSuccess: (res) => {
       onSuccess?.(res)
     },
@@ -85,7 +85,7 @@ export const addActionToRole = (
       header: utils.header(''),
       data
     },
-    actionType: action.addActionToRole,
+    actionType: actionTypes.addActionToRole,
     onSuccess: (res) => {
       onSuccess?.(res)
     },
@@ -107,7 +107,7 @@ export const deleteAction = (
       header: utils.header(''),
       data
     },
-    actionType: action.deleteAction,
+    actionType: actionTypes.deleteAction,
     onSuccess: (res) => {
       onSuccess?.(res)
     },

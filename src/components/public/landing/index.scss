@@ -1,14 +1,12 @@
-@import "../../../styles/variables.scss";
-@import "../../../styles/mixins.scss";
-@import "../../../styles/theme-variables.scss";
+@use '../../../assets/styles/theme-variables' as theme;
 
 .landing-page {
   margin: 3.5rem auto 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  @include themify($themes) {
-    background: themed("landingBackground");
+  @include theme.themify(theme.$themes) {
+    background: theme.themed('landingBackground');
   }
 
   .container {
@@ -32,8 +30,8 @@
         font-size: 1.3525rem;
         line-height: 2rem;
         margin: 0 0 0.35rem;
-        @include themify($themes) {
-          color: themed("infovalue");
+        @include theme.themify(theme.$themes) {
+          color: theme.themed('infovalue');
         }
       }
 
@@ -56,8 +54,8 @@
             p {
               margin: 0;
               font-size: 0.8325rem;
-              @include themify($themes) {
-                color: themed("colorText");
+              @include theme.themify(theme.$themes) {
+                color: theme.themed('colorText');
               }
               line-height: normal;
             }
@@ -72,8 +70,8 @@
     }
 
     h1 {
-      @include themify($themes) {
-        color: themed("themeColor");
+      @include theme.themify(theme.$themes) {
+        color: theme.themed('themeColor');
       }
       font-family: Nunito;
       font-size: 3.375rem;
@@ -111,8 +109,8 @@
       justify-content: space-between;
       position: relative;
       h2 {
-        @include themify($themes) {
-          color: themed("colorText");
+        @include theme.themify(theme.$themes) {
+          color: theme.themed('colorText');
         }
         font-family: Nunito;
         font-size: 2.5rem;

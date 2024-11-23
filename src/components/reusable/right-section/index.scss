@@ -1,6 +1,5 @@
-@import '../../../styles/variables.scss';
-@import '../../../styles/mixins.scss';
-@import '../../../styles/theme-variables.scss';
+@use '../../../assets/styles/theme-variables' as theme;
+@use '../../../assets/styles/variables.scss' as variables;
 
 .right_container {
   display: flex;
@@ -12,8 +11,8 @@
   width: 50%;
   height: 100vh;
   z-index: 30;
-  @include themify($themes) {
-    background: themed('colorBackground');
+  @include theme.themify(theme.$themes) {
+    background: theme.themed('colorBackground');
   }
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   transition: 0.2s all ease-in;
@@ -29,13 +28,13 @@
     display: flex;
     align-items: center;
     padding-bottom: 1.56rem;
-    @include themify($themes) {
-      border-bottom: 1px solid themed('border');
+    @include theme.themify(theme.$themes) {
+      border-bottom: 1px solid theme.themed('border');
     }
     h3 {
       margin: 0 0 0 1.5rem;
-      @include themify($themes) {
-        color: themed('themeColor');
+      @include theme.themify(theme.$themes) {
+        color: theme.themed('themeColor');
       }
       font-family: Nunito;
       font-size: 0.875rem;
@@ -56,10 +55,10 @@
     overflow: auto;
     padding: 3.12rem 0;
   }
-  @media (max-width: $lg-breakpoint) {
+  @media (max-width: variables.$lg-breakpoint) {
     width: -webkit-fill-available;
   }
-  @media (max-width: $md-breakpoint) {
+  @media (max-width: variables.$md-breakpoint) {
     padding: 1.56rem 1.5625rem 3.56rem;
   }
 }

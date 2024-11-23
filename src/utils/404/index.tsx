@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getOverview } from 'enums/Route'
+import { getOverview } from 'app-constants/Route'
 
 const Page404: FC = () => {
   const navigate = useNavigate()

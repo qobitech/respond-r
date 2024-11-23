@@ -13,6 +13,13 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   return {
     assetsInclude: ['**/*.mp3'],
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@use 'sass:math';` // Example of global data injection
+        }
+      }
+    },
     plugins: [
       react({
         jsxRuntime: 'automatic'

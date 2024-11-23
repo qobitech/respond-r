@@ -42,21 +42,21 @@ export const globalType = generateActionTypes([
   'search'
 ])
 
-export const apiScopeType = generateActionTypes([
-  'getAPIScopes',
-  'createAPIScope',
-  'updateAPIScope'
-])
+// export const apiScopeType = generateActionTypes([
+//   'getAPIScopes',
+//   'createAPIScope',
+//   'updateAPIScope'
+// ])
 
-export const applications = generateActionTypes([
-  'getAllApplications',
-  'getApplicationById',
-  'deleteApplication',
-  'createApplication',
-  'updateApplication'
-])
+// export const applications = generateActionTypes([
+//   'getAllApplications',
+//   'getApplicationById',
+//   'deleteApplication',
+//   'createApplication',
+//   'updateApplication'
+// ])
 
-export const role = generateActionTypes([
+export const roleTypes = generateActionTypes([
   'getAllRoles',
   'createRole',
   'updateRole',
@@ -66,14 +66,14 @@ export const role = generateActionTypes([
   'unassignMultipleActionsForRole'
 ])
 
-export const organization = generateActionTypes([
+export const organizationTypes = generateActionTypes([
   'getAllOrganization',
   'createOrganization',
   'updateOrganization',
   'deleteOrganization'
 ])
 
-export const action = generateActionTypes([
+export const actionTypes = generateActionTypes([
   'getAllAction',
   'createAction',
   'updateAction',
@@ -82,12 +82,12 @@ export const action = generateActionTypes([
   'getActionsForRole'
 ])
 
-export const report = generateActionTypes([
+export const reportTypes = generateActionTypes([
   'getAllReports',
   'updateReportStatus'
 ])
 
-export const assets = generateActionTypes([
+export const assetsTypes = generateActionTypes([
   'getAllAssets',
   'getAssets',
   'createAsset',
@@ -101,7 +101,7 @@ export const logged = generateActionTypes([
   'getLoggedRoles'
 ])
 
-export const user = generateActionTypes([
+export const userTypes = generateActionTypes([
   'createUser',
   'updateUser',
   'getAllUsers',
@@ -109,28 +109,30 @@ export const user = generateActionTypes([
   'getUserById'
 ])
 
-export const demoActions = generateActionTypes(['getDemoEPoliceNotifications'])
+export const demoActionTypes = generateActionTypes([
+  'getDemoEPoliceNotifications'
+])
 
-export const vehicles = generateActionTypes([
+export const vehicleTypes = generateActionTypes([
   'getVehicleByRegNumber',
   'searchVehicleByRegNumber',
   'searchVehicleByChasisNumber'
 ])
 
-export const billing = generateActionTypes([
-  'getAPIBundles',
-  'getAPIBundleById',
-  'createAPIBundle',
-  'updateAPIBundle',
-  'deleteAPIBundle',
-  'getAPIConfigs',
-  'createAPIConfig',
-  'updateAPIConfig',
-  'deleteAPIConfig',
-  'getAPIConfigGroups',
-  'createAPIConfigGroup',
-  'updateAPIConfigGroup',
-  'getClientSubscriptions',
-  'subscribeToBundle',
-  'addAppsToSub'
-])
+// export const billing = generateActionTypes([
+//   'getAPIBundles',
+//   'getAPIBundleById',
+//   'createAPIBundle',
+//   'updateAPIBundle',
+//   'deleteAPIBundle',
+//   'getAPIConfigs',
+//   'createAPIConfig',
+//   'updateAPIConfig',
+//   'deleteAPIConfig',
+//   'getAPIConfigGroups',
+//   'createAPIConfigGroup',
+//   'updateAPIConfigGroup',
+//   'getClientSubscriptions',
+//   'subscribeToBundle',
+//   'addAppsToSub'
+// ])

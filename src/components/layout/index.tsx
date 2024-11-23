@@ -1,49 +1,23 @@
-import React, { ReactNode, useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from './navbar'
 import Footer from './footer'
 import './index.scss'
-import { isLogged, USERTOKEN } from 'utils/new/constants'
-import { IStates } from 'interfaces/IReducer'
 import { IAction } from 'interfaces/IAction'
 import SideBar from './sidebar'
 import ScrollIntoViewController from './ScrollIntoViewController'
-import { GlobalContext, IGlobalContext, themeType } from 'context'
-import { PulseSVG } from 'utils/new/svgs'
-import { GODUSER } from 'utils/new/constants/roles'
+import { GlobalContext, themeType } from 'context'
 import { IReport, IReports } from 'interfaces/IReport'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useQueryValuesHook } from 'utils/hooks'
-import { url } from 'enums/Route'
-import { ISideToast } from 'utils/new/toast'
+import { url } from 'app-constants/Route'
 import { ThemeContext } from 'context/theme-context'
-
-export const useGlobalContext = (): IGlobalContext => {
-  const context = useContext(GlobalContext)
-
-  return context
-}
-
-interface PageProps {
-  children: ReactNode
-  states?: IStates
-}
-
-export const getActionRoles = () => {
-  const actionRoles = localStorage.getItem('actionRoles')
-  if (actionRoles) return JSON.parse(actionRoles) as string[]
-  return []
-}
-
-export const storeActionRoles = (actionsRoles: string[] | undefined) => {
-  if (!actionsRoles?.length) return
-  if (!getActionRoles().length) {
-    localStorage.setItem('actionRoles', JSON.stringify(actionsRoles))
-  }
-}
-
-export const clearActionRoles = () => {
-  localStorage.removeItem('actionRoles')
-}
+import { PageProps } from './helpers'
+import { useGlobalContext } from 'context/hooks'
+import { useRightSection } from 'components/reusable/right-section/hooks'
+import { GODUSER } from 'app-constants/roles'
+import { isLogged, USERTOKEN } from 'app-constants'
+import { ISideToast } from 'utils/toast'
+import { PulseSVG } from 'utils/svgs'
 
 const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
   const {
@@ -218,6 +192,8 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
     )
   }
 
+  const rsProps = useRightSection()
+
   return (
     <GlobalContext.Provider
       value={{
@@ -244,7 +220,8 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
         fetchReports,
         organization,
         setSideToast,
-        sideToast
+        sideToast,
+        rsProps
       }}
     >
       <ThemeContext.Provider value={{ theme, setTheme }}>

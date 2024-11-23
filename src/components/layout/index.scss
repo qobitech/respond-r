@@ -1,12 +1,11 @@
-@import "../../styles/variables.scss";
-@import "../../styles/theme-variables.scss";
+@use '../../assets/styles/theme-variables' as theme;
 
 .page_layout {
   padding-top: 0px;
   display: flex;
   flex-direction: column;
-  @include themify($themes) {
-    background: themed("colorBackground");
+  @include theme.themify(theme.$themes) {
+    background: theme.themed('colorBackground');
   }
 
   &.fitContent {
@@ -14,8 +13,8 @@
   }
   .contents {
     height: 100%;
-    @include themify($themes) {
-      background: themed("colorBackground");
+    @include theme.themify(theme.$themes) {
+      background: theme.themed('colorBackground');
     }
   }
 }
@@ -33,8 +32,8 @@
   background: rgba(255, 255, 255, 0.05);
   p {
     margin: 0;
-    @include themify($themes) {
-      color: themed("colorText");
+    @include theme.themify(theme.$themes) {
+      color: theme.themed('colorText');
     }
   }
 }

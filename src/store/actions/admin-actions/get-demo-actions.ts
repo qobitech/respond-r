@@ -1,6 +1,6 @@
-import { baseurlEPoliceTest } from 'utils/constants'
+import { baseurlEPoliceTest } from 'app-constants'
 import * as utils from '../../services/new/utils'
-import { demoActions } from 'store/types'
+import { demoActionTypes } from 'store/types'
 
 export const getDemoEPoliceNotifications = () => {
   return utils.httpGetMethod({
@@ -9,6 +9,6 @@ export const getDemoEPoliceNotifications = () => {
       customurl: `${baseurlEPoliceTest}/Police`,
       header: utils.header('')
     },
-    actionType: demoActions.getDemoEPoliceNotifications
+    actionType: demoActionTypes.getDemoEPoliceNotifications
   })
 }

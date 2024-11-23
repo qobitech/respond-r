@@ -1,12 +1,5 @@
-import { naijaPhoneRegex } from './constants'
+import { naijaPhoneRegex } from 'app-constants'
 
-// export function checkIfNull<R> ( item: R ) {
-//     if(item === null || item === undefined || (typeof item === 'string' && item.length === 0)) {
-//         return false;
-//     }else {
-//         return true;
-//     }
-// };
 export const checkIfNull = <R>(item: R): boolean => {
   if (
     item === null ||

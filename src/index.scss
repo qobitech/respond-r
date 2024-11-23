@@ -1,18 +1,18 @@
-@import "./styles/variables.scss";
-@import "./styles/mixins.scss";
+@use './assets/styles/variables' as variables;
+@use './assets/styles/mixins' as mixins;
 
 body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: $font-family;
+  font-family: variables.$font-family;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: $base-color;
+  color: variables.$base-color;
   background-color: #fff;
 
   font-size: 12px;
-  @media (min-width: $md-breakpoint) {
+  @media (min-width: variables.$md-breakpoint) {
     font-size: 14px;
   }
 }
@@ -36,7 +36,7 @@ body {
   }
 
   input {
-    @include input;
+    @include mixins.input;
   }
 
   .form-actions {

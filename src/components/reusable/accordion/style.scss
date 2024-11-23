@@ -1,13 +1,13 @@
-@import "../../../styles/theme-variables.scss";
+@use '../../../assets/styles/theme-variables' as theme;
 
 .accordion {
-  @include themify($themes) {
-    border-bottom: 1px solid themed("border");
+  @include theme.themify(theme.$themes) {
+    border-bottom: 1px solid theme.themed('border');
   }
   .accordionitem {
     height: auto;
-    @include themify($themes) {
-      border-bottom: 1px solid themed("border");
+    @include theme.themify(theme.$themes) {
+      border-bottom: 1px solid theme.themed('border');
     }
     &.islast {
       border-bottom: none;
@@ -23,8 +23,8 @@
         align-items: center;
         gap: 10px;
         p {
-          @include themify($themes) {
-            color: themed("colorText");
+          @include theme.themify(theme.$themes) {
+            color: theme.themed('colorText');
           }
           font-size: clamp(0.625rem, -0.875rem + 8.333vw, 0.8625rem);
           margin: 0;
@@ -35,8 +35,8 @@
         }
       }
       &.active {
-        @include themify($themes) {
-          border-bottom: 1px solid themed("border");
+        @include theme.themify(theme.$themes) {
+          border-bottom: 1px solid theme.themed('border');
         }
         margin-bottom: 2.1425rem;
       }

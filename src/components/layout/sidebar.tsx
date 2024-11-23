@@ -1,21 +1,12 @@
-import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import './sidebar.scss'
-import { url } from 'enums/Route'
-import {
-  CarsSVG,
-  // FireExtinguisherSVG,
-  HamburgerSVG,
-  ManagementSVG,
-  // MedicalSVG,
-  // PoliceSVG,
-  SwitchSVG
-} from 'utils/new/svgs'
-import { ISSUPERADMIN, ORGANIZATION } from 'utils/new/constants'
-import { GODUSER } from 'utils/new/constants/roles'
-import { managementTabEnums } from 'components/dashboard/admin-management'
-import Logo from '../../extras/images/CHITHUB_LOGO.png'
+import { url } from 'app-constants/Route'
+import Logo from 'assets/images/CHITHUB_LOGO.png'
 import { IReport } from 'interfaces/IReport'
+import { CarsSVG, HamburgerSVG, ManagementSVG, SwitchSVG } from 'utils/svgs'
+import { GODUSER } from 'app-constants/roles'
+import { ISSUPERADMIN, ORGANIZATION } from 'app-constants'
+import { managementTabEnums } from 'components/pages/dashboard/admin-management'
 
 interface IProps {
   setMenuOpen: (menuOpen: boolean) => (dispatch: any) => void

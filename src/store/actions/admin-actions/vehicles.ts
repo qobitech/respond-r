@@ -1,6 +1,6 @@
-import { IN_CAR_QR_BASE_URL, VEHICLE_QR_BASE_URL } from 'utils/constants'
+import { IN_CAR_QR_BASE_URL, VEHICLE_QR_BASE_URL } from 'app-constants'
 import * as utils from '../../services/new/utils'
-import { vehicles } from 'store/types'
+import { vehicleTypes } from 'store/types'
 
 export const getVehicleByRegNumber = (query: string) => {
   return utils.httpGetMethod({
@@ -9,7 +9,7 @@ export const getVehicleByRegNumber = (query: string) => {
       customurl: `${VEHICLE_QR_BASE_URL}/Vehicle/${query || 'kwl76bz'}`,
       header: utils.header('')
     },
-    actionType: vehicles.getVehicleByRegNumber
+    actionType: vehicleTypes.getVehicleByRegNumber
   })
 }
 
@@ -22,7 +22,7 @@ export const searchVehicleByRegNumber = (query: string) => {
       }`,
       header: utils.header('')
     },
-    actionType: vehicles.searchVehicleByRegNumber
+    actionType: vehicleTypes.searchVehicleByRegNumber
   })
 }
 
@@ -33,6 +33,6 @@ export const searchVehicleByChasisNumber = (query: string) => {
       customurl: `${IN_CAR_QR_BASE_URL}/Vehicle/search/chasis/${query || ''}`,
       header: utils.header('')
     },
-    actionType: vehicles.searchVehicleByChasisNumber
+    actionType: vehicleTypes.searchVehicleByChasisNumber
   })
 }

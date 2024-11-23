@@ -1,4 +1,4 @@
-import { url } from 'enums/Route'
+import { url } from 'app-constants/Route'
 
 interface IMenuItems {
   title: string

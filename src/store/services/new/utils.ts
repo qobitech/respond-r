@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { TOKEN } from 'utils/new/constants'
+import { TOKEN } from 'app-constants'
 
 export const header = (token?: string) => ({
   'Content-type': 'application/json',

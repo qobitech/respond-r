@@ -1,16 +1,16 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { url } from 'enums/Route'
+import { url } from 'app-constants/Route'
 import './index.scss'
-import cars from '../../../extras/images/animation/Animation - 1707465062653.json'
+import cars from 'assets/images/animation/Animation - 1707465062653.json'
 import Lottie from 'react-lottie'
-import { TypeButton } from 'utils/new/button'
 import {
   FireExtinguisherSVG,
   MedicalSVG,
   PoliceSVG,
   TrafficSVG
-} from 'utils/new/svgs'
+} from 'utils/svgs'
+import { TypeButton } from 'utils/button'
 
 const LandingPage = () => {
   const navigate = useNavigate()

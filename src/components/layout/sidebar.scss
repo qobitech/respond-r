@@ -1,12 +1,10 @@
-@import "../../styles/variables.scss";
-@import "../../styles/mixins.scss";
-@import "../../styles/theme-variables.scss";
+@use '../../assets/styles/theme-variables' as theme;
 
 .side-bar {
   height: 100vh;
   overflow: auto;
-  @include themify($themes) {
-    background: themed("colorBackground");
+  @include theme.themify(theme.$themes) {
+    background: theme.themed('colorBackground');
   }
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   max-width: 13.5025rem;
@@ -45,14 +43,14 @@
       }
       transition: 0.2s ease;
       &:hover {
-        @include themify($themes) {
-          background: themed("sideBarTxtHover");
+        @include theme.themify(theme.$themes) {
+          background: theme.themed('sideBarTxtHover');
         }
       }
       p {
         margin: 0;
-        @include themify($themes) {
-          color: themed("sideBarTxt");
+        @include theme.themify(theme.$themes) {
+          color: theme.themed('sideBarTxt');
         }
         font-family: Nunito;
         font-size: 0.9325rem;
@@ -62,8 +60,8 @@
       }
       &.active {
         p {
-          @include themify($themes) {
-            color: themed("sideBarTxtActive");
+          @include theme.themify(theme.$themes) {
+            color: theme.themed('sideBarTxtActive');
           }
           font-weight: 600;
         }

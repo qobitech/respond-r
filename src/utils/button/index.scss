@@ -1,0 +1,110 @@
+@use '../../assets/styles/theme-variables' as theme;
+
+.type-button {
+  button {
+    display: inline-flex;
+    padding: 1rem 1.75rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+    background: #235a62;
+    outline: none;
+    color: #fff;
+    font-family: Nunito;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    border: none;
+    cursor: pointer;
+    &.disabled {
+      @include theme.themify(theme.$themes) {
+        background: theme.themed('disabled');
+      }
+      cursor: not-allowed;
+      opacity: 0.3;
+    }
+    &.outlined {
+      background: none;
+      @include theme.themify(theme.$themes) {
+        color: theme.themed('smallbtnboldcolor');
+      }
+      border: 1px solid #235a62;
+    }
+    &.danger {
+      // background: #faf5f7;
+      color: #f56e9d;
+      @include theme.themify(theme.$themes) {
+        background: theme.themed('smallbtndangerbg');
+        border: 0.5px solid theme.themed('smallbtndangerborder');
+      }
+    }
+    &.small {
+      font-size: 0.875rem;
+      font-weight: 700;
+      line-height: normal;
+      display: inline-flex;
+      padding: 0.5rem 1.19rem;
+      width: max-content;
+    }
+    &.medium {
+      font-size: 0.9rem;
+      font-weight: 700;
+      line-height: normal;
+      display: inline-flex;
+      padding: 0.5rem 1.19rem;
+      width: max-content;
+      height: auto;
+    }
+  }
+}
+
+.type-small-button {
+  button {
+    display: inline-flex;
+    padding: 0.5rem 1.19rem;
+    width: max-content;
+    height: auto;
+    justify-content: center;
+    align-items: center;
+    font-family: Nunito;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    border: none;
+    flex-shrink: 0;
+    border-radius: 0.1875rem;
+    @include theme.themify(theme.$themes) {
+      background: theme.themed('smallbtnboldbg');
+      color: theme.themed('smallbtnboldcolor');
+    }
+    cursor: pointer;
+    &.disabled {
+      @include theme.themify(theme.$themes) {
+        background: theme.themed('disabled');
+      }
+      cursor: not-allowed;
+      opacity: 0.2;
+    }
+    &.outlined {
+      background: none;
+      color: #485e82;
+      border: 1px solid #485e82;
+    }
+    &.danger {
+      color: #f56e9d;
+      @include theme.themify(theme.$themes) {
+        background: theme.themed('smallbtndangerbg');
+        border: 0.5px solid theme.themed('smallbtndangerborder');
+      }
+    }
+    &.active {
+      color: #0f9979;
+      background: #e8faf6;
+    }
+    &.status {
+      cursor: default;
+    }
+  }
+}

@@ -1,0 +1,106 @@
+@use '../../../../assets/styles/theme-variables' as theme;
+
+.login-page {
+  @include theme.themify(theme.$themes) {
+    background: theme.themed('colorBackground');
+  }
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 6em 0 2em;
+  overflow: auto;
+
+  .main-card {
+    max-width: 60.25rem;
+    width: 100%;
+    padding: 0;
+    @include theme.themify(theme.$themes) {
+      background-color: theme.themed('feedbg');
+      border: 1px solid theme.themed('border');
+    }
+    height: auto;
+    border-radius: 0.3125rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 3rem auto;
+
+    h3 {
+      @include theme.themify(theme.$themes) {
+        color: theme.themed('colorText');
+      }
+      text-align: center;
+      font-family: Nunito;
+      font-size: 1.25rem;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+      margin: 2.37rem auto;
+    }
+
+    .separator {
+      @include theme.themify(theme.$themes) {
+        border-top: 1px solid theme.themed('border');
+      }
+      width: 100%;
+      height: 1px;
+    }
+
+    form {
+      max-width: 31.25rem;
+      width: 100%;
+      margin: 3.88rem auto;
+    }
+
+    .forgot-password {
+      text-align: right;
+      margin-bottom: 2.75rem;
+      width: 100%;
+      display: flex;
+      p {
+        color: #485e82;
+        font-family: Nunito;
+        font-size: 0.875rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        margin: 0;
+        cursor: pointer;
+        width: max-content;
+        margin-left: auto;
+      }
+    }
+    .cta {
+      text-align: center;
+      display: flex;
+      justify-content: center;
+    }
+    .alt {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.38rem 0 3.2rem;
+      gap: 20px;
+      p {
+        margin: 0;
+        color: #485e82;
+        font-family: Nunito;
+        font-size: 0.875rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        &.action {
+          color: #202a3a;
+          font-weight: 600;
+          cursor: pointer;
+          text-decoration: underline;
+        }
+      }
+    }
+    .form-error {
+      display: flex;
+      justify-content: center;
+      padding: 1.6425rem 0 0;
+    }
+  }
+}

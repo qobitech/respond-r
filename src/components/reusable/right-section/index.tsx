@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
 import './index.scss'
-import { TypeButton } from 'utils/new/button'
 import ReactDOM from 'react-dom'
 import { ThemeContext } from 'context/theme-context'
 import { IRSection } from './utils'
+import { TypeButton } from 'utils/button'
 
 const RightSection = <T extends {}>({ children, rsProps }: IRSection<T>) => {
   const handleClose = () => {

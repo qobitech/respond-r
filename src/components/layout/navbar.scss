@@ -1,11 +1,10 @@
-@import "../../styles/variables.scss";
-@import "../../styles/mixins.scss";
-@import "../../styles/theme-variables.scss";
+@use '../../assets/styles/theme-variables' as theme;
+@use '../../assets/styles/variables.scss' as variables;
 
 .nav-container {
-  @include themify($themes) {
-    background: themed("feedbg");
-    border: 1px solid themed("border");
+  @include theme.themify(theme.$themes) {
+    background: theme.themed('feedbg');
+    border: 1px solid theme.themed('border');
   }
   position: fixed;
   width: 100%;
@@ -16,17 +15,15 @@
     height: auto;
     display: flex;
     align-items: flex-start;
-    @include themify($themes) {
-      color: themed("colorText");
+    @include theme.themify(theme.$themes) {
+      color: theme.themed('colorText');
     }
     margin: 0 auto;
     position: relative;
     width: 100%;
     max-width: 95%;
     margin: 0 auto;
-    // padding: 1rem 0px;
     box-sizing: border-box;
-    // border-bottom: 1px solid #e8e8e8;
 
     .hamburger {
       height: 55px;
@@ -45,8 +42,8 @@
       margin: 0 auto;
       p {
         margin: 0;
-        @include themify($themes) {
-          color: themed("colorText");
+        @include theme.themify(theme.$themes) {
+          color: theme.themed('colorText');
         }
         font-family: Nunito;
         font-size: 0.8125rem;
@@ -138,7 +135,7 @@
         color: #000;
       }
 
-      @media (min-width: $md-breakpoint) {
+      @media (min-width: variables.$md-breakpoint) {
         display: none;
         padding: 0;
       }
@@ -155,7 +152,7 @@
       padding-inline-start: 0;
       right: -100%;
 
-      @media screen and (max-width: $md-breakpoint) {
+      @media screen and (max-width: variables.$md-breakpoint) {
         position: fixed;
         flex-direction: column;
         min-height: 100vh;
@@ -178,7 +175,7 @@
         width: 50vw;
         z-index: 20;
 
-        @media (min-width: $md-breakpoint) {
+        @media (min-width: variables.$md-breakpoint) {
           visibility: hidden;
         }
       }
@@ -190,7 +187,7 @@
         text-align: left;
         margin-right: 1em;
 
-        @media (max-width: $md-breakpoint) {
+        @media (max-width: variables.$md-breakpoint) {
           margin: 20px 0;
         }
 
@@ -200,7 +197,7 @@
           align-items: center;
           justify-content: center;
 
-          @media (max-width: $md-breakpoint) {
+          @media (max-width: variables.$md-breakpoint) {
             color: #fff;
           }
         }
@@ -234,7 +231,7 @@
       }
 
       .nav-current {
-        @media (min-width: $md-breakpoint) {
+        @media (min-width: variables.$md-breakpoint) {
           font-weight: 500;
           color: #e1ad01;
         }
@@ -253,7 +250,7 @@
           color: #fff;
         }
 
-        @media (min-width: $md-breakpoint) {
+        @media (min-width: variables.$md-breakpoint) {
           padding: 0.5em 1em;
           font-weight: 400;
           color: #000;
@@ -267,9 +264,9 @@
       }
 
       button {
-        @include button($font-size: 0.8em);
+        // @include button(font-size: 0.8em);
 
-        @media (max-width: $md-breakpoint) {
+        @media (max-width: variables.$md-breakpoint) {
           padding: 1em;
           font-size: 1em;
           width: 150px;
@@ -291,13 +288,13 @@
     background: none;
     border: none;
     font-size: 0.8625rem;
-    @include themify($themes) {
-      border: 1px solid themed("typeborder");
-      color: themed("colorText");
+    @include theme.themify(theme.$themes) {
+      border: 1px solid theme.themed('typeborder');
+      color: theme.themed('colorText');
     }
     &:focus {
-      @include themify($themes) {
-        border: 1px solid themed("focus");
+      @include theme.themify(theme.$themes) {
+        border: 1px solid theme.themed('focus');
       }
       &.error {
         border: 1px solid #f56e9d;
@@ -320,8 +317,8 @@
   gap: 10px;
   margin-left: auto;
   cursor: pointer;
-  @include themify($themes) {
-    color: themed("colorText");
+  @include theme.themify(theme.$themes) {
+    color: theme.themed('colorText');
   }
   p {
     margin: 0;

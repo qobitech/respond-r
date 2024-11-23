@@ -1,6 +1,6 @@
-import { baseurlReport, isBaseURL } from 'utils/constants'
+import { baseurlReport, isBaseURL } from 'app-constants'
 import * as utils from '../../services/new/utils'
-import { report } from 'store/types'
+import { reportTypes } from 'store/types'
 
 export const getAllReports = (
   organization: string,
@@ -14,7 +14,7 @@ export const getAllReports = (
       customurl: `${baseurlReport}${organization}/get-all-paged${query || ''}`,
       header: utils.header('')
     },
-    actionType: report.getAllReports,
+    actionType: reportTypes.getAllReports,
     onSuccess,
     onFailure
   })
@@ -46,7 +46,7 @@ export const updateReportStatus = (
       header: utils.header(''),
       data
     },
-    actionType: report.updateReportStatus,
+    actionType: reportTypes.updateReportStatus,
     onSuccess,
     onFailure
   })

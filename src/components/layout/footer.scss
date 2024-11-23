@@ -1,15 +1,13 @@
-@import "../../styles/variables.scss";
-@import "../../styles/mixins.scss";
-@import "../../styles/theme-variables.scss";
+@use '../../assets/styles/theme-variables' as theme;
 
 .footer_main {
   width: 100%;
   margin: 0;
   padding: 20px 0;
   box-sizing: border-box;
-  @include themify($themes) {
-    background: themed("colorBackground");
-    color: themed("colorText");
+  @include theme.themify(theme.$themes) {
+    background: theme.themed('colorBackground');
+    color: theme.themed('colorText');
   }
   text-align: center;
   margin-top: auto;

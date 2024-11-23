@@ -1,6 +1,6 @@
 import React, { ReactNode, useState } from 'react'
 import './style.scss'
-import { MinusSVG, PlusSVG } from 'utils/new/svgs'
+import { MinusSVG, PlusSVG } from 'utils/svgs'
 
 export interface IUA {
   accordion: string | null

@@ -4,7 +4,7 @@ import { IATE, IAssetQuery } from 'store/actions/admin-actions/assets'
 import { IURS } from 'store/actions/admin-actions/report'
 interface IAuth {
   setAuthorizationHeader: (token: string) => void
-  registerOrganization: (adminDetails: object) => (dispatch: Function) => void
+  // registerOrganization: (adminDetails: object) => (dispatch: Function) => void
   clearOrgAuth: () => (dispatch: Function) => void
   verifyEmail: (data: object) => (dispatch: Function) => void
   userLogin: (data: {

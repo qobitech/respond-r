@@ -1,6 +1,6 @@
-import { baseurlReport, isBaseURL } from 'utils/constants'
+import { baseurlReport, isBaseURL } from 'app-constants'
 import * as utils from '../../services/new/utils'
-import { assets } from 'store/types'
+import { assetsTypes } from 'store/types'
 
 export const getAssets = () => {
   return utils.httpGetMethod({
@@ -9,7 +9,7 @@ export const getAssets = () => {
       customurl: `${baseurlReport}Asset/get-all-paged`,
       header: utils.header('')
     },
-    actionType: assets.getAssets
+    actionType: assetsTypes.getAssets
   })
 }
 
@@ -28,7 +28,7 @@ export const getAllAssets = ({ overwrite, getLatest }: IAssetQuery) => {
       customurl: `${baseurlReport}Asset/get-all${q}${ov}${gl}`,
       header: utils.header('')
     },
-    actionType: assets.getAllAssets
+    actionType: assetsTypes.getAllAssets
   })
 }
 
@@ -39,7 +39,7 @@ export const createAsset = () => {
       customurl: `${baseurlReport}Asset`,
       header: utils.header('')
     },
-    actionType: assets.createAsset
+    actionType: assetsTypes.createAsset
   })
 }
 
@@ -50,7 +50,7 @@ export const getAssetById = (assetId: string) => {
       customurl: `${baseurlReport}Asset/${assetId}`,
       header: utils.header('')
     },
-    actionType: assets.getAssetById
+    actionType: assetsTypes.getAssetById
   })
 }
 
@@ -80,7 +80,7 @@ export const assignAssetToEmergency = (
       header: utils.header(''),
       data
     },
-    actionType: assets.assignAssetToEmergency,
+    actionType: assetsTypes.assignAssetToEmergency,
     onSuccess,
     onFailure
   })

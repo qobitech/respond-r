@@ -1,0 +1,35 @@
+@use '../assets/styles/theme-variables' as theme;
+
+.main-page {
+  min-height: 100vh;
+  @include theme.themify(theme.$themes) {
+    background: theme.themed('colorBackground');
+  }
+  padding: 7.12rem 0 0;
+
+  .pg-container {
+    width: 100%;
+    max-width: 95%;
+    margin: 0 auto;
+  }
+}
+
+.svg-default {
+  @include theme.themify(theme.$themes) {
+    fill: theme.themed('themeColor');
+  }
+}
+.svg-nav {
+  @include theme.themify(theme.$themes) {
+    fill: theme.themed('svgnav');
+  }
+}
+
+.card-section {
+  border-radius: 0.5625rem;
+  padding: 10px 0 25px;
+  @include theme.themify(theme.$themes) {
+    background: theme.themed('feedbg');
+    border: 1px solid theme.themed('border');
+  }
+}

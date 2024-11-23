@@ -1,0 +1,199 @@
+// import React, { useEffect } from 'react'
+// import 'utils/pagination.scss'
+// import 'utils/page.scss'
+// import './management.scss'
+// import { IStates } from 'interfaces/IReducer'
+// import { IAction } from 'interfaces/IAction'
+// import CreateAction from './create'
+// import { IUser } from 'interfaces/IUser'
+// import { useRightSection } from 'components/reusable/right-section/hooks'
+// import { ICell, ICellAction } from 'utils/report-table'
+// import { TypeButton } from 'utils/button'
+// import { TypeSelect } from 'utils/select'
+// import { GODUSER } from 'app-constants/roles'
+// import Table from 'utils/table'
+// import RightSection from 'components/reusable/right-section'
+// import { PageHeader } from '../../components'
+
+// interface IProps {
+//   states?: IStates
+//   actions?: IAction
+// }
+
+// const ActionPage: React.FC<IProps> = ({ states, actions }) => {
+//   const { callRightSection, getAllUsers } = actions
+
+//   const rightSectionProps = states?.global.rightSection
+
+//   const userState = states?.user
+
+//   const rsProps = useRightSection<IUser>(rightSectionProps, callRightSection)
+
+//   useEffect(() => {
+//     getAllUsers('')
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, [])
+
+//   interface ITable {
+//     id: string
+//     row: ICell[]
+//     rowActions: ICellAction[]
+//   }
+
+//   const demoAction = [
+//     {
+//       action: 'create user',
+//       description: 'can create user'
+//     },
+//     {
+//       action: 'view user',
+//       description: 'can view user'
+//     },
+//     {
+//       action: 'modify user',
+//       description: 'can modify user'
+//     },
+//     {
+//       action: 'delete user',
+//       description: 'can delete user'
+//     }
+//   ]
+
+//   const record: ITable[] = demoAction?.map((i) => ({
+//     id: '1',
+//     row: [
+//       {
+//         value: i.action,
+//         isLink: false
+//       },
+//       {
+//         value: i.description,
+//         isLink: false
+//       }
+//     ],
+//     rowActions: [
+//       {
+//         value: 'Assign Role',
+//         isLink: true,
+//         action: () => {
+//           // rsProps.callSection("custom", "update-admin", i.email, i)
+//         }
+//       },
+//       {
+//         value: 'Update Action',
+//         isLink: true,
+//         action: () => {
+//           // rsProps.callSection("custom", "update-admin", i.email, i)
+//         }
+//       },
+//       {
+//         value: 'Delete Action',
+//         isLink: true,
+//         action: () => {
+//           // rsProps.callSection("custom", "update-admin", i.email, i)
+//         },
+//         buttonType: 'danger'
+//       }
+//     ]
+//   })) as ITable[]
+
+//   const roleOptionData = [
+//     {
+//       id: 1,
+//       label: 'Super-Admin',
+//       value: 'Super-Admin'
+//     },
+//     {
+//       id: 2,
+//       label: 'Admin',
+//       value: 'Admin'
+//     },
+//     {
+//       id: 3,
+//       label: 'Moderator',
+//       value: 'Moderator'
+//     },
+//     {
+//       id: 4,
+//       label: 'Field Officer',
+//       value: 'Field Officer'
+//     }
+//   ]
+
+//   const orgOptionData = [
+//     {
+//       id: 1,
+//       label: 'Traffic',
+//       value: 'Traffic'
+//     },
+//     {
+//       id: 2,
+//       label: 'E-Police',
+//       value: 'E-Police'
+//     },
+//     {
+//       id: 3,
+//       label: 'Fire Service',
+//       value: 'Fire Service'
+//     },
+//     {
+//       id: 4,
+//       label: 'E-Medical',
+//       value: 'E-Medical'
+//     }
+//   ]
+
+//   return (
+//     <>
+//       <RightSection rsProps={rsProps}>
+//         {rsProps.isView('custom', 'create-admin') ||
+//         rsProps.isView('custom', 'update-admin') ? (
+//           <CreateAction states={states} actions={actions} />
+//         ) : null}
+//         {rsProps.isView('custom', 'view-admin') ? <></> : null}
+//         {rsProps.isView('custom', 'update-admin') ? <></> : null}
+//       </RightSection>
+//       <div>
+//         <PageHeader
+//           title="Action Management"
+//           load={userState?.getAllUsersLoading}
+//         />
+
+//         <div className="cta-header-section">
+//           <TypeButton
+//             buttonSize="small"
+//             title="Add Action"
+//             onClick={() => {
+//               rsProps.callSection('custom', 'create-admin')
+//             }}
+//           />
+//         </div>
+//         <div className="table-section card-section">
+//           <div className="filter-management-section">
+//             <TypeSelect
+//               initoption={{ label: 'All', value: '' }}
+//               label="Filter by Role"
+//               optionsdata={roleOptionData}
+//               customwidth={'300px'}
+//             />
+//             {GODUSER && (
+//               <TypeSelect
+//                 initoption={{ label: 'All', value: '' }}
+//                 label="Filter by Organization"
+//                 optionsdata={orgOptionData}
+//                 customwidth={'300px'}
+//               />
+//             )}
+//           </div>
+//           <Table
+//             header={['Title', 'Description', 'Actions']}
+//             record={record}
+//             hideNumbering
+//           />
+//         </div>
+//       </div>
+//     </>
+//   )
+// }
+
+// export default ActionPage

@@ -1,7 +1,7 @@
 import React from 'react'
-import { TypeButton } from 'utils/new/button'
-import { TypeInput } from 'utils/new/input'
 import './index.scss'
+import { TypeButton } from 'utils/button'
+import { TypeInput } from 'utils/input'
 
 export type filterType = 'text' | 'date' | 'select'
 

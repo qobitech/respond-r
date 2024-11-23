@@ -1,9 +1,7 @@
-import { url } from 'enums/Route'
-import { RESPONDR_CM_BASE_URL } from '../../../utils/constants'
+import { url } from 'app-constants/Route'
 import * as utils from '../../services/new/utils'
 import { authType } from 'store/types'
-import { TOKENKEY } from 'utils/new/constants'
-// import { ILogin } from "interfaces/IAuth"
+import { RESPONDR_CM_BASE_URL, TOKENKEY } from 'app-constants'
 
 const setAuthorizationHeader = (token: string) => {
   localStorage.setItem(TOKENKEY, token)

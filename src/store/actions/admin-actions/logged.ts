@@ -1,4 +1,4 @@
-import { RESPONDR_QR_BASE_URL } from 'utils/constants'
+import { RESPONDR_QR_BASE_URL } from 'app-constants'
 import * as utils from '../../services/new/utils'
 import { logged } from 'store/types'
 

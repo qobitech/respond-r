@@ -1,0 +1,77 @@
+@use '../../assets/styles/theme-variables' as theme;
+
+.toast-container {
+  width: 100%;
+  height: auto;
+  background: #df271f;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0;
+  gap: 10px;
+  &.success {
+    background: #00851d;
+  }
+  & p {
+    font-family: Nunito;
+    font-size: 13px;
+    font-weight: 500;
+    margin: 0;
+    color: #fff;
+    text-transform: capitalize;
+  }
+}
+
+.side-toast-container {
+  position: fixed;
+  bottom: 0;
+  right: 15px;
+  top: 40px;
+  width: 350px;
+  height: 67px;
+  z-index: 40;
+  @include theme.themify(theme.$themes) {
+    background: theme.themed('side-toast');
+  }
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  transition: 0.2s all ease-in;
+  &.menuclose {
+    transform: translateX(105%);
+  }
+  &.menuopen {
+    transform: translateX(0);
+  }
+  &.success {
+    color: #fff;
+  }
+  .side-toast-container-content {
+    display: flex;
+    align-items: center;
+    padding: 0 1.52rem;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    p {
+      font-size: 0.8rem;
+    }
+    .side-toast-close {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      .side-toast-close-content {
+        width: max-content;
+        height: max-content;
+        padding: 0.1rem 1.25rem 0.2rem;
+        cursor: pointer;
+        @include theme.themify(theme.$themes) {
+          border: 0.1px solid #066d1c;
+        }
+      }
+    }
+  }
+}

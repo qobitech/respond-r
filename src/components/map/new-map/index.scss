@@ -1,4 +1,4 @@
-@import "../../../styles/variables.scss";
+@use '../../../assets/styles/variables.scss' as variables;
 
 .map_container,
 .map_container_wrapper {
@@ -8,11 +8,11 @@
   border-radius: 1em;
   z-index: 1;
 
-  @media screen and (max-width: $md-breakpoint) {
+  @media screen and (max-width: variables.$md-breakpoint) {
     min-width: 600px;
   }
 
-  @media screen and (max-width: $sm-breakpoint) {
+  @media screen and (max-width: variables.$sm-breakpoint) {
     width: 320px;
   }
 

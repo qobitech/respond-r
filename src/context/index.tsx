@@ -1,10 +1,11 @@
+import { IRightSection } from 'components/reusable/right-section/utils'
 import { IAction } from 'interfaces/IAction'
 import { IOrganization } from 'interfaces/IOrganization'
 import { IStates } from 'interfaces/IReducer'
 import { IReport, IReports } from 'interfaces/IReport'
 import { IRole } from 'interfaces/IRole'
 import { createContext } from 'react'
-import { ISideToast } from 'utils/new/toast'
+import { ISideToast } from 'utils/toast'
 
 export type themeType = 'dark' | 'light'
 
@@ -36,6 +37,7 @@ export interface IGlobalContext {
   organization?: 'Fire' | 'Police' | 'Medical' | null
   setSideToast?: (toast: ISideToast) => void
   sideToast?: ISideToast
+  rsProps?: IRightSection<{}>
 }
 
 export const GlobalContext = createContext<IGlobalContext>({

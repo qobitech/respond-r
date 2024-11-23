@@ -1,57 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { url } from 'enums/Route'
+import { url } from 'app-constants/Route'
 import './navbar.scss'
-import Toast, { ISideToast, SideToast } from 'utils/new/toast'
-import { INotification } from 'interfaces/IGlobal'
-import { isLogged } from 'utils/new/constants'
-import {
-  CarsSVG,
-  CogSVG,
-  FireExtinguisherSVG,
-  HamburgerSVG,
-  ManagementSVG,
-  MedicalSVG,
-  PoliceSVG,
-  PulseSVG
-} from 'utils/new/svgs'
-import { ICallRightSection, vehicleSearchType } from 'store/actions/global'
-import TextPrompt from 'utils/new/text-prompt'
-import { TypeButton } from 'utils/new/button'
-import Toggle from 'utils/new/toggle'
-import { useGlobalContext } from '.'
-import Logo from '../../extras/images/CHITHUB_LOGO.png'
-
-interface NavbarProps {
-  notifyUser: INotification | undefined
-  setMenuOpen: (menuOpen: boolean) => (dispatch: any) => void
-  menuOpen: boolean
-  callRightSection: (props: ICallRightSection) => (dispatch: any) => void
-  searchVehicleByChasisNumber: (query: string) => (dispatch: any) => void
-  searchVehicleByRegNumber: (query: string) => (dispatch: any) => void
-  setSearch: (
-    search: boolean,
-    type: vehicleSearchType
-  ) => (dispatch: any) => void
-  searchLoad?: boolean
-  setSideToast: (toast: ISideToast) => void
-  sideToast: ISideToast
-}
-
-type pageType =
-  | 'e-traffic'
-  | 'e-police'
-  | 'firefighter'
-  | 'management'
-  | 'e-medical'
+import Logo from 'assets/images/CHITHUB_LOGO.png'
+import { NavbarProps, pageType } from './utils'
+import { ConfigurationComponent } from './configuration-component'
+import { TrafficSearchComponent } from './traffic-search-component'
+import { FireSearchComponent } from './fire-search-component'
+import { PoliceSearchComponent } from './police-search-component'
+import { PageIdentifier } from './page-identifier'
+import { HamburgerSVG } from 'utils/svgs'
+import Toggle from 'utils/toggle'
+import { TypeButton } from 'utils/button'
+import Toast, { SideToast } from 'utils/toast'
+import { isLogged } from 'app-constants'
 
 const Navbar = (props: NavbarProps) => {
+  const navigate = useNavigate()
+  const location = useLocation()
+
   const handleClick = () => {
     props.setMenuOpen(!props.menuOpen)
   }
-  const navigate = useNavigate()
-
-  const location = useLocation()
 
   function _isUrl(page: string) {
     if (!page) return false
@@ -138,37 +108,6 @@ const Navbar = (props: NavbarProps) => {
             </div>
           )}
         </div>
-
-        {/* {!isLogged ? (
-          <ul className={clicked ? "nav-menu active" : "nav-menu"}>
-            {MenuItems.map((item, index) => (
-              <div className="menu-item" key={index}>
-                <NavLink
-                  key={index}
-                  className={({ isActive }) =>
-                    isActive
-                      ? `menu-item-container ${item.cName}`
-                      : `${item.cName}`
-                  }
-                  to={item.url}
-                  onClick={() =>
-                    window.innerWidth < 758 ? setClicked(!clicked) : void 0
-                  }
-                >
-                  {item.title}
-                </NavLink>
-              </div>
-            ))}
-            <button
-              onClick={() => navigate(url.REGISTER)}
-              className="button-cta"
-            >
-              LOGIN
-            </button>
-          </ul>
-        ) : (
-          <UserComponent imgSrc="" name="" />
-        )} */}
       </nav>
       <Toast
         status={props.notifyUser?.status || false}
@@ -183,275 +122,3 @@ const Navbar = (props: NavbarProps) => {
 }
 
 export default Navbar
-
-const PageIdentifier = ({ page }: { page: pageType }) => {
-  return (
-    <div className="page-identifier">
-      {page === 'firefighter' ? <FireExtinguisherSVG /> : null}
-      {page === 'e-police' ? <PoliceSVG /> : null}
-      {page === 'e-traffic' ? <CarsSVG /> : null}
-      {page === 'management' ? <ManagementSVG /> : null}
-      {page === 'e-medical' ? <MedicalSVG /> : null}
-      <p>{page}</p>
-    </div>
-  )
-}
-
-const PoliceSearchComponent = () => {
-  const [inputValue, setInputValue] = useState<string>('')
-  const [error, setError] = useState<string>('')
-
-  const handleOnChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = target
-    setInputValue(value)
-    setError('')
-  }
-
-  // const handleSearch = (searchType: "reg" | "chasis") => {
-  //   if (!inputValue) {
-  //     setError("input empty")
-  //     return
-  //   }
-  //   // if (searchType === "reg") searchVehicleByRegNumber(inputValue)
-  //   // if (searchType === "chasis") searchVehicleByChasisNumber(inputValue)
-  //   // setSearch(true)
-  // }
-
-  return (
-    <form className="nav-search-component" onSubmit={(e) => e.preventDefault()}>
-      <div className="d-flex align-items-center" style={{ gap: '20px' }}>
-        <input
-          placeholder="Type here to search"
-          onChange={handleOnChange}
-          value={inputValue}
-          onBlur={() => setError('')}
-          onFocus={() => setError('')}
-          autoFocus={error.length > 0}
-          style={{
-            border: error ? '1px solid #f56e9d' : '',
-            marginBottom: error ? '5px' : '0'
-          }}
-        />
-
-        {/* <CTAS
-          // load={load}
-          onBtn1={() => {
-            handleSearch("reg")
-          }}
-          onBtn2={() => {
-            handleSearch("chasis")
-          }}
-        /> */}
-      </div>
-      {error ? <TextPrompt prompt={error} status={false} /> : null}
-    </form>
-  )
-}
-
-const FireSearchComponent = () => {
-  const [inputValue, setInputValue] = useState<string>('')
-  const [error, setError] = useState<string>('')
-
-  const handleOnChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = target
-    setInputValue(value)
-    setError('')
-  }
-
-  // const handleSearch = (searchType: "reg" | "chasis") => {
-  //   if (!inputValue) {
-  //     setError("input empty")
-  //     return
-  //   }
-  //   // if (searchType === "reg") searchVehicleByRegNumber(inputValue)
-  //   // if (searchType === "chasis") searchVehicleByChasisNumber(inputValue)
-  //   // setSearch(true)
-  // }
-
-  return (
-    <form className="nav-search-component" onSubmit={(e) => e.preventDefault()}>
-      <div className="d-flex align-items-center" style={{ gap: '20px' }}>
-        <input
-          placeholder="Type here to search"
-          onChange={handleOnChange}
-          value={inputValue}
-          onBlur={() => setError('')}
-          onFocus={() => setError('')}
-          autoFocus={error.length > 0}
-          style={{
-            border: error ? '1px solid #f56e9d' : '',
-            marginBottom: error ? '5px' : '0'
-          }}
-        />
-
-        {/* <CTAS
-          // load={load}
-          onBtn1={() => {
-            handleSearch("reg")
-          }}
-          onBtn2={() => {
-            handleSearch("chasis")
-          }}
-        /> */}
-      </div>
-      {error ? <TextPrompt prompt={error} status={false} /> : null}
-    </form>
-  )
-}
-
-const TrafficSearchComponent = ({
-  searchVehicleByChasisNumber,
-  searchVehicleByRegNumber,
-  load,
-  setSearch
-}: {
-  searchVehicleByChasisNumber: (query: string) => (dispatch: any) => void
-  searchVehicleByRegNumber: (query: string) => (dispatch: any) => void
-  load?: boolean
-  setSearch: (
-    search: boolean,
-    type: vehicleSearchType
-  ) => (dispatch: any) => void
-}) => {
-  const { search } = useGlobalContext()
-
-  const [inputValue, setInputValue] = useState<string>('')
-  const [error, setError] = useState<string>('')
-
-  const handleOnChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = target
-    setInputValue(value)
-    setError('')
-  }
-
-  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!inputValue) {
-      setError('input empty')
-      return
-    }
-    if (inputValue.length < 11) searchVehicleByRegNumber(inputValue)
-    else searchVehicleByChasisNumber(inputValue)
-    setSearch(true, inputValue.length < 11 ? 'regnumber' : 'chasis')
-  }
-
-  useEffect(() => {
-    setInputValue(search)
-  }, [search])
-
-  return (
-    <form className="nav-search-component" onSubmit={handleSearch}>
-      <div className="d-flex align-items-center" style={{ gap: '20px' }}>
-        <input
-          placeholder="Search reg number or chasis number"
-          onChange={handleOnChange}
-          value={inputValue.toUpperCase()}
-          onBlur={() => setError('')}
-          onFocus={() => setError('')}
-          autoFocus={error.length > 0}
-          className={error ? 'error' : ''}
-        />
-        {load ? (
-          <PulseSVG />
-        ) : (
-          <TypeButton
-            buttonSize="small"
-            title="Search"
-            type="submit"
-            load={load}
-          />
-        )}
-
-        {/* <CTAS
-          load={load}
-          onBtn1={() => {
-            handleSearch("reg")
-          }}
-          onBtn2={() => {
-            handleSearch("chasis")
-          }}
-        /> */}
-      </div>
-      {error ? <TextPrompt prompt={error} status={false} /> : null}
-    </form>
-  )
-}
-
-// interface ICTAS {
-//   load?: boolean
-//   onBtn1: () => void
-//   onBtn2: () => void
-// }
-
-// const CTAS: FC<ICTAS> = ({ load, onBtn1, onBtn2 }) => {
-//   return (
-//     <div
-//       className="w-100 d-flex flex-wrap justify-content-center"
-//       style={{ gap: "20px" }}
-//     >
-//       {load ? (
-//         <PulseSVG />
-//       ) : (
-//         <div
-//           className="dropdown text-center d-flex align-items-center justify-content-center"
-//           style={{ gap: "20px" }}
-//         >
-//           <button
-//             className="btn btn-secondary dropdown-toggle px-2 border-0 text-dark"
-//             style={{ background: "none", outline: "none", fontSize: "14px" }}
-//             type="button"
-//             id="dropdownMenuButton"
-//             data-toggle="dropdown"
-//             aria-haspopup="true"
-//             aria-expanded="false"
-//           >
-//             Search
-//           </button>
-//           <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-//             <p
-//               className="dropdown-item cursor-pointer m-0 py-2"
-//               style={{ cursor: "pointer" }}
-//               onClick={onBtn1}
-//             >
-//               Reg number
-//             </p>
-//             <p
-//               className="dropdown-item cursor-pointer m-0 py-2"
-//               style={{ cursor: "pointer" }}
-//               onClick={onBtn2}
-//             >
-//               Chasis number
-//             </p>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   )
-// }
-
-const ConfigurationComponent = ({
-  openSettings
-}: {
-  openSettings: () => void
-}) => {
-  return (
-    <div className="nav-config-component" onClick={openSettings}>
-      <CogSVG />
-      <p>Settings</p>
-    </div>
-  )
-}
-
-// const UserComponent = ({ name, imgSrc }: { name: string; imgSrc: string }) => {
-//   return (
-//     <div className="nav-user-component">
-//       <div className="nav-profile">
-//         <div className="nav-user-profile">
-//           <img src={imgSrc || ""} alt="" />
-//         </div>
-//         <p>{name || "User"}</p>
-//       </div>
-//       <EllipsisSVG />
-//     </div>
-//   )
-// }
