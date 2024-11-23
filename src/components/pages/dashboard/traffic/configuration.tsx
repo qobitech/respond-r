@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { LiveFeedStatusComponent } from './live-feed-status-component'
 import { FeedForm } from './feed-form'
 import { RTSPForm } from './rtsp-form'
-import { IRightSection } from 'components/reusable/right-section/utils'
+import { IRightSection } from 'utils/right-section/utils'
 
 export const Configuration = ({
   signalRProps,

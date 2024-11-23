@@ -2,7 +2,6 @@ import { IVehicleReducer } from 'interfaces/IReducer'
 import { IUSIO, tabEnum } from './utils'
 import { useState } from 'react'
 import MediaRTSPToggle from './media-rtsp-toggle'
-import { IframeComponent } from '../components'
 import { NoMediaComponent } from './no-media-component'
 import { VehicleInfoSection } from './vehicle-info-section'
 import { VehicleOffensesSection } from './vehicle-offense-section'
@@ -11,6 +10,7 @@ import { VehicleSOTSection } from './vehicle-sot-section'
 import { VehicleInstanceSection } from './vehicle-instance-section'
 import { CarNotes } from './car-notes'
 import { CarFlags } from './car-flags'
+import { IframeComponent } from '../service-component/frame-component'
 
 const MainView = ({
   mediaUrl,

@@ -1,108 +1,24 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState } from 'react'
+import React from 'react'
 import './index.scss'
 import { NoMediaComponent } from '../traffic/no-media-component'
 import { IReport, IReports } from 'interfaces/IReport'
-import { MainView, MainViewLocal } from '../components'
 import { IAllAssets, IAsset, IAssets, assetType } from 'interfaces/IAsset'
-import moveable from 'assets/images/moveable.svg'
-import police_vehicle from 'assets/images/asset_icons/police-vehicle.svg'
-import fire_truck from 'assets/images/asset_icons/fire-truck.svg'
-import police from 'assets/images/asset_icons/police.svg'
-import street_camera from 'assets/images/asset_icons/street-camera.svg'
-import frsc_patrol from 'assets/images/asset_icons/frsc-patrol.svg'
-import hospital from 'assets/images/asset_icons/hospital.svg'
-import ambulance from 'assets/images/asset_icons/ambulance.svg'
-import police_station from 'assets/images/asset_icons/police-station.svg'
-import traffic_light from 'assets/images/asset_icons/traffic-light.svg'
-import drts_patrol from 'assets/images/asset_icons/drts-patrol.svg'
+
 import { IATE } from 'store/actions/admin-actions/assets'
 import { IURS } from 'store/actions/admin-actions/report'
-import { IReportReducer } from 'interfaces/IReducer'
 import { statusType } from '../asset/location-assets'
 import { ILocationDetails, ITableRecord } from '../traffic/utils'
-import { IRightSection } from 'components/reusable/right-section/utils'
 import { useGlobalContext } from 'context/hooks'
 import { CopyComponent, useCopy } from 'utils/hook'
 import { PulseSVG, RefreshSVG } from 'utils/svgs'
-import ReportTable from 'utils/report-table'
-import { TypeSelect } from 'utils/select'
-import { TypeInput } from 'utils/input'
-import { TypeButton } from 'utils/button'
 import { assetsTypes } from 'store/types'
-
-const getIconUrl = (type: assetType) => {
-  switch (type) {
-    case 'ambulance':
-      return ambulance
-    case 'drts-patrol':
-      return drts_patrol
-    case 'fire-truck':
-      return fire_truck
-    case 'frsc-patrol':
-      return frsc_patrol
-    case 'hospital':
-      return hospital
-    case 'police':
-      return police
-    case 'police-station':
-      return police_station
-    case 'police-vehicle':
-      return police_vehicle
-    case 'street-camera':
-      return street_camera
-    case 'traffic-light':
-      return traffic_light
-    default:
-      return moveable
-  }
-}
-
-interface IReportData<T> {
-  title: string
-  data: T[]
-}
-
-export const getReportStatusBg = (status: string) => {
-  //     Assigned (blue)
-  // Accepted (yellow)
-  // Closed (green)
-  // Ignored (---)
-  if (!status) return 'grey'
-  switch (status.toLowerCase()) {
-    case 'new':
-      return 'red'
-    case 'assigned':
-      return 'blue'
-    case 'accepted':
-      return 'yellow'
-    case 'closed':
-      return 'green'
-    default:
-      return 'grey'
-  }
-}
-
-export const getTime = (date: string) => {
-  const currentDate = new Date(date)
-  const hours = currentDate.getHours()
-  const minutes = currentDate.getMinutes()
-  const seconds = currentDate.getSeconds()
-  const amPM = hours >= 12 ? 'PM' : 'AM' // Determine AM/PM
-
-  // Convert hours to 12-hour format
-  const formattedHours = hours % 12 || 12
-
-  // Ensure minutes and seconds are displayed with leading zeros if less than 10
-  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes
-  const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds
-
-  return `${formattedHours}:${formattedMinutes}:${formattedSeconds} ${amPM}`
-}
-
-export interface ObjectType {
-  [key: string]: IReport[]
-}
+import { getIconUrl, IReportData, ObjectType } from './utils'
+import { getReportStatusBg, getTime } from './helpers'
+import { FilterSection } from './filter-section'
+import { ViewReportItem } from './view-report-item'
+import { ReportSection } from './report-section'
+import { Loader } from './loader'
 
 const AdminReport = <T extends { [key: string]: any }>({
   data,
@@ -388,175 +304,4 @@ const AdminReport = <T extends { [key: string]: any }>({
   )
 }
 
-interface IVRI {
-  backToAllReports: () => void
-  feed?: IReport | null
-  assignAssets: (
-    data: IATE,
-    callBack: (status: statusType, id: string) => void
-  ) => void
-  assets: IAssets
-  updateReport: (data: IURS) => void
-  updateReportProps: IReportReducer
-}
-
-const ViewReportItem: React.FC<IVRI> = ({
-  backToAllReports,
-  feed,
-  assignAssets,
-  assets,
-  updateReport,
-  updateReportProps
-}) => {
-  return (
-    <div className="view-report-item-container">
-      <div className="back-btn-container">
-        <button className="button-action danger" onClick={backToAllReports}>
-          Back
-        </button>
-      </div>
-      <div className="view-report-item">
-        <MainViewLocal
-          feed={feed}
-          assignAssets={assignAssets}
-          assets={assets}
-          updateReport={updateReport}
-          updateReportProps={updateReportProps}
-        />
-      </div>
-    </div>
-  )
-}
-
-const Loader = ({ loadReports }: { loadReports: boolean }) => {
-  return (
-    <>
-      {loadReports ? (
-        <div className="text-center">
-          <PulseSVG />
-        </div>
-      ) : null}
-    </>
-  )
-}
-
-interface IReportSection {
-  reportsGroupedByDate: ObjectType
-  getTableReport: (data: IReport[]) => ITableRecord[]
-  // lastCardElementRef: (node: any) => void
-  lastCardElementRef: React.RefObject<HTMLTableRowElement>
-  hide?: boolean
-}
-
-const ReportSection: React.FC<IReportSection> = ({
-  reportsGroupedByDate,
-  getTableReport,
-  lastCardElementRef,
-  hide
-}) => {
-  return (
-    <div className={hide ? 'hide-prop' : ''}>
-      {reportsGroupedByDate ? (
-        <div className="table-wrapper">
-          {Object.values(reportsGroupedByDate)?.map((report, index) => (
-            <TableWrapper
-              title={Object.keys(reportsGroupedByDate)[index]}
-              key={index}
-            >
-              <ReportTable
-                header={['Time', 'Report', 'Location', 'Status']}
-                record={getTableReport(report)}
-                hideNumbering
-                lastCardElementRef={lastCardElementRef}
-              />
-            </TableWrapper>
-          ))}
-        </div>
-      ) : null}
-    </div>
-  )
-}
-
-const TableWrapper = ({
-  title,
-  children
-}: {
-  title: string
-  children?: any
-}) => {
-  const [toggle, setToggle] = useState<boolean>(true)
-  return (
-    <div className="table-wrapper-box">
-      <div
-        className="table-wrapper-box-header"
-        onClick={() => setToggle(!toggle)}
-      >
-        <p>{new Date(title).toDateString()}</p>
-        <p>
-          <span>
-            <i className={`fas fa-angle-${toggle ? 'down' : 'up'}`} />
-          </span>
-        </p>
-      </div>
-      {toggle ? (
-        <div className={`table-wrapper-box-body`}>{children}</div>
-      ) : null}
-    </div>
-  )
-}
-
-export const ViewReport = ({
-  rsProps
-}: {
-  rsProps?: IRightSection<IReport>
-}) => {
-  return <MainView feed={rsProps?.data} />
-}
-
 export default AdminReport
-
-const FilterSection = () => {
-  return (
-    <div className="admin-filter-section">
-      <TypeSelect
-        initoption={{ label: 'All reports', value: '' }}
-        optionsdata={[
-          { id: 1, label: 'Un-assigned reports', value: 'unassigned' },
-          { id: 2, label: 'Assigned reports', value: 'assigned' },
-          { id: 3, label: 'Rejected reports', value: 'rejected' }
-        ]}
-      />
-      <TypeInput placeholder="Search report or location" />
-      <TypeButton buttonSize="small" title="Search" />
-    </div>
-  )
-}
-
-export const ReportStatus = ({ reportStatus }: { reportStatus: string[] }) => {
-  return (
-    <div className="d-flex align-items-center" style={{ gap: '20px' }}>
-      {reportStatus.map((i, index) => (
-        <ReportStatusItem status={i} key={index} />
-      ))}
-    </div>
-  )
-}
-
-const ReportStatusItem = ({ status }: { status: string }) => {
-  return (
-    <div className="d-flex align-items-center" style={{ gap: '5px' }}>
-      <div
-        style={{
-          width: '12px',
-          height: '12px',
-          borderRadius: '50%',
-          background: getReportStatusBg(status)
-        }}
-        title={status}
-      ></div>
-      <p className="m-0 text-color" style={{ fontSize: '0.7rem' }}>
-        {status}
-      </p>
-    </div>
-  )
-}

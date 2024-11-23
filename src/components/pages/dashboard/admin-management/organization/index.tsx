@@ -4,13 +4,13 @@ import 'utils/page.scss'
 import './management.scss'
 import CreateRole from './create-organization'
 import { IOrganization } from 'interfaces/IOrganization'
-import { useRightSection } from 'components/reusable/right-section/hooks'
+import { useRightSection } from 'utils/right-section/hooks'
 import { useGlobalContext } from 'context/hooks'
 import { ICell, ICellAction, useTableAction } from 'utils/report-table'
 import { TypeButton } from 'utils/button'
 import Table from 'utils/table'
-import RightSection from 'components/reusable/right-section'
-import { PageHeader } from '../../components'
+import RightSection from 'utils/right-section'
+import { PageHeader } from '../../service-component/page-header'
 
 const OrganizationPage: FC = () => {
   const { state, action } = useGlobalContext()

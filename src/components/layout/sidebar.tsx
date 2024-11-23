@@ -6,7 +6,7 @@ import { IReport } from 'interfaces/IReport'
 import { CarsSVG, HamburgerSVG, ManagementSVG, SwitchSVG } from 'utils/svgs'
 import { GODUSER } from 'app-constants/roles'
 import { ISSUPERADMIN, ORGANIZATION } from 'app-constants'
-import { managementTabEnums } from 'components/pages/dashboard/admin-management'
+import { managementTabEnums } from 'components/pages/dashboard/admin-management/utils'
 
 interface IProps {
   setMenuOpen: (menuOpen: boolean) => (dispatch: any) => void

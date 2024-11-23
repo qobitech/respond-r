@@ -1,0 +1,74 @@
+@use '../../assets/styles/theme-variables' as theme;
+@use '../../assets/styles/variables' as variables;
+
+.right_container {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  top: 0;
+  width: 50%;
+  height: 100vh;
+  z-index: 30;
+  @include theme.themify(theme.$themes) {
+    background: theme.themed('colorBackground');
+  }
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  transition: 0.2s all ease-in;
+  padding: 1.56rem 3.12rem 3.56rem;
+  overflow: auto;
+  &.menuclose {
+    transform: translateX(100%);
+  }
+  &.menuopen {
+    transform: translateX(0);
+  }
+  .rs-header {
+    display: flex;
+    align-items: center;
+    padding-bottom: 1.56rem;
+    @include theme.themify(theme.$themes) {
+      border-bottom: 1px solid theme.themed('border');
+    }
+    h3 {
+      margin: 0 0 0 1.5rem;
+      @include theme.themify(theme.$themes) {
+        color: theme.themed('themeColor');
+      }
+      font-family: Nunito;
+      font-size: 0.875rem;
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+      margin-right: 1.94rem;
+    }
+    .ctas {
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+      gap: 25px;
+    }
+  }
+  .rs-body {
+    height: 85vh;
+    overflow: auto;
+    padding: 3.12rem 0;
+  }
+  @media (max-width: variables.$lg-breakpoint) {
+    width: -webkit-fill-available;
+  }
+  @media (max-width: variables.$md-breakpoint) {
+    padding: 1.56rem 1.5625rem 3.56rem;
+  }
+}
+
+.back-drop {
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 28;
+}

@@ -1,6 +1,6 @@
 import React from 'react'
 import '../global.scss'
-import { PageComponent } from '../components'
+import { PageComponent } from '../service-component'
 
 const IFireServicePage = () => {
   return (

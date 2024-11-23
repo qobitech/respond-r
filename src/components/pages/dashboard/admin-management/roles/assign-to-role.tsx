@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react'
 import { TypeButton } from 'utils/button'
 import TextPrompt from 'utils/text-prompt'
 import { IRole } from 'interfaces/IRole'
-import { IRightSection } from 'components/reusable/right-section/utils'
-import { SelectedItems } from '../action/selected-iTems'
+import { IRightSection } from 'utils/right-section/utils'
+import { SelectedItems } from '../action/selected-items'
 import { RoleSelectItem } from '../action/role-select-item'
 
 const AssignToRole = ({

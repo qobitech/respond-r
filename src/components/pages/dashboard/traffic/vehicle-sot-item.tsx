@@ -1,5 +1,5 @@
-import { Accordion, useAccordion } from 'components/reusable/accordion'
-import Switch, { Case } from 'components/reusable/switch'
+import { Accordion, useAccordion } from 'utils/accordion'
+import Switch, { Case } from 'utils/switch'
 import { ISOTDetails } from 'interfaces/IVehicle'
 import { VehicleInfoSectionItem } from './vehicle-info-section-item'
 import { VehicleInfoSectionColorItem } from './vehicle-info-section-color-item'

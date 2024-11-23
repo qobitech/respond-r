@@ -1,36 +1,34 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Navbar from './navbar'
 import Footer from './footer'
 import './index.scss'
 import { IAction } from 'interfaces/IAction'
 import SideBar from './sidebar'
 import ScrollIntoViewController from './ScrollIntoViewController'
-import { GlobalContext, themeType } from 'context'
-import { IReport, IReports } from 'interfaces/IReport'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useQueryValuesHook } from 'utils/hooks'
+import { GlobalContext } from 'context'
+import { useLocation } from 'react-router-dom'
 import { url } from 'app-constants/Route'
 import { ThemeContext } from 'context/theme-context'
 import { PageProps } from './helpers'
-import { useGlobalContext } from 'context/hooks'
-import { useRightSection } from 'components/reusable/right-section/hooks'
-import { GODUSER } from 'app-constants/roles'
+import { useRightSection } from 'utils/right-section/hooks'
 import { isLogged, USERTOKEN } from 'app-constants'
 import { ISideToast } from 'utils/toast'
 import { PulseSVG } from 'utils/svgs'
+import {
+  useGlobalStartConnection,
+  useIsLogged,
+  useSelectedReport,
+  useTheme
+} from './hooks'
 
 const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
   const {
-    setNotificationStatus,
     setMenuOpen,
     setSearch,
     logOut,
     callRightSection,
     searchVehicleByChasisNumber,
-    searchVehicleByRegNumber,
-    getLoggedActionsForRole,
-    getLoggedOrganization,
-    getLoggedRoles
+    searchVehicleByRegNumber
   } = props as unknown as IAction
 
   const searchLoad =
@@ -43,90 +41,34 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
   const notifyUser = states?.global.notifyUser
   const menuOpen = states?.global.menuOpen
 
-  useEffect(() => {
-    let timeOut: NodeJS.Timeout
-    if (notifyUser)
-      timeOut = setTimeout(() => {
-        setNotificationStatus('', false)
-      }, 3000)
-
-    return () => {
-      clearTimeout(timeOut)
-    }
-  }, [notifyUser, setNotificationStatus])
-
-  const query = (sign: string) =>
-    GODUSER
-      ? ''
-      : `${sign}OrganisationId=${
-          getOrganization?.('name', USERTOKEN.Organisation)?.id || ''
-        }`
-
-  const getAllLoggedRoles = (query: string) => {
-    if (GODUSER) getLoggedRoles(query)
-    if (organizations?.length) getLoggedRoles(query)
-  }
-
-  useEffect(() => {
-    if (isLogged) {
-      if (!roles) getAllLoggedRoles(query('?'))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [organizations])
-
-  useEffect(() => {
-    if (isLogged) {
-      if (!actionsRoles) getLoggedActionsForRole(USERTOKEN.Role)
-      if (!organizations) getLoggedOrganization('')
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   const preLoad =
     states?.logged.getLoggedActionsForRoleLoading ||
     states?.logged.getLoggedOrganizationLoading ||
     states?.logged.getLoggedRolesLoading
 
-  const isBrowserDefaultDark = () =>
-    window.matchMedia('(prefers-color-scheme: dark)').matches
-
-  const getDefaultTheme = (): themeType => {
-    const localStorageTheme = localStorage.getItem('theme')
-    const browserDefault = isBrowserDefaultDark() ? 'dark' : 'light'
-    return (localStorageTheme || browserDefault) as themeType
+  const getOrganization = (type: 'id' | 'name', key: string | number) => {
+    if (type === 'id') return organizations?.find((org) => org.id === key)
+    return organizations?.find((org) => org.name === key)
   }
 
-  const [theme, setTheme] = useState<themeType>(getDefaultTheme())
+  useIsLogged({
+    action: props as unknown as IAction,
+    notifyUser,
+    getOrganization,
+    organizations,
+    roles,
+    actionsRoles
+  })
+
+  const { theme, setTheme } = useTheme()
+
   const [search, setSearchValue] = useState<string>('')
-  const [globalStartConnection, setGlobalStartConnection] = useState<{
-    action: boolean
-    url: string
-  }>({ action: false, url: '' })
-  const [selectedReport, setSelectedReport] = useState<IReport | null>(null)
+
   const [sideToast, setSideToast] = useState<ISideToast>({
     notice: '',
     show: false,
     status: false
   })
-
-  const activateGlobalStartConnection = (url: string) => {
-    setGlobalStartConnection(() => ({
-      action: true,
-      url
-    }))
-  }
-
-  const disableGlobalStartConnection = () => {
-    setGlobalStartConnection((prev) => ({
-      action: false,
-      url: ''
-    }))
-  }
-
-  const getOrganization = (type: 'id' | 'name', key: string | number) => {
-    if (type === 'id') return organizations?.find((org) => org.id === key)
-    return organizations?.find((org) => org.name === key)
-  }
 
   const getRole = (id: number) => {
     return roles?.find((org) => org.id === id)
@@ -134,31 +76,6 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
 
   const isAction = (action: string) => {
     return actionsRoles?.includes(action) || false
-  }
-
-  const navigate = useNavigate()
-
-  const { reportId } = useQueryValuesHook()
-
-  const handleSelectReport = (report: IReport | null) => {
-    setSelectedReport?.(report)
-    navigate(report ? `?reportId=${report?.id}` : `?`)
-  }
-
-  const setReportById = (data: IReports) => {
-    const reports = data.data
-    if (reports?.length) {
-      if (reportId) {
-        const reportById = reports?.filter(
-          (report) => report.id === reportId
-        )?.[0]
-        if (reportById) {
-          handleSelectReport(reportById)
-        } else {
-          // fetch report by id
-        }
-      }
-    }
   }
 
   const location = useLocation()
@@ -178,21 +95,20 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
     action?.getAssets()
   }
 
-  const fetchReports = (page?: number) => {
-    if (!organization) return
-    const currentPage = states?.report?.getAllReports?.currentPage || 1
-
-    const action = props as unknown as IAction
-    action?.getAllReports(
-      organization,
-      `?sort=desc&pageNumber=${page || currentPage + 1}`,
-      (data) => {
-        setReportById?.(data as IReports)
-      }
-    )
-  }
-
   const rsProps = useRightSection()
+
+  const {
+    activateGlobalStartConnection,
+    disableGlobalStartConnection,
+    globalStartConnection
+  } = useGlobalStartConnection()
+
+  const { fetchReports, selectedReport, handleSelectReport, setReportById } =
+    useSelectedReport({
+      organization,
+      states,
+      action: props as unknown as IAction
+    })
 
   return (
     <GlobalContext.Provider
@@ -263,17 +179,3 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
 }
 
 export default Page
-
-export const ActionWrapper = ({
-  action,
-  children
-}: {
-  action: string
-  children?: any
-}) => {
-  const { isAction } = useGlobalContext()
-
-  if (isAction?.(action)) return <>{children}</>
-
-  return <></>
-}

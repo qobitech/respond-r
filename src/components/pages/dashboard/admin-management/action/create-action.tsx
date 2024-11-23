@@ -1,34 +1,22 @@
 import { IAction } from 'interfaces/IAction'
 import { IStates } from 'interfaces/IReducer'
 import React, { useEffect, useState } from 'react'
-import * as yup from 'yup'
 import 'utils/page.scss'
 import { actionTypes } from 'store/types'
 import { IRoleAction } from 'interfaces/IRoleActions'
-import { PAGENUMBER, PAGESIZE, getQuery } from '.'
-import { IRightSection } from 'components/reusable/right-section/utils'
-import FormBuilder, { IFormComponent } from 'utils/form-builder'
+import { IRightSection } from 'utils/right-section/utils'
+import FormBuilder from 'utils/form-builder'
 import { useFormHook } from 'utils/hook'
 import { TypeButton } from 'utils/button'
 import TextPrompt from 'utils/text-prompt'
-
-interface ICreateAction {
-  name: string
-}
-
-const createActionSchema = {
-  name: yup.string().required('input required')
-}
-
-const formComponent: IFormComponent[] = [
-  {
-    id: 'name',
-    label: 'Title',
-    placeHolder: 'Enter title',
-    type: 'text',
-    component: 'input'
-  }
-]
+import {
+  createActionSchema,
+  formComponent,
+  ICreateAction,
+  PAGENUMBER,
+  PAGESIZE
+} from './utils'
+import { getQuery } from './helpers'
 
 const CreateAction = ({
   states,

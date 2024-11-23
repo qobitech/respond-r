@@ -4,9 +4,10 @@ import { IRoleAction } from 'interfaces/IRoleActions'
 import { useState } from 'react'
 import { TypeButton } from 'utils/button'
 import TextPrompt from 'utils/text-prompt'
-import { PAGENUMBER, PAGESIZE, getQuery } from '.'
-import { IRightSection } from 'components/reusable/right-section/utils'
-import { SelectedItems } from './selected-iTems'
+import { IRightSection } from 'utils/right-section/utils'
+import { SelectedItems } from './selected-items'
+import { getQuery } from './helpers'
+import { PAGENUMBER, PAGESIZE } from './utils'
 
 const DeleteAction = ({
   states,

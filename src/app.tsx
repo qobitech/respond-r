@@ -4,7 +4,7 @@ import AuthRoute from 'route/auth'
 import PublicRoute from 'route/public'
 
 import { url } from 'app-constants/Route'
-import LandingPage from 'components/public/landing'
+import LandingPage from 'components/pages/public/landing'
 import { PulseSVG } from 'utils/svgs'
 import Overview from 'components/pages/dashboard/traffic'
 import IFireServicePage from 'components/pages/dashboard/fire-service'

@@ -4,16 +4,13 @@ import { url } from 'app-constants/Route'
 import './navbar.scss'
 import Logo from 'assets/images/CHITHUB_LOGO.png'
 import { NavbarProps, pageType } from './utils'
-import { ConfigurationComponent } from './configuration-component'
-import { TrafficSearchComponent } from './traffic-search-component'
-import { FireSearchComponent } from './fire-search-component'
-import { PoliceSearchComponent } from './police-search-component'
 import { PageIdentifier } from './page-identifier'
 import { HamburgerSVG } from 'utils/svgs'
 import Toggle from 'utils/toggle'
 import { TypeButton } from 'utils/button'
 import Toast, { SideToast } from 'utils/toast'
 import { isLogged } from 'app-constants'
+import { SearchComponent } from './search-component'
 
 const Navbar = (props: NavbarProps) => {
   const navigate = useNavigate()
@@ -28,25 +25,22 @@ const Navbar = (props: NavbarProps) => {
     return location.pathname.includes(page)
   }
 
-  const isTraffic = _isUrl(url.TRAFFIC)
-  const isFireService = _isUrl(url.FIRESERVICE)
-  const isPolice = _isUrl(url.POLICE)
-  const isMedical = _isUrl(url.MEDICAL)
-
   const getPageIdentifier = (): pageType => {
     switch (true) {
-      case isTraffic:
+      case _isUrl(url.TRAFFIC):
         return 'e-traffic'
-      case isFireService:
+      case _isUrl(url.FIRESERVICE):
         return 'firefighter'
-      case isPolice:
+      case _isUrl(url.POLICE):
         return 'e-police'
-      case isMedical:
+      case _isUrl(url.MEDICAL):
         return 'e-medical'
       default:
         return 'management'
     }
   }
+
+  const pageIdentifier = getPageIdentifier()
 
   return (
     <div className="nav-container">
@@ -69,35 +63,10 @@ const Navbar = (props: NavbarProps) => {
             <img src={Logo} alt="Chithub technologies" />
           </div>
         )}
-        {isLogged ? <PageIdentifier page={getPageIdentifier()} /> : null}
+        {isLogged ? <PageIdentifier page={pageIdentifier} /> : null}
         <div className="nav-other-components">
-          {isLogged && (
-            <>
-              {isTraffic ? (
-                <TrafficSearchComponent
-                  searchVehicleByChasisNumber={
-                    props.searchVehicleByChasisNumber
-                  }
-                  searchVehicleByRegNumber={props.searchVehicleByRegNumber}
-                  load={props.searchLoad}
-                  setSearch={props.setSearch}
-                />
-              ) : null}
-              {isFireService ? <FireSearchComponent /> : null}
-              {isPolice ? <PoliceSearchComponent /> : null}
-            </>
-          )}
+          {isLogged && <SearchComponent navProps={props} />}
           <Toggle />
-          {isLogged && (
-            <ConfigurationComponent
-              openSettings={() => {
-                props.callRightSection({
-                  action: 'custom',
-                  component: 'settings'
-                })
-              }}
-            />
-          )}
           {!isLogged && (
             <div className="auth-actions">
               <TypeButton

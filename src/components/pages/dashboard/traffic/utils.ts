@@ -1,5 +1,5 @@
 import * as signalR from '@microsoft/signalr'
-import { ILocation } from 'components/map/new-map'
+import { ILocation } from 'utils/map'
 import { IStates } from 'interfaces/IReducer'
 import { IFeed, IHit } from 'interfaces/IStream'
 import { IVehicle } from 'interfaces/IVehicle'

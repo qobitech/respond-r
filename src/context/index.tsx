@@ -1,4 +1,4 @@
-import { IRightSection } from 'components/reusable/right-section/utils'
+import { IRightSection } from 'utils/right-section/utils'
 import { IAction } from 'interfaces/IAction'
 import { IOrganization } from 'interfaces/IOrganization'
 import { IStates } from 'interfaces/IReducer'

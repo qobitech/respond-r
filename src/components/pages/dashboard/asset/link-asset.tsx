@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import './style.scss'
-import { ActionComponent } from '../components'
 import { clearAction } from 'store/actions/global'
 import { IReport } from 'interfaces/IReport'
-import { IRightSection } from 'components/reusable/right-section/utils'
+import { IRightSection } from 'utils/right-section/utils'
 import { useGlobalContext } from 'context/hooks'
 import { TypeInput } from 'utils/input'
 import { TypeButton } from 'utils/button'
 import { PulseSVG } from 'utils/svgs'
 import { assetsTypes } from 'store/types'
+import { ActionComponent } from '../service-component/action-component'
 
 const LinkAsset = ({
   assetId,

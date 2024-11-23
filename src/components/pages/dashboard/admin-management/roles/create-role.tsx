@@ -1,54 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import * as yup from 'yup'
 import 'utils/page.scss'
 import { IRole } from 'interfaces/IRole'
-import { IOrganization } from 'interfaces/IOrganization'
 import { useGlobalContext } from 'context/hooks'
-import { GODUSER } from 'app-constants/roles'
-import { ISSUPERADMIN } from 'app-constants'
-import FormBuilder, { IFormComponent } from 'utils/form-builder'
+import FormBuilder from 'utils/form-builder'
 import { useFormHook } from 'utils/hook'
 import { TypeButton } from 'utils/button'
 import TextPrompt from 'utils/text-prompt'
 import { roleTypes } from 'store/types'
-
-interface ICreateRole {
-  name: string
-  organisationId: number
-}
-
-const createRoleSchema = {
-  name: yup.string().required('input required'),
-  organisationId: GODUSER
-    ? yup.number().required('input required')
-    : yup.number()
-}
-
-const getFormComponent = (organizations: IOrganization[]) =>
-  [
-    {
-      id: 'name',
-      label: 'Title',
-      placeHolder: 'Enter role title',
-      type: 'text',
-      component: 'input'
-    },
-    {
-      id: 'organisationId',
-      label: 'Organization',
-      placeHolder: '',
-      type: 'text',
-      component: 'select',
-      initOptions: { id: 2, label: 'Select Organziation', value: '' },
-      optionData: organizations.map((i, index) => ({
-        id: index + 1,
-        label: i.name,
-        value: i.id
-      }))
-    }
-  ].filter((i) =>
-    GODUSER ? i : ISSUPERADMIN ? i.id === 'name' : false
-  ) as IFormComponent[]
+import { createRoleSchema, getFormComponent, ICreateRole } from './utils'
 
 const CreateRole = () => {
   const { organizations, userOrganization, state, action, rsProps } =

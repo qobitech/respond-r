@@ -1,4 +1,4 @@
-import { managementTabEnums } from 'components/pages/dashboard/admin-management'
+import { managementTabEnums } from 'components/pages/dashboard/admin-management/utils'
 import { ISSUPERADMIN, ORGANIZATION, organizationEnumsType } from '.'
 import { GODUSER } from 'app-constants/roles'
 

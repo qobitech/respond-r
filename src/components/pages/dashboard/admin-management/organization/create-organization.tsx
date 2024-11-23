@@ -1,34 +1,16 @@
 import { IAction } from 'interfaces/IAction'
 import { IStates } from 'interfaces/IReducer'
 import { useEffect, useState } from 'react'
-import * as yup from 'yup'
+
 import 'utils/page.scss'
 import { organizationTypes } from 'store/types'
 import { IOrganization } from 'interfaces/IOrganization'
-import { IRightSection } from 'components/reusable/right-section/utils'
-import FormBuilder, { IFormComponent } from 'utils/form-builder'
+import { IRightSection } from 'utils/right-section/utils'
+import FormBuilder from 'utils/form-builder'
 import { useFormHook } from 'utils/hook'
 import { TypeButton } from 'utils/button'
 import TextPrompt from 'utils/text-prompt'
-
-interface ICreateOrg {
-  name: string
-  organisationId: number
-}
-
-const createOrgSchema = {
-  name: yup.string().required('input required')
-}
-
-const formComponent: IFormComponent[] = [
-  {
-    id: 'name',
-    label: 'Title',
-    placeHolder: 'Enter title',
-    type: 'text',
-    component: 'input'
-  }
-]
+import { createOrgSchema, formComponent, ICreateOrg } from './utils'
 
 const CreateOrganization = ({
   states,

@@ -1,4 +1,6 @@
+import { themeType } from 'context'
 import { INotification } from 'interfaces/IGlobal'
+import { IReport, IReports } from 'interfaces/IReport'
 import { ICallRightSection, vehicleSearchType } from 'store/actions/global'
 import { ISideToast } from 'utils/toast'
 
@@ -24,3 +26,24 @@ export type pageType =
   | 'firefighter'
   | 'management'
   | 'e-medical'
+
+export interface IUseTheme {
+  theme: themeType
+  setTheme: React.Dispatch<React.SetStateAction<themeType>>
+}
+
+export interface IUseGlobalStartConnection {
+  globalStartConnection: {
+    action: boolean
+    url: string
+  }
+  activateGlobalStartConnection: (url: string) => void
+  disableGlobalStartConnection: () => void
+}
+
+export interface IUseSelectedReport {
+  fetchReports: (page?: number) => void
+  selectedReport: IReport
+  handleSelectReport: (report: IReport | null) => void
+  setReportById: (data: IReports) => void
+}

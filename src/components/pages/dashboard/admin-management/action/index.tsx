@@ -6,17 +6,15 @@ import CreateAction from './create-action'
 import { IRoleAction } from 'interfaces/IRoleActions'
 import AssignToRole from './assign-to-role'
 import DeleteAction from './delete-action'
-import { useRightSection } from 'components/reusable/right-section/hooks'
+import { useRightSection } from 'utils/right-section/hooks'
 import { useGlobalContext } from 'context/hooks'
 import { ITableRecord, useTableAction } from 'utils/report-table'
 import { TypeButton } from 'utils/button'
 import Table from 'utils/table'
-import RightSection from 'components/reusable/right-section'
-import { PageHeader } from '../../components'
-
-export const getQuery = (query: string) => (query ? `/paged?${query}` : '')
-export const PAGESIZE = `pageSize=10`
-export const PAGENUMBER = `pageNumber=1`
+import RightSection from 'utils/right-section'
+import { getQuery } from './helpers'
+import { PAGENUMBER, PAGESIZE } from './utils'
+import { PageHeader } from '../../service-component/page-header'
 
 const ActionPage: FC = () => {
   const { state, action } = useGlobalContext()

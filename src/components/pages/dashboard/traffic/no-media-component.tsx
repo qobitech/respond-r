@@ -1,6 +1,6 @@
 import { PulseSVG } from 'utils/svgs'
 import { ILocationDetails } from './utils'
-import { MapChart } from 'components/map/new-map'
+import { MapChart } from 'utils/map'
 
 export const NoMediaComponent = ({
   load,
