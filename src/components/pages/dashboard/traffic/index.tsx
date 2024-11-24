@@ -1,13 +1,11 @@
-import React, { useState } from 'react'
+import { FC, useState } from 'react'
 import '../global.scss'
 import './index.scss'
 import 'utils/pagination.scss'
 import 'utils/page.scss'
 import RightSection from 'utils/right-section'
 import { IFeed, IHit } from 'interfaces/IStream'
-import { IAction } from 'interfaces/IAction'
 import { vehicleTypes } from 'store/types'
-import { IProps } from './utils'
 import { getFilePath } from './helpers'
 import { useRTSP, useSignalR } from './hooks'
 import MainView from './main-view'
@@ -17,13 +15,15 @@ import { LiveFeedComponent } from './live-feed-component'
 import { useRightSection } from 'utils/right-section/hooks'
 import { CopyComponent, useCopy } from 'utils/hook'
 import { Loader } from 'utils/components'
+import { useGlobalContext } from 'context/hooks'
 
-const Overview: React.FC<IProps> = ({ states, ...props }) => {
+const Overview: FC = () => {
+  const { state, action } = useGlobalContext()
   const { getVehicleByRegNumber, clearAction, setSearch, callRightSection } =
-    props as unknown as IAction
-  const searchAction = states?.global.search
-  const searchedVehicleByChasis = states?.vehicle.searchVehicleByChasisNumber
-  const searchedVehicleByReg = states?.vehicle.searchVehicleByRegNumber
+    action
+  const searchAction = state?.global.search
+  const searchedVehicleByChasis = state?.vehicle.searchVehicleByChasisNumber
+  const searchedVehicleByReg = state?.vehicle.searchVehicleByRegNumber
 
   const vehicleSearchResult =
     searchAction?.type === 'chasis'
@@ -32,8 +32,8 @@ const Overview: React.FC<IProps> = ({ states, ...props }) => {
       ? searchedVehicleByReg
       : null
 
-  const rightSectionProps = states?.global.rightSection
-  const vehicle = states?.vehicle
+  const rightSectionProps = state?.global.rightSection
+  const vehicle = state?.vehicle
   const [mediaUrl, setMediaUrl] = useState<string>('')
   const [flags, setFlags] = useState<string[]>([])
   // const [camera, setCamera] = useState<string>()
