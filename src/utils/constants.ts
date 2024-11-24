@@ -37,8 +37,8 @@ export const identity_server = 'https://identityserver.myapiservices.net/api/v1'
 // https://identitymanager.myapiservices.net/api/v1/UserLogin
 // export const baseurl = 'https://apigateway.myapiservices.net/identity-manager';
 
-export const RESPONDR_QR_BASE_URL = `http://127.0.0.1:30814/api/v1`
-export const RESPONDR_CM_BASE_URL = `http://127.0.0.1:30817/api/v1`
+export const RESPONDR_QR_BASE_URL = `https://respondr-query.ngrok.app/api/v1`
+export const RESPONDR_CORE_BASE_URL = `https://respondr-core.ngrok.app/api/v1`
 export const VEHICLE_QR_BASE_URL = `https://etraffica.ngrok.app/vehicle-query/api/v1`
 export const IN_CAR_QR_BASE_URL = `http://127.0.0.1:30816/api/v1`
 

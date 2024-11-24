@@ -1,4 +1,4 @@
-import { RESPONDR_QR_BASE_URL, RESPONDR_CM_BASE_URL } from 'utils/constants'
+import { RESPONDR_CORE_BASE_URL } from 'utils/constants'
 import * as utils from '../../services/new/utils'
 import { action } from 'store/types'
 
@@ -6,7 +6,7 @@ export const getAllAction = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_QR_BASE_URL}/Action${query || ''}`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/Action${query || ''}`,
       header: utils.header('')
     },
     actionType: action.getAllAction
@@ -23,7 +23,7 @@ export const createAction = (
     return utils.httpPostMethod({
       apiData: {
         url: '',
-        customurl: `${RESPONDR_CM_BASE_URL}/Action`,
+        customurl: `${RESPONDR_CORE_BASE_URL}/Action`,
         header: utils.header(''),
         data
       },
@@ -38,7 +38,7 @@ export const createAction = (
   return utils.httpPutMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/Action`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/Action`,
       header: utils.header(''),
       data
     },
@@ -60,7 +60,7 @@ export const getActionsForRole = (
   return utils.httpGetMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_QR_BASE_URL}/Action/getactionsforrole?roleName=${name}`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/Action/getactionsforrole?roleName=${name}`,
       header: utils.header('')
     },
     actionType: action.getActionsForRole,
@@ -81,7 +81,7 @@ export const addActionToRole = (
   return utils.httpPostMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/Role/addActionsToRole`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/Role/addActionsToRole`,
       header: utils.header(''),
       data
     },
@@ -103,7 +103,7 @@ export const deleteAction = (
   return utils.httpDeleteMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/Action`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/Action`,
       header: utils.header(''),
       data
     },

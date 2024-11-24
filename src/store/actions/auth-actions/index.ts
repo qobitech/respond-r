@@ -1,5 +1,5 @@
 import { url } from 'enums/Route'
-import { RESPONDR_CM_BASE_URL } from '../../../utils/constants'
+import { RESPONDR_CORE_BASE_URL } from '../../../utils/constants'
 import * as utils from '../../services/new/utils'
 import { authType } from 'store/types'
 import { TOKENKEY } from 'utils/new/constants'
@@ -13,7 +13,7 @@ export const registerOrganization = (adminDetails: object) => {
   return utils.httpPostMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/UserManagement/OrganizationRegistration`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/UserManagement/OrganizationRegistration`,
       header: utils.headerNoAuth(),
       data: adminDetails
     },
@@ -25,7 +25,7 @@ export const verifyEmail = (data: object) => {
   return utils.httpPostMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/UserManagement/VerifyToken`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/UserManagement/VerifyToken`,
       header: utils.headerNoAuth(),
       data
     },
@@ -37,7 +37,7 @@ export const userLogin = (data: { email: string; password: string }) => {
   return utils.httpPostMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/Auth/Login`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/Auth/Login`,
       header: utils.headerNoAuth(),
       data
     },
@@ -55,7 +55,7 @@ export const passwordReset = (data: object) => {
   return utils.httpPostMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/UserManagement/PasswordReset/UpdatePassword`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/UserManagement/PasswordReset/UpdatePassword`,
       header: utils.headerNoAuth(),
       data
     },
@@ -67,7 +67,7 @@ export const requestPasswordToken = (email: { [key: string]: any }) => {
   return utils.httpPostMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/PasswordReset/TokenLink/${email?.email}`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/PasswordReset/TokenLink/${email?.email}`,
       header: utils.headerNoAuth()
     },
     actionType: authType.requestPasswordToken,
@@ -81,7 +81,7 @@ export const verifyPasswordResetToken = (data: object) => {
   return utils.httpPostMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/PasswordReset/ValidateToken`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/PasswordReset/ValidateToken`,
       header: utils.headerNoAuth(),
       data
     },
@@ -93,7 +93,7 @@ export const updatePassword = (data: object) => {
   return utils.httpPostMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/ChangePassword`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/ChangePassword`,
       header: utils.headerNoAuth(),
       data
     },
@@ -105,7 +105,7 @@ export const generateAccessToken = (data: object) => {
   return utils.httpPostMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/connect/token`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/connect/token`,
       header: utils.headerNoAuth(),
       data
     },
@@ -117,7 +117,7 @@ export const getRefreshToken = (data: object) => {
   return utils.httpPostMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/Session/RefreshToken`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/Session/RefreshToken`,
       header: utils.headerNoAuth(),
       data
     },

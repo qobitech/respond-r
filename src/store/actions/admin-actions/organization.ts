@@ -1,4 +1,4 @@
-import { RESPONDR_QR_BASE_URL, RESPONDR_CM_BASE_URL } from 'utils/constants'
+import { RESPONDR_CORE_BASE_URL } from 'utils/constants'
 import * as utils from '../../services/new/utils'
 import { organization } from 'store/types'
 
@@ -6,7 +6,7 @@ export const getAllOrganization = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_QR_BASE_URL}/Organisation/${query || ''}`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/Organisation/${query || ''}`,
       header: utils.header('')
     },
     actionType: organization.getAllOrganization
@@ -22,7 +22,7 @@ export const createOrganization = (
   return utils.httpPostMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/Organisation/${
+      customurl: `${RESPONDR_CORE_BASE_URL}/Organisation/${
         update ? 'update' : 'add'
       }`,
       header: utils.header(''),
@@ -44,7 +44,7 @@ export const deleteOrganization = (id: string) => {
   return utils.httpDeleteMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/Organisation/delete?id=${id}`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/Organisation/delete?id=${id}`,
       header: utils.header('')
     },
     actionType: organization.deleteOrganization

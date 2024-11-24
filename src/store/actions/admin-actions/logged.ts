@@ -1,4 +1,4 @@
-import { RESPONDR_QR_BASE_URL } from 'utils/constants'
+import { RESPONDR_CORE_BASE_URL } from 'utils/constants'
 import * as utils from '../../services/new/utils'
 import { logged } from 'store/types'
 
@@ -10,7 +10,7 @@ export const getLoggedActionsForRole = (
   return utils.httpGetMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_QR_BASE_URL}/Action/getactionsforrole?roleName=${name}`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/Action/getactionsforrole?roleName=${name}`,
       header: utils.header('')
     },
     actionType: logged.getLoggedActionsForRole,
@@ -27,7 +27,7 @@ export const getLoggedOrganization = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_QR_BASE_URL}/Organisation/${query || ''}`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/Organisation/${query || ''}`,
       header: utils.header('')
     },
     actionType: logged.getLoggedOrganization
@@ -38,7 +38,7 @@ export const getLoggedRoles = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_QR_BASE_URL}/Role${query || ''}`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/Role${query || ''}`,
       header: utils.header('')
     },
     actionType: logged.getLoggedRoles
