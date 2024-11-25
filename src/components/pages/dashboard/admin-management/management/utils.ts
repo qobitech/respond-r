@@ -11,7 +11,7 @@ export interface ICreateAdmin {
   phoneNumber: string
   password: string
   confirmPassword: string
-  role: string
+  role: string[]
 }
 
 export const createAdminSchema = (update: boolean) => ({

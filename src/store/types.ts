@@ -23,15 +23,9 @@ const generateActionTypes = <K extends string>(
 }
 
 export const authType = generateActionTypes([
-  'registerOrganization',
-  'verifyEmail',
   'userLogin',
   'passwordReset',
-  'requestPasswordToken',
-  'verifyPasswordResetToken',
-  'updatePassword',
-  'generateAccessToken',
-  'getRefreshToken'
+  'updatePassword'
 ])
 
 export const globalType = generateActionTypes([
@@ -61,7 +55,6 @@ export const roleTypes = generateActionTypes([
   'createRole',
   'updateRole',
   'deleteRole',
-  'getPermissions',
   'getRolesForOrganisation',
   'unassignMultipleActionsForRole'
 ])

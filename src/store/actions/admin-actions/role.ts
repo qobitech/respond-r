@@ -1,4 +1,4 @@
-import { RESPONDR_CM_BASE_URL, RESPONDR_QR_BASE_URL } from 'app-constants'
+import { RESPONDR_CM_BASE_URL } from 'app-constants'
 import * as utils from '../../services/new/utils'
 import { roleTypes } from 'store/types'
 
@@ -6,7 +6,7 @@ export const getAllRoles = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_QR_BASE_URL}/Role${query || ''}`,
+      customurl: `${RESPONDR_CM_BASE_URL}/Role${query || ''}`,
       header: utils.header('')
     },
     actionType: roleTypes.getAllRoles
@@ -22,9 +22,9 @@ export const createRole = (
   return utils.httpPostMethod({
     apiData: {
       url: '',
-      customurl: update
-        ? `${RESPONDR_CM_BASE_URL}/Role/update`
-        : `${RESPONDR_CM_BASE_URL}/Role/addRole`,
+      customurl: `${RESPONDR_CM_BASE_URL}/Role/${
+        update ? 'update' : 'addRole'
+      }`,
       header: utils.header(''),
       data
     },
@@ -46,17 +46,6 @@ export const deleteRole = (name: string) => {
       header: utils.header('')
     },
     actionType: roleTypes.deleteRole
-  })
-}
-
-export const getPermissions = (query: string) => {
-  return utils.httpGetMethod({
-    apiData: {
-      url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/Permissions/GetAll`,
-      header: utils.header('')
-    },
-    actionType: roleTypes.getPermissions
   })
 }
 
@@ -82,7 +71,7 @@ export const unassignMultipleActionsForRole = (
   return utils.httpPostMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/Action/UnassignMultiplectionsForRole`,
+      customurl: `${RESPONDR_CM_BASE_URL}/Action/UnassignMultipleActionsForRole`,
       header: utils.header(''),
       data
     },

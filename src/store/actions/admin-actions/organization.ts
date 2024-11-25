@@ -1,4 +1,4 @@
-import { RESPONDR_CM_BASE_URL, RESPONDR_QR_BASE_URL } from 'app-constants'
+import { RESPONDR_CM_BASE_URL } from 'app-constants'
 import * as utils from '../../services/new/utils'
 import { organizationTypes } from 'store/types'
 
@@ -6,7 +6,7 @@ export const getAllOrganization = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_QR_BASE_URL}/Organisation/${query || ''}`,
+      customurl: `${RESPONDR_CM_BASE_URL}/Organisation/${query || ''}`,
       header: utils.header('')
     },
     actionType: organizationTypes.getAllOrganization

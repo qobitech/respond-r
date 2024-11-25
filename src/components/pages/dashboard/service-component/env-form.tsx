@@ -1,4 +1,4 @@
-import { isBaseURL } from 'app-constants'
+import { getBaseUrl, isBaseURL } from 'app-constants'
 import { useEffect } from 'react'
 import { TypeButton } from 'utils/button'
 import { useFormHook } from 'utils/hook'
@@ -23,9 +23,9 @@ export const ENVForm = () => {
 
   useEffect(() => {
     if (isBaseURL('commandURL'))
-      commandhookForm.setValue('commandURL', isBaseURL('commandURL'))
+      commandhookForm.setValue('commandURL', getBaseUrl('commandURL'))
     if (isBaseURL('queryURL'))
-      queryhookForm.setValue('queryURL', isBaseURL('queryURL'))
+      queryhookForm.setValue('queryURL', getBaseUrl('queryURL'))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

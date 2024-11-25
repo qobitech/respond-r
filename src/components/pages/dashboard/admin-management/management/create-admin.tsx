@@ -41,10 +41,9 @@ const CreateAdmin = ({
       )
       hookForm.setValue('phoneNumber', '+' + rsProps?.data?.phoneNumber || '')
       hookForm.setValue('userName', rsProps?.data?.userName || '')
-      hookForm.setValue(
-        'role',
+      hookForm.setValue('role', [
         rsProps?.data?.roleForReturn?.[0]?.id.toString() || ''
-      )
+      ])
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUpdate])
@@ -56,7 +55,7 @@ const CreateAdmin = ({
       actions.createUser(
         {
           ...data,
-          role: [getRole?.(parseInt(data.role))?.name],
+          role: data.role.map((i) => getRole?.(parseInt(i))?.name),
           organizationId: GODUSER
             ? data.organisationId
             : getOrganization?.('name', USERTOKEN.Organisation)?.id
