@@ -77,7 +77,7 @@ const MainView = ({
         />
         {!vehicle?.getVehicleByRegNumber?.isSuccessful || isRtsp ? (
           <>
-            <div className="separator-mainview" />
+            {/* <div className="separator-mainview" /> */}
             <div className="main-view-body">
               <div className="video-cta-title start">
                 {isImage ? (
