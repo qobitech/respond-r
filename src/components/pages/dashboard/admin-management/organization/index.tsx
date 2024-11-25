@@ -25,6 +25,8 @@ const OrganizationPage: FC = () => {
     callRightSection
   )
 
+  console.log(typeof getAllOrganization)
+
   useEffect(() => {
     getAllOrganization('')
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -35,8 +37,6 @@ const OrganizationPage: FC = () => {
     row: ICell[]
     rowActions: ICellAction[]
   }
-
-  console.log(organizationState?.getAllOrganization?.data, 'juju')
 
   const record: ITable[] = organizationState?.getAllOrganization?.data?.map(
     (i) => ({
