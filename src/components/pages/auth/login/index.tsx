@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { FC, useEffect } from 'react'
 import './index.scss'
 import * as yup from 'yup'
-import { IStates } from 'interfaces/IReducer'
-import { IAction } from 'interfaces/IAction'
 import { UseFormReturn } from 'react-hook-form'
 import FormBuilder from 'utils/form-builder'
 import { TypeButton } from 'utils/button'
@@ -10,10 +8,7 @@ import TextPrompt from 'utils/text-prompt'
 import { useFormHook } from 'utils/hook'
 import { loginFC } from './utils'
 import { authType } from 'store/types'
-
-interface IProps {
-  states?: IStates
-}
+import { useGlobalContext } from 'context/hooks'
 
 interface ILoginHookForm {
   email: string
@@ -56,13 +51,13 @@ export const LoginForm: React.FC<ILoginForm> = ({
   )
 }
 
-const Login: React.FC<IProps> = ({ states, ...props }) => {
-  const { userLogin, clearAction, setNotificationStatus } =
-    props as unknown as IAction
+const Login: FC = () => {
+  const { state, action } = useGlobalContext()
+  const { userLogin, clearAction, setNotificationStatus } = action
 
-  const dataLoading = states?.auth.userLoginLoading
-  const dataError = states?.auth.userLoginError
-  const data = states?.auth.userLogin
+  const dataLoading = state?.auth.userLoginLoading
+  const dataError = state?.auth.userLoginError
+  const data = state?.auth.userLogin
 
   const loginSchema = {
     email: yup.string().email().required('Email is required'),

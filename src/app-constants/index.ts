@@ -102,6 +102,8 @@ export const RESPONDR_CM_BASE_URL = `http://127.0.0.1:30817/api/v1`
 export const VEHICLE_QR_BASE_URL = `https://etraffica.ngrok.app/vehicle-query/api/v1`
 export const IN_CAR_QR_BASE_URL = `http://127.0.0.1:30816/api/v1`
 
+export const RESPONDR_CORE_BASE_URL = `http://127.0.0.1:30814/api/v1`
+
 export const validEmailRegex = /\S+@\S+\.\S+/
 
 export const naijaPhoneRegex = /^[+][0-9]\d{9,13}$/
