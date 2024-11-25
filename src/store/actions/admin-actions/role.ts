@@ -1,4 +1,4 @@
-import { RESPONDR_CM_BASE_URL } from 'app-constants'
+import { RESPONDR_CORE_BASE_URL } from 'app-constants'
 import * as utils from '../../services/new/utils'
 import { roleTypes } from 'store/types'
 
@@ -6,7 +6,7 @@ export const getAllRoles = (query: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/Role${query || ''}`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/Role${query || ''}`,
       header: utils.header('')
     },
     actionType: roleTypes.getAllRoles
@@ -22,7 +22,7 @@ export const createRole = (
   return utils.httpPostMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/Role/${
+      customurl: `${RESPONDR_CORE_BASE_URL}/Role/${
         update ? 'update' : 'addRole'
       }`,
       header: utils.header(''),
@@ -42,7 +42,7 @@ export const deleteRole = (name: string) => {
   return utils.httpDeleteMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/Role/delete?roleName=${name}`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/Role/delete?roleName=${name}`,
       header: utils.header('')
     },
     actionType: roleTypes.deleteRole
@@ -53,7 +53,7 @@ export const getRolesForOrganisation = (id: string) => {
   return utils.httpGetMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/Role/getRolesForOrganisation?orgId=${id}`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/Role/getRolesForOrganisation?orgId=${id}`,
       header: utils.header('')
     },
     actionType: roleTypes.getRolesForOrganisation
@@ -71,7 +71,7 @@ export const unassignMultipleActionsForRole = (
   return utils.httpPostMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/Action/UnassignMultipleActionsForRole`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/Action/UnassignMultipleActionsForRole`,
       header: utils.header(''),
       data
     },

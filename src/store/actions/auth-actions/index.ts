@@ -1,7 +1,7 @@
 import { url } from 'app-constants/Route'
 import * as utils from '../../services/new/utils'
 import { authType } from 'store/types'
-import { RESPONDR_CM_BASE_URL, TOKENKEY } from 'app-constants'
+import { RESPONDR_CORE_BASE_URL, TOKENKEY } from 'app-constants'
 
 const setAuthorizationHeader = (token: string) => {
   localStorage.setItem(TOKENKEY, token)
@@ -11,7 +11,7 @@ export const userLogin = (data: { email: string; password: string }) => {
   return utils.httpPostMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/Auth/Login`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/Auth/Login`,
       header: utils.headerNoAuth(),
       data
     },
@@ -29,7 +29,7 @@ export const passwordReset = (data: object) => {
   return utils.httpPostMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/Auth/ResetPassword`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/Auth/ResetPassword`,
       header: utils.headerNoAuth(),
       data
     },
@@ -41,7 +41,7 @@ export const updatePassword = (data: object) => {
   return utils.httpPostMethod({
     apiData: {
       url: '',
-      customurl: `${RESPONDR_CM_BASE_URL}/Auth/changePassword`,
+      customurl: `${RESPONDR_CORE_BASE_URL}/Auth/changePassword`,
       header: utils.headerNoAuth(),
       data
     },
