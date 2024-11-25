@@ -15,25 +15,20 @@ import { IframeComponent } from '../service-component/frame-component'
 const MainView = ({
   mediaUrl,
   flags,
-  isImage,
-  isRtsp,
   rtspProps,
-  setSelectedView,
   vehicle
 }: {
   mediaUrl: string
   flags: string[]
-  isImage: boolean
-  isRtsp: boolean
   rtspProps: IUSIO
-  setSelectedView?: (value: React.SetStateAction<number>) => void
   vehicle: IVehicleReducer | undefined
 }) => {
+  const [selectedView, setSelectedView] = useState<number>(() => 0)
+
   const [tab, setTab] = useState<string>(tabEnum.VEHICLEINFO)
+  const [isMedia, setIsMedia] = useState<boolean>(true)
 
   const vehicleData = vehicle?.getVehicleByRegNumber?.data
-
-  const [isMedia, setIsMedia] = useState<boolean>(true)
 
   const carTags = [
     {
@@ -65,6 +60,9 @@ const MainView = ({
 
   const vehicleNotes = vehicle?.getVehicleByRegNumber?.data?.notes
 
+  const isImage = selectedView === 0
+  const isRtsp = selectedView === 1
+
   return (
     <>
       <div className="video-section">
@@ -75,9 +73,9 @@ const MainView = ({
           isMedia={isMedia}
           setIsMedia={setIsMedia}
         />
-        {!vehicle?.getVehicleByRegNumber?.isSuccessful || isRtsp ? (
+        <div className="separator-mainview mt-3 mb-1" />
+        {vehicle?.getVehicleByRegNumber?.isSuccessful || isRtsp ? (
           <>
-            {/* <div className="separator-mainview" /> */}
             <div className="main-view-body">
               <div className="video-cta-title start">
                 {isImage ? (
@@ -97,7 +95,6 @@ const MainView = ({
               </div>
               <div className={`media-container ${isMedia ? '' : 'hide'}`}>
                 <div className={`media-box ${isRtsp ? '' : 'hide'}`}>
-                  {/* <Stream /> */}
                   <IframeComponent src={rtspProps.rtspurl || ''} />
                 </div>
                 {isMedia ? (

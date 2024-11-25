@@ -62,12 +62,7 @@ const Overview: FC = () => {
 
   const rtspProps = useRTSP()
 
-  const [selectedView, setSelectedView] = useState<number>(0)
-
   const [copyProps] = useCopy()
-
-  const isImage = selectedView === 0
-  const isRtsp = selectedView === 1
 
   return (
     <>
@@ -83,10 +78,7 @@ const Overview: FC = () => {
             <MainView
               mediaUrl={mediaUrl}
               flags={flags}
-              isImage={isImage}
-              isRtsp={isRtsp}
               rtspProps={rtspProps}
-              setSelectedView={setSelectedView}
               vehicle={vehicle}
             />
             <div className="stream-section">
