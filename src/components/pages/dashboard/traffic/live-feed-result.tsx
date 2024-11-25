@@ -6,7 +6,6 @@ import { LiveHitItemComponent } from './live-hit-item-component'
 import { NoFeeds } from './no-feeds'
 import { useGlobalContext } from 'context/hooks'
 import { ICopyProps } from 'utils/hook'
-import { feedDemoData } from './mock-data'
 
 export const LiveFeedResults = ({
   signalRProps,
@@ -28,21 +27,25 @@ export const LiveFeedResults = ({
     <div className="live-feed-component-wrapper">
       {isFeed ? (
         <>
-          {[feedDemoData].map((i) => (
-            <LiveFeedItemComponent
-              key={i.regNumber}
-              carColor={i.colour}
-              carMake={i.make || '...'}
-              carType={i.model || '...'}
-              imgSrc={getFilePath(i.filePath)}
-              offense={i.flags?.[0] ? i.flags?.length + '' : '0'}
-              regNumber={i.regNumber}
-              handleOnClick={() => {
-                handleFeedRequest(i)
-                setSearchValue?.(i.regNumber)
-              }}
-            />
-          ))}
+          {signalRProps.feeds[0] ? (
+            signalRProps.feeds.map((i) => (
+              <LiveFeedItemComponent
+                key={i.regNumber}
+                carColor={i.colour}
+                carMake={i.make || '...'}
+                carType={i.model || '...'}
+                imgSrc={getFilePath(i.filePath)}
+                offense={i.flags?.[0] ? i.flags?.length + '' : '0'}
+                regNumber={i.regNumber}
+                handleOnClick={() => {
+                  handleFeedRequest(i)
+                  setSearchValue?.(i.regNumber)
+                }}
+              />
+            ))
+          ) : (
+            <NoFeeds />
+          )}
         </>
       ) : null}
       {isHit ? (
