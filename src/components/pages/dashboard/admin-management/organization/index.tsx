@@ -25,8 +25,6 @@ const OrganizationPage: FC = () => {
     callRightSection
   )
 
-  console.log(typeof getAllOrganization)
-
   useEffect(() => {
     getAllOrganization('')
     // eslint-disable-next-line react-hooks/exhaustive-deps

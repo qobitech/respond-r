@@ -46,7 +46,6 @@ const CreateOrganization = ({
           message: states?.organization?.createOrganization?.message || '',
           isSuccessful: states?.organization?.createOrganization?.isSuccessful!
         })
-        console.log(res)
       },
       (err) => {
         console.log(err)
