@@ -6,7 +6,7 @@ import { LiveHitItemComponent } from './live-hit-item-component'
 import { NoFeeds } from './no-feeds'
 import { useGlobalContext } from 'context/hooks'
 import { ICopyProps } from 'utils/hook'
-import { feedDemoDatas } from './mock-data'
+// import { feedDemoDatas } from './mock-data'
 
 export const LiveFeedResults = ({
   signalRProps,
@@ -25,8 +25,8 @@ export const LiveFeedResults = ({
 }) => {
   const { setSearch: setSearchValue } = useGlobalContext()
 
-  // const feeds = signalRProps.feeds
-  const feeds = feedDemoDatas
+  const feeds = signalRProps.feeds
+  // const feeds = feedDemoDatas
   return (
     <div className="live-feed-component-wrapper">
       {isFeed ? (
