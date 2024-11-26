@@ -25,6 +25,7 @@ export const setUrls = (data: any) => {
 
 export const getFilePath = (i: string) => {
   if (!i) return ''
+  if (i.includes('http')) return i.replaceAll('\\', '/')
   if (!getUrl('filePath')) return ''
   return getUrl('filePath') + `/` + i.replaceAll('\\', '/')
 }
