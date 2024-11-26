@@ -6,13 +6,10 @@ import { userTypes } from 'store/types'
 import 'utils/page.scss'
 import { IUser } from 'interfaces/IUser'
 import { IRightSection } from 'utils/right-section/utils'
-import { useGlobalContext } from 'context/hooks'
 import FormBuilder from 'utils/form-builder'
-import { GODUSER } from 'app-constants/roles'
 import { useFormHook } from 'utils/hook'
 import { TypeButton } from 'utils/button'
 import TextPrompt from 'utils/text-prompt'
-import { USERTOKEN } from 'app-constants'
 import { createAdminSchema, getFormComponent, ICreateAdmin } from './utils'
 
 const CreateAdmin = ({
@@ -24,7 +21,6 @@ const CreateAdmin = ({
   actions: IAction
   rsProps?: IRightSection<IUser>
 }) => {
-  const { getRole, getOrganization } = useGlobalContext()
   const isUpdate = rsProps?.isView('custom', 'update-admin')
   const [hookForm] = useFormHook<ICreateAdmin>(createAdminSchema(isUpdate))
   const [response, setResponse] = useState<{
@@ -48,17 +44,15 @@ const CreateAdmin = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUpdate])
 
+  console.log(hookForm.watch(), 'juju')
+
   const handleUser = (data: ICreateAdmin) => {
     setResponse(null)
     if (!isUpdate) {
       actions.clearAction(userTypes.createUser)
       actions.createUser(
         {
-          ...data,
-          role: data.role.map((i) => getRole?.(parseInt(i))?.name),
-          organizationId: GODUSER
-            ? data.organisationId
-            : getOrganization?.('name', USERTOKEN.Organisation)?.id
+          ...data
         },
         () => {
           setResponse({
@@ -76,7 +70,12 @@ const CreateAdmin = ({
     }
   }
 
-  const formComponent = getFormComponent(states, actions)
+  const formComponent = getFormComponent((e) => {
+    console.log(e, 'JUJU')
+    const existingRoles = hookForm.getValues('role') || []
+    const mappedRoleId = [...existingRoles, e.target.value]
+    hookForm.setValue('role', mappedRoleId)
+  }, states)
 
   return (
     <div className="card-section px-4 py-4">

@@ -1,5 +1,4 @@
 import { GODUSER } from 'app-constants/roles'
-import { IAction } from 'interfaces/IAction'
 import { IStates } from 'interfaces/IReducer'
 import { IFormComponent } from 'utils/form-builder'
 import * as yup from 'yup'
@@ -20,6 +19,11 @@ export const createAdminSchema = (update: boolean) => ({
   userName: yup.string().required('input required'),
   phoneNumber: yup.string().required('input required'),
   password: update ? yup.string() : yup.string().required('input required'),
+  role: yup
+    .array()
+    .of(yup.string()) // Ensures each element is a string
+    .min(1, 'At least one role is required') // Minimum number of items
+    .required('Role is required'),
   confirmPassword: update
     ? yup.string()
     : yup
@@ -29,10 +33,10 @@ export const createAdminSchema = (update: boolean) => ({
 })
 
 export const getFormComponent = (
-  states?: IStates,
-  actions?: IAction
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void,
+  states?: IStates
 ): IFormComponent[] => {
-  const allRoles = states?.logged.getLoggedRoles?.data
+  const allRoles = states?.role.getAllRoles?.data
   const organizations = states?.organization.getAllOrganization?.data
 
   return [
@@ -54,10 +58,7 @@ export const getFormComponent = (
         id: index + 1,
         label: i.name,
         value: i.id
-      })),
-      onChange: (value: string) => {
-        actions?.getRolesForOrganisation?.(value)
-      }
+      }))
     },
     {
       id: 'role',
@@ -70,7 +71,8 @@ export const getFormComponent = (
         id: index + 1,
         label: i.name,
         value: i.id
-      }))
+      })),
+      onChange
     },
     {
       id: 'userName',

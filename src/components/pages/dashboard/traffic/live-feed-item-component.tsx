@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { ILFIC } from './utils'
-import { PasteSVG } from 'utils/svgs'
+import { CopySVG } from 'utils/svgs'
 
 export const LiveFeedItemComponent: FC<ILFIC> = (props) => {
   return (
@@ -11,7 +11,7 @@ export const LiveFeedItemComponent: FC<ILFIC> = (props) => {
       <div className="lf-info-section">
         <div className="vehicle-reg-number-info">
           <p className="lf-info-section-label">Reg Number</p>
-          <PasteSVG width="15" height="15" />
+          <CopySVG />
         </div>
         <p className="lf-info-section-value lf-reg-number">{props.regNumber}</p>
         <p className="lf-info-section-label">Make & Type</p>

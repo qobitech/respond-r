@@ -46,8 +46,8 @@ const AssignToRole = ({
 
   const isPlural = (value: any[]) => (value.length > 1 ? 's' : '')
 
-  const selectedRoleActions = roleState.data
-    .filter((role) => selectedRoles?.includes(role.id.toString()))
+  const selectedRoleActions = roleState?.data
+    ?.filter((role) => selectedRoles?.includes(role.id.toString()))
     .map((role) => role.actions)
 
   const merge = (a: any, b: any, predicate = (a: any, b: any) => a === b) => {
@@ -61,7 +61,7 @@ const AssignToRole = ({
 
   const getMergeArrays = () => {
     let mergedArray = []
-    for (let i = 0; i < selectedRoleActions.length; i++) {
+    for (let i = 0; i < selectedRoleActions?.length; i++) {
       mergedArray = merge(selectedRoleActions[i], mergedArray)
     }
     return mergedArray

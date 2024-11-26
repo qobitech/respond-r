@@ -10,7 +10,7 @@ import { IURS } from 'store/actions/admin-actions/report'
 import { statusType } from '../asset/location-assets'
 import { ILocationDetails, ITableRecord } from '../traffic/utils'
 import { useGlobalContext } from 'context/hooks'
-import { CopyComponent, useCopy } from 'utils/hook'
+import { useCopy } from 'utils/hook'
 import { PulseSVG, RefreshSVG } from 'utils/svgs'
 import { assetsTypes } from 'store/types'
 import { getIconUrl, IReportData, ObjectType } from './utils'
@@ -128,7 +128,7 @@ const AdminReport = <T extends { [key: string]: any }>({
     })
   }
 
-  const [copyProps] = useCopy()
+  const copyProps = useCopy()
 
   const getSelectedReport = (selectedReport: IReport) => ({
     location: {
@@ -161,7 +161,7 @@ const AdminReport = <T extends { [key: string]: any }>({
     markerContent: (
       <div
         onClick={() => {
-          copyProps.setUrl(selectedAsset.id)
+          copyProps.copy(selectedAsset.id)
           linkAsset(selectedAsset.id)
         }}
       >
@@ -235,7 +235,6 @@ const AdminReport = <T extends { [key: string]: any }>({
 
   return (
     <>
-      <CopyComponent {...copyProps} />
       <div className="admin-report-section">
         <div className={`admin-report-header ${!showHeader ? 'd-none' : ''}`}>
           <div className="d-flex align-items-center" style={{ gap: '20px' }}>

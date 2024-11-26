@@ -27,6 +27,10 @@ const App = () => {
         }
       >
         <Routes>
+          <Route path="/" element={<PublicRoute />}>
+            <Route path={url.LANDING_PAGE} element={<LandingPage />} />
+            <Route path={url.LOGIN} element={<Login />} />
+          </Route>
           <Route path="/dashboard" element={<AuthRoute />}>
             <Route path={url.TRAFFIC} element={<Overview />} />
             <Route path={url.FIRESERVICE} element={<IFireServicePage />} />
@@ -36,10 +40,6 @@ const App = () => {
               path={`${url.MANAGEMENT}/:pageTab`}
               element={<AdminManagement />}
             />
-          </Route>
-          <Route path="/" element={<PublicRoute />}>
-            <Route path={url.LANDING_PAGE} element={<LandingPage />} />
-            <Route path={url.LOGIN} element={<Login />} />
           </Route>
         </Routes>
       </Suspense>

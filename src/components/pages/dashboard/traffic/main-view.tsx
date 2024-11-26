@@ -72,6 +72,7 @@ const MainView = ({
           setSelectedView={setSelectedView}
           isMedia={isMedia}
           setIsMedia={setIsMedia}
+          plateNumber={vehicleData?.regNumber}
         />
         <div className="separator-mainview mt-3 mb-1" />
         {vehicle?.getVehicleByRegNumber?.isSuccessful || isRtsp ? (

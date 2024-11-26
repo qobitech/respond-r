@@ -13,7 +13,7 @@ import { Configuration } from './configuration'
 import { LiveFeedStatusComponent } from './live-feed-status-component'
 import { LiveFeedComponent } from './live-feed-component'
 import { useRightSection } from 'utils/right-section/hooks'
-import { CopyComponent, useCopy } from 'utils/hook'
+import { useCopy } from 'utils/hook'
 import { Loader } from 'utils/components'
 import { useGlobalContext } from 'context/hooks'
 
@@ -62,7 +62,7 @@ const Overview: FC = () => {
 
   const rtspProps = useRTSP()
 
-  const [copyProps] = useCopy()
+  const copyProps = useCopy()
 
   return (
     <>
@@ -94,7 +94,6 @@ const Overview: FC = () => {
             </div>
           </div>
         </div>
-        <CopyComponent {...copyProps} />
         <Loader loader={false} />
       </div>
     </>

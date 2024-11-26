@@ -3,7 +3,15 @@ import './sidebar.scss'
 import { url } from 'app-constants/Route'
 import Logo from 'assets/images/CHITHUB_LOGO.png'
 import { IReport } from 'interfaces/IReport'
-import { CarsSVG, HamburgerSVG, ManagementSVG, SwitchSVG } from 'utils/svgs'
+import {
+  CarsSVG,
+  // FireExtinguisherSVG,
+  HamburgerSVG,
+  ManagementSVG,
+  // MedicalSVG,
+  // PoliceSVG,
+  SwitchSVG
+} from 'utils/svgs'
 import { GODUSER } from 'app-constants/roles'
 import { ISSUPERADMIN, ORGANIZATION } from 'app-constants'
 import { managementTabEnums } from 'components/pages/dashboard/admin-management/utils'
@@ -36,25 +44,25 @@ const SideBar = ({
       id: 'e-traffic'
     },
     // {
-    //   title: "E-Police",
+    //   title: 'E-Police',
     //   imgsrc: <PoliceSVG />,
     //   isActive: _isUrl(url.POLICE),
     //   url: url.POLICE,
-    //   id: "e-police",
+    //   id: 'e-police'
     // },
     // {
-    //   title: "Fire Service",
+    //   title: 'Fire Service',
     //   imgsrc: <FireExtinguisherSVG />,
     //   isActive: _isUrl(url.FIRESERVICE),
     //   url: url.FIRESERVICE,
-    //   id: "firefighter",
+    //   id: 'firefighter'
     // },
     // {
-    //   title: "E-Medical",
+    //   title: 'E-Medical',
     //   imgsrc: <MedicalSVG />,
     //   isActive: _isUrl(url.MEDICAL),
     //   url: url.MEDICAL,
-    //   id: "e-medical",
+    //   id: 'e-medical'
     // },
     {
       title: 'Management',

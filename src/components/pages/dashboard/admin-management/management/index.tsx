@@ -21,7 +21,8 @@ import { PageHeader } from '../../service-component/page-header'
 const ManagementPage: FC = () => {
   const { isAction, getOrganization, organizations, state, action } =
     useGlobalContext()
-  const { callRightSection, getAllUsers } = action
+  const { callRightSection, getAllUsers, getAllOrganization, getAllRoles } =
+    action
 
   const rightSectionProps = state?.global.rightSection
 
@@ -44,6 +45,8 @@ const ManagementPage: FC = () => {
   useEffect(() => {
     // if (!organizations?.length)
     getAllUsersFn(query('?'))
+    getAllOrganization('')
+    getAllRoles('')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -52,6 +55,8 @@ const ManagementPage: FC = () => {
     row: ICell[]
     rowActions: ICellAction[]
   }
+
+  console.log(userState?.getAllUsers?.data, 'juju')
 
   const record: ITable[] = userState?.getAllUsers?.data?.map((i) => ({
     id: '1',

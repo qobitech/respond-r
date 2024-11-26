@@ -1,6 +1,6 @@
 import { useGlobalContext } from 'context/hooks'
 import { getStatus } from './helpers'
-import { PasteSVG } from 'utils/svgs'
+import { CopySVG } from 'utils/svgs'
 
 export const VehicleInfoSectionItem = ({
   label,
@@ -33,7 +33,7 @@ export const VehicleInfoSectionItem = ({
           >
             {value || '...'}
           </p>
-          {isReg ? <PasteSVG /> : null}
+          {isReg ? <CopySVG /> : null}
         </div>
         {isStatus ? (
           <p className={`p-btn-status no-btn ${status ? 'success' : 'danger'}`}>

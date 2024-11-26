@@ -15,17 +15,14 @@ export const useFormHook = <T extends {}>(objSchema: {}): [
 }
 
 export interface ICopyProps {
-  shareURLRef: React.RefObject<HTMLTextAreaElement>
-  setUrl: React.Dispatch<React.SetStateAction<string>>
-  url: string
   copySuccess: boolean
+  copy: (text: string) => void
   setAction: React.Dispatch<React.SetStateAction<string>>
   action: string
 }
 
-export const useCopy = (): [ICopyProps] => {
+export const useCopy = (): ICopyProps => {
   const [copySuccess, setCopySuccess] = useState<boolean>(false)
-  const [url, setUrl] = useState<string>('')
   const [action, setAction] = useState<string>('')
 
   useEffect(() => {
@@ -34,67 +31,36 @@ export const useCopy = (): [ICopyProps] => {
       timer = setTimeout(() => {
         setCopySuccess(() => false)
         setAction('')
-      }, 1000)
+      }, 1500)
     }
     return () => {
       clearTimeout(timer)
     }
   }, [copySuccess])
 
-  const copyToClipboard = (
-    e?: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e?.preventDefault()
-    shareURLRef?.current?.select()
-    document.execCommand('copy')
-    setCopySuccess(true)
-    setUrl('')
+  function copyToClipboard(text: string) {
+    // Create a new ClipboardItem object with the text
+    const clipboardItem = new ClipboardItem({
+      'text/plain': new Blob([text], { type: 'text/plain' })
+    })
+
+    // Use the Clipboard API to write the ClipboardItem to the clipboard
+    navigator.clipboard.write([clipboardItem]).then(
+      () => {
+        setCopySuccess(true)
+      },
+      () => {
+        setCopySuccess(false)
+      }
+    )
   }
 
-  useEffect(() => {
-    if (url) {
-      copyToClipboard()
-    }
-  }, [url])
-
-  const shareURLRef = useRef<HTMLTextAreaElement>(null)
-
-  return [
-    {
-      shareURLRef,
-      setUrl,
-      url,
-      copySuccess,
-      setAction,
-      action
-    }
-  ]
-}
-
-export const CopyComponent = ({
-  url,
-  shareURLRef
-}: {
-  url: string
-  shareURLRef: React.RefObject<HTMLTextAreaElement>
-}) => {
-  return (
-    <div
-      className="m-0 p-0 d-flex flex-column bg-white align-items-center position-relative"
-      style={{ height: 0 }}
-    >
-      <textarea
-        value={url}
-        style={{
-          width: 0,
-          height: 0,
-          opacity: 0
-        }}
-        ref={shareURLRef}
-        readOnly
-      />
-    </div>
-  )
+  return {
+    copySuccess,
+    copy: copyToClipboard,
+    setAction,
+    action
+  }
 }
 
 export const handleFullScreen = (url: string) => {

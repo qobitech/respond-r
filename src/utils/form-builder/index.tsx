@@ -35,7 +35,7 @@ export interface IFormComponent {
     type: 'external' | 'internal'
   }
   isonlyview?: boolean
-  onChange?: (value: string) => void
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void
 }
 
 interface IFormBuilder<T extends FieldValues> {
@@ -91,10 +91,11 @@ const FormBuilder = <T extends FieldValues>({
               error={
                 hookForm.formState.errors?.[i.id as Path<T>]?.message as string
               }
-              onInput={({ currentTarget }) => {
-                const { value } = currentTarget
-                i.onChange?.(value)
-              }}
+              onChange={
+                typeof i.onChange === 'function'
+                  ? i.onChange
+                  : hookForm.register(i.id as Path<T>).onChange
+              }
             />
           )}
           {i.component === 'text-area' && (

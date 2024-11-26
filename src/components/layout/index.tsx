@@ -75,7 +75,9 @@ const Page: React.FC<PageProps> = ({ children, states, ...props }) => {
   }
 
   const isAction = (action: string) => {
-    return actionsRoles?.includes(action) || false
+    // return actionsRoles?.includes(action) || false
+    // return demoRoleActions?.includes(action) || false
+    return true
   }
 
   const location = useLocation()

@@ -1,11 +1,11 @@
 import { managementTabEnums } from 'components/pages/dashboard/admin-management/utils'
-import { ISSUPERADMIN, ORGANIZATION, organizationEnumsType } from '.'
+import { isLogged, ISSUPERADMIN, ORGANIZATION, organizationEnumsType } from '.'
 import { GODUSER } from 'app-constants/roles'
 
 const errorPage = ''
 
 const isView = (org: organizationEnumsType, url: string) =>
-  GODUSER || ORGANIZATION === org ? url : errorPage
+  !isLogged || GODUSER || ORGANIZATION === org ? url : errorPage
 
 export const url = {
   LANDING_PAGE: '/',
@@ -20,7 +20,8 @@ export const url = {
   POLICE: isView('e-police', '/dashboard/e-police'),
   FIRESERVICE: isView('firefighter', '/dashboard/firefighter'),
   MEDICAL: isView('ambulance', '/dashboard/e-medical'),
-  MANAGEMENT: GODUSER || ISSUPERADMIN ? '/dashboard/management' : errorPage,
+  MANAGEMENT:
+    !isLogged || GODUSER || ISSUPERADMIN ? '/dashboard/management' : errorPage,
   PAGE404: ''
 }
 

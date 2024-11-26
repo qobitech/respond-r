@@ -384,6 +384,11 @@
       margin-left: auto;
     }
   }
+  h3 {
+    @include theme.themify(theme.$themes) {
+      color: theme.themed('colorText');
+    }
+  }
 }
 
 .type-input-class .type-input {

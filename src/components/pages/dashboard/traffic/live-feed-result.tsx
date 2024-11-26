@@ -6,6 +6,7 @@ import { LiveHitItemComponent } from './live-hit-item-component'
 import { NoFeeds } from './no-feeds'
 import { useGlobalContext } from 'context/hooks'
 import { ICopyProps } from 'utils/hook'
+import { feedDemoDatas } from './mock-data'
 
 export const LiveFeedResults = ({
   signalRProps,
@@ -23,12 +24,15 @@ export const LiveFeedResults = ({
   isHit: boolean
 }) => {
   const { setSearch: setSearchValue } = useGlobalContext()
+
+  // const feeds = signalRProps.feeds
+  const feeds = feedDemoDatas
   return (
     <div className="live-feed-component-wrapper">
       {isFeed ? (
         <>
-          {signalRProps.feeds[0] ? (
-            signalRProps.feeds.map((i) => (
+          {feeds[0] ? (
+            feeds.map((i) => (
               <LiveFeedItemComponent
                 key={i.regNumber}
                 carColor={i.colour}
@@ -62,7 +66,7 @@ export const LiveFeedResults = ({
                 regNumber={i.regNumber}
                 handleOnClick={() => {
                   handleHitRequest(i)
-                  copyProps.setAction(i.regNumber)
+                  copyProps.copy(i.regNumber)
                 }}
               />
             ))
